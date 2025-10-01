@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
-import { Users, Zap, Search, ChevronLeft, ChevronRight, Home, MapPin, Globe, LoaderCircle } from 'lucide-react';
-// import { Toaster } from 'sonner'; // Dihapus karena sonner tidak diperlukan jika tidak ada notifikasi aktif
+import { Users, Zap, Search, ChevronLeft, ChevronRight, Home, MapPin, Globe } from 'lucide-react';
 
 // ===============================================
 // 1. DATA SIMULASI (Digunakan oleh LandingPage & CampusDetailPage)
@@ -71,7 +70,6 @@ const mockCourses = [
 
 const CampusDetailPage = () => {
     const { id } = useParams();
-    // Gunakan data mockCourses yang didefinisikan di atas
     const campus = mockCourses.find(c => c.id === id);
 
     // Jika ID kampus tidak ditemukan
@@ -94,20 +92,19 @@ const CampusDetailPage = () => {
         <div className="min-h-screen bg-gray-50 font-sans">
             
             {/* Header / Navigasi Breadcrumb */}
-            <header className="flex items-center p-4 bg-white shadow-sm border-b border-gray-100 sticky top-0 z-10">
+            <header className="flex items-center p-4 bg-white shadow-sm border-b border-gray-100">
                 <Link to="/" className={`text-sm font-semibold text-gray-700 hover:${LIGHT_BLUE_TEXT} transition duration-200 flex items-center`}>
                     <Home className="w-4 h-4 mr-1" /> Beranda
                 </Link>
                 <span className="mx-2 text-gray-400">/</span>
-                {/* Menggunakan title karena campus.name tidak ada di mockCourses */}
-                <span className="text-sm font-bold text-gray-900">{campus.title}</span> 
+                <span className="text-sm font-bold text-gray-900">{campus.name}</span>
             </header>
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 
                 {/* Hero Section Kampus */}
                 <div className={`p-8 md:p-12 rounded-xl shadow-xl text-white ${campus.color} mb-10`}>
-                    <h1 className="text-4xl font-extrabold mb-2">{campus.title}</h1>
+                    <h1 className="text-4xl font-extrabold mb-2">{campus.name}</h1>
                     <p className="text-xl font-light opacity-90">{campus.tagline}</p>
                     <div className="mt-4 flex items-center space-x-6 text-sm">
                         <span className="flex items-center"><MapPin className="w-4 h-4 mr-2" /> {campus.location}</span>
@@ -124,11 +121,11 @@ const CampusDetailPage = () => {
                         <p className="text-gray-700 leading-relaxed mb-6">{campus.description}</p>
 
                         <h3 className="text-xl font-bold text-gray-900 mb-3">Program Studi Unggulan</h3>
-                        <div className="flex flex-wrap gap-2">
+                        <ul className="space-y-2 list-disc list-inside text-gray-700">
                             {campus.programs.map((program, index) => (
-                                <span key={index} className={`px-3 py-1 text-sm font-medium rounded-full border border-current ${LIGHT_BLUE_TEXT} ${DARK_GREEN.replace('bg', 'bg-opacity-5')}`}>{program}</span>
+                                <li key={index} className={`font-medium ${LIGHT_BLUE_TEXT}`}>{program}</li>
                             ))}
-                        </div>
+                        </ul>
                     </div>
 
                     {/* Kolom Kanan: Call to Action */}
@@ -242,7 +239,7 @@ const LandingPage = () => {
                     <div className="hidden sm:flex items-center space-x-4 text-sm text-gray-600">
                         <Link to="#" className="hover:text-[#10403D]">Fitur</Link>
                         <Link to="#" className="hover:text-[#10403D]">Dukungan</Link>
-                        <Link to="kampus-unggulan" className="hover:text-[#10403D]">Kampus</Link>
+                        <Link to="kampus-unggulan" className="hover:text-[#10403D]">Dukungan</Link>
                     </div>
                 </div>
                 
@@ -268,7 +265,7 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* 3. Banner & Hero Section (DENGAN CAROUSEL GAMBAR) */}
-                    <div className="text-center py-16 bg-white rounded-xl shadow-lg p-6">
+                    <div className="text-center py-16 bg-white rounded-lg">
                         
                         {/* Panggil Komponen Carousel Gambar Hero */}
                         <HeroImageCarousel />
@@ -285,9 +282,9 @@ const LandingPage = () => {
                     <hr className="my-10 border-gray-200" />
 
 
-                    {/* 4. Kampus Unggulan Section (GRID STATIS) */}
+                    {/* 4. Fitur Utama / Courses Section (GRID STATIS) */}
                     <section className="pb-20 relative">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-8">
                             Kampus Unggulan
                         </h2>
                         
@@ -299,7 +296,7 @@ const LandingPage = () => {
                             {mockCourses.map((item, index) => (
                                 <Link
                                     key={index} 
-                                    to={`/kampus/${item.id}`} // LINK DINAMIS KE DETAIL KAMPUS
+                                    to={`/kampus/${item.id}`} // LINK YANG SEHARUSNYA BISA DIKLIK
                                     className="bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition duration-300 overflow-hidden border border-gray-100 block group"
                                 >
                                     {/* Header Warna Kursus */}
@@ -320,13 +317,12 @@ const LandingPage = () => {
                                         <p className="text-xs font-semibold uppercase text-gray-500 mb-1">
                                             {item.subtitle}
                                         </p>
-                                        <h3 className={`text-lg font-bold mb-3 group-hover:${LIGHT_BLUE_TEXT} transition duration-300`}>
+                                        <h3 className={`text-lg font-bold ${LIGHT_BLUE_TEXT} mb-3 group-hover:underline`}>
                                             {item.title}
                                         </h3>
-                                        <div className="flex items-center text-sm text-gray-500 mt-2">
-                                            <MapPin className="w-4 h-4 mr-1" />
-                                            <span>{item.location}</span>
-                                        </div>
+                                        <p className="text-sm text-gray-600">
+                                            Jelajahi program studi dan fasilitas {item.title}.
+                                        </p>
                                     </div>
                                 </Link>
                             ))}
@@ -349,21 +345,15 @@ const LandingPage = () => {
 // ===============================================
 
 export default function App() {
-    // Definisi placeholder untuk Login/Admin
+    // Definisi placeholder untuk Login/Admin jika komponen aslinya tidak ada
     const PlaceholderPage = ({ title }) => (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-700">
-            <div className="text-center p-8 bg-white shadow-xl rounded-xl">
-                 <h1 className="text-3xl font-bold mb-4">{title}</h1>
-                 <p className="text-gray-500">Halaman ini masih dalam tahap pengembangan.</p>
-                 <Link to="/" className={`mt-6 inline-block px-4 py-2 text-white rounded-lg font-semibold ${DARK_GREEN} ${HOVER_GREEN} transition duration-200`}>
-                    <Home className="w-4 h-4 mr-2 inline-block"/> Kembali ke Beranda
-                 </Link>
-            </div>
+            <h1 className="text-2xl font-bold">{title}</h1>
         </div>
     );
 
     return (
-        // Menghapus Toaster, Suspense, dan lazy loading
+        // Wrapper Router memastikan semua Link berfungsi
         <Router>
             <Routes>
                 {/* 1. Rute Utama (Landing Page) */}
