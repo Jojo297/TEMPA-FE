@@ -1,20 +1,37 @@
-import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  redirect,
+} from "react-router-dom";
+import { lazy, Suspense, useState } from "react";
+import { Toaster } from "sonner";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { Button } from "./components/ui/button";
 import { LoaderCircle } from "lucide-react";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const LoginAdmin = lazy(() => import("./page/loginAdmin"));
 
   return (
     <>
-      <div className="flex flex-col gap-4 justify-center items-center h-screen">
-        <h1 className="text-3xl">Project Under Construction</h1>
-        <Button>
-          <LoaderCircle className="animate-spin" />
-        </Button>
-      </div>
+      <Toaster richColors closeButton position="top-right" />
+      <Router>
+        <Routes>
+          {/* login admin */}
+          <Route
+            path="/login-admin"
+            element={
+              <Suspense>
+                <LoginAdmin />
+                //{" "}
+              </Suspense>
+            }
+          />
+          {/* end login admin */}
+        </Routes>
+      </Router>
     </>
   );
 }
