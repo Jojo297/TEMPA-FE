@@ -4,6 +4,7 @@ import { Users, Zap, Search, ChevronLeft, ChevronRight, Home, MapPin, Globe, Loa
 import LoginAdmin from './page/loginAdmin';
 import LoginCampus from './page/loginCampus';
 import LandingPage from './page/Landingpage';
+import LoginMentee from './page/LoginMentee';
 import CampusDetailPage from './components/CampusDetailPage';
 
 export default function App() {
@@ -33,6 +34,9 @@ export default function App() {
                 {/* 3. Rute Login/Admin (Placeholder) */}
                 <Route path="/login-campus" element={<LoginCampus title="Halaman Login Kampus" />} />
                 <Route path="/login-admin" element={<LoginAdmin title="Halaman Login Admin" />} />
+
+                {/* 4. Rute Login Mentee */}
+                <Route path="/login-mentee" element={<LoginMentee />} />
             </Routes>
         </Router>
     );
