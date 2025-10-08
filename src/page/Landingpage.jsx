@@ -21,6 +21,9 @@ import {
   FaYoutube,
   FaXTwitter,
 } from "react-icons/fa6";
+import logo2 from "@/assets/logo-text.png";
+import img2 from "@/assets/img2.png";
+import img1 from "@/assets/img1.png";
 
 const LandingPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,7 +84,7 @@ const LandingPage = () => {
       <nav className="bg-[#013B35] text-white px-10 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <img
-            src="/logo.png"
+            src={logo2}
             alt="Logo TEMPA"
             className="h-8 w-auto object-contain"
           />
@@ -119,9 +122,14 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="flex justify-between items-center px-20 py-24">
-        <div className="w-[620px] h-[600px] bg-[#013B35] rounded-t-[180px] rounded-b-none"></div>
-
+      <section className="flex justify-between items-center mt-10 px-20 py-24 h-[600px]">
+        <div className="w-[620px] h-[600px] bg-[#013B35] rounded-t-[180px] rounded-b-none flex justify-center items-center overflow-hidden">
+          <img
+            src={img2}
+            alt="Gambar"
+            className="w-[615px] h-[612px] object-contain"
+          />
+        </div>
         <div className="max-w-md">
           <h1 className="text-5xl font-extrabold leading-snug text-[#0A0A0A]">
             EKSPLORASI
@@ -318,7 +326,7 @@ const LandingPage = () => {
           </ul>
 
           <div className="flex gap-4">
-            <Link to="/LoginCampus">
+            <Link to="/login-campus">
               <button className="bg-[#B9E6FF] text-[#013B35] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#9edcff] transition">
                 Gabung Kampus
               </button>
@@ -329,7 +337,13 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="absolute right-0 top-0 h-full w-[55%] bg-white rounded-l-[50%]"></div>
+        <div className="absolute right-0 top-0 h-full w-[55%] bg-white rounded-l-[50%] overflow-hidden flex justify-center items-center">
+          <img
+            src={img1}
+            alt="Gambar di area putih"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </section>
 
       {/* Footer */}
@@ -337,11 +351,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo dan Deskripsi */}
           <div>
-            <img
-              src="/logo.png"
-              alt="Logo TEMPA"
-              className="h-12 w-auto object-contain"
-            />
+            <div className=" p-4">
+              <img
+                src={logo2}
+                alt="Logo TEMPA"
+                className="h-12 w-auto object-contain"
+              />
+            </div>
 
             <p className="text-gray-300 text-sm mt-3 leading-relaxed">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
