@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "lucide-react";
@@ -8,6 +7,8 @@ import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
 import LandingPage from "./page/Landingpage";
 import LoginMentee from "./page/loginMentee";
+import CampusPage from "./page/campuspage";
+import CampusDetailPage from "./components/CampusDetailPage";
 
 export default function App() {
   // DEFINISI VARIABEL WARNA (DIPERLUKAN UNTUK PlaceholderPage)
@@ -31,13 +32,11 @@ export default function App() {
     </div>
   );
 
-
   return (
     <Router>
       <Routes>
         {/* 1. Rute Utama (Landing Page) */}
         <Route path="/" element={<LandingPage />} />
-
         {/* 4. Rute Login/Admin (Placeholder) */}
         <Route
           path="/login-campus"
@@ -51,6 +50,11 @@ export default function App() {
           path="/login-mentee"
           element={<LoginMentee title="Halaman Login Mentee" />}
         />
+        <Route
+          path="/CampusPage"
+          element={<CampusPage title="Halaman Campus" />}
+        />
+        <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
       </Routes>
     </Router>
   );
