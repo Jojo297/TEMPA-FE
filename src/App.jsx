@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "lucide-react";
@@ -9,14 +8,16 @@ import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
 import LandingPage from "./page/Landingpage";
 import LoginMentee from "./page/loginMentee";
-import MajorDetailPage from "./page/detailjurusan";
+import CampusPage from "./page/campuspage";
+import CampusDetailPage from "./components/CampusDetailPage";
+import CampusPrestasiPage from "./components/CampusPrestasiPage";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function App() {
-  // DEFINISI VARIABEL WARNA (DIPERLUKAN UNTUK PlaceholderPage)
   const DARK_GREEN = "bg-[#10403D]";
   const HOVER_GREEN = "hover:bg-[#0c312e]";
 
-  // Definisi placeholder untuk Login/Admin
   const PlaceholderPage = ({ title }) => (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-700">
       <div className="text-center p-8 bg-white shadow-xl rounded-xl">
@@ -33,28 +34,24 @@ export default function App() {
     </div>
   );
 
-
   return (
     <Router>
       <Routes>
-        {/* 1. Rute Utama (Landing Page) */}
+        {/* Rute Utama */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* 4. Rute Login/Admin (Placeholder) */}
-        <Route
-          path="/login-campus"
-          element={<LoginCampus title="Halaman Login Kampus" />}
-        />
-        <Route
-          path="/login-admin"
-          element={<LoginAdmin title="Halaman Login Admin" />}
-        />
-        <Route
-          path="/login-mentee"
-          element={<LoginMentee title="Halaman Login Mentee" />}
-        />
-        {/* 5. Rute Detail Jurusan */}
-        <Route path="/detail-jurusan" element={<MajorDetailPage />} />
+        {/* Login/Admin */}
+        <Route path="/login-campus" element={<LoginCampus />} />
+        <Route path="/login-admin" element={<LoginAdmin />} />
+        <Route path="/login-mentee" element={<LoginMentee />} />
+
+        {/* Halaman Kampus */}
+        <Route path="/CampusPage" element={<CampusPage />} />
+        <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
+
+        <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
+        <Route path="/campus/:id" element={<CampusDetailPage />} />
+        <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
       </Routes>
     </Router>
   );
