@@ -4,10 +4,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "lucide-react";
 
 // Import Pages dan Components
+
 import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
 import LandingPage from "./page/Landingpage";
 import LoginMentee from "./page/loginMentee";
+import MajorDetailPage from "./page/detailjurusan";
 
 export default function App() {
   // DEFINISI VARIABEL WARNA (DIPERLUKAN UNTUK PlaceholderPage)
@@ -51,6 +53,8 @@ export default function App() {
           path="/login-mentee"
           element={<LoginMentee title="Halaman Login Mentee" />}
         />
+        {/* 5. Rute Detail Jurusan */}
+        <Route path="/detail-jurusan" element={<MajorDetailPage />} />
       </Routes>
     </Router>
   );
