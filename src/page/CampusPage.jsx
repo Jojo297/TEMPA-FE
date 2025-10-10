@@ -1,6 +1,6 @@
 import React from "react";
 import { Star, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import polibatam from "../assets/polibatam.jpeg";
