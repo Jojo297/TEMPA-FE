@@ -89,7 +89,7 @@ const LandingPage = () => {
     setCurrentIndex((prev) => (prev === kampusList.length - 1 ? 0 : prev + 1));
   };
 
-  // 🎯 Autoplay carousel tiap 4 detik
+  // 🎯 Autoplay carousel tiap 2 detik
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) =>
@@ -98,6 +98,31 @@ const LandingPage = () => {
     }, 2000);
     return () => clearInterval(interval);
   }, [kampusList.length]);
+
+  // 🎯 Animasi angka menghitung
+  const stats = [
+    { angka: 1000, label: "Mentee" },
+    { angka: 1000, label: "Mentor" },
+    { angka: 1000, label: "Kampus" },
+    { angka: 1000, label: "Program" },
+  ];
+
+  const [counts, setCounts] = useState(stats.map(() => 0));
+
+  useEffect(() => {
+    const duration = 2000; // durasi animasi (2 detik)
+    const startTime = performance.now();
+
+    const animate = (time) => {
+      const progress = Math.min((time - startTime) / duration, 1);
+      const updatedCounts = stats.map((s) => Math.floor(s.angka * progress));
+      setCounts(updatedCounts);
+
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+
+    requestAnimationFrame(animate);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans">
@@ -120,9 +145,9 @@ const LandingPage = () => {
             </a>
           </li>
           <li>
-            <a href="#jurusan" className="hover:text-[#00BFA6]">
+            <Link to="/JurusanPage" className="hover:text-[#00BFA6]">
               Jurusan
-            </a>
+            </Link>
           </li>
           <li>
             <a href="#program" className="hover:text-[#00BFA6]">
@@ -299,20 +324,17 @@ const LandingPage = () => {
         </p>
 
         <div className="flex justify-center items-center gap-14">
-          {[
-            { angka: "1000+", label: "Mentee" },
-            { angka: "1000+", label: "Mentor" },
-            { angka: "1000+", label: "Kampus" },
-            { angka: "1000+", label: "Program" },
-          ].map((item, i) => (
+          {stats.map((item, i) => (
             <React.Fragment key={i}>
               <div className="flex flex-col items-center">
                 <h3 className="text-3xl font-bold text-[#013B35]">
-                  {item.angka}
+                  {counts[i]}+
                 </h3>
                 <p className="text-lg text-gray-700 mt-2">{item.label}</p>
               </div>
-              {i !== 3 && <div className="w-[2px] h-12 bg-[#013B35]"></div>}
+              {i !== stats.length - 1 && (
+                <div className="w-[2px] h-12 bg-[#013B35]"></div>
+              )}
             </React.Fragment>
           ))}
         </div>

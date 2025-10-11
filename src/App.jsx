@@ -8,8 +8,10 @@ import LoginCampus from "./page/loginCampus";
 import LandingPage from "./page/Landingpage";
 import LoginMentee from "./page/loginMentee";
 import CampusPage from "./page/campuspage";
+import JurusanPage from "./page/JurusanPage";
 import CampusDetailPage from "./components/CampusDetailPage";
 import CampusPrestasiPage from "./components/CampusPrestasiPage";
+import DetailJurusan from "@/components/DetailJurusan";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -46,11 +48,13 @@ export default function App() {
 
         {/* Halaman Kampus */}
         <Route path="/CampusPage" element={<CampusPage />} />
+        <Route path="/JurusanPage" element={<JurusanPage />} />
         <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
 
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
         <Route path="/campus/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
+        <Route path="/jurusan/informatika" element={<DetailJurusan />} />
       </Routes>
     </Router>
   );
