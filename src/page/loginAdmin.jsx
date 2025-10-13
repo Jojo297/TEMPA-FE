@@ -1,6 +1,8 @@
 // File: src/page/loginAdmin.jsx
 
 import React, { useState } from "react";
+import logo2 from "@/assets/logo-text.png";
+
 // TIDAK ADA LAGI IMPORT './LoginAdmin.css'
 
 // Asumsi Anda sudah menginstal dan mengkonfigurasi Tailwind CSS di proyek Anda.
@@ -65,7 +67,7 @@ export default function LoginAdmin() {
             {" "}
             {/* logo */}
             <img
-              src="/logo.png" // ganti dengan path logo TEMPA-mu
+              src={logo2} // ganti dengan path logo TEMPA-mu
               alt="Logo TEMPA"
               className="w-30 h-30 object-contain"
             />

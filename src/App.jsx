@@ -1,62 +1,124 @@
 import React from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "lucide-react";
 
-// Import Pages dan Components
 import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
-import LandingPage from "./page/Landingpage";
-import LoginMentee from "./page/loginMentee";
-import DashboardMentee from "./page/Dashboard/dashboardMentee";
+const LandingPage = lazy(() => import("./page/Landingpage"));
+const LoginMentee = lazy(() => import("./page/loginMentee"));
+const DashboardMentee = lazy(() => import("./page/Dashboard/dashboardMentee"));
+const CampusPage = lazy(() => import("./page/campuspage"));
+const JurusanPage = lazy(() => import("./page/JurusanPage"));
+const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
+const CampusPrestasiPage = lazy(() =>
+  import("./components/CampusPrestasiPage")
+);
+const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
+const CampusProgram = lazy(() => import("./components/CampusProgram"));
+import LoadingRedirect from "./components/loadingRedirect";
 
 export default function App() {
-  // DEFINISI VARIABEL WARNA (DIPERLUKAN UNTUK PlaceholderPage)
-  const DARK_GREEN = "bg-[#10403D]";
-  const HOVER_GREEN = "hover:bg-[#0c312e]";
-
-  // Definisi placeholder untuk Login/Admin
-  const PlaceholderPage = ({ title }) => (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-700">
-      <div className="text-center p-8 bg-white shadow-xl rounded-xl">
-        <h1 className="text-3xl font-bold mb-4">{title}</h1>
-        <p className="text-gray-500">
-          Halaman ini masih dalam tahap pengembangan.
-        </p>
-        <Link
-          to="/"
-          className={`mt-6 inline-block px-4 py-2 text-white rounded-lg font-semibold ${DARK_GREEN} ${HOVER_GREEN} transition duration-200`}>
-          <Home className="w-4 h-4 mr-2 inline-block" /> Kembali ke Beranda
-        </Link>
-      </div>
-    </div>
-  );
-
   return (
     <Router>
       <Routes>
         {/* Landing Page) */}
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LandingPage />
+            </Suspense>
+          }
+        />
 
         {/* Login campus */}
         <Route
           path="/login-campus"
-          element={<LoginCampus title="Halaman Login Kampus" />}
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginCampus title="Halaman Login Kampus" />
+            </Suspense>
+          }
         />
         {/* Login admin */}
         <Route
           path="/login-admin"
-          element={<LoginAdmin title="Halaman Login Admin" />}
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginAdmin title="Halaman Login Admin" />
+            </Suspense>
+          }
         />
         {/* Login mentee */}
         <Route
           path="/login-mentee"
-          element={<LoginMentee title="Halaman Login Mentee" />}
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginMentee title="Halaman Login Mentee" />
+            </Suspense>
+          }
         />
         {/* Dashboard */}
         <Route
           path="/dashboard-mentee"
-          element={<DashboardMentee title="Dashboard Mentee" />}
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardMentee title="Dashboard Mentee" />
+            </Suspense>
+          }
         />
+
+        {/* Login/Admin */}
+        <Route
+          path="/login-campus"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginCampus />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/login-admin"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginAdmin />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/login-mentee"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginMentee />
+            </Suspense>
+          }
+        />
+
+        {/* Halaman Kampus */}
+        <Route
+          path="/CampusPage"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <CampusPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/JurusanPage"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <JurusanPage />
+            </Suspense>
+          }
+        />
+        {/* detail campus */}
+        <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
+        <Route path="/campus/:id" element={<CampusDetailPage />} />
+        <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
+        <Route path="/campus/:id/jurusan" element={<CampusJurusanPage />} />
+        <Route path="/campus/:id/program" element={<CampusProgram />} />
+        {/* end detail campus */}
       </Routes>
     </Router>
   );
