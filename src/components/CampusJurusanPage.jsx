@@ -182,18 +182,6 @@ const CampusJurusanPage = () => {
     );
   }
 
-  /*
-    WARNING: The following assets are not defined/imported in the original code:
-    - Gedung
-    - Hanggar
-    - tecno
-    - POLIBATAM_LOGO
-    - politeknikData
-    The code below has been commented out to prevent reference errors.
-    If you wish to use this section, you must define and import these assets/variables.
-  */
-  // const { name, location, logo, image } = kampus; // Destructure for cleaner JSX
-
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
       <Navbar />
@@ -241,25 +229,6 @@ const CampusJurusanPage = () => {
           </div>
         </div>
       </header> 
-     
-
-      {/* Simplified Header/Info based on the missing variables, using 'kampus' data
-      <div className="relative w-full bg-white shadow-md min-h-64 flex justify-start items-end mb-6">
-        <img
-          src={kampus.image}
-          alt={kampus.name}
-          className="absolute inset-0 w-full h-full object-cover rounded-b-2xl"
-        />
-        {kampus.logo && (
-          <div className="relative z-10 mb-[-2rem] ml-10 bg-white rounded-full p-4 shadow-lg border-4 border-gray-100">
-            <img
-              src={kampus.logo}
-              alt={`${kampus.name} Logo`}
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-        )}
-      </div> */}
 
       {/* Info Kampus & Jurusan Content */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
