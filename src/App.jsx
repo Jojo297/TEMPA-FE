@@ -11,6 +11,7 @@ import LoginMentee from "./page/loginMentee";
 import CampusPage from "./page/campuspage";
 import CampusDetailPage from "./components/CampusDetailPage";
 import CampusPrestasiPage from "./components/CampusPrestasiPage";
+import CampusJurusanPage from "./components/CampusJurusanPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -51,7 +52,7 @@ export default function App() {
 
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
         <Route path="/campus/:id" element={<CampusDetailPage />} />
-        <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
+        <Route path="/campus/:id/jurusan" element={<CampusJurusanPage />} />
       </Routes>
     </Router>
   );

@@ -231,12 +231,18 @@ const CampusPrestasiPage = () => {
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Deskripsi
           </Link>
-          <button className="px-6 py-2 bg-[#013B35] text-white font-semibold rounded-full shadow transition hover:bg-[#01614c]">
+          <Link
+            to={`/campus/${kampus.id}/prestasi`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Prestasi
-          </button>
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          </Link>
+
+          <Link
+            to={`/campus/${kampus.id}/jurusan`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Jurusan
-          </button>
+          </Link>
+
           <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
           </button>

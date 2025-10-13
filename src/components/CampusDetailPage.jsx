@@ -109,10 +109,18 @@ const CampusDetailPage = () => {
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Prestasi
           </Link>
-
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          
+          <Link
+            to={`/campus/${kampus.id}/jurusan`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Jurusan
-          </button>
+          </Link>
+
+          {/* <Link 
+            to={`/campus/${kampus.id}/jurusan`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            Jurusan
+          </Link> */}
           <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
           </button>
