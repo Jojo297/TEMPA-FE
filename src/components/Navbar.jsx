@@ -24,9 +24,9 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <a href="#jurusan" className="hover:text-[#00BFA6]">
+          <Link to="/JurusanPage" className="hover:text-[#00BFA6]">
             Jurusan
-          </a>
+          </Link>
         </li>
         <li>
           <a href="#program" className="hover:text-[#00BFA6]">
@@ -34,13 +34,13 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="#masuk" className="hover:text-[#00BFA6]">
+          <Link to="/login-Mentee" className="hover:text-[#00BFA6]">
             Masuk
-          </a>
+          </Link>
         </li>
         <li>
           <a
-            href="#daftar"
+            href="/login-campus"
             className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
             Daftar
           </a>
