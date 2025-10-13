@@ -54,7 +54,7 @@ export default function App() {
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
         <Route path="/campus/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
-        <Route path="/jurusan/informatika" element={<DetailJurusan />} />
+        <Route path="/jurusan/:id" element={<DetailJurusan />} />
       </Routes>
     </Router>
   );
