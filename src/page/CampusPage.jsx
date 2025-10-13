@@ -98,56 +98,48 @@ const CampusPage = () => {
         {filteredKampus.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {filteredKampus.map((kampus) => (
-              <div
-                key={kampus.id}
-                className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 border border-gray-100">
-                <img
-                  src={kampus.image}
-                  alt={kampus.name}
-                  className="w-full h-56 object-cover"
-                />
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-[#013B35] mb-2">
-                    {kampus.name}
-                  </h2>
+              <Link to={`/campus-detail/${kampus.id}`} key={kampus.id}>
+                <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 border border-gray-100 flex flex-col h-full">
+                  <img
+                    src={kampus.image}
+                    alt={kampus.name}
+                    className="w-full h-56 object-cover flex-shrink-0"
+                  />
 
-                  {/* Rating */}
-                  <div className="flex items-center space-x-1 mb-3 text-[#FFD700]">
-                    {[...Array(kampus.rating)].map((_, i) => (
-                      <Star key={i} size={16} fill="#FFD700" stroke="none" />
-                    ))}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h2 className="text-xl font-semibold text-[#013B35] mb-2">
+                      {kampus.name}
+                    </h2>
+
+                    {/* Rating */}
+                    <div className="flex items-center space-x-1 mb-3 text-[#FFD700]">
+                      {/* ... Rating map ... */}
+                    </div>
+
+                    {/* Lokasi */}
+                    <div className="flex items-center text-sm text-gray-500 mb-4">
+                      {/* ... MapPin ... */}
+                      {kampus.location}
+                    </div>
+
+                    {/* Deskripsi */}
+                    <p className="text-gray-600 text-sm mb-4 leading-relaxed flex-grow">
+                      {kampus.desc}
+                    </p>
+
+                    {/* Jurusan: Tambahkan MAX-H dan SCROLL di sini */}
+                    <div className="flex flex-wrap gap-2 mb-0 max-h-24 overflow-y-auto pr-2 flex-shrink-0">
+                      {kampus.jurusan.map((jrs, i) => (
+                        <span
+                          key={i}
+                          className="bg-[#E9F7F4] text-[#013B35] text-xs px-3 py-1 rounded-full font-medium shrink-0">
+                          {jrs}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-
-                  {/* Lokasi */}
-                  <div className="flex items-center text-sm text-gray-500 mb-4">
-                    <MapPin size={16} className="mr-2 text-[#00BFA6]" />
-                    {kampus.location}
-                  </div>
-
-                  {/* Deskripsi */}
-                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                    {kampus.desc}
-                  </p>
-
-                  {/* Jurusan */}
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {kampus.jurusan.map((jrs, i) => (
-                      <span
-                        key={i}
-                        className="bg-[#E9F7F4] text-[#013B35] text-xs px-3 py-1 rounded-full font-medium">
-                        {jrs}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Lihat Detail */}
-                  <Link
-                    to={`/campus-detail/${kampus.id}`}
-                    className="bg-[#013B35] text-white w-full py-2 rounded-lg font-semibold hover:bg-[#025D52] transition text-center block">
-                    Lihat Detail
-                  </Link>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         ) : (

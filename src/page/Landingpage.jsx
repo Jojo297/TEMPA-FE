@@ -160,11 +160,11 @@ const LandingPage = () => {
             </a>
           </li>
           <li>
-            <a
-              href="#daftar"
+            <Link
+              to={"/login-mentee"}
               className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
               Daftar
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
@@ -370,7 +370,7 @@ const LandingPage = () => {
 
           <div className="flex gap-4">
             <Link to="/login-campus">
-              <button className="bg-[#B9E6FF] text-[#013B35] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#9edcff] transition">
+              <button className="bg-[#B9E6FF] text-[#013B35] font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-[#9edcff] transition">
                 Gabung Kampus
               </button>
             </Link>

@@ -3,37 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import polibatam from "../assets/polibatam.jpeg";
-import iteba from "../assets/iteba.jpg";
-import uib from "../assets/uib.jpeg";
+import polibatam from "../assets/Gedung.jpg";
+import iteba from "../assets/itebaGedung.jpg";
+import uib from "../assets/uibGedung.jpg";
 import logoPolibatam from "../assets/logo-polibatam.png";
 import logoIteba from "../assets/logo-iteba.png";
 import logoUib from "../assets/logo-uib.png";
 import polibatamPrestasi from "../assets/polibatam-prestasi.png";
-
-const kampusList = [
-  {
-    id: 1,
-    name: "Politeknik Negeri Batam",
-    image: polibatam,
-    logo: logoPolibatam,
-    location: "Batam, Riau Islands, Indonesia",
-  },
-  {
-    id: 2,
-    name: "Institut Teknologi Batam (ITEBA)",
-    image: iteba,
-    logo: logoIteba,
-    location: "Batam, Riau Islands, Indonesia",
-  },
-  {
-    id: 3,
-    name: "Universitas Internasional Batam (UIB)",
-    image: uib,
-    logo: logoUib,
-    location: "Batam, Riau Islands, Indonesia",
-  },
-];
+import { kampusList } from "@/lib/kampusList";
 
 const CampusPrestasiPage = () => {
   const { id } = useParams();
@@ -197,33 +174,42 @@ const CampusPrestasiPage = () => {
       <Navbar />
 
       {/* Header Kampus */}
-      <div className="relative w-full bg-white shadow-md min-h-[384px] flex justify-start items-end">
-        <img
-          src={kampus.image}
-          alt={kampus.name}
-          className="absolute inset-0 w-full h-64 md:h-96 object-cover rounded-b-2xl"
-        />
-        {kampus.logo && (
-          <div className="relative z-10 mb-[-2rem] ml-10 bg-white rounded-full p-4 shadow-lg">
+      {/* 2. Header Kampus & Galeri Gambar (Problematic: Missing asset variables) */}
+      <header className="px-10 pt-10 pb-0 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="h-[400px]">
             <img
-              src={kampus.logo}
-              alt={`${kampus.name} Logo`}
-              className="h-16 w-16 object-contain"
+              src={kampus.image}
+              alt="Gedung Utama"
+              className="col-span-2 row-span-2 w-full h-full object-cover rounded-tl-xl rounded-bl-xl"
             />
           </div>
-        )}
-      </div>
+
+          <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+                <img
+                  src={kampus.logo}
+                  alt="Polibatam Logo"
+                  className="w-20 h-20 object-contain"
+                />
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {kampus.name}
+                </h1>
+                <div className="flex items-center text-gray-300 mt-1">
+                  <MapPin size={16} className="mr-2" />
+                  <span className="text-sm">{kampus.location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Info Kampus */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#013B35] mb-2">
-          {kampus.name}
-        </h1>
-        <p className="flex items-center text-gray-500 text-sm md:text-base mb-8">
-          <MapPin size={16} className="mr-2 text-[#00BFA6]" />
-          {kampus.location}
-        </p>
-
         {/* Tombol Navigasi */}
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
@@ -231,15 +217,24 @@ const CampusPrestasiPage = () => {
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Deskripsi
           </Link>
-          <button className="px-6 py-2 bg-[#013B35] text-white font-semibold rounded-full shadow transition hover:bg-[#01614c]">
+          <Link
+            to={`/campus/${kampus.id}/prestasi`}
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Prestasi
-          </button>
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          </Link>
+          <Link
+            to={`/campus/${kampus.id}/jurusan`}
+            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Jurusan
-          </button>
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          </Link>
+          <Link
+            to={`/campus/${kampus.id}/program`}
+            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
-          </button>
+          </Link>
+          {/* <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            Program
+          </button> */}
         </div>
 
         {/* Card Prestasi */}

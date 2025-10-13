@@ -2,58 +2,14 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import polibatam from "../assets/polibatam.jpeg";
-import iteba from "../assets/iteba.jpg";
-import uib from "../assets/uib.jpeg";
+import iteba from "../assets/itebaGedung.jpg";
+import uib from "../assets/uibGedung.jpg";
 import logoPolibatam from "../assets/logo-polibatam.png";
 import logoIteba from "../assets/logo-iteba.png";
 import logoUib from "../assets/logo-uib.png";
-
-const kampusList = [
-  {
-    id: 1,
-    name: "Politeknik Negeri Batam",
-    image: polibatam,
-    logo: logoPolibatam,
-    location: "Batam, Riau Islands, Indonesia",
-    desc: "Politeknik Negeri Batam (Polibatam) merupakan satu-satunya Perguruan Tinggi Negeri (PTN) Vokasi di kawasan perdagangan dan pelabuhan bebas Batam, Bintan, dan Karimun Provinsi Kepulauan Riau. Selain terletak di salah satu kawasan pusat pertumbuhan ekonomi nasional, Polibatam juga terletak di wilayah terdepan dan terluar wilayah Negara Kesatuan republik Indonesia yang berbatasan langsung dengan perairan internasional.olibatam merupakan kampus vokasi unggulan yang berfokus pada pendidikan terapan, riset, dan inovasi teknologi industri.",
-    visi: "Visi dari Polibatam adalah menjadi politeknik generasi baru yang bermutu, adaptif, inovatif, dan bermitra erat dengan industri dan masyarakat untuk mendukung Indonesia Maju dan Sejahtera 2045.",
-    misi: "Aktif dalam proses kreasi, penyebaran, dan penerapan sains serta teknologi melalui layanan pendidikan tinggi vokasi dan penelitian terapan yang bermutu, terbuka, relevan, dan berkolaborasi erat dengan masyarakat dan industri.",
-  },
-  {
-    id: 2,
-    name: "Institut Teknologi Batam (ITEBA)",
-    image: iteba,
-    logo: logoIteba,
-    location: "Batam, Riau Islands, Indonesia",
-    desc: "ITEBA berkomitmen untuk mencetak lulusan yang tidak hanya unggul dalam bidang akademik, tetapi juga siap beradaptasi dan berinovasi di dunia profesional yang terus berubah. Dengan kurikulum yang terus berkembang dan relevansi yang tinggi dengan kebutuhan industri, ITEBA bertujuan untuk menjadi salah satu perguruan tinggi terkemuka di Indonesia, serta mencetak generasi penerus yang mampu bersaing di kancah internasional.",
-    visi: "Menjadi institusi pendidikan tinggi yang terkemuka dibidang sains, desain bisnis dan teknologi di Asia Pasifik dan menjadi rujukan pendidikan tinggi Indonesia tahun 2025",
-    misi: [
-      "Menyelenggarakan dan mengembangkan pendidikan dan pengajaran dibidang sains, desain, bisnis, dan teknologi yang menghasilkan lulusan unggul di bidangnya.",
-      "Menyelenggarakan dan mengembangkan penelitian dibidang sains, desain, bisnis, dan teknologi berbasis kearifan lokal.",
-      "Mengaplikasikan berbagai keahlian dan keilmuan melalui pengabdian kepada masyarakat untuk meningkatkan kesejahteraan masyarakat.",
-      "Menjadi agen pembaharu dalam mendorong kemandirian pembangunan SDM bidang sains, desain, bisnis, dan teknologi.",
-      "Berperan sebagai simpul utama jejaring pendidikan tinggi sains, desain, bisnis, dan teknologi di Indonesia.",
-    ],
-  },
-
-  {
-    id: 3,
-    name: "Universitas Internasional Batam (UIB)",
-    image: uib,
-    logo: logoUib,
-    location: "Batam, Riau Islands, Indonesia",
-    desc: "Universitas Internasional Batam is a campus where global social leaders are formed and forged based on values and global perspective. With UIB, you will find a learning experience that combines in-depth knowledge which forms a character with integrity, and is supported by a conducive learning environment to develop your potential.",
-    visi: "To become a university of international standards that produces graduates, scientific knowledge, technology, and art capable of responding to global dynamic changes.",
-    misi: [
-      "To continuously deliver comprehensive education that meets international quality standards.",
-      "To advance analytical and innovative science, technology, and art through research.",
-      "To provide community services that uphold human values.",
-      "To implement transparent and accountable governance.",
-    ],
-  },
-];
+import polibatam from "../assets/Gedung.jpg";
+import POLIBATAM_LOGO from "../assets/logo-polibatam.png";
+import { kampusList } from "@/lib/kampusList";
 
 const CampusDetailPage = () => {
   const { id } = useParams();
@@ -71,53 +27,69 @@ const CampusDetailPage = () => {
       <Navbar />
 
       {/* Header Image */}
-      <div className="relative w-full bg-white shadow-md">
-        <img
-          src={kampus.image}
-          alt={kampus.name}
-          className="w-full h-64 md:h-96 object-cover rounded-b-2xl"
-        />
-        {kampus.logo && (
-          <div className="absolute -bottom-8 left-10 bg-white rounded-full p-4 shadow-lg">
+      <header className="px-10 pt-10 pb-0 bg-white">
+        <div className="max-w-7xl mx-auto rounded-xl shadow-lg overflow-hidden">
+          <div className="grid grid-cols-1 grid-rows-1 gap-3 h-[400px]">
             <img
-              src={kampus.logo}
-              alt={`${kampus.name} Logo`}
-              className="h-16 w-16 object-contain"
+              src={kampus.image}
+              alt="Gedung Utama"
+              className="col-span-2 row-span-2 w-full h-full object-cover rounded-tl-xl rounded-bl-xl"
             />
           </div>
-        )}
-      </div>
 
-      {/* Info Kampus & Card */}
-      <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20">
-        {/* Nama & Lokasi */}
-        <h1 className="text-3xl md:text-4xl font-bold text-[#013B35] mb-2">
-          {kampus.name}
-        </h1>
-        <p className="flex items-center text-gray-500 text-sm md:text-base mb-8">
-          <MapPin size={16} className="mr-2 text-[#00BFA6]" />
-          {kampus.location}
-        </p>
+          <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+                <img
+                  src={kampus.logo}
+                  alt="Polibatam Logo"
+                  className="w-20 h-20 object-contain"
+                />
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {kampus.name}
+                </h1>
+                <div className="flex items-center text-gray-300 mt-1">
+                  <MapPin size={16} className="mr-2" />
+                  <span className="text-sm">{kampus.location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        {/* Navigation Buttons */}
-        <div className="flex flex-wrap gap-4 mb-10">
-          <button className="px-6 py-2 bg-[#013B35] text-white font-semibold rounded-full shadow transition hover:bg-[#01614c]">
+      {/* Info Kampus */}
+      <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
+        {/* Tombol Navigasi */}
+        <div className="flex flex-wrap gap-4 mb-10 justify-start">
+          <Link
+            to={`/campus-detail/${kampus.id}`}
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Deskripsi
-          </button>
+          </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Prestasi
           </Link>
-
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          <Link
+            to={`/campus/${kampus.id}/jurusan`}
+            // Active state class applied
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Jurusan
-          </button>
-          <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+          </Link>
+          <Link
+            to={`/campus/${kampus.id}/program`}
+            // Active state class applied
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
-          </button>
+          </Link>
+          {/* <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            Program
+          </button> */}
         </div>
-
         {/* Deskripsi & Visi Misi */}
         <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6">
           <h2 className="text-2xl font-bold text-[#013B35]">
