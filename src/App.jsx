@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "lucide-react";
@@ -8,6 +7,7 @@ import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
 import LandingPage from "./page/Landingpage";
 import LoginMentee from "./page/loginMentee";
+import DashboardMentee from "./page/Dashboard/dashboardMentee";
 
 export default function App() {
   // DEFINISI VARIABEL WARNA (DIPERLUKAN UNTUK PlaceholderPage)
@@ -31,25 +31,31 @@ export default function App() {
     </div>
   );
 
-
   return (
     <Router>
       <Routes>
-        {/* 1. Rute Utama (Landing Page) */}
+        {/* Landing Page) */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* 4. Rute Login/Admin (Placeholder) */}
+        {/* Login campus */}
         <Route
           path="/login-campus"
           element={<LoginCampus title="Halaman Login Kampus" />}
         />
+        {/* Login admin */}
         <Route
           path="/login-admin"
           element={<LoginAdmin title="Halaman Login Admin" />}
         />
+        {/* Login mentee */}
         <Route
           path="/login-mentee"
           element={<LoginMentee title="Halaman Login Mentee" />}
+        />
+        {/* Dashboard */}
+        <Route
+          path="/dashboard-mentee"
+          element={<DashboardMentee title="Dashboard Mentee" />}
         />
       </Routes>
     </Router>
