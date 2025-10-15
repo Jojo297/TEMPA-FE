@@ -1,20 +1,18 @@
-// src/lib/JurusanList.jsx
 import informatika from "@/assets/informatika.png";
 import mesin from "@/assets/mesin.jpg";
 import elektronika from "@/assets/elektronika.jpg";
 import akutansi from "@/assets/akutansi.jpg";
 import hukum from "@/assets/hukum.jpg";
 import sisteminformasi from "@/assets/sistem-informasi.jpg";
-import teknikkomputer from "@/assets/teknik-komputer.jpg";
 import teknikindustri from "@/assets/teknik-industri.jpg";
 import manajemen from "@/assets/manajemen.jpg";
-import bisnisdigital from "@/assets/bisnis-digital.jpg";
-import dkv from "@/assets/dkv.jpg";
 import tekniksipil from "@/assets/teknik-sipil.jpg";
-import arsitektur from "@/assets/arsitektur.jpg";
-import psikologi from "@/assets/psikologi.jpg";
-import matematika from "@/assets/matematika.jpg";
 import dokter from "@/assets/dokter.jpg";
+import pariwisata from "@/assets/pariwisata.jpg";
+import dkv from "@/assets/dkv.jpg";
+import lpi from "@/assets/lpi.jpg";
+import matematika from "@/assets/matematika.jpg";
+import bahasainggris from "@/assets/bahasa-inggris.jpg";
 
 export const jurusanList = [
   {
@@ -70,30 +68,6 @@ export const jurusanList = [
   },
   {
     id: 3,
-    nama: "Teknik Komputer",
-    slug: "teknik-komputer",
-    heroImg: teknikkomputer,
-    deskripsi:
-      "Jurusan Teknik Komputer menggabungkan hardware dan software untuk menciptakan sistem cerdas dan efisien.",
-    prospekKerja: [
-      "Hardware Engineer",
-      "Embedded System Developer",
-      "IoT Engineer",
-    ],
-    kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
-      { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
-    ],
-    programTerkait: [
-      {
-        nama: "Workshop Internet of Things (IoT)",
-        tanggal: "3 November 2025",
-        lokasi: "Polibatam - Lab Komputer",
-      },
-    ],
-  },
-  {
-    id: 4,
     nama: "Teknik Mesin",
     slug: "mesin",
     heroImg: mesin,
@@ -118,7 +92,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 5,
+    id: 4,
     nama: "Teknik Industri",
     slug: "teknik-industri",
     heroImg: teknikindustri,
@@ -142,7 +116,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 6,
+    id: 5,
     nama: "Elektronika",
     slug: "elektronika",
     heroImg: elektronika,
@@ -166,7 +140,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 7,
+    id: 6,
     nama: "Akuntansi",
     slug: "akuntansi",
     heroImg: akutansi,
@@ -186,8 +160,8 @@ export const jurusanList = [
     ],
   },
   {
-    id: 8,
-    nama: "Manajemen",
+    id: 7,
+    nama: "Manajemen Bisnis",
     slug: "manajemen",
     heroImg: manajemen,
     deskripsi:
@@ -207,31 +181,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 9,
-    nama: "Bisnis Digital",
-    slug: "bisnis-digital",
-    heroImg: bisnisdigital,
-    deskripsi:
-      "Jurusan Bisnis Digital mempelajari penerapan teknologi digital dalam strategi bisnis, termasuk e-commerce, digital marketing, dan inovasi startup.",
-    prospekKerja: [
-      "Digital Marketer",
-      "E-Commerce Specialist",
-      "Startup Founder",
-    ],
-    kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
-      { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-    ],
-    programTerkait: [
-      {
-        nama: "Workshop Digital Branding",
-        tanggal: "29 Oktober 2025",
-        lokasi: "ITEBA - Aula Inovasi",
-      },
-    ],
-  },
-  {
-    id: 10,
+    id: 8,
     nama: "Desain Komunikasi Visual (DKV)",
     slug: "dkv",
     heroImg: dkv,
@@ -256,7 +206,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 11,
+    id: 9,
     nama: "Teknik Sipil",
     slug: "teknik-sipil",
     heroImg: tekniksipil,
@@ -275,26 +225,7 @@ export const jurusanList = [
     ],
   },
   {
-    id: 12,
-    nama: "Arsitektur",
-    slug: "arsitektur",
-    heroImg: arsitektur,
-    deskripsi:
-      "Jurusan Arsitektur mempelajari seni dan sains dalam perancangan bangunan yang fungsional, estetis, dan berkelanjutan.",
-    prospekKerja: ["Architect", "Urban Planner", "Interior Designer"],
-    kampusTerkait: [
-      { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-    ],
-    programTerkait: [
-      {
-        nama: "Pameran Desain Arsitektur Modern",
-        tanggal: "5 November 2025",
-        lokasi: "UIB - Aula Seni",
-      },
-    ],
-  },
-  {
-    id: 13,
+    id: 10,
     nama: "Hukum",
     slug: "hukum",
     heroImg: hukum,
@@ -313,64 +244,34 @@ export const jurusanList = [
     ],
   },
   {
-    id: 14,
-    nama: "Psikologi",
-    slug: "psikologi",
-    heroImg: psikologi,
+    id: 11,
+    nama: "Pendidikan Bahasa Inggris",
+    heroImg: bahasainggris,
+    slug: "pendidikan-bahasa-inggris",
     deskripsi:
-      "Jurusan Psikologi mempelajari perilaku manusia, proses kognitif, dan aspek sosial-emosional. Mahasiswa dibekali keterampilan konseling dan penelitian psikologis.",
-    prospekKerja: ["Psychologist", "Counselor", "HR Specialist"],
-    kampusTerkait: [
-      { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
+      "Jurusan Pendidikan Bahasa Inggris berfokus pada penguasaan bahasa Inggris serta metodologi pengajaran. Mahasiswa dilatih untuk menjadi pendidik profesional yang mampu mengajar dengan efektif serta memahami budaya dan linguistik bahasa Inggris.",
+    prospekKerja: [
+      "Guru Bahasa Inggris",
+      "Penerjemah",
+      "Content Writer",
+      "Konsultan Bahasa",
     ],
-    programTerkait: [
+    kampusTerkait: [
       {
-        nama: "Seminar Psikologi Klinis",
-        tanggal: "18 Oktober 2025",
-        lokasi: "UIB - Aula Psikologi",
+        nama: "Universitas Internasional Batam (UIB)",
+        gambar: "/kampus/uib.jpg",
       },
-    ],
-  },
-  {
-    id: 15,
-    nama: "Matematika",
-    slug: "matematika",
-    heroImg: matematika,
-    deskripsi:
-      "Jurusan Matematika mempelajari teori bilangan, statistika, aljabar, dan analisis numerik. Mahasiswa dibekali keterampilan pemodelan matematis untuk berbagai industri.",
-    prospekKerja: ["Data Analyst", "Statistician", "Researcher"],
-    kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
         nama: "Workshop Statistik & Data",
         tanggal: "22 Oktober 2025",
-        lokasi: "ITEBA - Lab Matematika",
+        lokasi: "UIB - Kelas",
       },
     ],
   },
   {
-    id: 16,
-    nama: "Kelautan",
-    slug: "kelautan",
-    // heroImg: placeholder,
-    deskripsi:
-      "Jurusan Kelautan mempelajari ekosistem laut, sumber daya kelautan, dan konservasi. Mahasiswa dibekali kemampuan riset dan pengelolaan sumber daya laut.",
-    prospekKerja: ["Marine Biologist", "Oceanographer", "Fisheries Manager"],
-    kampusTerkait: [
-      { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-    ],
-    programTerkait: [
-      {
-        nama: "Workshop Konservasi Laut",
-        tanggal: "19 Oktober 2025",
-        lokasi: "UIB - Lab Kelautan",
-      },
-    ],
-  },
-  {
-    id: 17,
+    id: 12,
     nama: "Kedokteran",
     slug: "kedokteran",
     heroImg: dokter,
@@ -389,10 +290,10 @@ export const jurusanList = [
     ],
   },
   {
-    id: 18,
+    id: 13,
     nama: "Pariwisata",
     slug: "pariwisata",
-    // heroImg: placeholder,
+    heroImg: pariwisata,
     deskripsi:
       "Jurusan Pariwisata mempelajari pengelolaan destinasi, perhotelan, dan strategi promosi wisata untuk mengembangkan industri pariwisata berkelanjutan.",
     prospekKerja: ["Tourism Consultant", "Hotel Manager", "Event Planner"],
@@ -408,29 +309,29 @@ export const jurusanList = [
     ],
   },
   {
-    id: 19,
-    nama: "Manajemen Rekayasa",
-    slug: "manajemen-rekayasa",
-    // heroImg: placeholder,
+    id: 14,
+    nama: "Matematika",
+    slug: "matematika",
+    heroImg: matematika,
     deskripsi:
-      "Jurusan ini menggabungkan prinsip teknik dan manajemen untuk merancang, mengelola, dan meningkatkan sistem kompleks di industri.",
-    prospekKerja: ["Project Manager", "Operations Engineer", "Systems Analyst"],
+      "Jurusan Matematika mempelajari teori bilangan, statistika, aljabar, dan analisis numerik. Mahasiswa dibekali kemampuan berpikir logis dan analitis untuk berbagai bidang riset dan teknologi.",
+    prospekKerja: ["Data Analyst", "Actuary", "Researcher"],
     kampusTerkait: [
       { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
-        nama: "Workshop Manajemen Produksi",
-        tanggal: "10 November 2025",
-        lokasi: "ITEBA - Aula Rekayasa",
+        nama: "Workshop Analisis Data Statistik",
+        tanggal: "28 Oktober 2025",
+        lokasi: "ITEBA - Lab Matematika",
       },
     ],
   },
   {
-    id: 20,
+    id: 15,
     nama: "Logistik Perdagangan Internasional",
     slug: "logistik-perdagangan",
-    // heroImg: placeholder,
+    heroImg: lpi,
     deskripsi:
       "Jurusan ini mempelajari manajemen rantai pasok, ekspor-impor, dan sistem logistik global yang mendukung perdagangan internasional.",
     prospekKerja: [

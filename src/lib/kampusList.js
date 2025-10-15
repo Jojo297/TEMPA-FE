@@ -17,11 +17,16 @@ export const kampusList = [
     misi: "Aktif dalam proses kreasi, penyebaran, dan penerapan sains serta teknologi melalui layanan pendidikan tinggi vokasi dan penelitian terapan yang bermutu, terbuka, relevan, dan berkolaborasi erat dengan masyarakat dan industri.",
     jurusan: [
       { name: "Teknik Informatika", slug: "informatika" },
-      { name: "Manajemen Bisnis", slug: "manajemen-bisnis" },
+      { name: "Manajemen Bisnis", slug: "manajemen" },
       { name: "Teknik Mesin", slug: "mesin" },
       { name: "Teknik Elektronika", slug: "elektronika" },
       { name: "Akuntansi", slug: "akuntansi" },
       { name: "Administrasi Bisnis", slug: "administrasi-bisnis" },
+      { name: "Sistem Informasi", slug: "sistem-informasi" },
+      {
+        name: "Logistik Perdagangan internasional",
+        slug: "logistik-perdagangan",
+      },
     ],
   },
   {
@@ -41,11 +46,13 @@ export const kampusList = [
     ],
     jurusan: [
       { name: "Teknik Informatika", slug: "informatika" },
-      { name: "Manajemen Bisnis", slug: "manajemen-bisnis" },
+      { name: "Manajemen Bisnis", slug: "manajemen" },
       { name: "Teknik Mesin", slug: "mesin" },
       { name: "Teknik Elektronika", slug: "elektronika" },
       { name: "Desain Komunikasi Visual (DKV)", slug: "dkv" },
       { name: "Teknik Industri", slug: "teknik-industri" },
+      { name: "Teknik Sipil", slug: "teknik-sipil" },
+      { name: "Akuntansi", slug: "akuntansi" },
     ],
   },
   {
@@ -64,13 +71,20 @@ export const kampusList = [
     ],
     jurusan: [
       { name: "Teknik Informatika", slug: "informatika" },
-      { name: "Manajemen Bisnis", slug: "manajemen-bisnis" },
+      { name: "Manajemen Bisnis", slug: "manajemen" },
       { name: "Teknik Mesin", slug: "mesin" },
       { name: "Hukum", slug: "hukum" },
       { name: "Akuntansi", slug: "akuntansi" },
       { name: "Manajemen", slug: "manajemen" },
       { name: "Desain Komunikasi Visual (DKV)", slug: "dkv" },
       { name: "Pariwisata", slug: "pariwisata" },
+      { name: "Sistem Informasi", slug: "sistem-informasi" },
+      { name: "Pendidikan Bahasa Inggris", slug: "pendidikan-bahasa-inggris" },
+      { name: "Kedokteran", slug: "kedokteran" },
+      {
+        name: "Logistik Perdagangan internasional",
+        slug: "logistik-perdagangan",
+      },
     ],
   },
 ];
