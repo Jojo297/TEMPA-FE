@@ -11,6 +11,8 @@ const DashboardMentee = lazy(() => import("./page/Dashboard/dashboardMentee"));
 const CampusPage = lazy(() => import("./page/campuspage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
+const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
+
 const CampusPrestasiPage = lazy(() =>
   import("./components/CampusPrestasiPage")
 );
@@ -112,10 +114,19 @@ export default function App() {
             </Suspense>
           }
         />
+        <Route
+          path="/jurusan/:id"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DetailJurusan />
+            </Suspense>
+          }
+        />
         {/* detail campus */}
         <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
+        <Route path="/jurusan/:id" element={<DetailJurusan />} />
         <Route path="/campus/:id/jurusan" element={<CampusJurusanPage />} />
         <Route path="/campus/:id/program" element={<CampusProgram />} />
         {/* end detail campus */}

@@ -306,9 +306,11 @@ const LandingPage = () => {
             ))}
           </div>
 
-          <button className="mt-10 text-sm font-semibold border-b-2 border-black hover:text-[#013B35] hover:border-[#013B35] transition">
+          <Link
+            to="/JurusanPage"
+            className="mt-10 inline-block text-sm font-semibold border-b-2 border-black hover:text-[#013B35] hover:border-[#013B35] transition">
             Lihat Selengkapnya
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -368,7 +370,7 @@ const LandingPage = () => {
 
           <div className="flex gap-4">
             <Link to="/login-campus">
-              <button className="bg-[#B9E6FF] text-[#013B35] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#9edcff] transition">
+              <button className="bg-[#B9E6FF] text-[#013B35] font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-[#9edcff] transition">
                 Gabung Kampus
               </button>
             </Link>

@@ -35,14 +35,14 @@ const Navbar = () => {
         </li>
         <li>
           <Link to="/login-Mentee" className="hover:text-[#00BFA6]">
-            Masuk
+            panduan
           </Link>
         </li>
         <li>
           <a
-            href="/login-campus"
+            href="/login-mentee"
             className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
-            Daftar
+            Masuk
           </a>
         </li>
       </ul>

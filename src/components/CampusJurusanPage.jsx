@@ -3,197 +3,18 @@ import { Link, useParams } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-// Asset Imports
-
-import polibatam from "../assets/Gedung.jpg";
-import itebaImage from "../assets/itebaGedung.jpg";
-import uibImage from "../assets/uibGedung.jpg";
-import logoPolibatam from "../assets/logo-polibatam.png";
-import logoIteba from "../assets/logo-iteba.png";
-import logoUib from "../assets/logo-uib.png";
-import tiLogo from "../assets/if.jpg";
-import elektroLogo from "../assets/ELEKTRO.png";
-import tmLogo from "../assets/TM.jpg";
 import { kampusList } from "@/lib/kampusList";
+import { jurusanList } from "@/lib/JurusanList"; // ✅ jurusan dipanggil dari file baru
 
-// === DATA JURUSAN PER KAMPUS ===
-const jurusanData = {
-  1: [
-    {
-      Jurusan: "Teknik Informatika",
-      content: (
-        <div className="flex flex-col lg:flex-row gap-6 p-4">
-          <div className="w-full lg:w-1/3 flex justify-center items-start">
-            <img
-              src={tiLogo}
-              alt="Teknik Informatika Polibatam"
-              className="max-w-[200px] h-auto object-contain"
-            />
-          </div>
-          <div className="w-full lg:w-2/3 text-gray-700 leading-relaxed">
-            <p className="mb-4">
-              Sebagai jurusan yang berperan penting dalam mencetak talenta
-              digital masa depan, Teknik Informatika Polibatam menghadirkan
-              beberapa program studi unggulan berikut:
-            </p>
-            <div className="flex flex-col sm:flex-row">
-              <ul className="list-disc ml-5 space-y-1 w-full sm:w-1/2">
-                <li>Diploma 3 Teknik Informatika</li>
-                <li>Diploma 3 Teknologi Geomatika</li>
-                <li>Sarjana Terapan Animasi</li>
-                <li>Sarjana Terapan Teknologi Rekayasa Multimedia</li>
-              </ul>
-              <ul className="list-disc ml-5 space-y-1 w-full sm:w-1/2 mt-4 sm:mt-0">
-                <li>Sarjana Terapan Rekayasa Keamanan Siber</li>
-                <li>Sarjana Terapan Rekayasa Perangkat Lunak</li>
-                <li>Sarjana Terapan Teknologi Permainan</li>
-                <li>Magister Terapan (S2) / Teknik Komputer</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      Jurusan: "Teknik Elektro",
-      content: (
-        <div className="flex flex-col lg:flex-row gap-6 p-4">
-          <div className="w-full lg:w-1/3 flex justify-center items-start">
-            <img
-              src={elektroLogo}
-              alt="Teknik Elektro Polibatam"
-              className="max-w-[200px] h-auto object-contain"
-            />
-          </div>
-          <div className="w-full lg:w-2/3 text-gray-700 leading-relaxed">
-            <p className="mb-4">
-              Sebagai jurusan yang berperan penting dalam dunia Elektronika,
-              Teknik Elektro Polibatam menghadirkan beberapa program studi
-              unggulan berikut:
-            </p>
-            <div className="flex flex-col sm:flex-row">
-              <ul className="list-disc ml-5 space-y-1 w-full sm:w-1/2">
-                <li>Diploma 3 Teknik Elektronika Manufaktur</li>
-                <li>Diploma 3 Teknik Instrumentasi</li>
-                <li>Sarjana Terapan Teknik Robotika</li>
-                <li>Sarjana Terapan Teknologi Rekayasa Elektronika</li>
-              </ul>
-              <ul className="list-disc ml-5 space-y-1 w-full sm:w-1/2 mt-4 sm:mt-0">
-                <li>Sarjana Terapan Rekayasa Pembangkit Energi</li>
-                <li>Sarjana Terapan Mekatronika</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      Jurusan: "Teknik Mesin",
-      content: (
-        <div className="flex flex-col lg:flex-row gap-6 p-4 items-center lg:items-start">
-          <div className="w-full lg:w-1/3 flex justify-center items-start">
-            <img
-              src={tmLogo}
-              alt="Teknik Mesin Polibatam"
-              className="max-w-[200px] h-auto object-contain"
-            />
-          </div>
-          <div className="w-full lg:w-2/3 text-gray-700 leading-relaxed">
-            <p className="mb-4">
-              Jurusan Teknik Mesin Polibatam fokus pada pengembangan kompetensi
-              di bidang perancangan, manufaktur, dan perawatan mesin industri.
-              Program studi unggulan:
-            </p>
-            <ul className="list-disc ml-5 space-y-1">
-              <li>Diploma 3 Teknik Mesin</li>
-              <li>Sarjana Terapan Teknik Perancangan dan Konstruksi Kapal</li>
-              <li>Sarjana Terapan Teknologi Rekayasa Kimia Industri</li>
-            </ul>
-          </div>
-        </div>
-      ),
-    },
-    {
-      Jurusan: "Management Bisnis",
-      content: (
-        <p className="p-4 text-gray-700 leading-relaxed">
-          Jurusan Management Bisnis Polibatam menyiapkan lulusan yang siap
-          bersaing dalam dunia usaha. Program studi unggulan: D3 Akuntansi,
-          S.Tr. Akuntansi Manajerial, S.Tr. Administrasi Bisnis Terapan.
-        </p>
-      ),
-    },
-  ],
-  // Placeholder data for ITEBA and UIB (IDs 2 & 3) using Jurusan structure
-  2: [
-    {
-      Jurusan: "Teknologi Informasi",
-      content: (
-        <p className="p-4 text-gray-700">
-          Program studi: S1 Teknik Informatika, S1 Sistem Informasi.
-        </p>
-      ),
-    },
-    {
-      Jurusan: "Desain",
-      content: (
-        <p className="p-4 text-gray-700">
-          Program studi: S1 Desain Komunikasi Visual (DKV).
-        </p>
-      ),
-    },
-    {
-      Jurusan: "Rekayasa Industri",
-      content: (
-        <p className="p-4 text-gray-700">Program studi: S1 Teknik Industri.</p>
-      ),
-    },
-  ],
-  3: [
-    {
-      Jurusan: "Hukum",
-      content: (
-        <p className="p-4 text-gray-700">Program studi: S1 Ilmu Hukum.</p>
-      ),
-    },
-    {
-      Jurusan: "Bisnis dan Akuntansi",
-      content: (
-        <p className="p-4 text-gray-700">
-          Program studi: S1 Akuntansi, S1 Manajemen.
-        </p>
-      ),
-    },
-    {
-      Jurusan: "Teknik",
-      content: (
-        <p className="p-4 text-gray-700">
-          Program studi: S1 Teknik Sipil, S1 Teknik Elektro.
-        </p>
-      ),
-    },
-    {
-      Jurusan: "Pariwisata",
-      content: (
-        <p className="p-4 text-gray-700">Program studi: S1 Pariwisata.</p>
-      ),
-    },
-  ],
-};
-
-// --- MAIN COMPONENT ---
 const CampusJurusanPage = () => {
   const { id } = useParams();
   const campusId = parseInt(id);
   const kampus = kampusList.find((k) => k.id === campusId);
 
-  // State: Initialize with the first Jurusan name if available
-  const currentJurusanData = jurusanData[campusId] || [];
+  const currentJurusanData = jurusanList[campusId] || [];
   const initialJurusan = currentJurusanData[0]?.Jurusan || null;
   const [openJurusan, setOpenJurusan] = useState(initialJurusan);
 
-  // Toggle function for the accordion
   const toggleJurusan = (jurusanName) => {
     setOpenJurusan(openJurusan === jurusanName ? null : jurusanName);
   };
@@ -210,14 +31,14 @@ const CampusJurusanPage = () => {
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
       <Navbar />
 
-      {/* 2. Header Kampus & Galeri Gambar (Problematic: Missing asset variables) */}
+      {/* Header Kampus */}
       <header className="px-10 pt-10 pb-0 bg-white">
         <div className="max-w-7xl mx-auto rounded-xl shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 grid-rows-1 gap-3 h-[400px]">
+          <div className="h-[400px]">
             <img
               src={kampus.image}
-              alt="Gedung Utama"
-              className="col-span-2 row-span-2 w-full h-full object-cover rounded-tl-xl rounded-bl-xl"
+              alt={`Gedung ${kampus.name}`}
+              className="w-full h-full object-cover"
             />
           </div>
 
@@ -226,7 +47,7 @@ const CampusJurusanPage = () => {
               <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
                 <img
                   src={kampus.logo}
-                  alt="Polibatam Logo"
+                  alt={`${kampus.name} Logo`}
                   className="w-20 h-20 object-contain"
                 />
               </div>
@@ -244,7 +65,7 @@ const CampusJurusanPage = () => {
         </div>
       </header>
 
-      {/* Info Kampus & Jurusan Content */}
+      {/* Jurusan Section */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
         {/* Tombol Navigasi */}
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
@@ -260,18 +81,17 @@ const CampusJurusanPage = () => {
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
-            // Active state class applied
             className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
-            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
           </Link>
         </div>
 
-        {/* Card Jurusan (Accordion) */}
+        {/* Accordion Jurusan */}
         <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
           <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
             Jurusan & Program Studi {kampus.name}
@@ -280,6 +100,7 @@ const CampusJurusanPage = () => {
             Pilih jurusan di bawah untuk melihat program studi dan informasi
             detail.
           </p>
+
           <div className="space-y-5">
             {currentJurusanData.length > 0 ? (
               currentJurusanData.map((item) => (
