@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { jurusanList } from "@/lib/JurusanList";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { kampusList } from "@/lib/kampusList";
 
 const ChevronRightIcon = () => (
   <svg
@@ -150,11 +151,40 @@ const ProgramItem = ({ program }) => (
 );
 
 export default function DetailJurusan() {
-  const { id } = useParams();
-  const jurusanId = parseInt(id);
-  const jurusan = jurusanList.find((j) => j.id === jurusanId);
+  const { slug } = useParams();
 
-  const dummyProgram = [
+  const jurusan = jurusanList.find((j) => j.slug === slug);
+
+  let kampusDitemukan = [];
+
+  if (slug) {
+    kampusDitemukan = kampusList.filter((kampus) => {
+      if (Array.isArray(kampus.jurusan)) {
+        return kampus.jurusan.some((j) => j.slug === slug);
+      }
+      return false;
+    });
+  }
+
+  if (!jurusan) {
+    // Memberi tahu pengguna jika slug tidak cocok dengan item di jurusanList
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center text-center">
+        <h1 className="text-3xl font-bold mb-2 text-red-500">
+          Jurusan '{slug}' tidak ditemukan.
+        </h1>
+        <Link
+          to="/JurusanPage"
+          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]">
+          Kembali ke daftar jurusan
+        </Link>
+      </div>
+    );
+  }
+
+  // Definisikan data dummy program di sini (atau ambil dari state/prop jika ada)
+  const programData = [
+    // Data dummyProgram Anda
     {
       id: 1,
       nama: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -179,24 +209,7 @@ export default function DetailJurusan() {
     },
   ];
 
-  const programData =
-    jurusan?.programTerkait?.length > 0 ? jurusan.programTerkait : dummyProgram;
-
-  if (!jurusan) {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-center">
-        <h1 className="text-3xl font-bold mb-2 text-red-500">
-          Jurusan tidak ditemukan
-        </h1>
-        <Link
-          to="/JurusanPage"
-          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]">
-          Kembali ke daftar jurusan
-        </Link>
-      </div>
-    );
-  }
-
+  // --- JSX Output ---
   return (
     <>
       <Navbar />
@@ -206,16 +219,17 @@ export default function DetailJurusan() {
           <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
             <div className="relative w-full h-[320px]">
               <img
+                // Menggunakan data jurusan
                 src={
-                  jurusan.heroImg ||
-                  "https://via.placeholder.com/1200x320?text=INFORMATIKA+HERO"
+                  jurusan.heroImg || // Asumsi jurusanList memiliki properti heroImg
+                  "https://via.placeholder.com/1200x320?text=HERO+JURUSAN"
                 }
                 alt={jurusan.nama}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="bg-[#013B35] py-4 px-6">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white uppercase tracking-wider">
+              <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
                 {jurusan.nama}
               </h1>
             </div>
@@ -228,8 +242,9 @@ export default function DetailJurusan() {
             Tentang Jurusan
           </h2>
           <p className="text-gray-700 leading-relaxed text-justify">
+            {/* Menggunakan data jurusan */}
             {jurusan.deskripsi ||
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+              "Deskripsi default: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
           </p>
         </div>
 
@@ -239,23 +254,26 @@ export default function DetailJurusan() {
             Prospek Kerja
           </h2>
           <div className="flex flex-wrap gap-2">
-            {(
-              jurusan.prospekKerja || [
-                "Programmer",
-                "Software Developer",
-                "System Analyst",
-                "Data Scientist",
-                "UI/UX Designer",
-                "Network Engineer",
-                "IT Consultant",
-              ]
-            ).map((item, i) => (
-              <span
-                key={i}
-                className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition-colors duration-300 cursor-pointer">
-                {item}
-              </span>
-            ))}
+            {
+              // Menggunakan data jurusan
+              (
+                jurusan.prospekKerja || [
+                  "Programmer",
+                  "Software Developer",
+                  "System Analyst",
+                  "Data Scientist",
+                  "UI/UX Designer",
+                  "Network Engineer",
+                  "IT Consultant",
+                ]
+              ).map((item, i) => (
+                <span
+                  key={i}
+                  className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition-colors duration-300 cursor-pointer">
+                  {item}
+                </span>
+              ))
+            }
           </div>
         </div>
 
@@ -265,59 +283,54 @@ export default function DetailJurusan() {
             Kampus Terkait
           </h2>
           <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {(
-                jurusan.kampusTerkait || [
-                  {
-                    id: 1,
-                    nama: "Politeknik Negeri Batam",
-                    gambar: "https://via.placeholder.com/400x250?text=Kampus+1",
-                  },
-                  {
-                    id: 2,
-                    nama: "Politeknik Negeri Batam",
-                    gambar: "https://via.placeholder.com/400x250?text=Kampus+2",
-                  },
-                  {
-                    id: 3,
-                    nama: "Politeknik Negeri Batam",
-                    gambar: "https://via.placeholder.com/400x250?text=Kampus+3",
-                  },
-                ]
-              ).map((kampus, index) => (
-                <div
-                  key={index}
-                  className="relative rounded-xl overflow-hidden shadow-lg transform hover:scale-[1.01] transition-transform duration-300">
-                  <img
-                    src={kampus.gambar}
-                    alt={kampus.nama}
-                    className="w-full h-64 object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-white">
-                      {kampus.nama}
-                    </h3>
-                    <div className="p-1 rounded-full bg-white text-[#013B35]">
-                      <ChevronRightIcon />
+            {/* Cek apakah ada kampus yang ditemukan */}
+            {kampusDitemukan.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {kampusDitemukan.map((kampus, index) => (
+                  <Link
+                    key={index}
+                    to={`/kampus/${kampus.id}`} // Link ke halaman detail kampus
+                    className="relative rounded-xl overflow-hidden shadow-lg transform hover:scale-[1.01] transition-transform duration-300 group">
+                    <img
+                      // Asumsi: properti gambar di kampusList adalah 'image' (sesuai data Anda)
+                      src={kampus.image}
+                      alt={kampus.name}
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 flex justify-between items-center group-hover:bg-[#013B35]/70 transition-colors">
+                      <h3 className="text-lg font-semibold text-white">
+                        {kampus.name}
+                      </h3>
+                      <div className="p-1 rounded-full bg-white text-[#013B35]">
+                        <ChevronRightIcon />
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex justify-center items-center space-x-4">
-              <button className="text-gray-400 hover:text-[#013B35] transition-colors">
-                <ChevronRightIcon className="transform rotate-180 h-7 w-7" />
-              </button>
-              <div className="flex space-x-2">
-                <span className="h-2 w-2 bg-[#013B35] rounded-full"></span>
-                <span className="h-2 w-2 bg-gray-300 rounded-full"></span>
-                <span className="h-2 w-2 bg-gray-300 rounded-full"></span>
+                  </Link>
+                ))}
               </div>
-              <button className="text-gray-400 hover:text-[#013B35] transition-colors">
-                <ChevronRightIcon className="h-7 w-7" />
-              </button>
-            </div>
+            ) : (
+              <p className="text-gray-600 italic">
+                Saat ini, belum ada kampus yang terdaftar menawarkan Jurusan **
+                {jurusan.name}**.
+              </p>
+            )}
+
+            {/* Tombol navigasi slider (hanya tampil jika kampusDitemukan.length > 0) */}
+            {kampusDitemukan.length > 3 && (
+              <div className="mt-6 flex justify-center items-center space-x-4">
+                <button className="text-gray-400 hover:text-[#013B35] transition-colors">
+                  <ChevronRightIcon className="transform rotate-180 h-7 w-7" />
+                </button>
+                <div className="flex space-x-2">
+                  <span className="h-2 w-2 bg-[#013B35] rounded-full"></span>
+                  <span className="h-2 w-2 bg-gray-300 rounded-full"></span>
+                  <span className="h-2 w-2 bg-gray-300 rounded-full"></span>
+                </div>
+                <button className="text-gray-400 hover:text-[#013B35] transition-colors">
+                  <ChevronRightIcon className="h-7 w-7" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

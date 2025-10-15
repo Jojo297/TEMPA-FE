@@ -15,6 +15,20 @@ export const kampusList = [
     desc: "Politeknik Negeri Batam (Polibatam) merupakan satu-satunya Perguruan Tinggi Negeri (PTN) Vokasi di kawasan perdagangan dan pelabuhan bebas Batam, Bintan, dan Karimun Provinsi Kepulauan Riau. Selain terletak di salah satu kawasan pusat pertumbuhan ekonomi nasional, Polibatam juga terletak di wilayah terdepan dan terluar wilayah Negara Kesatuan republik Indonesia yang berbatasan langsung dengan perairan internasional.olibatam merupakan kampus vokasi unggulan yang berfokus pada pendidikan terapan, riset, dan inovasi teknologi industri.",
     visi: "Visi dari Polibatam adalah menjadi politeknik generasi baru yang bermutu, adaptif, inovatif, dan bermitra erat dengan industri dan masyarakat untuk mendukung Indonesia Maju dan Sejahtera 2045.",
     misi: "Aktif dalam proses kreasi, penyebaran, dan penerapan sains serta teknologi melalui layanan pendidikan tinggi vokasi dan penelitian terapan yang bermutu, terbuka, relevan, dan berkolaborasi erat dengan masyarakat dan industri.",
+    jurusan: [
+      {
+        name: "Informatika",
+        slug: "informatika",
+      },
+      {
+        name: "Manejemen Bisnis",
+        slug: "manajemen-bisnis",
+      },
+      {
+        name: "Mesin",
+        slug: "mesin",
+      },
+    ],
   },
   {
     id: 2,
@@ -31,6 +45,24 @@ export const kampusList = [
       "Menjadi agen pembaharu dalam mendorong kemandirian pembangunan SDM bidang sains, desain, bisnis, dan teknologi.",
       "Berperan sebagai simpul utama jejaring pendidikan tinggi sains, desain, bisnis, dan teknologi di Indonesia.",
     ],
+    jurusan: [
+      {
+        name: "Informatika",
+        slug: "informatika",
+      },
+      {
+        name: "Manejemen Bisnis",
+        slug: "manajemen-bisnis",
+      },
+      {
+        name: "Mesin",
+        slug: "mesin",
+      },
+      {
+        name: "Elektro",
+        slug: "elektronika",
+      },
+    ],
   },
 
   {
@@ -46,6 +78,20 @@ export const kampusList = [
       "To advance analytical and innovative science, technology, and art through research.",
       "To provide community services that uphold human values.",
       "To implement transparent and accountable governance.",
+    ],
+    jurusan: [
+      {
+        name: "Informatika",
+        slug: "informatika",
+      },
+      {
+        name: "Manejemen Bisnis",
+        slug: "manajemen-bisnis",
+      },
+      {
+        name: "Mesin",
+        slug: "mesin",
+      },
     ],
   },
 ];

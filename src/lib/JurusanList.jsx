@@ -1,11 +1,13 @@
 // src/lib/JurusanList.jsx
 import informatika from "@/assets/informatika.png";
 // import placeholder from "@/assets/placeholder.png";
+import mesin from "@/assets/mesin.jpg";
 
 export const jurusanList = [
   {
     id: 1,
     nama: "Teknik Informatika",
+    slug: "informatika",
     heroImg: informatika,
     deskripsi:
       "Jurusan Teknik Informatika mempelajari pengembangan perangkat lunak, sistem informasi, kecerdasan buatan, serta pemrograman berbasis data. Mahasiswa dibekali keterampilan untuk menciptakan solusi teknologi inovatif yang dibutuhkan di era digital.",
@@ -36,7 +38,8 @@ export const jurusanList = [
   {
     id: 2,
     nama: "Teknik Mesin",
-    // heroImg: placeholder,
+    slug: "mesin",
+    heroImg: mesin,
     deskripsi:
       "Teknik Mesin berfokus pada desain, manufaktur, dan pemeliharaan mesin. Mahasiswa belajar tentang termodinamika, mekanika fluida, serta sistem energi untuk mendukung berbagai industri modern.",
     prospekKerja: [
@@ -60,6 +63,7 @@ export const jurusanList = [
   {
     id: 3,
     nama: "Elektronika",
+    slug: "elektronika",
     // heroImg: placeholder,
     deskripsi:
       "Jurusan Elektronika mempelajari rangkaian, sistem digital, dan teknologi komunikasi. Mahasiswa dibekali kemampuan untuk merancang dan memelihara perangkat elektronik modern.",
@@ -83,6 +87,7 @@ export const jurusanList = [
   {
     id: 4,
     nama: "Akuntansi",
+    slug: "manajemen-bisnis",
     // heroImg: placeholder,
     deskripsi:
       "Jurusan Akuntansi mempelajari prinsip akuntansi, audit, perpajakan, dan manajemen keuangan. Mahasiswa dibekali keterampilan analisis laporan keuangan.",

@@ -17,16 +17,31 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const jurusanList = [
-  { id: 1, name: "Informatika", icon: <Cpu size={40} /> },
-  { id: 2, name: "Mesin", icon: <Cog size={40} /> },
-  { id: 3, name: "Elektronika", icon: <CircuitBoard size={40} /> },
-  { id: 4, name: "Akuntansi", icon: <Calculator size={40} /> },
-  { id: 5, name: "Hukum", icon: <Scale size={40} /> },
-  { id: 6, name: "DKV", icon: <Palette size={40} /> },
-  { id: 7, name: "Psikologi", icon: <Brain size={40} /> },
-  { id: 8, name: "Matematika", icon: <Plus size={40} /> },
-  { id: 9, name: "Kelautan", icon: <Waves size={40} /> },
-  { id: 10, name: "Kedokteran", icon: <Cross size={40} /> },
+  { id: 1, name: "Informatika", slug: "informatika", icon: <Cpu size={40} /> },
+  { id: 2, name: "Mesin", slug: "mesin", icon: <Cog size={40} /> },
+  {
+    id: 3,
+    name: "Elektronika",
+    slug: "elektronika",
+    icon: <CircuitBoard size={40} />,
+  },
+  {
+    id: 4,
+    name: "Akuntansi",
+    slug: "manajemen-bisnis",
+    icon: <Calculator size={40} />,
+  },
+  { id: 5, name: "Hukum", slug: "hukum", icon: <Scale size={40} /> },
+  { id: 6, name: "DKV", slug: "dkv", icon: <Palette size={40} /> },
+  { id: 7, name: "Psikologi", slug: "psikologi", icon: <Brain size={40} /> },
+  { id: 8, name: "Matematika", slug: "matematika", icon: <Plus size={40} /> },
+  { id: 9, name: "Kelautan", slug: "kelautan", icon: <Waves size={40} /> },
+  {
+    id: 10,
+    name: "Kedokteran",
+    slug: "kedokteran",
+    icon: <Cross size={40} />,
+  },
 ];
 
 const JurusanPage = () => {
@@ -73,7 +88,7 @@ const JurusanPage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 justify-items-center">
             {filteredJurusan.map((j) => (
               <Link
-                to={`/jurusan/${j.id}`}
+                to={`/jurusan/${j.slug}`}
                 key={j.id}
                 className="bg-[#013B35] text-white rounded-2xl w-32 h-32 flex flex-col justify-center items-center hover:scale-105 transition-transform duration-300">
                 <div className="mb-2 text-[#9EE6D7]">{j.icon}</div>
