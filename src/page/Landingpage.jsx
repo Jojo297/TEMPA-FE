@@ -150,7 +150,7 @@ const LandingPage = () => {
             </Link>
           </li>
           <li>
-            <a href="#program" className="hover:text-[#00BFA6]">
+            <a href="/Panduan" className="hover:text-[#00BFA6]">
               Panduan
             </a>
           </li>

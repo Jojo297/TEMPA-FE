@@ -1,10 +1,12 @@
 import React from "react";
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoadingRedirect from "./components/loadingRedirect";
 import { Home } from "lucide-react";
 
 import LoginAdmin from "./page/loginAdmin";
 import LoginCampus from "./page/loginCampus";
+
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const DashboardMentee = lazy(() => import("./page/Dashboard/dashboardMentee"));
@@ -12,19 +14,18 @@ const CampusPage = lazy(() => import("./page/campuspage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
 const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
-
 const CampusPrestasiPage = lazy(() =>
   import("./components/CampusPrestasiPage")
 );
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
-import LoadingRedirect from "./components/loadingRedirect";
+const PanduanPage = lazy(() => import("./page/PanduanPage")); // ✅ Tambahkan ini
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing Page) */}
+        {/* Landing Page */}
         <Route
           path="/"
           element={
@@ -34,7 +35,7 @@ export default function App() {
           }
         />
 
-        {/* Login campus */}
+        {/* Login */}
         <Route
           path="/login-campus"
           element={
@@ -43,7 +44,6 @@ export default function App() {
             </Suspense>
           }
         />
-        {/* Login admin */}
         <Route
           path="/login-admin"
           element={
@@ -52,7 +52,6 @@ export default function App() {
             </Suspense>
           }
         />
-        {/* Login mentee */}
         <Route
           path="/login-mentee"
           element={
@@ -61,38 +60,13 @@ export default function App() {
             </Suspense>
           }
         />
+
         {/* Dashboard */}
         <Route
           path="/dashboard-mentee"
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardMentee title="Dashboard Mentee" />
-            </Suspense>
-          }
-        />
-
-        {/* Login/Admin */}
-        <Route
-          path="/login-campus"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginCampus />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/login-admin"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginAdmin />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/login-mentee"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginMentee />
             </Suspense>
           }
         />
@@ -122,14 +96,24 @@ export default function App() {
             </Suspense>
           }
         />
-        {/* detail campus */}
+
+        {/* Detail Kampus */}
         <Route path="/campus-detail/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id" element={<CampusDetailPage />} />
         <Route path="/campus/:id/prestasi" element={<CampusPrestasiPage />} />
         <Route path="/jurusan/:id" element={<DetailJurusan />} />
         <Route path="/campus/:id/jurusan" element={<CampusJurusanPage />} />
         <Route path="/campus/:id/program" element={<CampusProgram />} />
-        {/* end detail campus */}
+
+        {/* ✅ Halaman Panduan */}
+        <Route
+          path="/panduan"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <PanduanPage />
+            </Suspense>
+          }
+        />
       </Routes>
     </Router>
   );
