@@ -142,63 +142,6 @@ const LandingPage = () => {
     requestAnimationFrame(animate);
   }, []);
 
-  window.handleCredentialResponse = async (response) => {
-    // console.log("Encoded JWT ID token: " + response.credential);
-    const googleToken = response.credential;
-    try {
-      const loginMentee = await axios.post(
-        "http://localhost:8080/api/v1/login-mentee",
-        { credential: googleToken } // Backend can get req.body.credential
-      );
-      const { token, uniqueId, fullName, email } = loginMentee.data.data;
-
-      console.log(loginMentee.data.data);
-
-      // save JWT to localstorage
-      localStorage.setItem("userJwt", token);
-
-      // redirect
-      navigate("/dashboard-mentee");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    // 1. Tambahkan pengecekan yang lebih ketat untuk window.google
-    if (
-      isDialogOpen &&
-      window.google &&
-      typeof window.google.accounts?.id?.renderButton === "function"
-    ) {
-      const googleButtonContainer = document.querySelector(".g_id_signin");
-
-      if (googleButtonContainer) {
-        // Hapus content lama jika ada
-        googleButtonContainer.innerHTML = "";
-
-        window.google.accounts.id.renderButton(googleButtonContainer, {
-          type: "standard",
-          shape: "rectangular",
-          theme: "outline",
-          text: "signin_with",
-          size: "large",
-          logo_alignment: "left",
-          // Hapus data-width="500" di JSX, atau gunakan width yang lebih kecil
-        });
-
-        // 2. Penting: Inisialisasi One Tap/GIS untuk konfigurasi
-        window.google.accounts.id.initialize({
-          client_id: data_client_id, // Pastikan Anda mendeklarasikan data_client_id
-          callback: handleCredentialResponse,
-          context: "signin",
-          ux_mode: "popup",
-          // ... konfigurasi lainnya
-        });
-      }
-    }
-  }, [isDialogOpen]);
-
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans">
       {/* Navbar */}
