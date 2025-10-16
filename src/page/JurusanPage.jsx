@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import notfound from "../assets/robot-error.png";
 
 const jurusanList = [
   {
@@ -166,9 +167,16 @@ const JurusanPage = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 mt-10">
-            Jurusan tidak ditemukan 😢
-          </p>
+          <div className="flex flex-col items-center justify-center mt-10">
+            <img
+              src={notfound}
+              alt="Tidak ditemukan"
+              className="w-48 h-48 object-contain mb-2 opacity-90"
+            />
+            <p className="text-center text-gray-500 mt-10">
+              Jurusan tidak ditemukan
+            </p>
+          </div>
         )}
       </section>
 

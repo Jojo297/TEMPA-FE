@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -27,6 +28,7 @@ import img1 from "@/assets/img1.png";
 import polibatam from "../assets/polibatam.jpeg";
 import iteba from "../assets/iteba.jpg";
 import uib from "../assets/uib.jpeg";
+import peta from "../assets/peta.png";
 import {
   Dialog,
   DialogClose,
@@ -210,15 +212,25 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="flex justify-between items-center mt-10 px-20 py-24 h-[600px]">
+      <section
+        className="relative flex justify-between items-center mt-10 px-20 py-24 h-[600px] bg-[#F5FAFA] overflow-hidden"
+        style={{
+          backgroundImage: `url(${peta})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center right",
+          backgroundSize: "contain",
+        }}>
+        {/* Gambar kiri */}
         <div className="w-[620px] h-[600px] bg-[#013B35] rounded-t-[180px] rounded-b-none flex justify-center items-center overflow-hidden">
           <img
             src={img2}
             alt="Gambar"
-            className="w-[615px] h-[612px] object-contain"
+            className="w-[615px] h-[612px] object-cover"
           />
         </div>
-        <div className="max-w-md">
+
+        {/* Teks kanan */}
+        <div className="max-w-md z-10">
           <h1 className="text-5xl font-extrabold leading-snug text-[#0A0A0A]">
             EKSPLORASI
             <br />
@@ -227,8 +239,9 @@ const LandingPage = () => {
             BERSAMA TEMPA
           </h1>
           <p className="text-sm text-gray-700 mt-4 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            TEMPA adalah platform pengembangan diri dan edukasi digital yang
+            membantu kamu menemukan potensi, belajar dengan cara baru, dan
+            mempersiapkan masa depan dengan lebih percaya diri.
           </p>
         </div>
       </section>
@@ -238,8 +251,8 @@ const LandingPage = () => {
         <h2 className="text-2xl font-bold mb-2 text-left">Partner Kampus</h2>
         <div className="w-24 h-[2px] bg-white mb-4 text-left"></div>
         <p className="text-gray-300 mb-10 text-left">
-          Dari ruang kelas hingga dunia kerja, TEMPA bermitra dengan kampus
-          untuk membentuk masa depan.
+          Dari ruang kelas hingga dunia kerja, TEMPA hadir sebagai jembatan
+          antara mahasiswa dan kampus untuk menyiapkan generasi siap masa depan.
         </p>
 
         <div className="relative flex items-center justify-center w-full">
@@ -326,7 +339,11 @@ const LandingPage = () => {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-center">
             {[
-              { nama: "Informatika", icon: <Cpu size={36} /> },
+              {
+                nama: "Informatika",
+                slug: "informatika",
+                icon: <Cpu size={36} />,
+              },
               { nama: "Mesin", icon: <Cog size={36} /> },
               { nama: "Elektronika", icon: <Activity size={36} /> },
               { nama: "Akuntansi", icon: <DollarSign size={36} /> },
@@ -360,9 +377,10 @@ const LandingPage = () => {
           Bertumbuh Bersama TEMPA
         </h2>
         <p className="text-base text-gray-700 max-w-3xl mx-auto mb-14 leading-relaxed">
-          TEMPA telah dipercaya oleh ribuan pengguna, bermitra dengan berbagai
-          kampus, menghadirkan mentor berpengalaman, dan menyelenggarakan
-          program inovatif untuk mendukung masa depan bersama.
+          TEMPA telah dipercaya ribuan pengguna dan berkolaborasi dengan
+          berbagai kampus, menghadirkan mentor berpengalaman serta
+          program-program inovatif yang dirancang untuk membentuk masa depan
+          yang lebih cerah bersama.
         </p>
 
         <div className="flex justify-center items-center gap-14">
@@ -386,7 +404,7 @@ const LandingPage = () => {
       <section className="flex justify-between items-center px-10 py-24 bg-[#013B35] text-white relative overflow-hidden">
         <div className="max-w-lg z-10">
           <h1 className="text-4xl font-extrabold leading-snug mb-4">
-            BANGUN MASA DEPAN BERSAMA
+            BANGUN MASA DEPAN BERSAMA TEMPA
           </h1>
           <p className="text-base text-gray-100 mb-6 leading-relaxed">
             Bersama, kita wujudkan ekosistem pendidikan yang adaptif, inovatif,
@@ -441,8 +459,9 @@ const LandingPage = () => {
               />
             </div>
             <p className="text-gray-300 text-sm mt-3 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              TEMPA adalah platform pengembangan diri dan edukasi digital yang
+              membantu kamu menemukan potensi, belajar dengan cara baru, dan
+              mempersiapkan masa depan dengan lebih percaya diri.
             </p>
             <div className="flex space-x-4 mt-5 text-xl">
               <FaFacebookF className="hover:text-[#75B4C6] cursor-pointer" />
@@ -453,22 +472,18 @@ const LandingPage = () => {
           </div>
 
           <div>
-            <h2 className="font-semibold mb-4 text-lg">TOP 4 KAMPUS</h2>
+            <h2 className="font-semibold mb-4 text-lg">TOP KAMPUS</h2>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>Politeknik Negeri Batam</li>
-              <li>Politeknik Negeri Batam</li>
-              <li>Politeknik Negeri Batam</li>
-              <li>Politeknik Negeri Batam</li>
+              <li>Institut Teknologi Batam (ITEBA)</li>
+              <li>Universitas Internasional Batam (UIB)</li>
             </ul>
           </div>
 
           <div>
             <h2 className="font-semibold mb-4 text-lg">TOP 4 PERUSAHAAN</h2>
             <ul className="space-y-2 text-gray-300 text-sm">
-              <li>Suit Nusapersada</li>
-              <li>Suit Nusapersada</li>
-              <li>Suit Nusapersada</li>
-              <li>Suit Nusapersada</li>
+              <li>COMING SOON</li>
             </ul>
           </div>
 
@@ -485,7 +500,7 @@ const LandingPage = () => {
         </div>
 
         <div className="border-t border-gray-600 mt-10 pt-5 text-center text-sm text-gray-400">
-          © 2025 TEMPA. All Rights Reserved.
+          © 2025 TEMPA. All rights reserved. Icons by Icons8
         </div>
       </footer>
     </div>

@@ -6,6 +6,7 @@ import { MapPin, Calendar, Users, Clock, Map, Home } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
+import kuliah from "../assets/kuliah.png";
 // Ganti dengan import aktual di proyek Anda
 
 // --- Data Placeholder untuk kampusList (Hanya untuk referensi) ---
@@ -23,12 +24,12 @@ const programData = {
       Jurusan: "Teknik Informatika",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Informatika Polibatam, mahasiswa belajar coding menggunakan Python untuk memahami logika pemrograman, analisis data, dan pengembangan aplikasi dasar.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TI+Program", // Placeholder
+      Image: kuliah, // Placeholder
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -36,12 +37,12 @@ const programData = {
       Jurusan: "Manajemen Bisnis",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Manajemen Bisnis Polibatam, mahasiswa mempelajari strategi bisnis, manajemen keuangan, pemasaran, dan kewirausahaan untuk membangun kemampuan dalam mengelola dan mengembangkan usaha secara profesional.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=MB+Program", // Placeholder
+      Image: kuliah, // Placeholder
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -49,12 +50,12 @@ const programData = {
       Jurusan: "Teknik Elektro",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Teknik Elektro Polibatam, mahasiswa mempelajari dasar kelistrikan, sistem kontrol, elektronika, dan mikrokontroler untuk merancang serta mengembangkan berbagai sistem dan perangkat berbasis listrik.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TE+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -62,12 +63,12 @@ const programData = {
       Jurusan: "Teknik Mesin",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Teknik Mesin Polibatam, mahasiswa mempelajari prinsip perancangan, manufaktur, dan perawatan mesin serta penerapannya dalam industri modern.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TM+Program", // Placeholder
+      Image: kuliah,
     },
   ],
   2: [
@@ -77,12 +78,12 @@ const programData = {
       Jurusan: "Teknik Informatika",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Teknik Informatika ITEBA, mahasiswa mempelajari dasar pemrograman, pengembangan web menggunakan PHP, serta konsep basis data dan teknologi jaringan untuk membangun solusi digital yang efisien.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TI+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -90,12 +91,12 @@ const programData = {
       Jurusan: "Manajemen",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Manajemen ITEBA, mahasiswa mempelajari perencanaan bisnis, pengelolaan sumber daya, serta strategi pemasaran dan keuangan untuk menciptakan manajer yang adaptif dan berdaya saing tinggi.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=MB+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -103,12 +104,12 @@ const programData = {
       Jurusan: "Teknik Industri",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Teknik Industri ITEBA, mahasiswa mempelajari perancangan, optimalisasi, dan pengelolaan sistem produksi serta proses bisnis agar lebih efisien dan produktif.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TE+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -116,12 +117,12 @@ const programData = {
       Jurusan: "K3 & Kesehatan Lingkungan",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program K3 (Keselamatan dan Kesehatan Kerja) ITEBA, mahasiswa mempelajari cara mengidentifikasi, menganalisis, dan mengendalikan risiko di lingkungan kerja untuk menciptakan tempat kerja yang aman dan sehat.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TM+Program", // Placeholder
+      Image: kuliah,
     },
   ],
   3: [
@@ -131,12 +132,12 @@ const programData = {
       Jurusan: "Pendidikan Bahasa Inggris",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Pendidikan Bahasa Inggris UIB, mahasiswa mempelajari keterampilan berbahasa Inggris, metode pengajaran, linguistik, serta penerapan teknologi dalam pembelajaran untuk menjadi pendidik yang profesional dan komunikatif.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=TI+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -144,12 +145,12 @@ const programData = {
       Jurusan: "Manajemen",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Manajemen UIB, mahasiswa mempelajari analisis bisnis, kepemimpinan, inovasi, serta strategi pengambilan keputusan berbasis data untuk mencetak calon pemimpin dan profesional bisnis yang siap bersaing di tingkat global.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "20 Orang",
       Tempat: "Gedung TA II.12",
-      Image: "https://via.placeholder.com/600x400?text=MB+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -157,12 +158,12 @@ const programData = {
       Jurusan: "Arsitektur",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Arsitektur UIB, mahasiswa mempelajari perancangan bangunan, estetika ruang, dan teknologi konstruksi, serta mengembangkan kreativitas dalam menciptakan desain yang fungsional, berkelanjutan, dan bernilai seni tinggi.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "10 Orang",
       Tempat: "Gedung Utama Kampus",
-      Image: "https://via.placeholder.com/600x400?text=TE+Program", // Placeholder
+      Image: kuliah,
     },
     {
       Program: "KULIAH BERSERTIFIKAT 1 HARI",
@@ -170,12 +171,12 @@ const programData = {
       Jurusan: "Teknologi Informasi",
       Tipe: "Onsite",
       Deskripsi:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Di program Teknologi Informasi UIB, mahasiswa mempelajari pengelolaan sistem informasi, jaringan komputer, keamanan data, serta pengembangan solusi digital untuk mendukung transformasi teknologi di berbagai sektor industri.",
       Tanggal: "10 Oktober 2025",
       Waktu: "09.00 WIB - 12.00 WIB",
       Peserta: "10 Orang",
       Tempat: "Gedung Utama Kampus",
-      Image: "https://via.placeholder.com/600x400?text=TM+Program", // Placeholder
+      Image: kuliah,
     },
   ],
   // Data Program untuk kampus lain (ID 2, 3, dst.) akan ditambahkan di sini
@@ -240,7 +241,7 @@ const ProgramCard = ({ program }) => (
       </div>
 
       {/* Tombol Aksi */}
-      <button className="w-full lg:w-auto self-start px-8 py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition">
+      <button className="w-full lg:w-auto self-start min-w-[659px] px-10 py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
         Ikut Program
       </button>
     </div>
@@ -312,14 +313,14 @@ export default function CampusProgram() {
             Deskripsi
           </Link>
           <Link
-            to={`/campus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-            Jurusan
-          </Link>
-          <Link
             to={`/campus/${kampus.id}/prestasi`}
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Prestasi
+          </Link>
+          <Link
+            to={"/campus/${kampus.id}/jurusan"}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            Jurusan          
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}

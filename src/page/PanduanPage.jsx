@@ -17,35 +17,47 @@ const PanduanPage = () => {
       content: (
         <>
           <p className="mb-4 text-[#222] text-sm leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            Panduan Ikut Program TEMPA
           </p>
           <ol className="list-decimal ml-6 mt-3 text-[#222] text-sm space-y-1">
-            <li>Lorem ipsum dolor sit amet...</li>
-            <li>Lorem ipsum dolor sit amet...</li>
-            <li>Lorem ipsum dolor sit amet...</li>
-            <li>Lorem ipsum dolor sit amet...</li>
+            <li>
+              Daftar Dulu, Yuk! Bikin akun TEMPA pakai nama, email, dan kata
+              sandi kamu biar bisa lanjut ke tahap berikutnya.
+            </li>
+            <li>
+              Login ke Akunmu Setelah akun jadi, tinggal masuk aja pakai email
+              dan kata sandi yang udah kamu buat.
+            </li>
+            <li>
+              Isi Formulir Pendaftaran Lengkapi data diri kamu, terus pilih
+              program atau bidang yang paling kamu minati.
+            </li>
+            <li>
+              Pilih Cara Belajar Mau ikut online biar fleksibel dari mana aja,
+              atau onsite biar bisa langsung ketemu di kampus? Pilih yang paling
+              cocok buat kamu!
+            </li>
+            <li>
+              Tentukan Kampus, Tujuan Pilih kampus atau mitra TEMPA yang kamu
+              mau jadi tempat kamu belajar dan berkembang.
+            </li>
+            <li>
+              Konfirmasi & Siap Mulai! Setelah semuanya beres, tinggal
+              konfirmasi dan siap deh mulai perjalanan seru kamu bareng TEMPA 🚀
+            </li>
           </ol>
         </>
-      ),
-    },
-    {
-      title: "Tes Minat dan Bakat",
-      content: (
-        <p className="text-[#222] text-sm leading-relaxed">
-          Panduan lengkap untuk melakukan Tes Minat dan Bakat akan dimuat
-          segera.
-        </p>
       ),
     },
     {
       title: "Tes Jurusan",
       content: (
         <p className="text-[#222] text-sm leading-relaxed">
-          Informasi mengenai Tes Jurusan dan langkah-langkahnya dapat ditemukan
-          di sini.
+          Sebelum ikut Tes Jurusan, pastikan kamu sudah login ke akun TEMPA, ya!
+          Setelah login, kamu bisa langsung ngerjain tesnya buat tahu jurusan
+          mana yang paling cocok sama minat dan kemampuan kamu. Hasilnya bakal
+          ngasih rekomendasi jurusan yang pas buat kamu biar nggak bingung lagi
+          milih arah masa depan 🎯
         </p>
       ),
     },

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import logo2 from "../assets/logo2.png"; // pastikan path logo sesuai dengan struktur project kamu
+import logo2 from "../assets/logo-text.png"; // pastikan path logo sesuai dengan struktur project kamu
 
 const Footer = () => {
   return (
@@ -18,8 +18,9 @@ const Footer = () => {
           </div>
 
           <p className="text-gray-300 text-sm mt-3 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            TEMPA adalah platform pengembangan diri dan edukasi digital yang
+            membantu kamu menemukan potensi, belajar dengan cara baru, dan
+            mempersiapkan masa depan dengan lebih percaya diri.
           </p>
 
           {/* Icon Sosial Media */}
@@ -36,20 +37,16 @@ const Footer = () => {
           <h2 className="font-semibold mb-4 text-lg">TOP 4 KAMPUS</h2>
           <ul className="space-y-2 text-gray-300 text-sm">
             <li>Politeknik Negeri Batam</li>
-            <li>Politeknik Negeri Batam</li>
-            <li>Politeknik Negeri Batam</li>
-            <li>Politeknik Negeri Batam</li>
+            <li>Institut Teknologi Batam (ITEBA)</li>
+            <li>Universitas Internasional Batam (UIB)</li>
           </ul>
         </div>
 
         {/* Top 4 Perusahaan */}
         <div>
-          <h2 className="font-semibold mb-4 text-lg">TOP 4 PERUSAHAAN</h2>
+          <h2 className="font-semibold mb-4 text-lg">TOP PERUSAHAAN</h2>
           <ul className="space-y-2 text-gray-300 text-sm">
-            <li>Suit Nusapersada</li>
-            <li>Suit Nusapersada</li>
-            <li>Suit Nusapersada</li>
-            <li>Suit Nusapersada</li>
+            <li>COMING SOON</li>
           </ul>
         </div>
 
@@ -68,7 +65,7 @@ const Footer = () => {
 
       {/* Garis Bawah */}
       <div className="border-t border-gray-600 mt-10 pt-5 text-center text-sm text-gray-400">
-        © 2025 TEMPA. All rights reserved.
+        © 2025 TEMPA. All rights reserved. Icons by Icons8
       </div>
     </footer>
   );
