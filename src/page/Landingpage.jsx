@@ -27,9 +27,27 @@ import img1 from "@/assets/img1.png";
 import polibatam from "../assets/polibatam.jpeg";
 import iteba from "../assets/iteba.jpg";
 import uib from "../assets/uib.jpeg";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import LoginMentee from "./loginMentee";
+import logo_text from "@/assets/logo-text.png";
+// import { kampusList } from "@/lib/kampusList";
 
 const LandingPage = () => {
+  const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const kampusList = [
     {
@@ -124,6 +142,63 @@ const LandingPage = () => {
     requestAnimationFrame(animate);
   }, []);
 
+  window.handleCredentialResponse = async (response) => {
+    // console.log("Encoded JWT ID token: " + response.credential);
+    const googleToken = response.credential;
+    try {
+      const loginMentee = await axios.post(
+        "http://localhost:8080/api/v1/login-mentee",
+        { credential: googleToken } // Backend can get req.body.credential
+      );
+      const { token, uniqueId, fullName, email } = loginMentee.data.data;
+
+      console.log(loginMentee.data.data);
+
+      // save JWT to localstorage
+      localStorage.setItem("userJwt", token);
+
+      // redirect
+      navigate("/dashboard-mentee");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // 1. Tambahkan pengecekan yang lebih ketat untuk window.google
+    if (
+      isDialogOpen &&
+      window.google &&
+      typeof window.google.accounts?.id?.renderButton === "function"
+    ) {
+      const googleButtonContainer = document.querySelector(".g_id_signin");
+
+      if (googleButtonContainer) {
+        // Hapus content lama jika ada
+        googleButtonContainer.innerHTML = "";
+
+        window.google.accounts.id.renderButton(googleButtonContainer, {
+          type: "standard",
+          shape: "rectangular",
+          theme: "outline",
+          text: "signin_with",
+          size: "large",
+          logo_alignment: "left",
+          // Hapus data-width="500" di JSX, atau gunakan width yang lebih kecil
+        });
+
+        // 2. Penting: Inisialisasi One Tap/GIS untuk konfigurasi
+        window.google.accounts.id.initialize({
+          client_id: data_client_id, // Pastikan Anda mendeklarasikan data_client_id
+          callback: handleCredentialResponse,
+          context: "signin",
+          ux_mode: "popup",
+          // ... konfigurasi lainnya
+        });
+      }
+    }
+  }, [isDialogOpen]);
+
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans">
       {/* Navbar */}
@@ -155,11 +230,38 @@ const LandingPage = () => {
             </a>
           </li>
           <li>
-            <Link
-              to={"/login-mentee"}
-              className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
-              Masuk
-            </Link>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <form>
+                <DialogTrigger asChild>
+                  <Button
+                    onClick={() => setIsDialogOpen(true)}
+                    className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
+                    Masuk
+                  </Button>
+                </DialogTrigger>
+                {isDialogOpen && (
+                  <DialogContent className="sm:max-w-[425px] bg-[#013B35]">
+                    <DialogHeader className="mb-4 ">
+                      <DialogTitle className=" text-white ">
+                        <div className="flex justify-center items-center ">
+                          <div className="text-3xl">Masuk </div>
+                          <img
+                            src={logo_text}
+                            alt=""
+                            className="w-28"
+                            srcset=""
+                          />
+                        </div>
+                        <div className="px-16">
+                          <div className="w-full  h-1 bg-[#96CCEC] mt-3 mb-2"></div>
+                        </div>
+                      </DialogTitle>
+                    </DialogHeader>
+                    <LoginMentee />
+                  </DialogContent>
+                )}
+              </form>
+            </Dialog>
           </li>
         </ul>
       </nav>
