@@ -13,6 +13,7 @@ import dkv from "@/assets/dkv.jpg";
 import lpi from "@/assets/lpi.jpg";
 import matematika from "@/assets/matematika.jpg";
 import bahasainggris from "@/assets/bahasa-inggris.jpg";
+import kuliah from "../assets/kuliah.png";
 
 export const jurusanList = [
   {
@@ -37,12 +38,14 @@ export const jurusanList = [
       {
         nama: "Workshop Coding Dasar",
         tanggal: "15 Oktober 2025",
-        lokasi: "Polibatam - Gedung Teknik",
+        lokasi: "Polibatam - Gedung Utama",
+        gambar: kuliah,
       },
       {
         nama: "Bootcamp AI & Machine Learning",
         tanggal: "22 Oktober 2025",
         lokasi: "ITEBA - Aula Utama",
+        gambar: kuliah,
       },
     ],
   },
@@ -63,6 +66,7 @@ export const jurusanList = [
         nama: "Bootcamp Analisis Sistem",
         tanggal: "25 Oktober 2025",
         lokasi: "ITEBA - Lab Komputer",
+        gambar: kuliah,
       },
     ],
   },
@@ -88,6 +92,7 @@ export const jurusanList = [
         nama: "Pelatihan Desain 3D SolidWorks",
         tanggal: "18 Oktober 2025",
         lokasi: "Polibatam - Lab Mesin",
+        gambar: kuliah,
       },
     ],
   },
@@ -112,6 +117,7 @@ export const jurusanList = [
         nama: "Pelatihan Lean Manufacturing",
         tanggal: "30 Oktober 2025",
         lokasi: "ITEBA - Workshop Teknik",
+        gambar: kuliah,
       },
     ],
   },
@@ -135,7 +141,8 @@ export const jurusanList = [
       {
         nama: "Workshop IoT Dasar",
         tanggal: "25 Oktober 2025",
-        lokasi: "Polibatam - Lab Elektronika",
+        lokasi: "ITEBA - Lab Elektronika",
+        gambar: kuliah,
       },
     ],
   },
@@ -156,6 +163,7 @@ export const jurusanList = [
         nama: "Workshop Laporan Keuangan",
         tanggal: "12 Oktober 2025",
         lokasi: "UIB - Gedung Ekonomi",
+        gambar: kuliah,
       },
     ],
   },
@@ -177,6 +185,7 @@ export const jurusanList = [
         nama: "Seminar Kepemimpinan Bisnis",
         tanggal: "27 Oktober 2025",
         lokasi: "UIB - Gedung Ekonomi",
+        gambar: kuliah,
       },
     ],
   },
@@ -202,6 +211,7 @@ export const jurusanList = [
         nama: "Workshop Desain Poster Kreatif",
         tanggal: "20 Oktober 2025",
         lokasi: "ITEBA - Studio Desain",
+        gambar: kuliah,
       },
     ],
   },
@@ -221,6 +231,7 @@ export const jurusanList = [
         nama: "Pelatihan Desain Struktur Bangunan",
         tanggal: "1 November 2025",
         lokasi: "UIB - Lab Sipil",
+        gambar: kuliah,
       },
     ],
   },
@@ -240,6 +251,7 @@ export const jurusanList = [
         nama: "Seminar Hukum Nasional",
         tanggal: "20 Oktober 2025",
         lokasi: "UIB - Aula Utama",
+        gambar: kuliah,
       },
     ],
   },
@@ -286,6 +298,7 @@ export const jurusanList = [
         nama: "Workshop Dasar Kedokteran",
         tanggal: "21 Oktober 2025",
         lokasi: "UIB - Lab Kedokteran",
+        gambar: kuliah,
       },
     ],
   },
@@ -305,6 +318,7 @@ export const jurusanList = [
         nama: "Seminar Wisata Berkelanjutan",
         tanggal: "12 November 2025",
         lokasi: "UIB - Gedung Pariwisata",
+        gambar: kuliah,
       },
     ],
   },
@@ -324,6 +338,7 @@ export const jurusanList = [
         nama: "Workshop Analisis Data Statistik",
         tanggal: "28 Oktober 2025",
         lokasi: "ITEBA - Lab Matematika",
+        gambar: kuliah,
       },
     ],
   },
@@ -347,7 +362,8 @@ export const jurusanList = [
       {
         nama: "Seminar Logistik Global",
         tanggal: "7 November 2025",
-        lokasi: "Polibatam - Gedung Niaga",
+        lokasi: "Polibatam - Tower A",
+        gambar: kuliah,
       },
     ],
   },

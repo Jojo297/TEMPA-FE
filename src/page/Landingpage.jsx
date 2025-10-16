@@ -151,19 +151,14 @@ const LandingPage = () => {
           </li>
           <li>
             <a href="#program" className="hover:text-[#00BFA6]">
-              Program
-            </a>
-          </li>
-          <li>
-            <a href="#masuk" className="hover:text-[#00BFA6]">
-              Masuk
+              Panduan
             </a>
           </li>
           <li>
             <Link
               to={"/login-mentee"}
               className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
-              Daftar
+              Masuk
             </Link>
           </li>
         </ul>

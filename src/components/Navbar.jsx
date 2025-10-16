@@ -29,11 +29,6 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <a href="#program" className="hover:text-[#00BFA6]">
-            Program
-          </a>
-        </li>
-        <li>
           <Link to="/login-Mentee" className="hover:text-[#00BFA6]">
             panduan
           </Link>

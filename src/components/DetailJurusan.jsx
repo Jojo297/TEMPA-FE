@@ -88,67 +88,85 @@ const UserIcon = () => (
   </svg>
 );
 
-const ProgramItem = ({ program }) => (
-  <div className="flex bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-    {/* Gambar kiri + overlay teks */}
-    <div className="relative w-2/5 max-w-[300px] flex-shrink-0">
-      <img
-        src={program.gambar}
-        alt={program.nama}
-        className="w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white p-2 text-center">
-        <p className="text-2xl font-extrabold uppercase leading-tight">
-          KULIAH <br /> BERSERTIFIKAT <br /> 1HARI
-        </p>
-      </div>
-    </div>
+const ProgramItem = ({ program, jurusan, kampus }) => {
+  // 1. Ekstraksi nama kampus singkat dari program.lokasi
+  // Contoh: "Polibatam - Tower A" -> "Polibatam"
+  const shortCampusName = program.lokasi.split(" - ")[0].trim();
 
-    {/* Kolom kanan */}
-    <div className="bg-[#013B35] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
-      <div>
-        {/* Deskripsi */}
-        <p className="text-sm text-gray-200 leading-relaxed mb-2">
-          {program.deskripsiSingkat ||
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
-        </p>
+  // 2. Mencari data kampus lengkap di array 'kampus' yang dikirimkan (kampusDitemukan)
+  const matchedCampus = kampus.find((k) => {
+    // Karena kampusList menggunakan properti 'name', kita cocokkan dengan itu.
+    return k.name.includes(shortCampusName);
+  });
 
-        {/* Baris kampus, jurusan, mode */}
-        <div className="flex flex-wrap gap-x-4 text-sm text-gray-100 mb-2">
-          <span>Politeknik Negeri Batam</span>
-          <span>• Informatika</span>
-          <span>• Onsite</span>
-        </div>
+  // 3. Tentukan nama yang akan ditampilkan
+  // Jika matchedCampus ditemukan, gunakan nama lengkapnya (k.name).
+  // Jika tidak ditemukan, gunakan nama singkat dari lokasi.
+  const displayedCampusName = matchedCampus
+    ? matchedCampus.name
+    : shortCampusName;
 
-        {/* Garis pembatas */}
-        <hr className="border-gray-500 mb-3" />
-
-        {/* Baris detail waktu, peserta, tempat */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-gray-200">
-          <p>
-            <CalendarIcon /> {program.tanggal}
-          </p>
-          <p>
-            <ClockIcon /> {program.waktu}
-          </p>
-          <p>
-            <UserIcon /> {program.peserta}
-          </p>
-          <p>
-            <LocationIcon /> {program.lokasi}
+  return (
+    <div className="flex bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+      {/* Gambar kiri + overlay teks */}
+      <div className="relative w-2/5 max-w-[300px] flex-shrink-0">
+        <img
+          src={program.gambar}
+          alt={program.nama}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white p-2 text-center">
+          <p className="text-2xl font-extrabold uppercase leading-tight">
+            {program.nama}
           </p>
         </div>
       </div>
 
-      {/* Tombol bawah */}
-      <div className="mt-4 flex justify-center">
-        <button className="w-full bg-[#007F7F] text-white font-semibold py-2 rounded-md hover:bg-[#019E9E] transition">
-          Ikut Program
-        </button>
+      {/* Kolom kanan */}
+      <div className="bg-[#013B35] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
+        <div>
+          {/* Deskripsi */}
+          <p className="text-sm text-gray-200 leading-relaxed mb-2">
+            {program.nama}
+          </p>
+
+          {/* Baris kampus, jurusan, mode */}
+          <div className="flex flex-wrap gap-x-4 text-sm text-gray-100 mb-2">
+            <span>{displayedCampusName}</span>
+            <span>{jurusan.nama}</span>
+            <span>• Onsite</span>
+          </div>
+
+          {/* Garis pembatas */}
+          <hr className="border-gray-500 mb-3" />
+
+          {/* Baris detail waktu, peserta, tempat */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-gray-200">
+            <p>
+              <CalendarIcon /> {program.tanggal}
+            </p>
+            <p>
+              <ClockIcon /> {program.waktu}
+            </p>
+            <p>
+              <UserIcon /> {program.peserta}
+            </p>
+            <p>
+              <LocationIcon /> {program.lokasi}
+            </p>
+          </div>
+        </div>
+
+        {/* Tombol bawah */}
+        <div className="mt-4 flex justify-center">
+          <button className="w-full bg-[#007F7F] text-white font-semibold py-2 rounded-md hover:bg-[#019E9E] transition">
+            Ikut Program
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function DetailJurusan() {
   const { slug } = useParams();
@@ -166,6 +184,11 @@ export default function DetailJurusan() {
     });
   }
 
+  let programTerkaitJurusan = [];
+  if (jurusan && Array.isArray(jurusan.programTerkait)) {
+    programTerkaitJurusan = jurusan.programTerkait;
+  }
+
   if (!jurusan) {
     // Memberi tahu pengguna jika slug tidak cocok dengan item di jurusanList
     return (
@@ -181,33 +204,6 @@ export default function DetailJurusan() {
       </div>
     );
   }
-
-  // Definisikan data dummy program di sini (atau ambil dari state/prop jika ada)
-  const programData = [
-    // Data dummyProgram Anda
-    {
-      id: 1,
-      nama: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      gambar: "https://via.placeholder.com/600x400?text=Program+1",
-      tanggal: "12 Oktober 2025",
-      waktu: "09.00 WIB - 16.00 WIB",
-      lokasi: "Senasa (Gedung TI-FA)",
-      peserta: "10 Peserta",
-      deskripsiSingkat:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      id: 2,
-      nama: "Kuliah Singkat Berbasis Industri",
-      gambar: "https://via.placeholder.com/600x400?text=Program+2",
-      tanggal: "20 November 2025",
-      waktu: "08.00 WIB - 15.00 WIB",
-      lokasi: "Gedung Pusat Bisnis",
-      peserta: "25 Peserta",
-      deskripsiSingkat:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
-    },
-  ];
 
   // --- JSX Output ---
   return (
@@ -340,8 +336,13 @@ export default function DetailJurusan() {
             Program Terkait
           </h2>
           <div className="space-y-6">
-            {programData.map((program, index) => (
-              <ProgramItem key={index} program={program} />
+            {programTerkaitJurusan.map((program, index) => (
+              <ProgramItem
+                key={index}
+                program={program}
+                jurusan={jurusan}
+                kampus={kampusDitemukan}
+              />
             ))}
           </div>
         </div>

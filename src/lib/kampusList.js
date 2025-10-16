@@ -53,6 +53,7 @@ export const kampusList = [
       { name: "Teknik Industri", slug: "teknik-industri" },
       { name: "Teknik Sipil", slug: "teknik-sipil" },
       { name: "Akuntansi", slug: "akuntansi" },
+      { name: "Sistem Informasi", slug: "sistem-informasi" },
     ],
   },
   {
@@ -72,7 +73,6 @@ export const kampusList = [
     jurusan: [
       { name: "Teknik Informatika", slug: "informatika" },
       { name: "Manajemen Bisnis", slug: "manajemen" },
-      { name: "Teknik Mesin", slug: "mesin" },
       { name: "Hukum", slug: "hukum" },
       { name: "Akuntansi", slug: "akuntansi" },
       { name: "Manajemen", slug: "manajemen" },
@@ -81,6 +81,7 @@ export const kampusList = [
       { name: "Sistem Informasi", slug: "sistem-informasi" },
       { name: "Pendidikan Bahasa Inggris", slug: "pendidikan-bahasa-inggris" },
       { name: "Kedokteran", slug: "kedokteran" },
+      { name: "Sistem Informasi", slug: "sistem-informasi" },
       {
         name: "Logistik Perdagangan internasional",
         slug: "logistik-perdagangan",
