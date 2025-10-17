@@ -21,6 +21,11 @@ const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
 const PanduanPage = lazy(() => import("./page/PanduanPage")); // ✅ Tambahkan ini
 
+// ✅ Tambahan: DashboardMentee dari components
+const DashboardMenteeComponent = lazy(() =>
+  import("./components/DashboardMentee")
+);
+
 export default function App() {
   return (
     <Router>
@@ -61,12 +66,12 @@ export default function App() {
           }
         />
 
-        {/* Dashboard */}
+        {/*  Dashboard Mentee (versi dari components) */}
         <Route
-          path="/dashboard-mentee"
+          path="/dashboard-mentee-v2"
           element={
             <Suspense fallback={<LoadingRedirect />}>
-              <DashboardMentee title="Dashboard Mentee" />
+              <DashboardMenteeComponent title="Dashboard Mentee Components" />
             </Suspense>
           }
         />
