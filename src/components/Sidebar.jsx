@@ -1,53 +1,69 @@
 import React from "react";
 import {
-  Home,
+  LayoutGrid,
   GraduationCap,
-  Building,
-  BookOpen,
+  Building2,
+  Share2,
   FileQuestion,
-  ClipboardList,
+  BookOpen,
+  Star,
   LogOut,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/assets/logo-text.png";
 
 const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Beranda", icon: <Home size={18} />, path: "/" },
-    { name: "Program", icon: <GraduationCap size={18} />, path: "/program" },
-    { name: "Kampus", icon: <Building size={18} />, path: "/kampus" },
-    { name: "Jurusan", icon: <BookOpen size={18} />, path: "/jurusan" },
+    { name: "BERANDA", icon: <LayoutGrid size={18} />, path: "/" },
+    { name: "PROGRAM", icon: <GraduationCap size={18} />, path: "/program" },
+    { name: "KAMPUS", icon: <Building2 size={18} />, path: "/kampus" },
+    { name: "JURUSAN", icon: <Share2 size={18} />, path: "/jurusan" },
+    { separator: true },
     {
-      name: "Tes Jurusan",
+      name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
       path: "/tes-jurusan",
     },
-    { name: "Materi", icon: <ClipboardList size={18} />, path: "/materi" },
-    {
-      name: "Penilaian",
-      icon: <ClipboardList size={18} />,
-      path: "/penilaian",
-    },
-    { name: "Keluar", icon: <LogOut size={18} />, path: "/logout" },
+    { name: "MATERI", icon: <BookOpen size={18} />, path: "/materi" },
+    { name: "PENILAIAN", icon: <Star size={18} />, path: "/penilaian" },
+    { name: "KELUAR", icon: <LogOut size={18} />, path: "/logout" },
   ];
 
   return (
-    <div className="bg-[#003C3C] text-white w-64 h-screen p-5 flex flex-col">
-      <h1 className="text-2xl font-bold mb-8">TEMPA</h1>
-      <ul className="space-y-4">
-        {menuItems.map((item, index) => (
-          <li key={index}>
-            <Link
-              to={item.path}
-              className={`flex items-center gap-3 p-2 rounded-md hover:bg-[#025858] transition ${
-                location.pathname === item.path ? "bg-[#025858]" : ""
-              }`}>
-              {item.icon}
-              <span>{item.name}</span>
-            </Link>
-          </li>
-        ))}
+    <div className="bg-[#003C3C] text-white w-64 h-screen flex flex-col fixed">
+      <div className="flex items-center justify-center px-6 py-4 h-16 border-b border-white/10">
+        <img
+          src={logo}
+          alt="Logo TEMPA"
+          className="w-32 object-contain" // ubah ukuran sesuai kebutuhan
+        />
+      </div>
+
+      {/* Menu */}
+      <ul className="flex flex-col mt-4 w-full flex-1">
+        {menuItems.map((item, index) =>
+          item.separator ? (
+            <hr
+              key={`sep-${index}`}
+              className="my-3 mx-auto w-[70%] border-t border-white/50"
+            />
+          ) : (
+            <li key={index}>
+              <Link
+                to={item.path}
+                className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
+                  location.pathname === item.path
+                    ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
+                    : "hover:bg-white/10 text-white/80"
+                }`}>
+                {item.icon}
+                <span className="font-medium">{item.name}</span>
+              </Link>
+            </li>
+          )
+        )}
       </ul>
     </div>
   );

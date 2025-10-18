@@ -1,59 +1,147 @@
 import React from "react";
+import { Check, X, GraduationCap } from "lucide-react";
+
+// ✅ Import komponen Sidebar
 import Sidebar from "@/components/Sidebar";
-import Footer from "@/components/Footer";
-// import robotHappy from "@/assets/robot-happy.png";
+
+// ✅ Import assets
+import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 
 const DashboardMentee = () => {
+  const darkText = "#003C3C";
+  const cardBgColor = "#E6F3F3";
+  const heroBg = "#003C3C";
+
+  // Header bar
+  const HeaderBar = () => (
+    <header
+      className="flex items-center justify-end px-6 h-16"
+      style={{ backgroundColor: heroBg }}>
+      <div className="flex items-center gap-4">
+        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white bg-white/5">
+          <img
+            src={robotHappy}
+            alt="Profil Robot"
+            className="object-cover w-full h-full"
+          />
+        </div>
+      </div>
+    </header>
+  );
+
   return (
-    <div className="flex min-h-screen bg-[#F8F9F8]">
-      {/* Sidebar */}
+    <div className="min-h-screen bg-[#F8F9F8] flex">
+      {/* Sidebar (imported) */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header Section */}
-        <header className="p-6 bg-white shadow-sm flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-semibold text-[#003C3C]">
-              Selamat Datang,
-            </h2>
-            <h1 className="text-2xl font-bold text-[#003C3C]">Teman TEMPA</h1>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-gray-300"></div>
-        </header>
+      <div className="flex-1 flex flex-col ml-64">
+        {/* Header */}
+        <HeaderBar />
 
-        {/* Welcome Card */}
-        <section className="p-6">
-          <div className="bg-[#003C3C] text-white rounded-xl p-6 flex justify-between items-center shadow-lg">
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Program</h3>
-              <div className="flex gap-4">
-                <div className="bg-white text-[#003C3C] rounded-lg p-3 w-32 text-center font-semibold">
-                  Ongoing
+        {/* Main Section */}
+        <main className="px-10 pt-4 pb-6 flex-1">
+          {/* Hero Section */}
+          <div
+            className="rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between"
+            style={{ backgroundColor: heroBg }}>
+            {/* Left Side */}
+            <div className="flex-1 pr-4">
+              <p className="text-sm tracking-widest text-white/80 mb-1">
+                SELAMAT DATANG,
+              </p>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
+                TEMAN TEMPA
+              </h1>
+
+              <div className="flex flex-wrap gap-4">
+                {/* Program */}
+                <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
+                  <div
+                    className="rounded-full w-10 h-10 flex items-center justify-center text-[#003C3C]"
+                    style={{ backgroundColor: cardBgColor }}>
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">PROGRAM</p>
+                    <p
+                      className="font-semibold text-lg"
+                      style={{ color: darkText }}>
+                      00 Program
+                    </p>
+                  </div>
                 </div>
-                <div className="bg-green-500 rounded-lg p-3 w-32 text-center font-semibold">
-                  Lulus
+
+                {/* Lulus */}
+                <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
+                  <div
+                    className="rounded-full w-10 h-10 flex items-center justify-center text-[#32A852]"
+                    style={{ backgroundColor: cardBgColor }}>
+                    <Check className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">LULUS</p>
+                    <p
+                      className="font-semibold text-lg"
+                      style={{ color: darkText }}>
+                      00 Program
+                    </p>
+                  </div>
                 </div>
-                <div className="bg-red-500 rounded-lg p-3 w-32 text-center font-semibold">
-                  Tidak Lulus
+
+                {/* Tidak Lulus */}
+                <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
+                  <div
+                    className="rounded-full w-10 h-10 flex items-center justify-center text-[#FF4136]"
+                    style={{ backgroundColor: cardBgColor }}>
+                    <X className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">TIDAK LULUS</p>
+                    <p
+                      className="font-semibold text-lg"
+                      style={{ color: darkText }}>
+                      00 Program
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-            {/* <img src={robotHappy} alt="Robot" className="w-32 md:w-40" /> */}
-          </div>
-        </section>
 
-        {/* Aktivitas Section */}
-        <section className="px-6 flex-1">
-          <h2 className="text-2xl font-bold text-[#003C3C] mb-6">Aktivitas</h2>
-          <div className="flex flex-col items-center justify-center text-center text-gray-500">
-            <img src={roboterror} alt="Robot" className="w-40 mb-4" />
-            <p>Belum ada aktivitas yang diikuti</p>
+            {/* Right Side (Robot) */}
+            <div className="mt-6 md:mt-0 md:ml-6 flex-shrink-0">
+              <img
+                src={robotHappy}
+                alt="Robot TEMPA"
+                className="w-44 md:w-56 object-contain"
+                style={{ position: "relative", top: "-20px" }}
+              />
+            </div>
           </div>
-        </section>
 
-        <Footer />
+          {/* Aktivitas Section */}
+          <section className="mt-8">
+            <h2 className="text-2xl font-bold mb-6" style={{ color: darkText }}>
+              Aktivitas
+            </h2>
+
+            {/* Empty State */}
+            <div className="flex flex-col items-center justify-center py-16 rounded-xl bg-white/40 border border-white/10 shadow-inner">
+              <img
+                src={roboterror}
+                alt="Belum Ada Aktivitas"
+                className="w-40 mb-4"
+              />
+              <p className="text-gray-600">Belum ada aktivitas yang diikuti</p>
+            </div>
+          </section>
+        </main>
+
+        {/* Footer */}
+        <footer className="px-6 py-4 text-center text-sm text-gray-500">
+          © 2025 TEMPA. All rights reserved.
+        </footer>
       </div>
     </div>
   );
