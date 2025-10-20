@@ -2,14 +2,43 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 
-// Lazy imports
+// ✅ Lazy imports
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
+
+// Dashboard Mentee Pages (folder DashboardMentee)
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
+const DashboardProgram = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardProgram")
+);
+const DashboardCampus = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardCampus")
+);
+const DashboardCampusDetail = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashbordCampusDetail")
+);
+
+const DashboardCampusPrestasi = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardCampusPrestasi")
+);
+const DashboardCampusJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardCampusJurusan")
+);
+const DetailProgramMentee = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+);
+const DashboardMenteeProgramDaftar = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
+);
+const DashboardCampusProgram = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
+);
+
+// Other Pages
 const CampusPage = lazy(() => import("./page/campuspage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
@@ -20,23 +49,12 @@ const CampusPrestasiPage = lazy(() =>
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
-const DashboardProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardProgram")
-);
-const DashboardCampus = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardCampus")
-);
-
-// ✅ Tambahkan ini (halaman detail program mentee)
-const DetailProgramMentee = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
-);
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing Page */}
+        {/* 🌐 Landing Page */}
         <Route
           path="/"
           element={
@@ -46,7 +64,7 @@ export default function App() {
           }
         />
 
-        {/* Login Pages */}
+        {/* 🔐 Login Pages */}
         <Route
           path="/login-mentee"
           element={
@@ -72,7 +90,7 @@ export default function App() {
           }
         />
 
-        {/* Campus Related Pages */}
+        {/* 🎓 Campus Related Pages */}
         <Route
           path="/CampusPage"
           element={
@@ -138,7 +156,7 @@ export default function App() {
           }
         />
 
-        {/* Panduan */}
+        {/* 📘 Panduan */}
         <Route
           path="/panduan"
           element={
@@ -148,7 +166,7 @@ export default function App() {
           }
         />
 
-        {/* Dashboard Mentee */}
+        {/* 👨‍🎓 Dashboard Mentee */}
         <Route
           path="/dashboard-mentee"
           element={
@@ -158,7 +176,7 @@ export default function App() {
           }
         />
 
-        {/* Program Dashboard Mentee */}
+        {/* 🧩 Program Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/program"
           element={
@@ -167,7 +185,8 @@ export default function App() {
             </Suspense>
           }
         />
-        {/* Program Kampus Mentee */}
+
+        {/* 🏫 Kampus Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/kampus"
           element={
@@ -177,12 +196,61 @@ export default function App() {
           }
         />
 
-        {/* ✅ Detail Program Dashboard Mentee */}
+        {/* 🏫 Detail Kampus Dashboard */}
+        <Route
+          path="/dashboard-mentee/kampus/:id"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampusDetail />
+            </Suspense>
+          }
+        />
+
+        {/* 🆕 🏆 Prestasi Kampus Dashboard */}
+        <Route
+          path="/dashboard-mentee/kampus/:id/prestasi"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampusPrestasi />
+            </Suspense>
+          }
+        />
+
+        {/* 🏫 Jurusan Kampus Dashboard */}
+        <Route
+          path="/dashboard-mentee/kampus/:id/jurusan"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampusJurusan />
+            </Suspense>
+          }
+        />
+
+        {/* 📄 Detail Program Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/program/:id"
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DetailProgramMentee />
+            </Suspense>
+          }
+        />
+
+        {/* 📝 Form Daftar Program Dashboard Mentee */}
+        <Route
+          path="/dashboard-mentee/program/daftar"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardMenteeProgramDaftar />
+            </Suspense>
+          }
+        />
+        {/* 🏫 Program Kampus Dashboard Mentee */}
+        <Route
+          path="/dashboard-mentee/kampus/:id/program"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampusProgram />
             </Suspense>
           }
         />
