@@ -13,10 +13,10 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
-import Footer from "@/components/Footer"; // ✅ Tambahkan ini
+import Footer from "@/components/Footer";
 
 const SidebarWithNavbar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
   const menuItems = [
@@ -30,7 +30,11 @@ const SidebarWithNavbar = ({ children }) => {
       icon: <GraduationCap size={18} />,
       path: "/dashboard-mentee/program",
     },
-    { name: "KAMPUS", icon: <Building2 size={18} />, path: "/kampus" },
+    {
+      name: "KAMPUS",
+      icon: <Building2 size={18} />,
+      path: "/dashboard-mentee/kampus",
+    },
     { name: "JURUSAN", icon: <Share2 size={18} />, path: "/jurusan" },
     { separator: true },
     {
@@ -46,7 +50,7 @@ const SidebarWithNavbar = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
       {/* NAVBAR */}
-      <div className="flex items-center justify-between bg-[#003C3C] text-white h-16 px-6 fixed top-0 left-0 right-0 z-50">
+      <div className="flex items-center justify-between bg-[#013B36] text-white h-16 px-6 fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center gap-4">
           <button onClick={() => setIsOpen(!isOpen)} className="text-white">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -64,7 +68,7 @@ const SidebarWithNavbar = ({ children }) => {
 
       {/* SIDEBAR */}
       <div
-        className={`fixed top-16 left-0 h-full bg-[#003C3C] text-white w-64 transform ${
+        className={`fixed top-16 left-0 h-full bg-[#013B36] text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}>
         <ul className="flex flex-col mt-4 w-full flex-1">

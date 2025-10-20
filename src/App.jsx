@@ -23,6 +23,14 @@ const PanduanPage = lazy(() => import("./page/PanduanPage"));
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
+const DashboardCampus = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardCampus")
+);
+
+// ✅ Tambahkan ini (halaman detail program mentee)
+const DetailProgramMentee = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+);
 
 export default function App() {
   return (
@@ -156,6 +164,25 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardProgram />
+            </Suspense>
+          }
+        />
+        {/* Program Kampus Mentee */}
+        <Route
+          path="/dashboard-mentee/kampus"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampus />
+            </Suspense>
+          }
+        />
+
+        {/* ✅ Detail Program Dashboard Mentee */}
+        <Route
+          path="/dashboard-mentee/program/:id"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DetailProgramMentee />
             </Suspense>
           }
         />
