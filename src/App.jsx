@@ -2,13 +2,24 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 
-// ✅ Lazy imports
+// Route before login
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
+const CampusPage = lazy(() => import("./page/CampusPage"));
+const JurusanPage = lazy(() => import("./page/JurusanPage"));
+const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
+const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
+const CampusPrestasiPage = lazy(() =>
+  import("./components/CampusPrestasiPage")
+);
+const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
+const CampusProgram = lazy(() => import("./components/CampusProgram"));
+const PanduanPage = lazy(() => import("./page/PanduanPage"));
+// end Route before login
 
-// Dashboard Mentee Pages (folder DashboardMentee)
+// start Dashboard Mentee Pages (folder DashboardMentee)
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
@@ -28,59 +39,22 @@ const DashboardCampusPrestasi = lazy(() =>
 const DashboardCampusJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusJurusan")
 );
-// const DetailProgramMentee = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
-// );
+const DetailProgramMentee = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+);
 const DashboardMenteeProgramDaftar = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
 );
 const DashboardCampusProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
 );
-
-// Other Pages
-const CampusPage = lazy(() => import("./page/campuspage"));
-const JurusanPage = lazy(() => import("./page/JurusanPage"));
-const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
-const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
-const CampusPrestasiPage = lazy(() =>
-  import("./components/CampusPrestasiPage")
-);
-const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
-const CampusProgram = lazy(() => import("./components/CampusProgram"));
-const PanduanPage = lazy(() => import("./page/PanduanPage"));
-// const DashboardProgram = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DashboardProgram")
-// );
-// const DashboardCampus = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DashboardCampus")
-// );
-const TestJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/testJurusan")
-);
-
-const Penilaian = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Penilaian")
-);
-
-// ✅ Tambahkan ini (halaman detail program mentee)
-const DetailProgramMentee = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
-);
-
-// ✅ Tambahkan halaman DashboardJurusan
-const DashboardJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardJurusan")
-);
-const DashboardJurusanDetail = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardJurusanDetail")
-);
+// end dashboard mentee
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* 🌐 Landing Page */}
+        {/* start route Landing Page */}
         <Route
           path="/"
           element={
@@ -90,6 +64,7 @@ export default function App() {
           }
         />
 
+        {/* 🔐 Login Pages */}
         {/* 🔐 Login Pages */}
         <Route
           path="/login-mentee"
@@ -116,6 +91,7 @@ export default function App() {
           }
         />
 
+        {/* 🎓 Campus Related Pages */}
         {/* 🎓 Campus Related Pages */}
         <Route
           path="/CampusPage"
@@ -183,6 +159,7 @@ export default function App() {
         />
 
         {/* 📘 Panduan */}
+        {/* 📘 Panduan */}
         <Route
           path="/panduan"
           element={
@@ -192,7 +169,9 @@ export default function App() {
           }
         />
 
-        {/* 👨‍🎓 Dashboard Mentee */}
+        {/* end route Landing Page */}
+
+        {/* start Dashboard Mentee */}
         <Route
           path="/dashboard-mentee"
           element={
@@ -202,6 +181,7 @@ export default function App() {
           }
         />
 
+        {/* 🧩 Program Dashboard Mentee */}
         {/* 🧩 Program Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/program"
@@ -213,20 +193,13 @@ export default function App() {
         />
 
         {/* 🏫 Kampus Dashboard Mentee */}
+
+        {/* 🏫 Kampus Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/kampus"
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardCampus />
-            </Suspense>
-          }
-        />
-        {/* Test Jurusan Mentee */}
-        <Route
-          path="/dashboard-mentee/test-jurusan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <TestJurusan />
             </Suspense>
           }
         />
@@ -271,16 +244,6 @@ export default function App() {
           }
         />
 
-        {/* Penilaian */}
-        <Route
-          path="/dashboard-mentee/Penilaian"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <Penilaian />
-            </Suspense>
-          }
-        />
-
         {/* 📝 Form Daftar Program Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/program/daftar"
@@ -299,25 +262,7 @@ export default function App() {
             </Suspense>
           }
         />
-
-        {/* ✅ Tambahan Route Dashboard Jurusan */}
-        <Route
-          path="/dashboard-mentee/jurusan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardJurusan />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/dashboard-mentee/jurusan/:slug"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardJurusanDetail />
-            </Suspense>
-          }
-        />
+        {/* end dashboard mentee */}
       </Routes>
     </Router>
   );
