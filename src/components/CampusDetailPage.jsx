@@ -10,6 +10,7 @@ import logoUib from "../assets/logo-uib.png";
 import polibatam from "../assets/Gedung.jpg";
 import POLIBATAM_LOGO from "../assets/logo-polibatam.png";
 import { kampusList } from "@/lib/kampusList";
+import { CampusHeaderProfile } from "./campusHeaderProfile";
 
 const CampusDetailPage = () => {
   const { id } = useParams();
@@ -26,39 +27,8 @@ const CampusDetailPage = () => {
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
       <Navbar />
 
-      {/* Header Image */}
-      <header className="px-10 pt-10 pb-0 bg-white">
-        <div className="max-w-7xl mx-auto rounded-xl shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 grid-rows-1 gap-3 h-[400px]">
-            <img
-              src={kampus.image}
-              alt="Gedung Utama"
-              className="col-span-2 row-span-2 w-full h-full object-cover rounded-tl-xl rounded-bl-xl"
-            />
-          </div>
-
-          <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
-                <img
-                  src={kampus.logo}
-                  alt="Polibatam Logo"
-                  className="w-20 h-20 object-contain"
-                />
-              </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {kampus.name}
-                </h1>
-                <div className="flex items-center text-gray-300 mt-1">
-                  <MapPin size={16} className="mr-2" />
-                  <span className="text-sm">{kampus.location}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header Kampus */}
+      <CampusHeaderProfile kampus={kampus} />
 
       {/* Info Kampus */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">

@@ -1,18 +1,37 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { MapPin } from "lucide-react";
+import { Briefcase, ListCheck, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
 import { jurusanList } from "@/lib/JurusanList"; // ✅ jurusan dipanggil dari file baru
+import { CampusHeaderProfile } from "./campusHeaderProfile";
 
 const CampusJurusanPage = () => {
   const { id } = useParams();
   const campusId = parseInt(id);
   const kampus = kampusList.find((k) => k.id === campusId);
+  // console.table(kampus.name);
 
-  const currentJurusanData = jurusanList[campusId] || [];
-  const initialJurusan = currentJurusanData[0]?.Jurusan || null;
+  // 1. LOGIKA FILTER JURUSAN DARI JURUSANLIST menggunakan useMemo
+  const filteredJurusanDetails = useMemo(() => {
+    // Ambil nama kampus aktif dan normalkan (lowercase)
+    const activeCampusName = kampus.name.toLowerCase();
+
+    return jurusanList.filter((jurusan) =>
+      jurusan.kampusTerkait.some(
+        // Normalisasi nama kampusTerkait sebelum membandingkan
+        (kampusTerkait) => kampusTerkait.nama.toLowerCase() === activeCampusName
+      )
+    );
+  }, [kampus]); // Dependencies hanya kampus
+
+  // console.log(filteredJurusanDetails);
+
+  // 2. INISIALISASI STATE
+  const initialJurusan = filteredJurusanDetails[0]?.nama || null;
+
+  // console.log(initialJurusan);
   const [openJurusan, setOpenJurusan] = useState(initialJurusan);
 
   const toggleJurusan = (jurusanName) => {
@@ -32,38 +51,7 @@ const CampusJurusanPage = () => {
       <Navbar />
 
       {/* Header Kampus */}
-      <header className="px-10 pt-10 pb-0 bg-white">
-        <div className="max-w-7xl mx-auto rounded-xl shadow-lg overflow-hidden">
-          <div className="h-[400px]">
-            <img
-              src={kampus.image}
-              alt={`Gedung ${kampus.name}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
-                <img
-                  src={kampus.logo}
-                  alt={`${kampus.name} Logo`}
-                  className="w-20 h-20 object-contain"
-                />
-              </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {kampus.name}
-                </h1>
-                <div className="flex items-center text-gray-300 mt-1">
-                  <MapPin size={16} className="mr-2" />
-                  <span className="text-sm">{kampus.location}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <CampusHeaderProfile kampus={kampus} />
 
       {/* Jurusan Section */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
@@ -102,25 +90,53 @@ const CampusJurusanPage = () => {
           </p>
 
           <div className="space-y-5">
-            {currentJurusanData.length > 0 ? (
-              currentJurusanData.map((item) => (
+            {/* MENGGUNAKAN filteredJurusanDetails */}
+            {filteredJurusanDetails.length > 0 ? (
+              filteredJurusanDetails.map((item) => (
                 <div
-                  key={item.Jurusan}
+                  key={item.slug} // Menggunakan slug sebagai key unik
                   className="border rounded-2xl overflow-hidden shadow-sm">
                   <button
-                    onClick={() => toggleJurusan(item.Jurusan)}
+                    // MENGGUNAKAN item.nama
+                    onClick={() => toggleJurusan(item.nama)}
                     className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
-                    <span>{item.Jurusan}</span>
-                    <span>{openJurusan === item.Jurusan ? "−" : "+"}</span>
+                    <span>{item.nama}</span> {/* MENGGUNAKAN item.nama */}
+                    <span>{openJurusan === item.nama ? "−" : "+"}</span>
                   </button>
-                  {openJurusan === item.Jurusan && (
-                    <div className="p-6 bg-gray-50">{item.content}</div>
+
+                  {/* Konten Detail Jurusan dari jurusanList */}
+                  {openJurusan === item.nama && (
+                    <div className="p-6 bg-gray-50">
+                      <h3 className="text-xl font-bold text-[#013B35] mb-3">
+                        Deskripsi
+                      </h3>
+                      <p className="text-gray-800 mb-6 leading-relaxed">
+                        {item.deskripsi}
+                      </p>
+
+                      <h3 className="text-xl font-bold text-[#013B35] mb-3 flex items-center">
+                        <Briefcase size={20} className="mr-2" />
+                        Prospek Kerja
+                      </h3>
+                      <ul className="space-y-2 list-disc ml-5 text-gray-700">
+                        {item.prospekKerja.map((prospek, index) => (
+                          <li key={index} className="flex items-start">
+                            <ListCheck
+                              size={16}
+                              className="text-[#013B35] mr-2 flex-shrink-0 mt-1"
+                            />
+                            {prospek}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               ))
             ) : (
-              <p className="text-center text-gray-500">
-                Data Jurusan belum tersedia untuk kampus ini.
+              <p className="text-center text-gray-500 py-10">
+                Maaf, data Jurusan yang terkait di **`jurusanList`** untuk
+                kampus **{kampus.name}** belum tersedia.
               </p>
             )}
           </div>

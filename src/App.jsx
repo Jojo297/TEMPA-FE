@@ -106,7 +106,7 @@ export default function App() {
           }
         />
         <Route
-          path="/jurusan/:id"
+          path="/jurusan/:slug"
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DetailJurusan />

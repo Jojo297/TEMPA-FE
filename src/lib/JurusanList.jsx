@@ -31,7 +31,7 @@ export const jurusanList = [
     ],
     kampusTerkait: [
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
       { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
     ],
     programTerkait: [
@@ -59,7 +59,7 @@ export const jurusanList = [
     prospekKerja: ["Business Analyst", "System Analyst", "IT Consultant"],
     kampusTerkait: [
       { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
@@ -85,7 +85,7 @@ export const jurusanList = [
     kampusTerkait: [
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
       { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
@@ -109,7 +109,7 @@ export const jurusanList = [
       "Operation Analyst",
     ],
     kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
     ],
     programTerkait: [
@@ -135,7 +135,7 @@ export const jurusanList = [
     ],
     kampusTerkait: [
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
@@ -177,7 +177,7 @@ export const jurusanList = [
     prospekKerja: ["Manager", "HR Specialist", "Business Development Officer"],
     kampusTerkait: [
       { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
     ],
     programTerkait: [
@@ -203,7 +203,7 @@ export const jurusanList = [
       "Brand Strategist",
     ],
     kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
       { nama: "Universitas Internasional Batam", gambar: "/kampus/uib.jpg" },
     ],
     programTerkait: [
@@ -331,7 +331,7 @@ export const jurusanList = [
       "Jurusan Matematika mempelajari teori bilangan, statistika, aljabar, dan analisis numerik. Mahasiswa dibekali kemampuan berpikir logis dan analitis untuk berbagai bidang riset dan teknologi.",
     prospekKerja: ["Data Analyst", "Actuary", "Researcher"],
     kampusTerkait: [
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
@@ -356,7 +356,7 @@ export const jurusanList = [
     ],
     kampusTerkait: [
       { nama: "Politeknik Negeri Batam", gambar: "/kampus/polibatam.jpg" },
-      { nama: "Institut Teknologi Batam", gambar: "/kampus/iteba.jpg" },
+      { nama: "Institut Teknologi Batam (ITEBA)", gambar: "/kampus/iteba.jpg" },
     ],
     programTerkait: [
       {
