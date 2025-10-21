@@ -35,7 +35,12 @@ const SidebarWithNavbar = ({ children }) => {
       icon: <Building2 size={18} />,
       path: "/dashboard-mentee/kampus",
     },
-    { name: "JURUSAN", icon: <Share2 size={18} />, path: "/jurusan" },
+    {
+      name: "JURUSAN",
+      icon: <Share2 size={18} />,
+      path: "/dashboard-mentee/jurusan",
+    },
+
     { separator: true },
     {
       name: "TES JURUSAN",
