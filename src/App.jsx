@@ -26,6 +26,14 @@ const DashboardProgram = lazy(() =>
 const DashboardCampus = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampus")
 );
+const TestJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/testJurusan")
+);
+
+const Penilaian = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/Penilaian")
+);
+
 
 // ✅ Tambahkan ini (halaman detail program mentee)
 const DetailProgramMentee = lazy(() =>
@@ -176,6 +184,15 @@ export default function App() {
             </Suspense>
           }
         />
+        {/* Test Jurusan Mentee */}
+        <Route
+          path="/dashboard-mentee/test-jurusan"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <TestJurusan />
+            </Suspense>
+          }
+        />
 
         {/* ✅ Detail Program Dashboard Mentee */}
         <Route
@@ -183,6 +200,16 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DetailProgramMentee />
+            </Suspense>
+          }
+          />
+
+        {/* Penilaian */}
+        <Route
+          path="/dashboard-mentee/Penilaian"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <Penilaian />
             </Suspense>
           }
         />

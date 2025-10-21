@@ -40,10 +40,14 @@ const SidebarWithNavbar = ({ children }) => {
     {
       name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
-      path: "/tes-jurusan",
+      path: "/dashboard-mentee/test-jurusan",
     },
     { name: "MATERI", icon: <BookOpen size={18} />, path: "/materi" },
-    { name: "PENILAIAN", icon: <Star size={18} />, path: "/penilaian" },
+    {
+      name: "PENILAIAN",
+      icon: <Star size={18} />,
+      path: "/dashboard-mentee/Penilaian",
+    },
     { name: "KELUAR", icon: <LogOut size={18} />, path: "/logout" },
   ];
 

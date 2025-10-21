@@ -3,7 +3,7 @@ import { Check, X, GraduationCap } from "lucide-react";
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
 import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
-import Footer from "@/components/Footer";
+
 
 const DashboardMentee = () => {
   const darkText = "#003C3C";
