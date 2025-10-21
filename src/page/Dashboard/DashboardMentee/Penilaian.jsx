@@ -1,14 +1,11 @@
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { jurusanList } from "@/lib/jurusanList";
+import { jurusanList } from "@/lib/JurusanList";
 import PenilaianModal from "@/components/PenilaianModal"; // 🧩 import popup
 
 export default function Penilaian() {
-  // ==================== State Utama ====================
   const [activeTab, setActiveTab] = useState("belumDinilai");
-
-  // ==================== State Popup ====================
   const [selectedProgram, setSelectedProgram] = useState(null);
 
   // Fungsi buka & tutup popup
@@ -21,7 +18,6 @@ export default function Penilaian() {
     alert("Terima kasih atas penilaiannya!");
   };
 
-  // ==================== Data Program ====================
   const allPrograms = jurusanList.flatMap((jurusan) =>
     jurusan.programTerkait.map((program) => ({
       ...program,
@@ -29,11 +25,9 @@ export default function Penilaian() {
     }))
   );
 
-  // ==================== Tampilan Halaman ====================
   return (
     <SidebarWithNavbar>
       <main className="px-10 pt-4 pb-10 flex-1">
-        {/* ================== Header Section ================== */}
         <section className="bg-[#013B35] text-white rounded-xl py-8 px-6 text-center mb-10">
           <h1 className="text-3xl font-bold mb-2">Penilaian</h1>
           <p className="max-w-2xl mx-auto text-gray-200">
@@ -42,7 +36,6 @@ export default function Penilaian() {
           </p>
         </section>
 
-        {/* ================== Filter Tabs ================== */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Penilaian Saya</h2>
           <div className="flex gap-4">
@@ -52,7 +45,8 @@ export default function Penilaian() {
                 activeTab === "belumDinilai"
                   ? "bg-[#A5E3E7] text-[#013B35]"
                   : "border border-[#013B35] text-[#013B35] bg-transparent"
-              }`}>
+              }`}
+            >
               Belum Dinilai
             </Button>
             <Button
@@ -61,7 +55,8 @@ export default function Penilaian() {
                 activeTab === "penilaianSaya"
                   ? "bg-[#A5E3E7] text-[#013B35]"
                   : "border border-[#013B35] text-[#013B35] bg-transparent"
-              }`}>
+              }`}
+            >
               Penilaian Saya
             </Button>
           </div>
@@ -72,7 +67,8 @@ export default function Penilaian() {
           {allPrograms.map((program, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all">
+              className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all"
+            >
               {program.gambar && (
                 <img
                   src={program.gambar}
@@ -89,7 +85,8 @@ export default function Penilaian() {
                 <p className="text-sm text-gray-500 mb-4">{program.tanggal}</p>
                 <button
                   onClick={() => handleOpenPopup(program)} // 🧩 buka popup
-                  className="w-full bg-[#A5E3E7] text-[#013B35] font-medium py-2 rounded-lg hover:bg-[#8ed1d5] transition">
+                  className="w-full bg-[#A5E3E7] text-[#013B35] font-medium py-2 rounded-lg hover:bg-[#8ed1d5] transition"
+                >
                   Beri Penilaian
                 </button>
               </div>

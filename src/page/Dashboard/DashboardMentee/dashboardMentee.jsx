@@ -4,7 +4,6 @@ import SidebarWithNavbar from "@/components/SidebarWithNavbar";
 import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 
-
 const DashboardMentee = () => {
   const darkText = "#003C3C";
   const cardBgColor = "#E6F3F3";
@@ -12,7 +11,7 @@ const DashboardMentee = () => {
 
   return (
     <SidebarWithNavbar>
-      <main className="px-10 pt-4 pb-6 flex-1">
+      <main className="px-4 pt-4 pb-6 flex-1">
         {/* Hero Section */}
         <div
           className="rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between"
@@ -38,7 +37,10 @@ const DashboardMentee = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">PROGRAM</p>
-                  <p className="font-semibold text-lg" style={{ color: darkText }}>
+                  <p
+                    className="font-semibold text-lg"
+                    style={{ color: darkText }}
+                  >
                     00 Program
                   </p>
                 </div>
@@ -54,7 +56,10 @@ const DashboardMentee = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">LULUS</p>
-                  <p className="font-semibold text-lg" style={{ color: darkText }}>
+                  <p
+                    className="font-semibold text-lg"
+                    style={{ color: darkText }}
+                  >
                     00 Program
                   </p>
                 </div>
@@ -70,7 +75,10 @@ const DashboardMentee = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">TIDAK LULUS</p>
-                  <p className="font-semibold text-lg" style={{ color: darkText }}>
+                  <p
+                    className="font-semibold text-lg"
+                    style={{ color: darkText }}
+                  >
                     00 Program
                   </p>
                 </div>
@@ -95,7 +103,11 @@ const DashboardMentee = () => {
             Aktivitas
           </h2>
           <div className="flex flex-col items-center justify-center py-16 rounded-xl bg-white/40 border border-white/10 shadow-inner">
-            <img src={roboterror} alt="Belum Ada Aktivitas" className="w-40 mb-4" />
+            <img
+              src={roboterror}
+              alt="Belum Ada Aktivitas"
+              className="w-40 mb-4"
+            />
             <p className="text-gray-600">Belum ada aktivitas yang diikuti</p>
           </div>
         </section>

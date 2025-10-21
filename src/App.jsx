@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 
-// Route before login
+// start Route landing page
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
@@ -26,7 +26,7 @@ const DashboardMenteePage = lazy(() =>
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
-const DashboardCampus = lazy(() =>
+const DashboardMenteeCampus = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampus")
 );
 const DashboardCampusDetail = lazy(() =>
@@ -48,7 +48,28 @@ const DashboardMenteeProgramDaftar = lazy(() =>
 const DashboardCampusProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
 );
+const TestJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/Testjurusan")
+);
+
+const Penilaian = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/Penilaian")
+);
+
+const DashboardJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardJurusan")
+);
+
+const DashboardJurusanDetail = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardJurusanDetail")
+);
 // end dashboard mentee
+
+// start dashboard campus
+const DashboardCampus = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampus")
+);
+// end dashboard campus
 
 export default function App() {
   return (
@@ -91,7 +112,6 @@ export default function App() {
           }
         />
 
-        {/* 🎓 Campus Related Pages */}
         {/* 🎓 Campus Related Pages */}
         <Route
           path="/CampusPage"
@@ -182,7 +202,6 @@ export default function App() {
         />
 
         {/* 🧩 Program Dashboard Mentee */}
-        {/* 🧩 Program Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/program"
           element={
@@ -193,13 +212,11 @@ export default function App() {
         />
 
         {/* 🏫 Kampus Dashboard Mentee */}
-
-        {/* 🏫 Kampus Dashboard Mentee */}
         <Route
           path="/dashboard-mentee/kampus"
           element={
             <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampus />
+              <DashboardMenteeCampus />
             </Suspense>
           }
         />
@@ -262,7 +279,56 @@ export default function App() {
             </Suspense>
           }
         />
+        {/* Test Jurusan Mentee */}
+
+        <Route
+          path="/dashboard-mentee/test-jurusan"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <TestJurusan />
+            </Suspense>
+          }
+        />
+
+        {/* Penilaian */}
+        <Route
+          path="/dashboard-mentee/Penilaian"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <Penilaian />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/dashboard-mentee/jurusan"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardJurusan />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/dashboard-mentee/jurusan/:slug"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardJurusanDetail />
+            </Suspense>
+          }
+        />
         {/* end dashboard mentee */}
+
+        {/* start dashboard campus */}
+        <Route
+          path="/dashboard-campus"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardCampus />
+            </Suspense>
+          }
+        />
+        {/* end dashboard campus */}
       </Routes>
     </Router>
   );

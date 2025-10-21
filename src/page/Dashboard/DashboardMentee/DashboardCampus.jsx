@@ -14,7 +14,7 @@ export default function DashboardCampus() {
 
   return (
     <SidebarWithNavbar>
-      <main className="px-10 pt-6 pb-10 flex-1 min-h-screen">
+      <main className="px-4 pt-6 pb-10 flex-1 min-h-screen">
         {/* Banner Section */}
         <div className=" mb-8 text-center">
           <div className="bg-[#004D40] text-white rounded-xl p-6 shadow">
@@ -34,7 +34,8 @@ export default function DashboardCampus() {
               <Link
                 to={`/dashboard-mentee/kampus/${kampus.id}`}
                 key={kampus.id}
-                className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
+                className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
+              >
                 <img
                   src={kampus.image}
                   alt={kampus.name}
@@ -81,7 +82,8 @@ export default function DashboardCampus() {
               <Link
                 to={`/dashboard-mentee/kampus/${kampus.id}`}
                 key={kampus.id}
-                className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
+                className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
+              >
                 <img
                   src={kampus.image}
                   alt={kampus.name}
