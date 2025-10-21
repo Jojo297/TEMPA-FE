@@ -62,7 +62,8 @@ export default function LoginMentee() {
         data-ux_mode="popup"
         data-callback="handleCredentialResponse"
         data-nonce=""
-        data-itp_support="true"></div>
+        data-itp_support="true"
+      ></div>
       {/* end popup login google */}
 
       {/* button login google*/}
@@ -75,7 +76,8 @@ export default function LoginMentee() {
           data-text="signin_with"
           data-size="large"
           data-logo_alignment="left"
-          data-width="300"></div>
+          data-width="300"
+        ></div>
       </div>
     </div>
   );
