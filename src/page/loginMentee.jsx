@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function LoginMentee() {
   // Definisi warna khusus agar lebih mudah dibaca (sesuai gambar)
@@ -23,7 +24,7 @@ export default function LoginMentee() {
     const googleToken = response.credential;
     try {
       const loginMentee = await axios.post(
-        "http://localhost:8080/api/v1/login-mentee",
+        `${BASE_URL}/login-mentee`,
         { credential: googleToken } // Backend can get req.body.credential
       );
       const { token, uniqueId, fullName, email } = loginMentee.data.data;

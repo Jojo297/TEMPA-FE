@@ -18,6 +18,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function LoginAdmin() {
   const navigate = useNavigate();
   const form = useForm();
@@ -45,13 +47,10 @@ export default function LoginAdmin() {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/admin-login",
-        {
-          username: data.username,
-          password: data.password,
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/admin-login`, {
+        username: data.username,
+        password: data.password,
+      });
       if (response.status == 200) {
         // const token = response.data.data.token;
         const token = response.data.data;
