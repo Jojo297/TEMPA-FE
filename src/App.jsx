@@ -71,6 +71,12 @@ const DashboardCampus = lazy(() =>
 );
 // end dashboard campus
 
+// start dashboard admin
+const DashboardAdmin = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
+);
+// end dashboard admin
+
 export default function App() {
   return (
     <Router>
@@ -329,6 +335,17 @@ export default function App() {
           }
         />
         {/* end dashboard campus */}
+
+        {/* start dashboard admin */}
+        <Route
+          path="/dashboard-admin"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardAdmin />
+            </Suspense>
+          }
+        />
+        {/* end dashboard admin */}
       </Routes>
     </Router>
   );
