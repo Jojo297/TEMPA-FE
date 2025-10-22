@@ -20,34 +20,35 @@ import { Spinner } from "@/components/ui/spinner";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function LoginAdmin() {
+export default function LoginMentor() {
   const navigate = useNavigate();
-  const form = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
   const DARK_GREEN = "bg-[#10403D]";
   const LIGHT_BLUE = "text-[#5BC0EB]";
   const PROGRESS_BLUE = "bg-[#5BC0EB]";
 
-  // validating form
-  const validateLoginAdmin = z.object({
+  // validating form using zod
+  const validateLoginMentor = z.object({
     username: z.string().min(2, "Masukkan Username!"),
     password: z.string().min(2, "Masukkan Password!"),
   });
 
-  const formLoginAdmin = useForm({
+  // handle form state and validation for mentor login
+  const formLoginMentor = useForm({
     defaultValues: {
       username: "",
       password: "",
     },
-    resolver: zodResolver(validateLoginAdmin),
+    resolver: zodResolver(validateLoginMentor),
   });
 
-  const onSubmitLoginAdmin = async (data) => {
+  // handle submit login
+  const onSubmitLoginMentor = async (data) => {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL}/admin-login`, {
+      const response = await axios.post(`${BASE_URL}/mentor-login`, {
         username: data.username,
         password: data.password,
       });
@@ -55,9 +56,9 @@ export default function LoginAdmin() {
         // const token = response.data.data.token;
         const token = response.data.data;
         // localStorage.setItem("token", token);
-        // redirect to dashboard
-        navigate("/dashboard-admin");
         toast.success("Anda berhasil Masuk!");
+        // redirect to dashboard
+        navigate("/dashboard-mentor");
       }
     } catch (error) {
       console.log(error);
@@ -100,16 +101,16 @@ export default function LoginAdmin() {
           </div>
           <h1 className="text-5xl font-extrabold leading-tight">
             Welcome <br />
-            Admin!
+            Mentor!
           </h1>
         </div>
 
         {/* Bagian Kanan (Form Login/Signup) */}
         <div className="w-3/5 bg-white p-16 flex flex-col">
           {/* Form Utama */}
-          <Form {...formLoginAdmin}>
+          <Form {...formLoginMentor}>
             <form
-              onSubmit={formLoginAdmin.handleSubmit(onSubmitLoginAdmin)}
+              onSubmit={formLoginMentor.handleSubmit(onSubmitLoginMentor)}
               className="flex flex-col"
             >
               <div className="mb-10">
@@ -126,7 +127,7 @@ export default function LoginAdmin() {
               <div className="mb-6">
                 {/* input product username */}
                 <FormField
-                  control={formLoginAdmin.control}
+                  control={formLoginMentor.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
@@ -148,7 +149,7 @@ export default function LoginAdmin() {
               <div className="mb-6">
                 {/* input product password */}
                 <FormField
-                  control={formLoginAdmin.control}
+                  control={formLoginMentor.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>

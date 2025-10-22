@@ -5,6 +5,7 @@ import googleIcon from "@/assets/google-logo.svg";
 import { ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { toast } from "sonner";
 
 const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -36,8 +37,28 @@ export default function LoginMentee() {
 
       // redirect
       navigate("/dashboard-mentee");
+
+      toast.success("Anda Berhasil Login!");
     } catch (error) {
       console.log(error);
+      const statusCode = error.response.status;
+      // Unauthorized
+      if (statusCode === 401) {
+        toast.error("Username atau Password salah!");
+        // url not found
+      } else if (statusCode === 404) {
+        const axiosMessage = error.message;
+        toast.error(`${axiosMessage}`);
+        // internal server error
+      } else if (statusCode >= 500) {
+        toast.error("Server sedang bermasalah. Coba lagi nanti.");
+      } else {
+        // get all error stautus HTTP
+        const serverMsg =
+          error.response.data.message ||
+          "Terjadi kesalahan yang tidak terduga.";
+        toast.error(serverMsg);
+      }
     }
   };
 

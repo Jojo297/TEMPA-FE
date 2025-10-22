@@ -4,6 +4,7 @@ import LoadingRedirect from "./components/loadingRedirect";
 
 // start Route landing page
 const LandingPage = lazy(() => import("./page/Landingpage"));
+const LoginMentor = lazy(() => import("./page/loginMentor"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
@@ -77,6 +78,12 @@ const DashboardAdmin = lazy(() =>
 );
 // end dashboard admin
 
+// start dashboard mentor
+const DashboardMentor = lazy(() =>
+  import("@/page/Dashboard/DashboardMentor/DashboardMentor")
+);
+// end dashboard mentor
+
 export default function App() {
   return (
     <Router>
@@ -92,7 +99,6 @@ export default function App() {
         />
 
         {/* 🔐 Login Pages */}
-        {/* 🔐 Login Pages */}
         <Route
           path="/login-mentee"
           element={
@@ -106,6 +112,14 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <LoginCampus />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/login-mentor"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginMentor />
             </Suspense>
           }
         />
@@ -342,6 +356,17 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardAdmin />
+            </Suspense>
+          }
+        />
+        {/* end dashboard admin */}
+
+        {/* start dashboard mentor */}
+        <Route
+          path="/dashboard-mentor"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <DashboardMentor />
             </Suspense>
           }
         />

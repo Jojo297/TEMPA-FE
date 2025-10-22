@@ -14,6 +14,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 const SidebarWithNavbar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -21,6 +22,7 @@ const SidebarWithNavbar = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("userJwt");
+    toast.success("Anda Berhasil Keluar!");
   };
 
   const menuItems = [
