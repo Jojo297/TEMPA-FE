@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo2 from "@/assets/logo-text.png";
 import { useNavigate } from "react-router";
-import z from "zod";
+import z, { number } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -30,14 +30,29 @@ export default function LoginMentor() {
 
   // validating form using zod
   const validateLoginMentor = z.object({
-    username: z.string().min(2, "Masukkan Username!"),
+    nik: z
+      .string()
+      .min(1, "Masukkan NIK Anda!")
+      // check if input number
+      .refine((val) => !isNaN(Number(val)) && val !== "", {
+        message: "Input NIK harus berupa angka!",
+      })
+      // Transform string to number.
+      .transform((val) => Number(val))
+      // wrap the resulting numbers from the transform using pipe
+      .pipe(
+        z
+          .number()
+          .int({ message: "NIK harus berupa bilangan bulat." })
+          .min(3, "Masukkan NIK minimal 2 digit!")
+      ),
     password: z.string().min(2, "Masukkan Password!"),
   });
 
   // handle form state and validation for mentor login
   const formLoginMentor = useForm({
     defaultValues: {
-      username: "",
+      nik: "",
       password: "",
     },
     resolver: zodResolver(validateLoginMentor),
@@ -48,8 +63,8 @@ export default function LoginMentor() {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL}/mentor-login`, {
-        username: data.username,
+      const response = await axios.post(`${BASE_URL}/login-mentor`, {
+        nik: data.nik,
         password: data.password,
       });
       if (response.status == 200) {
@@ -128,13 +143,13 @@ export default function LoginMentor() {
                 {/* input product username */}
                 <FormField
                   control={formLoginMentor.control}
-                  name="username"
+                  name="nik"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="username">Username</FormLabel>
+                      <FormLabel htmlFor="nik">NIK</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Masukkan Username"
+                          placeholder="Masukkan NIK"
                           className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                           {...field}
                         />
