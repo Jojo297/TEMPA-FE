@@ -49,6 +49,7 @@ const CampusPrestasiPage = lazy(() =>
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
+const Materi = lazy(() => import("./page/Dashboard/DashboardMentee/materi"));
 // const DashboardProgram = lazy(() =>
 //   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 // );
@@ -62,7 +63,6 @@ const TestJurusan = lazy(() =>
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
-
 
 // ✅ Tambahkan ini (halaman detail program mentee)
 const DetailProgramMentee = lazy(() =>
@@ -262,7 +262,7 @@ export default function App() {
               <DetailProgramMentee />
             </Suspense>
           }
-          />
+        />
 
         {/* Penilaian */}
         <Route
@@ -289,6 +289,14 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardCampusProgram />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/dashboard-mentee/Materi"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <Materi />
             </Suspense>
           }
         />
