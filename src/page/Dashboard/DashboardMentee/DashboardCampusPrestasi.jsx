@@ -204,23 +204,27 @@ const CampusPrestasiPage = () => {
           {/* Tombol Navigasi */}
           <div className="flex flex-wrap gap-4 mb-10 justify-start">
             <Link
-              to={`/campus-detail/${kampus.id}`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+              to={`/dashboard-mentee/kampus/${kampus.id}`}
+              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+            >
               Deskripsi
             </Link>
             <Link
-              to={`/campus/${kampus.id}/prestasi`}
-              className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
+              to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
+              className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+            >
               Prestasi
             </Link>
             <Link
-              to={`/campus/${kampus.id}/jurusan`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+              to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
+              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+            >
               Jurusan
             </Link>
             <Link
-              to={`/campus/${kampus.id}/program`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+              to={`/dashboard-mentee/kampus/${kampus.id}/program`}
+              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+            >
               Program
             </Link>
           </div>
@@ -242,10 +246,12 @@ const CampusPrestasiPage = () => {
               {prestasiData[kampus.id]?.map(({ year, content }) => (
                 <div
                   key={year}
-                  className="border rounded-2xl overflow-hidden shadow-sm">
+                  className="border rounded-2xl overflow-hidden shadow-sm"
+                >
                   <button
                     onClick={() => toggleYear(year)}
-                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
+                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition"
+                  >
                     <span>Tahun {year}</span>
                     <span>{openYear === year ? "−" : "+"}</span>
                   </button>

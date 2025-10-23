@@ -44,7 +44,7 @@ export default function DashboardProgram() {
 
   return (
     <SidebarWithNavbar>
-      <main className="px-10 pt-4 pb-6 flex-1">
+      <main className="px-4 pt-4 pb-6 flex-1">
         <div className="flex min-h-screen bg-gray-50">
           {/* Sidebar */}
 
@@ -93,7 +93,8 @@ export default function DashboardProgram() {
                     </div>
                     <Link
                       to={`/dashboard-mentee/program/${programs[0].id}`}
-                      className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center">
+                      className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center"
+                    >
                       Lihat Detail
                     </Link>
                   </div>
@@ -107,7 +108,8 @@ export default function DashboardProgram() {
                   {programs.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white shadow-md rounded-xl overflow-hidden flex flex-col md:flex-row">
+                      className="bg-white shadow-md rounded-xl overflow-hidden flex flex-col md:flex-row"
+                    >
                       <div className="md:w-1/3 relative">
                         <img
                           src={item.img}
@@ -137,7 +139,8 @@ export default function DashboardProgram() {
                         </div>
                         <Link
                           to={`/dashboard-mentee/program/${item.id}`}
-                          className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center">
+                          className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center"
+                        >
                           Lihat Detail
                         </Link>
                       </div>
