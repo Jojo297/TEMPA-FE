@@ -53,12 +53,11 @@ const SidebarWithNavbar = ({ children }) => {
       icon: <FileQuestion size={18} />,
       path: "/dashboard-mentee/test-jurusan",
     },
-    { name: "MATERI", icon: <BookOpen size={18} />, path: "/materi" },
-    {
-      name: "PENILAIAN",
-      icon: <Star size={18} />,
-      path: "/dashboard-mentee/Penilaian",
-    },
+    // {
+    //   name: "PENILAIAN",
+    //   icon: <Star size={18} />,
+    //   path: "/dashboard-mentee/Penilaian",
+    // },
     {
       name: "KELUAR",
       icon: <LogOut size={18} />,

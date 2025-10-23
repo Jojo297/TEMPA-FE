@@ -8,14 +8,15 @@ const DashboardMenteeProgramDaftar = () => {
   const navigate = useNavigate();
 
   return (
-    <SidebarWithNavbar>
+    <>
       <div className="flex-1 flex flex-col min-h-screen bg-gray-50">
         <main className="flex-1  overflow-y-auto ">
           {/* Header */}
           <div className="bg-[#0E3B3D] text-white rounded-xl p-10 mb-10 text-center shadow-md relative">
             <button
               onClick={() => navigate()}
-              className="absolute left-6 top-6 text-white hover:text-gray-300 transition">
+              className="absolute left-6 top-6 text-white hover:text-gray-300 transition"
+            >
               <ArrowLeft size={24} />
             </button>
             <h1 className="text-2xl font-semibold">Daftar Program</h1>
@@ -87,14 +88,15 @@ const DashboardMenteeProgramDaftar = () => {
               {/* Tombol Daftar */}
               <button
                 type="submit"
-                className="w-full bg-[#B4D0E7] text-[#0E3B3D] py-3 rounded-md font-semibold hover:bg-[#A3C5E0] transition">
+                className="w-full bg-[#B4D0E7] text-[#0E3B3D] py-3 rounded-md font-semibold hover:bg-[#A3C5E0] transition"
+              >
                 Daftar
               </button>
             </form>
           </div>
         </main>
       </div>
-    </SidebarWithNavbar>
+    </>
   );
 };
 
