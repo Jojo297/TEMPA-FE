@@ -201,8 +201,7 @@ export default function App() {
           }
         />
 
-        {/* 📘 Panduan */}
-        {/* 📘 Panduan */}
+        {/* Panduan */}
         <Route
           path="/panduan"
           element={

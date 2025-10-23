@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
 import kuliah from "@/assets/kuliah.png";
+import { Search } from "lucide-react";
 
 export default function DashboardProgram() {
   const programs = [
@@ -50,7 +51,7 @@ export default function DashboardProgram() {
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-y-auto ">
           {/* Header Section */}
-          <div className="bg-[#0E3B3D] text-white rounded-xl p-10 mb-10 text-center shadow-md mt-6">
+          <div className="bg-primary text-white rounded-xl p-10 mb-10 text-center shadow-md mt-6">
             <h1 className="text-2xl font-semibold">Program</h1>
             <p className="text-gray-200 mt-2 max-w-2xl mx-auto">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -74,7 +75,7 @@ export default function DashboardProgram() {
                   </h3>
                 </div>
               </div>
-              <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
+              <div className="md:w-2/3 p-6 bg-primary text-white flex flex-col justify-between">
                 <p className="text-sm mb-4">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
@@ -102,7 +103,24 @@ export default function DashboardProgram() {
 
           {/* Seluruh Program Section */}
           <section>
-            <h2 className="text-xl font-bold mb-4">Seluruh Program</h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+              <h2 className="text-xl font-bold mb-4 items-center">
+                Seluruh Program
+              </h2>
+              <div className="relative w-full md:w-60">
+                <Search
+                  size={16}
+                  className="absolute top-2.5 left-3 text-gray-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Cari program..."
+                  value=""
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
+                />
+              </div>
+            </div>
             <div className="flex flex-col gap-8">
               {programs.map((item) => (
                 <div
@@ -121,7 +139,7 @@ export default function DashboardProgram() {
                       </h3>
                     </div>
                   </div>
-                  <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
+                  <div className="md:w-2/3 p-6 bg-primary text-white flex flex-col justify-between">
                     <p className="text-sm mb-4">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </p>
@@ -138,7 +156,7 @@ export default function DashboardProgram() {
                     </div>
                     <Link
                       to={`/dashboard-mentee/program/${item.id}`}
-                      className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center"
+                      className="mt-6 bg-[#B4D0E7] text-primary py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center"
                     >
                       Lihat Detail
                     </Link>

@@ -16,7 +16,7 @@ export default function DashboardCampus() {
     <>
       {/* Banner Section */}
       <div className=" mb-8 text-center">
-        <div className="bg-[#0E3B3D] text-white rounded-xl p-6 shadow">
+        <div className="bg-primary text-white rounded-xl p-6 shadow">
           <h1 className="text-2xl font-bold mb-2">Kampus</h1>
           <p className="text-sm max-w-2xl mx-auto">
             Jelajahi berbagai kampus terbaik dan temukan informasi seputar
@@ -29,7 +29,7 @@ export default function DashboardCampus() {
       <section className="mb-10">
         <h2 className="text-xl font-bold mb-4">Rekomendasi</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredKampus.slice(0, 3).map((kampus) => (
+          {kampusList.map((kampus) => (
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
