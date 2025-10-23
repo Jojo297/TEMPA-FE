@@ -109,7 +109,7 @@ const ProgramItem = ({ program, jurusan, kampus }) => {
         </div>
       </div>
 
-      <div className="bg-[#013B35] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
+      <div className="bg-[#0E3B3D] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
         <div>
           <p className="text-sm text-gray-200 leading-relaxed mb-2">
             {program.nama}
@@ -159,7 +159,7 @@ export default function DashboardJurusanDetail() {
           </h1>
           <Link
             to="/dashboard-mentee/jurusan"
-            className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]">
+            className="mt-4 text-white bg-[#0E3B3D] px-4 py-2 rounded-lg hover:bg-[#025c54]">
             Kembali ke daftar jurusan
           </Link>
         </div>
@@ -188,7 +188,7 @@ export default function DashboardJurusanDetail() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="bg-[#013B35] py-4 px-6">
+            <div className="bg-[#0E3B3D] py-4 px-6">
               <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
                 {jurusan.nama}
               </h1>
@@ -197,7 +197,7 @@ export default function DashboardJurusanDetail() {
         </div>
 
         <div className="max-w-6xl mx-auto px-6 mt-10">
-          <h2 className="text-2xl font-semibold text-[#013B35] mb-3">
+          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-3">
             Tentang Jurusan
           </h2>
           <p className="text-gray-700 leading-relaxed text-justify">
@@ -206,7 +206,7 @@ export default function DashboardJurusanDetail() {
         </div>
 
         <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
             Prospek Kerja
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -219,7 +219,7 @@ export default function DashboardJurusanDetail() {
             ).map((item, i) => (
               <span
                 key={i}
-                className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
+                className="px-4 py-2 border border-[#0E3B3D] text-[#0E3B3D] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
                 {item}
               </span>
             ))}
@@ -227,7 +227,7 @@ export default function DashboardJurusanDetail() {
         </div>
 
         <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
             Kampus Terkait
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -245,7 +245,7 @@ export default function DashboardJurusanDetail() {
                   <h3 className="text-lg font-semibold text-white">
                     {kampus.name}
                   </h3>
-                  <div className="p-1 rounded-full bg-white text-[#013B35]">
+                  <div className="p-1 rounded-full bg-white text-[#0E3B3D]">
                     <ChevronRightIcon />
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default function DashboardJurusanDetail() {
         </div>
 
         <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
             Program Terkait
           </h2>
           <div className="space-y-6">

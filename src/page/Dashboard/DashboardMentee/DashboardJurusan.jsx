@@ -40,7 +40,7 @@ const DashboardJurusan = () => {
     <SidebarWithNavbar>
       <div className="min-h-screen bg-white px-6 py-6">
         {/* Header Section */}
-        <div className="bg-[#003135] text-white p-6 rounded-2xl shadow-md mb-8 text-center">
+        <div className="bg-[#0E3B3D] text-white p-6 rounded-2xl shadow-md mb-8 text-center">
           <h1 className="text-2xl font-semibold mb-2">Jurusan</h1>
           <p className="text-sm">
             Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan
@@ -56,7 +56,7 @@ const DashboardJurusan = () => {
               <Link
                 to={`/dashboard-mentee/jurusan/${item.name.toLowerCase()}`}
                 key={index}
-                className="bg-[#003135] text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
+                className="bg-[#0E3B3D] text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
                 {item.icon}
                 <p className="mt-2 text-sm font-medium">{item.name}</p>
               </Link>
@@ -86,7 +86,7 @@ const DashboardJurusan = () => {
               <Link
                 to={`/dashboard-mentee/jurusan/${item.name.toLowerCase()}`}
                 key={index}
-                className="bg-[#003135] text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
+                className="bg-[#0E3B3D] text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
                 {item.icon}
                 <p className="mt-2 text-sm font-medium">{item.name}</p>
               </Link>

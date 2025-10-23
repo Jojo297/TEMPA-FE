@@ -55,8 +55,9 @@ export default function DashboardProgram() {
               <div className="bg-[#0E3B3D] text-white rounded-xl p-10 mb-10 text-center shadow-md mt-6">
                 <h1 className="text-2xl font-semibold">Program</h1>
                 <p className="text-gray-200 mt-2 max-w-2xl mx-auto">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Program ini dirancang untuk mengembangkan potensi peserta
+                  melalui berbagai kegiatan inovatif, kolaboratif, dan
+                  berorientasi pada hasil nyata.
                 </p>
               </div>
 
@@ -77,9 +78,7 @@ export default function DashboardProgram() {
                     </div>
                   </div>
                   <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
-                    <p className="text-sm mb-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
+                    <p className="text-sm mb-4">Bootcamp Analisis Sistem</p>
                     <div className="flex flex-wrap text-sm mb-4 border-t border-gray-500 pt-4">
                       <p className="mr-4">
                         {programs[0].campus} | {programs[0].category} |{" "}
@@ -123,8 +122,7 @@ export default function DashboardProgram() {
                       </div>
                       <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
                         <p className="text-sm mb-4">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
+                          Pelatihan Desain 3D SolidWorks
                         </p>
                         <div className="flex flex-wrap text-sm mb-4 border-t border-gray-500 pt-4">
                           <p className="mr-4">
