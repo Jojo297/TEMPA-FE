@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock, Map, Home } from "lucide-react";
+import { Calendar, Users, Clock, Map, Home } from "lucide-react";
 
 // *** ASUMSI IMPORTS: Pastikan semua komponen dan data ini tersedia di proyek Anda ***
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
 import kuliah from "../assets/kuliah.png";
 import { CampusHeaderProfile } from "./campusHeaderProfile";
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
 const programData = {
   // ID 1: Politeknik Negeri Batam
@@ -259,7 +259,8 @@ export default function CampusProgram() {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
       {/* Header Kampus */}
       <div className="mt-4">

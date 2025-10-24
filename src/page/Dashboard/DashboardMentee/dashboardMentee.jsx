@@ -12,7 +12,7 @@ const DashboardMentee = () => {
 
   return (
     <SidebarWithNavbar>
-      <main className="px-4 pt-4 pb-6 flex-1">
+      <main className="px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">
         <Outlet />
       </main>
     </SidebarWithNavbar>

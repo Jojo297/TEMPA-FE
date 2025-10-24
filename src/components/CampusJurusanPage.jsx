@@ -4,8 +4,9 @@ import { Briefcase, ListCheck, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
-import { jurusanList } from "@/lib/JurusanList"; // ✅ jurusan dipanggil dari file baru
+import { jurusanList } from "@/lib/JurusanList";
 import { CampusHeaderProfile } from "./campusHeaderProfile";
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
 const CampusJurusanPage = () => {
   const { id } = useParams();
@@ -13,14 +14,12 @@ const CampusJurusanPage = () => {
   const kampus = kampusList.find((k) => k.id === campusId);
   // console.table(kampus.name);
 
-  // 1. LOGIKA FILTER JURUSAN DARI JURUSANLIST menggunakan useMemo
   const filteredJurusanDetails = useMemo(() => {
     // Ambil nama kampus aktif dan normalkan (lowercase)
     const activeCampusName = kampus.name.toLowerCase();
 
     return jurusanList.filter((jurusan) =>
       jurusan.kampusTerkait.some(
-        // Normalisasi nama kampusTerkait sebelum membandingkan
         (kampusTerkait) => kampusTerkait.nama.toLowerCase() === activeCampusName
       )
     );
@@ -48,10 +47,13 @@ const CampusJurusanPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
       {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+      <div className="mt-4">
+        <CampusHeaderProfile kampus={kampus} />
+      </div>
 
       {/* Jurusan Section */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
@@ -59,22 +61,26 @@ const CampusJurusanPage = () => {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Deskripsi
           </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Prestasi
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+          >
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Program
           </Link>
         </div>
@@ -95,11 +101,13 @@ const CampusJurusanPage = () => {
               filteredJurusanDetails.map((item) => (
                 <div
                   key={item.slug} // Menggunakan slug sebagai key unik
-                  className="border rounded-2xl overflow-hidden shadow-sm">
+                  className="border rounded-2xl overflow-hidden shadow-sm"
+                >
                   <button
                     // MENGGUNAKAN item.nama
                     onClick={() => toggleJurusan(item.nama)}
-                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
+                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition"
+                  >
                     <span>{item.nama}</span> {/* MENGGUNAKAN item.nama */}
                     <span>{openJurusan === item.nama ? "−" : "+"}</span>
                   </button>

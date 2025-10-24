@@ -15,12 +15,12 @@ import roboterror from "@/assets/robot-error.png";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-import useProgramStore from "@/hooks/useProgramMentee";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
+import useProgramStoreMentee from "@/hooks/useProgramMentee";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
-  const { programs, isLoading, error, fetchPrograms } = useProgramStore();
+  const { programs, isLoading, error, fetchPrograms } = useProgramStoreMentee();
   const token = localStorage.getItem("userJwt");
   // console.log(token);
 
@@ -33,7 +33,19 @@ export default function DashboardBeranda() {
   // get all program
   const displayPrograms = programs ?? [];
   const countProgram = displayPrograms.length;
-  // console.log(displayPrograms);
+  console.log(displayPrograms);
+
+  // get completed program
+  const completedPrograms = displayPrograms.filter((item) => {
+    return item.completion_status === "completed";
+  });
+  const completedCount = completedPrograms.length;
+  // console.log(completedCount);
+
+  const unCompleted = displayPrograms.filter(
+    (item) => item.completion_status === "uncompleted"
+  );
+  const countUnCompleted = unCompleted.length;
 
   // badge for status program
   const getBadgeClass = (status) => {
@@ -44,9 +56,9 @@ export default function DashboardBeranda() {
           bgColor: "bg-green-200",
           textColor: "text-green-800",
         };
-      case "uncomplate":
+      case "uncompleted":
         return {
-          text: "Sedang Berlangsung",
+          text: "Tidak Lulus",
           bgColor: "bg-red-100",
           textColor: "text-red-800",
         };
@@ -114,7 +126,9 @@ export default function DashboardBeranda() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">LULUS</p>
-                <p className="font-semibold text-lg">0 Program</p>
+                <p className="font-semibold text-lg">
+                  {completedCount} Program
+                </p>
               </div>
             </div>
 
@@ -125,7 +139,9 @@ export default function DashboardBeranda() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">TIDAK LULUS</p>
-                <p className="font-semibold text-lg">0 Program</p>
+                <p className="font-semibold text-lg">
+                  {countUnCompleted} Program
+                </p>
               </div>
             </div>
           </div>
@@ -173,7 +189,7 @@ export default function DashboardBeranda() {
             {displayPrograms.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden shadow-lg bg-white transition hover:shadow-xl"
+                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden bg-white transition hover:shadow-xl"
               >
                 {/* left side */}
                 <div

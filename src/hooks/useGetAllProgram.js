@@ -1,11 +1,9 @@
-// useProgramStore.js
-
-import { create } from "zustand";
 import axios from "axios";
+import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const useProgramStoreMentee = create((set) => ({
+const useGetAllProgram = create((set) => ({
   // State
   programs: [],
   isLoading: false,
@@ -16,7 +14,7 @@ const useProgramStoreMentee = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `${API_BASE_URL}/mentee/get-program-mentee`; // Ganti dengan URL API Anda
+      const API_URL = `${API_BASE_URL}/mentee/all-program`;
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -49,4 +47,4 @@ const useProgramStoreMentee = create((set) => ({
   clearPrograms: () => set({ programs: [], isLoading: false, error: null }),
 }));
 
-export default useProgramStoreMentee;
+export default useGetAllProgram;

@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import polibatam from "../assets/Gedung.jpg";
-import iteba from "../assets/itebaGedung.jpg";
-import uib from "../assets/uibGedung.jpg";
-import logoPolibatam from "../assets/logo-polibatam.png";
-import logoIteba from "../assets/logo-iteba.png";
-import logoUib from "../assets/logo-uib.png";
 import polibatamPrestasi from "../assets/polibatam-prestasi.png";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "./campusHeaderProfile";
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
 const CampusPrestasiPage = () => {
   const { id } = useParams();
@@ -172,12 +166,12 @@ const CampusPrestasiPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      <Navbar />
+      <NavbarLandingPage />
 
       {/* Header Kampus */}
-      {/* 2. Header Kampus & Galeri Gambar (Problematic: Missing asset variables) */}
-      {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+      <div className="mt-4">
+        <CampusHeaderProfile kampus={kampus} />
+      </div>
 
       {/* Info Kampus */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
@@ -185,22 +179,26 @@ const CampusPrestasiPage = () => {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Deskripsi
           </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+          >
             Prestasi
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
-            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
-            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className=" px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Program
           </Link>
           {/* <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
@@ -228,10 +226,12 @@ const CampusPrestasiPage = () => {
               prestasiData[kampus.id].map(({ year, content }) => (
                 <div
                   key={year}
-                  className="border rounded-2xl overflow-hidden shadow-sm">
+                  className="border rounded-2xl overflow-hidden shadow-sm"
+                >
                   <button
                     onClick={() => toggleYear(year)}
-                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
+                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition"
+                  >
                     <span>Tahun {year}</span>
                     <span>{openYear === year ? "−" : "+"}</span>
                   </button>

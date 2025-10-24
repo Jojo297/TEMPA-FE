@@ -162,7 +162,7 @@ const SidebarWithNavbar = ({ children }) => {
       </div>
 
       {/* MAIN CONTENT + FOOTER */}
-      <div className="flex flex-col pt-16 min-h-screen bg-[#F8FAFB]">
+      <div className="flex flex-col pt-16 min-h-screen">
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"

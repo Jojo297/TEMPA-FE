@@ -4,7 +4,7 @@ import robotHappy from "@/assets/robot-happy.png";
 import React from "react";
 
 // Komponen Card Skeleton Tunggal
-const SkeletonCard = () => (
+export const SkeletonCard = () => (
   <>
     {/* Hero Section */}
     <div className="bg-primary max-w-7xl rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
@@ -110,7 +110,7 @@ const SkeletonCard = () => (
 );
 
 // Komponen Wrapper untuk menampilkan beberapa Card
-const DashboardBerandaSkeleton = ({ count = 2 }) => {
+const DashboardBerandaSkeleton = ({ count = 3 }) => {
   return (
     <div className="flex flex-col gap-8">
       {Array(count)

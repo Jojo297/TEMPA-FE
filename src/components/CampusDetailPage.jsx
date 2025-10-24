@@ -1,16 +1,8 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { MapPin } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import iteba from "../assets/itebaGedung.jpg";
-import uib from "../assets/uibGedung.jpg";
-import logoPolibatam from "../assets/logo-polibatam.png";
-import logoIteba from "../assets/logo-iteba.png";
-import logoUib from "../assets/logo-uib.png";
-import polibatam from "../assets/Gedung.jpg";
-import POLIBATAM_LOGO from "../assets/logo-polibatam.png";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "./campusHeaderProfile";
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
 const CampusDetailPage = () => {
   const { id } = useParams();
@@ -25,10 +17,13 @@ const CampusDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
-      {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+      {/* Header Campus */}
+      <div className="mt-4">
+        <CampusHeaderProfile kampus={kampus} />
+      </div>
 
       {/* Info Kampus */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
@@ -36,24 +31,28 @@ const CampusDetailPage = () => {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+          >
             Deskripsi
           </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Prestasi
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
             // Active state class applied
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
             // Active state class applied
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Program
           </Link>
           {/* <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
