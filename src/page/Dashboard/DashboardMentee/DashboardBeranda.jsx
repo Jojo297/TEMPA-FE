@@ -1,28 +1,82 @@
-import React from "react";
-import { Check, X, GraduationCap, Search } from "lucide-react";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import React, { useEffect } from "react";
+import {
+  Check,
+  X,
+  GraduationCap,
+  Search,
+  Home,
+  Calendar,
+  Clock,
+  Users,
+  Map,
+} from "lucide-react";
 import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useProgramStore from "@/hooks/useProgramMentee";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
+  const { programs, isLoading, error, fetchPrograms } = useProgramStore();
   const token = localStorage.getItem("userJwt");
   // console.log(token);
 
   const decode = jwtDecode(token);
 
+  // get username
   const userName = decode.username;
-
   const name = userName.split(" ").slice(0, 2).join(" ");
-  // console.log(name);
+
+  // get all program
+  const displayPrograms = programs ?? [];
+  const countProgram = displayPrograms.length;
+  console.log(displayPrograms);
+
+  // badge for status program
+  const getBadgeClass = (status) => {
+    switch (status) {
+      case "completed":
+        return {
+          text: "Lulus",
+          bgColor: "bg-green-200",
+          textColor: "text-green-800",
+        };
+      case "uncomplate":
+        return {
+          text: "Sedang Berlangsung",
+          bgColor: "bg-red-100",
+          textColor: "text-red-800",
+        };
+      case "on_going":
+        return {
+          text: "Sedang Berjalan",
+          bgColor: "bg-yellow-100",
+          textColor: "text-yellow-800",
+        };
+    }
+  };
+
+  // get all program
+  useEffect(() => {
+    if (token) {
+      fetchPrograms(token);
+    }
+  }, [token, fetchPrograms]);
+
+  if (error) {
+    return (
+      <p className="justify-center text-center" style={{ color: "red" }}>
+        ❌ Error: {error}
+      </p>
+    );
+  }
 
   return (
     <>
       {/* Hero Section */}
-      <div className="bg-primary rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
+      <div className="bg-primary max-w-7xl rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
         {/* Left Side */}
         <div className="flex-1 pr-4">
           <p className="text-sm tracking-widest text-white/80 mb-2">
@@ -40,7 +94,9 @@ export default function DashboardBeranda() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">PROGRAM</p>
-                <p className="font-semibold text-lg">0 Program</p>
+                <p className="font-semibold text-lg">
+                  {countProgram || 0} Program
+                </p>
               </div>
             </div>
 
@@ -67,7 +123,6 @@ export default function DashboardBeranda() {
             </div>
           </div>
         </div>
-
         {/* Robot */}
         <div className="mt-6 md:mt-0 md:ml-6 flex-shrink-0">
           <img
@@ -82,22 +137,126 @@ export default function DashboardBeranda() {
       {/* Aktivitas */}
       <section className="mt-8">
         <h2 className="text-2xl font-bold mb-6">Aktivitas</h2>
-        <div className="flex flex-col items-center justify-center py-16 rounded-xl bg-white/40 border border-white/10 shadow-inner">
-          <img
-            src={roboterror}
-            alt="Belum Ada Aktivitas"
-            className="w-40 mb-4"
-          />
-          <div className="text-center">
-            <p className="text-gray-600">Belum ada aktivitas yang diikuti</p>
-            <Button
-              className="mt-4 px-24 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-              onClick={() => navigate("program")}
-            >
-              Cari Program <Search />
-            </Button>
+
+        {/* if programs null */}
+        {displayPrograms.length === 0 ? (
+          <div>
+            <div className="flex flex-col items-center justify-center py-16 rounded-xl bg-white/40 border border-white/10 shadow-inner">
+              <img
+                src={roboterror}
+                alt="Belum Ada Aktivitas"
+                className="w-40 mb-4"
+              />
+              <div className="text-center">
+                <p className="text-gray-600">
+                  Belum ada aktivitas yang diikuti
+                </p>
+                <Button
+                  className="mt-4 px-24 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  onClick={() => navigate("program")}
+                >
+                  Cari Program <Search />
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col gap-8">
+            {/* Card Program */}
+            {displayPrograms.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden shadow-lg bg-white transition hover:shadow-xl"
+              >
+                {/* left side */}
+                <div
+                  className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+                  // Menggunakan background image dengan overlay warna untuk efek keren
+                  style={{
+                    backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_details.image_url})`,
+                    backgroundColor: "#013B35",
+                    minHeight: "200px",
+                  }}
+                >
+                  {/* Completion Status */}
+                  {(() => {
+                    // get badge status
+                    const statusData = getBadgeClass(item.completion_status);
+                    return (
+                      <div
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                      >
+                        {statusData.text}
+                      </div>
+                    );
+                  })()}
+                  <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                    {item.program_details.program_name}
+                  </h3>
+                </div>
+
+                {/* right side */}
+                <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+                  <div>
+                    {/* Main info: Kampus, Jurusan */}
+                    <div className="flex flex-wrap items-center space-x-4 mb-4">
+                      <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                        <Home size={18} className="mr-2" />
+                        <span>{item.program_details.program_name}</span>
+                      </div>
+                      <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
+                        {item.program_details.major_name}
+                      </div>
+                    </div>
+
+                    {/* description */}
+                    <p className="text-gray-600 mb-4 text-sm">
+                      {item.program_details.description}
+                    </p>
+
+                    {/* date and location */}
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                      <div className="flex items-center">
+                        <Calendar size={16} className="mr-2 text-[#013B35]" />
+                        <span>
+                          {new Date(
+                            item.program_details.start_date
+                          ).toLocaleDateString("id-ID", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      {/* <div className="flex items-center">
+                        <Clock size={16} className="mr-2 text-[#013B35]" />
+                        <span>jam</span>
+                      </div> */}
+                      <div className="flex items-center">
+                        <Users size={16} className="mr-2 text-[#013B35]" />
+                        <span>{item.program_details.capacity} Orang</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Map size={16} className="mr-2 text-[#013B35]" />
+                        <span>
+                          Tempat:{" "}
+                          {item.program_details.sesi_program.map(
+                            (sesi) => sesi.type_sesi
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Button */}
+                    <button className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                      Lihat Materi
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );

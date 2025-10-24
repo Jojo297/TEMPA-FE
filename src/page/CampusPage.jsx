@@ -7,6 +7,7 @@ import polibatam from "../assets/polibatam.jpeg";
 import iteba from "../assets/iteba.jpg";
 import uib from "../assets/uib.jpeg";
 import notfound from "../assets/robot-error.png";
+import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 
 const kampusList = [
   {
@@ -68,7 +69,7 @@ const CampusPage = () => {
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans">
       {/* Navbar */}
-      <Navbar />
+      <NavbarLandingPage />
 
       {/* Header */}
       <section className="bg-[#013B35] text-white py-20 text-center">
@@ -133,7 +134,8 @@ const CampusPage = () => {
                       {kampus.jurusan.map((jrs, i) => (
                         <span
                           key={i}
-                          className="bg-[#E9F7F4] text-[#013B35] text-xs px-3 py-1 rounded-full font-medium shrink-0">
+                          className="bg-[#E9F7F4] text-[#013B35] text-xs px-3 py-1 rounded-full font-medium shrink-0"
+                        >
                           {jrs}
                         </span>
                       ))}

@@ -1,12 +1,13 @@
 import React from "react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Search } from "lucide-react";
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
 const PanduanPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
       {/* Header Section */}
       <div className="w-full bg-[#E7F3F1] text-center py-10">
