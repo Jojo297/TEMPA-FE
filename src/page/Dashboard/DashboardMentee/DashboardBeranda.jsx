@@ -16,6 +16,7 @@ import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import useProgramStore from "@/hooks/useProgramMentee";
+import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function DashboardBeranda() {
   // get all program
   const displayPrograms = programs ?? [];
   const countProgram = displayPrograms.length;
-  console.log(displayPrograms);
+  // console.log(displayPrograms);
 
   // badge for status program
   const getBadgeClass = (status) => {
@@ -65,12 +66,18 @@ export default function DashboardBeranda() {
     }
   }, [token, fetchPrograms]);
 
+  // error handling
   if (error) {
     return (
       <p className="justify-center text-center" style={{ color: "red" }}>
         ❌ Error: {error}
       </p>
     );
+  }
+
+  // skeleton loading
+  if (isLoading) {
+    return <DashboardBerandaSkeleton />;
   }
 
   return (
