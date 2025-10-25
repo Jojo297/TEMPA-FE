@@ -1,6 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
-import kuliah from "@/assets/kuliah.png";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
 import { useEffect } from "react";
 import useGetAllProgram from "@/hooks/useGetAllProgram";
@@ -30,6 +28,19 @@ export default function DashboardProgram() {
           bgColor: "bg-red-100",
           textColor: "text-red-800",
         };
+    }
+  };
+
+  const getLocation = (sesi) => {
+    if (!sesi) {
+      return "";
+    }
+
+    switch (sesi.type_sesi) {
+      case "online":
+        return "Online";
+      case "onsite":
+        return sesi.description || "Lokasi Offline";
     }
   };
 
@@ -90,7 +101,7 @@ export default function DashboardProgram() {
               {displayAllProgram.map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
+                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
                 >
                   {/* left side */}
                   <div
@@ -103,7 +114,6 @@ export default function DashboardProgram() {
                     }}
                   >
                     {/* Completion Status */}
-                    {/* // get badge status */}
                     {(() => {
                       // get badge status
                       const statusData = getBadgeClass(item.program_status);
@@ -126,11 +136,13 @@ export default function DashboardProgram() {
                       {/* Main info: Kampus, Jurusan */}
                       <div className="flex flex-wrap items-center space-x-4 mb-4">
                         <div className="flex items-center text-[#013B35] font-semibold text-lg">
-                          <Home size={18} className="mr-2" />
                           <span>{item.program_name}</span>
                         </div>
                         <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
                           {item.major_name}
+                        </div>
+                        <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                          {item.sesi_program.map((sesi) => sesi.type_sesi)}
                         </div>
                       </div>
 
@@ -154,10 +166,10 @@ export default function DashboardProgram() {
                             )}
                           </span>
                         </div>
-                        {/* <div className="flex items-center">
-                        <Clock size={16} className="mr-2 text-[#013B35]" />
-                        <span>jam</span>
-                      </div> */}
+                        <div className="flex items-center">
+                          <Home size={16} className="mr-2 text-[#013B35]" />
+                          <span>{item.campus_name}</span>
+                        </div>
                         <div className="flex items-center">
                           <Users size={16} className="mr-2 text-[#013B35]" />
                           <span>{item.capacity} Orang</span>
@@ -166,7 +178,7 @@ export default function DashboardProgram() {
                           <Map size={16} className="mr-2 text-[#013B35]" />
                           <span>
                             Tempat:{" "}
-                            {item.sesi_program.map((sesi) => sesi.type_sesi)}
+                            {item.sesi_program.map((sesi) => getLocation(sesi))}
                           </span>
                         </div>
                       </div>

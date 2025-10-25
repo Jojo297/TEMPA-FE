@@ -1,27 +1,59 @@
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
-import Footer from "@/components/Footer";
 import kuliah from "@/assets/kuliah.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar } from "lucide-react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import useGetAllProgram from "@/hooks/useGetAllProgram";
+import useGetDetailProgram from "@/hooks/useGetDetailProgram";
+import DetailProgramSkeleton from "@/components/DetailProgramSkeleton";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const DetailProgramMentee = () => {
+  // get id program from url
+  const { id } = useParams();
+  const idProgram = parseInt(id);
   const navigate = useNavigate();
   const [isAgreed, setIsAgreed] = useState(false);
+
+  // hooks get details program
+  const token = localStorage.getItem("userJwt");
+  const { detailProgram, isLoading, error, fetchDetailProgram } =
+    useGetDetailProgram();
+
+  const displayDetailProgram = detailProgram ?? [];
+  // console.log(displayDetailProgram);
+
+  // get detail program
+  useEffect(() => {
+    if (token) {
+      fetchDetailProgram(token, idProgram);
+    }
+  }, [token, fetchDetailProgram]);
+
+  // get location if sesi onsite
+  const getLocation = (sesi) => {
+    if (!sesi) {
+      return [];
+    }
+
+    return sesi.map((item) => {
+      switch (item.type_sesi) {
+        case "online":
+          return "Online";
+        case "onsite":
+          return item.description;
+      }
+    });
+  };
 
   const prasyaratList = [
     "Anda berusia minimal 18 tahun.",
@@ -29,22 +61,52 @@ const DetailProgramMentee = () => {
     "Menyetujui syarat dan ketentuan penggunaan platform.",
     "Bersedia menerima email dan notifikasi terkait pendaftaran.",
   ];
+
+  // error handling
+  if (error) {
+    return (
+      <p className="justify-center text-center" style={{ color: "red" }}>
+        ❌ Error: {error}
+      </p>
+    );
+  }
+
+  // loading handling
+  if (isLoading) {
+    return <DetailProgramSkeleton />;
+  }
+
   return (
     <>
       {/* Gambar Header */}
       <div className="relative rounded-xl overflow-hidden shadow-md mb-10">
-        <img src={kuliah} alt="Program" className="w-full h-72 object-cover" />
+        <img
+          src={displayDetailProgram.image_url}
+          alt="Program"
+          className="w-full h-72 object-cover"
+        />
         {/* Overlay konten di bawah gambar */}
         <div className="absolute bottom-0 left-0 right-0 bg-[#0E3B3D]/90 text-white p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold">
-              KULIAH BERSERTIFIKAT 1 HARI
+              {displayDetailProgram.program_name}
             </h1>
+            {/* start date */}
             <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
               <Calendar size={16} />
-              <span>10 Oktober 2025</span>
+              <span>
+                {new Date(displayDetailProgram.start_date).toLocaleDateString(
+                  "id-ID",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}
+              </span>
             </div>
           </div>
+          {/* start Popup register program */}
           <Dialog>
             <form>
               <DialogTrigger asChild>
@@ -113,6 +175,7 @@ const DetailProgramMentee = () => {
               </DialogContent>
             </form>
           </Dialog>
+          {/* end Popup register program */}
         </div>
       </div>
 
@@ -124,38 +187,41 @@ const DetailProgramMentee = () => {
             Detail Program
           </h2>
           <p className="text-gray-700 mb-4 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            {displayDetailProgram.description}
           </p>
 
           <ul className="text-gray-700 space-y-2 text-sm sm:text-base">
             <li>
-              <strong>Jenis Kegiatan:</strong> Onsite
+              <strong>Tanggal Pelaksanaan:</strong>{" "}
+              {new Date(displayDetailProgram.start_date).toLocaleDateString(
+                "id-ID",
+                {
+                  day: "numeric",
+                }
+              )}
+              {" - "}
+              {new Date(displayDetailProgram.end_date).toLocaleDateString(
+                "id-ID",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )}
             </li>
             <li>
-              <strong>Batas Akhir Pendaftaran:</strong> 9 Oktober 2025
-            </li>
-            <li>
-              <strong>Tanggal Pelaksanaan:</strong> 10 Oktober 2025
-            </li>
-            <li>
-              <strong>Tempat:</strong> Politeknik Negeri Batam, Gedung Tower A,
-              Lantai 1B, Ruangan 3B
-            </li>
-            <li>
-              <strong>Waktu:</strong> 10.00 – 17.00 WIB
+              <strong>Tempat:</strong>{" "}
+              {getLocation(displayDetailProgram.sesi_program)}
             </li>
           </ul>
 
           <div className="mt-6">
             <h3 className="font-semibold text-[#0E3B3D] mb-2">Fasilitas:</h3>
             <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm sm:text-base">
-              <li>Sertifikat</li>
-              <li>Ilmu dari mentor profesional</li>
-              <li>Lunch & snack</li>
-              <li>Kesempatan networking dengan mahasiswa dan dosen</li>
+              {displayDetailProgram.benefit &&
+                displayDetailProgram.benefit.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
             </ul>
           </div>
         </div>

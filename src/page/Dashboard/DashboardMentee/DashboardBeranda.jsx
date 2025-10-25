@@ -6,7 +6,6 @@ import {
   Search,
   Home,
   Calendar,
-  Clock,
   Users,
   Map,
 } from "lucide-react";
@@ -14,7 +13,7 @@ import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
 import useProgramStoreMentee from "@/hooks/useProgramMentee";
 
@@ -161,7 +160,7 @@ export default function DashboardBeranda() {
       <section className="mt-8">
         <h2 className="text-2xl font-bold mb-6">Aktivitas</h2>
 
-        {/* if programs null */}
+        {/* if programs empty */}
         {displayPrograms.length === 0 ? (
           <div>
             <div className="flex flex-col items-center justify-center py-16 rounded-xl bg-white/40 border border-white/10 shadow-inner">
@@ -194,7 +193,6 @@ export default function DashboardBeranda() {
                 {/* left side */}
                 <div
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
-                  // Menggunakan background image dengan overlay warna untuk efek keren
                   style={{
                     backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_details.image_url})`,
                     backgroundColor: "#013B35",
@@ -213,7 +211,7 @@ export default function DashboardBeranda() {
                       </div>
                     );
                   })()}
-                  <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                  <h3 className="text-2xl font-extrabold leading-tight drop-shadow-lg">
                     {item.program_details.program_name}
                   </h3>
                 </div>
@@ -232,13 +230,8 @@ export default function DashboardBeranda() {
                       </div>
                     </div>
 
-                    {/* description */}
-                    <p className="text-gray-600 mb-4 text-sm">
-                      {item.program_details.description}
-                    </p>
-
                     {/* date and location */}
-                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                    <div className="flex gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
                       <div className="flex items-center">
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>

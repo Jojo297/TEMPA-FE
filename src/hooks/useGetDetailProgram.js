@@ -3,30 +3,30 @@ import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const useGetAllProgram = create((set) => ({
-  // State
-  programs: [],
+const useGetDetailProgram = create((set) => ({
+  // state
+  detailProgram: [],
   isLoading: false,
   error: null,
 
-  // Actions get data program mentee
-  fetchPrograms: async (token) => {
+  // get detail program
+  fetchDetailProgram: async (token, id) => {
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `${API_BASE_URL}/mentee/all-program`;
+      const API_URL = `${API_BASE_URL}/mentee/detail-program/${id}`;
 
       const response = await axios.get(API_URL, {
         headers: {
-          // Mengirim JWT dalam header Authorizationb
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const fetchedPrograms = response.data.data;
+      const fetchDetailProgram = response.data.data;
 
+      // store to state
       set({
-        programs: fetchedPrograms,
+        detailProgram: fetchDetailProgram,
         isLoading: false,
         error: null,
       });
@@ -40,11 +40,16 @@ const useGetAllProgram = create((set) => ({
         isLoading: false,
         error: errorMessage,
       });
+
+      if (error.status == 404) {
+        set({ error: "404 not fount" });
+      }
     }
   },
 
-  // function for clear state
-  clearPrograms: () => set({ programs: [], isLoading: false, error: null }),
+  // clear state
+  clearDetailProgram: () =>
+    set({ detailProgram: [], isLoadingL: false, errors: false }),
 }));
 
-export default useGetAllProgram;
+export default useGetDetailProgram;
