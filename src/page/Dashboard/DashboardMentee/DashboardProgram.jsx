@@ -65,8 +65,15 @@ export default function DashboardProgram() {
   }
 
   if (!displayAllProgram) {
-    // Tangani jika data tidak ditemukan (misalnya status 404 dari backend)
     return <p>Program tidak ditemukan.</p>;
+  }
+
+  if (error) {
+    return (
+      <p className="justify-center text-center" style={{ color: "red" }}>
+        ❌ Error: {error}
+      </p>
+    );
   }
 
   return (
