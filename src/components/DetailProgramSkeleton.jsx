@@ -70,26 +70,46 @@ const DetailProgramSkeleton = () => {
         </div>
         {/* --- */}
 
-        {/* Informasi Mentor Skeleton (1 kolom) */}
-        <div className="bg-white shadow-md rounded-xl p-6 h-fit">
-          {/* Judul Informasi Mentor */}
-          <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-6"></div>
+        <div className="md:col-span-1 flex flex-col space-y-8">
+          {/* Informasi Mentor Skeleton (1 kolom) */}
+          <div className="bg-white shadow-md rounded-xl p-6 h-fit">
+            {/* Judul Informasi Mentor */}
+            <div className="h-14 bg-gray-300 dark:bg-gray-600 rounded w-full mb-6"></div>
 
-          {/* Detail Mentor */}
-          <div className="space-y-3 text-sm">
-            {/* Nama Mentor */}
-            <div className="flex items-center">
-              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-16"></div>
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 ml-2"></div>
-            </div>
-            {/* Email Mentor */}
-            <div className="flex items-center">
-              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-14"></div>
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-36 ml-2"></div>
+            {/* Detail Mentor */}
+            <div className="space-y-3 text-sm">
+              {/* Nama Mentor */}
+              <div className="flex items-center">
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 ml-2"></div>
+              </div>
+              {/* Email Mentor */}
+              <div className="flex items-center">
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-14"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-36 ml-2"></div>
+              </div>
             </div>
           </div>
+          <div className="bg-white shadow-md rounded-xl p-6 h-fit">
+            {/* Judul Informasi Mentor */}
+            <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-6"></div>
+
+            {/* Detail Mentor */}
+            <div className="space-y-3 text-sm">
+              {/* Nama Mentor */}
+              <div className="flex items-center">
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-16"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 ml-2"></div>
+              </div>
+              {/* Email Mentor */}
+              <div className="flex items-center">
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-14"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-36 ml-2"></div>
+              </div>
+            </div>
+          </div>
+          {/* --- */}
         </div>
-        {/* --- */}
       </div>
     </div>
   );

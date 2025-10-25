@@ -1,8 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
 import { useEffect } from "react";
 import useGetAllProgram from "@/hooks/useGetAllProgram";
 import DashboardProgramSkeleton from "@/components/DashboardProgramSkeleton";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function DashboardProgram() {
   const navigate = useNavigate();
@@ -55,11 +64,34 @@ export default function DashboardProgram() {
     return <DashboardProgramSkeleton />;
   }
 
+  if (!displayAllProgram) {
+    // Tangani jika data tidak ditemukan (misalnya status 404 dari backend)
+    return <p>Program tidak ditemukan.</p>;
+  }
+
   return (
     <div className="flex min-h-screen ">
       {/* Konten utama */}
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-y-auto ">
+          <div className="mb-2">
+            {/* breadcum */}
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild className="hover:text-primary">
+                    <Link to="/dashboard-mentee">Beranda</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem className="text-primary">
+                  <BreadcrumbPage className="text-primary">
+                    Program
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
           {/* Header Section */}
           <div className=" mb-8 text-center">
             <div className="bg-primary text-white rounded-xl p-6 shadow">
@@ -186,7 +218,9 @@ export default function DashboardProgram() {
                       {/* Button */}
                       <button
                         onClick={() =>
-                          navigate(`/dashboard-mentee/program/${item.id}`)
+                          navigate(
+                            `/dashboard-mentee/program/${item.id_campus}`
+                          )
                         }
                         className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
                       >

@@ -212,7 +212,7 @@ export default function DashboardBeranda() {
                     );
                   })()}
                   <h3 className="text-2xl font-extrabold leading-tight drop-shadow-lg">
-                    {item.program_details.program_name}
+                    {item.program_details?.program_name}
                   </h3>
                 </div>
 
@@ -223,10 +223,10 @@ export default function DashboardBeranda() {
                     <div className="flex flex-wrap items-center space-x-4 mb-4">
                       <div className="flex items-center text-[#013B35] font-semibold text-lg">
                         <Home size={18} className="mr-2" />
-                        <span>{item.program_details.program_name}</span>
+                        <span>{item.program_details?.program_name}</span>
                       </div>
                       <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
-                        {item.program_details.major_name}
+                        {item.program_details?.major_name}
                       </div>
                     </div>
 
@@ -236,7 +236,7 @@ export default function DashboardBeranda() {
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>
                           {new Date(
-                            item.program_details.start_date
+                            item.program_details?.start_date
                           ).toLocaleDateString("id-ID", {
                             year: "numeric",
                             month: "long",
@@ -250,13 +250,13 @@ export default function DashboardBeranda() {
                       </div> */}
                       <div className="flex items-center">
                         <Users size={16} className="mr-2 text-[#013B35]" />
-                        <span>{item.program_details.capacity} Orang</span>
+                        <span>{item.program_details?.capacity} Orang</span>
                       </div>
                       <div className="flex items-center">
                         <Map size={16} className="mr-2 text-[#013B35]" />
                         <span>
                           Tempat:{" "}
-                          {item.program_details.sesi_program.map(
+                          {item.program_details?.sesi_program.map(
                             (sesi) => sesi.type_sesi
                           )}
                         </span>

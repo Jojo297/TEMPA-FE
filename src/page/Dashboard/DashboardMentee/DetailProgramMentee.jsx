@@ -1,7 +1,7 @@
 import kuliah from "@/assets/kuliah.png";
 import React, { useEffect, useState } from "react";
-import { Calendar } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { Calendar, MapPin } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import useGetAllProgram from "@/hooks/useGetAllProgram";
 import useGetDetailProgram from "@/hooks/useGetDetailProgram";
 import DetailProgramSkeleton from "@/components/DetailProgramSkeleton";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -30,7 +37,7 @@ const DetailProgramMentee = () => {
     useGetDetailProgram();
 
   const displayDetailProgram = detailProgram ?? [];
-  // console.log(displayDetailProgram);
+  console.log(displayDetailProgram);
 
   // get detail program
   useEffect(() => {
@@ -78,6 +85,28 @@ const DetailProgramMentee = () => {
 
   return (
     <>
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee/program">Program</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">
+              {displayDetailProgram.program_name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {/* Gambar Header */}
       <div className="relative rounded-xl overflow-hidden shadow-md mb-10">
         <img
@@ -226,18 +255,65 @@ const DetailProgramMentee = () => {
           </div>
         </div>
 
-        {/* Informasi Mentor */}
-        <div className="bg-white shadow-md rounded-xl p-6 h-fit">
-          <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
-            Informasi Mentor
-          </h2>
-          <div className="space-y-2 text-gray-700 text-sm sm:text-base">
-            <p>
-              <strong>Nama:</strong> Nama Mentor
-            </p>
-            <p>
-              <strong>Email:</strong> PKProgram@gmail.com
-            </p>
+        <div className="md:col-span-1 flex flex-col space-y-8">
+          {/* Card Campus */}
+          <Link
+            to={`/dashboard-mentee/kampus/${displayDetailProgram.campus_program_id_campusTocampus?.id}`}
+            className="bg-white rounded-xl shadow-md transition p-3 block "
+          >
+            {/* banner */}
+            <img
+              src={
+                displayDetailProgram.campus_program_id_campusTocampus
+                  ?.banner_url
+              }
+              alt={
+                displayDetailProgram.campus_program_id_campusTocampus
+                  ?.campus_name
+              }
+              className="rounded-lg w-full h-40 object-cover mb-3"
+            />
+            <div className="flex items-center gap-2 mb-2">
+              {/* logo campus */}
+              <img
+                src={
+                  displayDetailProgram.campus_program_id_campusTocampus
+                    ?.logo_url
+                }
+                alt="Logo"
+                className="w-8 h-8 object-contain"
+              />
+              {/* campus name */}
+              <p className="font-semibold text-sm">
+                {
+                  displayDetailProgram.campus_program_id_campusTocampus
+                    ?.campus_name
+                }
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-gray-500 text-xs">
+              <MapPin size={14} />
+              {/* campus location */}
+              <span>
+                {displayDetailProgram.campus_program_id_campusTocampus?.address}
+              </span>
+            </div>
+          </Link>
+
+          {/* Informasi Mentor */}
+
+          <div className="bg-white shadow-md rounded-xl p-6 h-fit">
+            <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
+              Informasi Mentor
+            </h2>
+            <div className="space-y-2 text-gray-700 text-sm sm:text-base">
+              <p>
+                <strong>Nama:</strong> {displayDetailProgram.mentor?.name}
+              </p>
+              <p>
+                <strong>Email:</strong> PKProgram@gmail.com
+              </p>
+            </div>
           </div>
         </div>
       </div>

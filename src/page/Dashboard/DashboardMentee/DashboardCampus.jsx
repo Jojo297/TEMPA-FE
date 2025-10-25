@@ -1,8 +1,15 @@
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
 import React, { useState } from "react";
 import { MapPin, Search } from "lucide-react";
 import { kampusList } from "@/lib/kampusList";
 import { Link } from "react-router-dom";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function DashboardCampus() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +21,20 @@ export default function DashboardCampus() {
 
   return (
     <>
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">Kampus</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {/* Banner Section */}
       <div className=" mb-8 text-center">
         <div className="bg-primary text-white rounded-xl p-6 shadow">
