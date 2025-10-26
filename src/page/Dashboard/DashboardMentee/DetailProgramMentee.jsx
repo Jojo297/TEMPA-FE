@@ -21,6 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import useRegisterProgram from "@/hooks/useRegisterProgram";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -35,6 +36,38 @@ const DetailProgramMentee = () => {
   const token = localStorage.getItem("userJwt");
   const { detailProgram, isLoading, error, fetchDetailProgram } =
     useGetDetailProgram();
+
+  // hooks register program
+  const { message, isLoadingRegister, errorRegister, registerProgram } =
+    useRegisterProgram();
+
+  // handle register program
+  const handleRegisterProgram = async () => {
+    if (!isAgreed || isLoadingRegister) {
+      return;
+    }
+
+    try {
+      const result = await registerProgram(token, displayDetailProgram.id);
+
+      if (result.status === 200 || result.status === 201) {
+        toast.success(result.message || "Pendaftaran berhasil!");
+        navigate("/dashboard-mentee");
+      } else {
+        toast.success(result.message || "Pendaftaran disubmit!");
+        navigate("/dashboard-mentee");
+      }
+    } catch (error) {
+      if (error.status === 409) {
+        // Jika status 409 Conflict (Sudah terdaftar)
+        toast.warning(error.message || "Anda sudah terdaftar di program ini.");
+      } else {
+        const errorMessage =
+          error.message || "Terjadi kesalahan saat pendaftaran.";
+        toast.error(errorMessage);
+      }
+    }
+  };
 
   const displayDetailProgram = detailProgram ?? [];
   console.log(displayDetailProgram);
@@ -52,22 +85,13 @@ const DetailProgramMentee = () => {
       return [];
     }
 
-    return sesi.map((item) => {
-      switch (item.type_sesi) {
-        case "online":
-          return "Online";
-        case "onsite":
-          return item.description;
-      }
-    });
+    switch (sesi.type_sesi) {
+      case "online":
+        return "Online";
+      case "onsite":
+        return sesi.sesi_description;
+    }
   };
-
-  const prasyaratList = [
-    "Anda berusia minimal 18 tahun.",
-    "Data yang diisikan adalah data yang valid dan benar.",
-    "Menyetujui syarat dan ketentuan penggunaan platform.",
-    "Bersedia menerima email dan notifikasi terkait pendaftaran.",
-  ];
 
   // error handling
   if (error) {
@@ -157,16 +181,18 @@ const DetailProgramMentee = () => {
                       Mohon baca dan setujui prasyarat berikut:
                     </p>
                     <ul className="list-disc list-inside space-y-1">
-                      {prasyaratList.map((item, index) => (
-                        <li key={index} className="text-sm">
-                          {item}
-                        </li>
-                      ))}
+                      {displayDetailProgram.terms_and_conditions?.map(
+                        (item, index) => (
+                          <li key={index} className="text-sm">
+                            {item}
+                          </li>
+                        )
+                      )}
                     </ul>
                   </DialogDescription>
                 </DialogHeader>
 
-                {/* --- Bagian Checkbox Persetujuan --- */}
+                {/* checkbox */}
                 <div className="flex items-start mt-4">
                   <input
                     type="checkbox"
@@ -190,14 +216,8 @@ const DetailProgramMentee = () => {
                       ? "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
                       : "bg-gray-500 text-gray-300 cursor-not-allowed" // Warna non-aktif
                   }`}
-                  disabled={!isAgreed} // Tombol dinonaktifkan jika belum dicentang
-                  onClick={() => {
-                    if (isAgreed) {
-                      // Tambahkan logika submit pendaftaran di sini
-                      toast.success("Pendaftaran disubmit!");
-                      navigate("/dashboard-mentee");
-                    }
-                  }}
+                  disabled={!isAgreed || isLoadingRegister} // Tombol dinonaktifkan jika belum dicentang
+                  onClick={() => handleRegisterProgram()}
                 >
                   Submit Pendaftaran
                 </button>
@@ -208,7 +228,7 @@ const DetailProgramMentee = () => {
         </div>
       </div>
 
-      {/* Bagian Detail dan Mentor */}
+      {/* Bagian Detail  */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Detail Program */}
         <div className="md:col-span-2 bg-white shadow-md rounded-xl p-6">
@@ -239,8 +259,27 @@ const DetailProgramMentee = () => {
               )}
             </li>
             <li>
-              <strong>Tempat:</strong>{" "}
-              {getLocation(displayDetailProgram.sesi_program)}
+              <strong>Waktu Pelaksanaan :</strong>{" "}
+              {new Date(displayDetailProgram.sesi_start).toLocaleTimeString(
+                "id-ID",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                }
+              )}
+              {" - "}
+              {new Date(displayDetailProgram.sesi_end).toLocaleTimeString(
+                "id-ID",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                }
+              )}
+            </li>
+            <li>
+              <strong>Tempat:</strong> {getLocation(displayDetailProgram)}
             </li>
           </ul>
 

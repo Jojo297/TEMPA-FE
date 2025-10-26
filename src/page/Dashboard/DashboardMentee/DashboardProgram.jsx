@@ -181,7 +181,7 @@ export default function DashboardProgram() {
                           {item.major_name}
                         </div>
                         <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
-                          {item.sesi_program.map((sesi) => sesi.type_sesi)}
+                          {item.type_sesi}
                         </div>
                       </div>
 
@@ -215,19 +215,14 @@ export default function DashboardProgram() {
                         </div>
                         <div className="flex items-center">
                           <Map size={16} className="mr-2 text-[#013B35]" />
-                          <span>
-                            Tempat:{" "}
-                            {item.sesi_program.map((sesi) => getLocation(sesi))}
-                          </span>
+                          <span>Tempat: {item.sesi_description}</span>
                         </div>
                       </div>
 
                       {/* Button */}
                       <button
                         onClick={() =>
-                          navigate(
-                            `/dashboard-mentee/program/${item.id_campus}`
-                          )
+                          navigate(`/dashboard-mentee/program/${item.id}`)
                         }
                         className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
                       >
