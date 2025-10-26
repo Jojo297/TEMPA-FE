@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, Search } from "lucide-react";
-import { kampusList } from "@/lib/kampusList";
 import { Link } from "react-router-dom";
 import {
   Breadcrumb,
@@ -10,14 +9,43 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import useGetAllCampus from "@/hooks/useGetAllCampus";
+import DashboardCampusSkeleton from "@/components/DashboardCampusSkeleton";
 
 export default function DashboardCampus() {
   const [searchTerm, setSearchTerm] = useState("");
+  const token = localStorage.getItem("userJwt");
+  const { campus, isLoading, error, fetchCampus } = useGetAllCampus();
+
+  // store all campus to displayCampus
+  const displayCampus = campus ?? [];
+  console.log(displayCampus);
+
+  // fetch all campus
+  useEffect(() => {
+    if (token) {
+      fetchCampus(token);
+    }
+  }, [token, fetchCampus]);
 
   // Filter kampus sesuai input search
-  const filteredKampus = kampusList.filter((kampus) =>
-    kampus.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredKampus = displayCampus.filter((kampus) =>
+    kampus.campus_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // handle loading
+  if (isLoading) {
+    return <DashboardCampusSkeleton />;
+  }
+
+  // handle error
+  if (error) {
+    return (
+      <p className="justify-center text-center" style={{ color: "red" }}>
+        ❌ Error: {error}
+      </p>
+    );
+  }
 
   return (
     <>
@@ -50,28 +78,28 @@ export default function DashboardCampus() {
       <section className="mb-10">
         <h2 className="text-xl font-bold mb-4">Rekomendasi</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {kampusList.map((kampus) => (
+          {displayCampus.map((kampus) => (
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
               className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
             >
               <img
-                src={kampus.image}
-                alt={kampus.name}
+                src={kampus.banner_url}
+                alt={kampus.campus_name}
                 className="rounded-lg w-full h-40 object-cover mb-3"
               />
               <div className="flex items-center gap-2 mb-2">
                 <img
-                  src={kampus.logo}
+                  src={kampus.logo_url}
                   alt="Logo"
                   className="w-8 h-8 object-contain"
                 />
-                <p className="font-semibold text-sm">{kampus.name}</p>
+                <p className="font-semibold text-sm">{kampus.campus_name}</p>
               </div>
               <div className="flex items-center gap-1 text-gray-500 text-xs">
                 <MapPin size={14} />
-                <span>{kampus.location}</span>
+                <span>{kampus.address}</span>
               </div>
             </Link>
           ))}
@@ -105,21 +133,21 @@ export default function DashboardCampus() {
               className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
             >
               <img
-                src={kampus.image}
-                alt={kampus.name}
+                src={kampus.banner_url}
+                alt={kampus.campus_name}
                 className="rounded-lg w-full h-40 object-cover mb-3"
               />
               <div className="flex items-center gap-2 mb-2">
                 <img
-                  src={kampus.logo}
+                  src={kampus.logo_url}
                   alt="Logo"
                   className="w-8 h-8 object-contain"
                 />
-                <p className="font-semibold text-sm">{kampus.name}</p>
+                <p className="font-semibold text-sm">{kampus.campus_name}</p>
               </div>
               <div className="flex items-center gap-1 text-gray-500 text-xs">
                 <MapPin size={14} />
-                <span>{kampus.location}</span>
+                <span>{kampus.address}</span>
               </div>
             </Link>
           ))}
