@@ -131,7 +131,7 @@ const DetailProgramMentee = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      {/* Gambar Header */}
+      {/* Header */}
       <div className="relative rounded-xl overflow-hidden shadow-md mb-10">
         <img
           src={displayDetailProgram.image_url}

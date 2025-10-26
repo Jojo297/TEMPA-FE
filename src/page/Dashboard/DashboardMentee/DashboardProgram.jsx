@@ -40,16 +40,14 @@ export default function DashboardProgram() {
     }
   };
 
-  const getLocation = (sesi) => {
-    if (!sesi) {
-      return "";
-    }
-
-    switch (sesi.type_sesi) {
+  const getLocation = (status, item) => {
+    switch (status) {
       case "online":
-        return "Online";
+        return "Zoom/Gmeet";
       case "onsite":
-        return sesi.description || "Lokasi Offline";
+        return item.sesi_description;
+      default: // 🏆 Tambahkan ini
+        return "Tempat belum ditentukan";
     }
   };
 
@@ -68,6 +66,7 @@ export default function DashboardProgram() {
     return <p>Program tidak ditemukan.</p>;
   }
 
+  // handling error
   if (error) {
     return (
       <p className="justify-center text-center" style={{ color: "red" }}>
@@ -78,7 +77,6 @@ export default function DashboardProgram() {
 
   return (
     <div className="flex min-h-screen ">
-      {/* Konten utama */}
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-y-auto ">
           <div className="mb-2">
@@ -215,7 +213,9 @@ export default function DashboardProgram() {
                         </div>
                         <div className="flex items-center">
                           <Map size={16} className="mr-2 text-[#013B35]" />
-                          <span>Tempat: {item.sesi_description}</span>
+                          <span>
+                            Tempat: {getLocation(item.type_sesi, item)}
+                          </span>
                         </div>
                       </div>
 

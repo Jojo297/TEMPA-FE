@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
+import ScrollToTop from "./components/ScrollToTop";
 
 // start Route landing page
 const LandingPage = lazy(() => import("./page/Landingpage"));
@@ -91,6 +92,8 @@ const DashboardMentor = lazy(() =>
 export default function App() {
   return (
     <Router>
+      {/* for auto scroll top */}
+      <ScrollToTop />
       <Routes>
         {/* start route Landing Page */}
         <Route

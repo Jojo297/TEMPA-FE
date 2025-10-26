@@ -1,28 +1,41 @@
-import React from "react";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "@/components/campusHeaderProfile";
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
-import { MapPin } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CampusPrestasiPage from "./DashboardCampusPrestasi";
+import CampusDescription from "@/components/CampusDescription";
+import DashboardCampusJurusan from "./DashboardCampusJurusan";
+import DashboardCampusProgram from "./DashboardCampusProgram";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import useGetDetailCampus from "@/hooks/useGetDetailCampus";
+import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 
 const DashboardCampusDetail = () => {
   const { id } = useParams();
+  const token = localStorage.getItem("userJwt");
+  const { detailCampus, isLoading, error, fetchDetailCampus } =
+    useGetDetailCampus();
   const kampus = kampusList.find((k) => k.id === parseInt(id));
-  const location = useLocation();
 
-  // Fungsi utilitas untuk menentukan kelas aktif/non-aktif
-  const getActiveClass = (targetPath) => {
-    // 1. Definisikan path absolut penuh yang dicari (termasuk dashboard-mentee dan ID)
-    const fullTargetPath = `/dashboard-mentee/kampus/${kampus.id}${targetPath}`;
+  // store detail campus to displayCampusDetail
+  const displayCampusDetail = detailCampus ?? [];
+  console.log(displayCampusDetail);
 
-    // 2. Cek apakah pathname saat ini SAMA dengan target path
-    const isActive = location.pathname === fullTargetPath;
-
-    // 3. Tentukan kelas berdasarkan status aktif
-    return isActive
-      ? "bg-[#013B35] text-white" // Kelas Aktif
-      : "bg-white border border-[#013B35] text-[#013B35] hover:bg-[#013B35] hover:text-white transition"; // Kelas Non-Aktif
-  };
+  // fetch detail campus
+  useEffect(() => {
+    if (token) {
+      fetchDetailCampus(token, id);
+    }
+  }, [token, fetchDetailCampus]);
 
   if (!kampus)
     return (
@@ -33,50 +46,99 @@ const DashboardCampusDetail = () => {
       </SidebarWithNavbar>
     );
 
+  if (isLoading) {
+    return <DashboardCampusDetailSkeleton />;
+  }
+
   return (
     <>
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee/kampus">Kampus</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">
+              {displayCampusDetail.campus_name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+      <CampusHeaderProfile kampus={displayCampusDetail} />
+      <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
+        <Tabs defaultValue="deskripsi" className="w-full">
+          {/* Navigation button */}
+          <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
+            {/* description */}
+            <TabsTrigger
+              value="deskripsi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Deskripsi
+            </TabsTrigger>
 
-      {/* Navigation Kampus */}
-      <section className="mt-12 max-w-7xl bg-[#F8FAFB] mx-auto mb-20  flex flex-col items-start">
-        {/* Tombol Navigasi */}
-        <div className="flex flex-wrap gap-4 mb-10 justify-start">
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}`}
-            className={`px-6 py-2 rounded-full font-semibold ${getActiveClass(
-              ""
-            )}`}
-          >
-            Deskripsi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
-            className={`px-6 py-2 rounded-full font-semibold ${getActiveClass(
-              "/prestasi"
-            )}`}
-          >
-            Prestasi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
-            className={`px-6 py-2 rounded-full font-semibold ${getActiveClass(
-              "/jurusan"
-            )}`}
-          >
-            Jurusan
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/program`}
-            className={`px-6 py-2 rounded-full font-semibold ${getActiveClass(
-              "/program"
-            )}`}
-          >
-            Program
-          </Link>
-        </div>
+            {/* achivment */}
+            <TabsTrigger
+              value="prestasi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Prestasi
+            </TabsTrigger>
 
-        <Outlet />
+            {/* major */}
+            <TabsTrigger
+              value="jurusan"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Jurusan
+            </TabsTrigger>
+
+            {/* program */}
+            <TabsTrigger
+              value="program"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Program
+            </TabsTrigger>
+          </TabsList>
+
+          {/* content Tabs */}
+          <TabsContent value="deskripsi">
+            <CampusDescription kampus={displayCampusDetail} />
+          </TabsContent>
+
+          <TabsContent value="prestasi">
+            <CampusPrestasiPage kampus={kampus} />
+          </TabsContent>
+
+          <TabsContent value="jurusan">
+            <DashboardCampusJurusan kampus={displayCampusDetail} />
+          </TabsContent>
+
+          <TabsContent value="program">
+            <DashboardCampusProgram kampus={displayCampusDetail} />
+          </TabsContent>
+        </Tabs>
       </section>
     </>
   );
