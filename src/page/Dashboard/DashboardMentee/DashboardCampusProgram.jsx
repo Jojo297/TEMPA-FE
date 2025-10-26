@@ -158,63 +158,30 @@ export default function DashboardCampusProgram() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+    <>
+      {/* List Program */}
+      <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-8 w-full">
+        <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
+          Program yang Ditawarkan {kampus.name}
+        </h2>
+        <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
+          Melalui TEMPA, {kampus.name} membuka ruang bagi siswa untuk menjalani
+          minat, mengenal dunia kampus, dan mempersiapkan arah masa depan
+          melalui berbagai program pembelajaran dan pengalaman langsung.
+        </p>
 
-      {/* Navigasi Dashboard */}
-      <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
-        <div className="flex flex-wrap gap-4 mb-10 justify-start">
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Deskripsi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Prestasi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Jurusan
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/program`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
-            Program
-          </Link>
+        <div className="space-y-6">
+          {currentProgramData.length > 0 ? (
+            currentProgramData.map((program, index) => (
+              <ProgramCard key={index} program={program} />
+            ))
+          ) : (
+            <p className="text-center text-gray-500">
+              Data Program belum tersedia untuk kampus ini.
+            </p>
+          )}
         </div>
-
-        {/* List Program */}
-        <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-8 w-full">
-          <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
-            Program yang Ditawarkan {kampus.name}
-          </h2>
-          <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
-            Melalui TEMPA, {kampus.name} membuka ruang bagi siswa untuk
-            menjalani minat, mengenal dunia kampus, dan mempersiapkan arah masa
-            depan melalui berbagai program pembelajaran dan pengalaman langsung.
-          </p>
-
-          <div className="space-y-6">
-            {currentProgramData.length > 0 ? (
-              currentProgramData.map((program, index) => (
-                <ProgramCard key={index} program={program} />
-              ))
-            ) : (
-              <p className="text-center text-gray-500">
-                Data Program belum tersedia untuk kampus ini.
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
+import CampusDescription from "./components/CampusDescription";
 
 // start Route landing page
 const LandingPage = lazy(() => import("./page/Landingpage"));
@@ -263,27 +264,47 @@ export default function App() {
                 <DashboardCampusDetail />
               </Suspense>
             }
-          />
+          >
+            {/* child route detail campus */}
 
-          {/* Prestasi Kampus Dashboard */}
-          <Route
-            path="kampus/:id/prestasi"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardCampusPrestasi />
-              </Suspense>
-            }
-          />
+            {/* description campus */}
+            <Route
+              index
+              element={
+                <Suspense fallback={<LoadingRedirect />}>
+                  <CampusDescription />
+                </Suspense>
+              }
+            />
+            {/* Prestasi Kampus Dashboard */}
+            <Route
+              path="prestasi"
+              element={
+                <Suspense fallback={<LoadingRedirect />}>
+                  <DashboardCampusPrestasi />
+                </Suspense>
+              }
+            />
+            {/* Jurusan Kampus Dashboard */}
+            <Route
+              path="jurusan"
+              element={
+                <Suspense fallback={<LoadingRedirect />}>
+                  <DashboardCampusJurusan />
+                </Suspense>
+              }
+            />
 
-          {/* Jurusan Kampus Dashboard */}
-          <Route
-            path="kampus/:id/jurusan"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardCampusJurusan />
-              </Suspense>
-            }
-          />
+            {/* Program Kampus Dashboard Mentee */}
+            <Route
+              path="program"
+              element={
+                <Suspense fallback={<LoadingRedirect />}>
+                  <DashboardCampusProgram />
+                </Suspense>
+              }
+            />
+          </Route>
 
           {/* Detail Program Dashboard Mentee */}
           <Route
@@ -301,16 +322,6 @@ export default function App() {
             element={
               <Suspense fallback={<LoadingRedirect />}>
                 <DashboardMenteeProgramDaftar />
-              </Suspense>
-            }
-          />
-
-          {/* Program Kampus Dashboard Mentee */}
-          <Route
-            path="kampus/:id/program"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardCampusProgram />
               </Suspense>
             }
           />
