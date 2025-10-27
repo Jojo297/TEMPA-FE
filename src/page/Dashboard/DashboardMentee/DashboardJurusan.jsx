@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
@@ -12,6 +12,7 @@ import {
   Plus,
   Waves,
   Cross,
+  FileQuestionIcon,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -21,26 +22,41 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import useGetAllMajors from "@/hooks/useGetAllMajors";
 
 const DashboardJurusan = () => {
-  const rekomendasi = [
-    { icon: <Cpu size={48} />, name: "Informatika" },
-    { icon: <Cog size={48} />, name: "Mesin" },
-    { icon: <Lightbulb size={48} />, name: "Elektronika" },
-  ];
+  const token = localStorage.getItem("userJwt");
+  const { majors, isLoading, error, fetchMajor } = useGetAllMajors();
 
-  const seluruhJurusan = [
-    { icon: <Cpu size={48} />, name: "Informatika" },
-    { icon: <Cog size={48} />, name: "Mesin" },
-    { icon: <Lightbulb size={48} />, name: "Elektronika" },
-    { icon: <DollarSign size={48} />, name: "Akuntansi" },
-    { icon: <Scale size={48} />, name: "Hukum" },
-    { icon: <Palette size={48} />, name: "DKV" },
-    { icon: <Brain size={48} />, name: "Psikologi" },
-    { icon: <Plus size={48} />, name: "Matematika" },
-    { icon: <Waves size={48} />, name: "Kelautan" },
-    { icon: <Cross size={48} />, name: "Kedokteran" },
-  ];
+  const displayMajors = majors ?? [];
+
+  // icon majors
+  const majorIconMap = {
+    Informatika: <Cpu size={48} />,
+    Mesin: <Cog size={48} />,
+    Elektronika: <Lightbulb size={48} />,
+    Akuntansi: <DollarSign size={48} />,
+    Hukum: <Scale size={48} />,
+    "Desain Komunikasi Visual (DKV)": <Palette size={48} />,
+    Psikologi: <Brain size={48} />,
+    Matematika: <Plus size={48} />,
+    Kelautan: <Waves size={48} />,
+    Kedokteran: <Cross size={48} />,
+  };
+
+  // merge majors name to icon
+  const mergedData = displayMajors.map((major) => ({
+    ...major,
+    icon: majorIconMap[major.major_name] || <FileQuestionIcon size={48} />,
+  }));
+  // console.log(mergedData);
+
+  // fetch data majors
+  useEffect(() => {
+    if (token) {
+      fetchMajor(token);
+    }
+  }, []);
 
   return (
     <>
@@ -59,7 +75,7 @@ const DashboardJurusan = () => {
         </BreadcrumbList>
       </Breadcrumb>
       <div className="min-h-screen  ">
-        {/* Header Section */}
+        {/* header Section */}
         <div className="bg-primary text-white p-6 rounded-2xl shadow-md mb-8 text-center">
           <h1 className="text-2xl font-semibold mb-2">Jurusan</h1>
           <p className="text-sm">
@@ -68,26 +84,9 @@ const DashboardJurusan = () => {
           </p>
         </div>
 
-        {/* Rekomendasi Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Rekomendasi</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {rekomendasi.map((item, index) => (
-              <Link
-                to={`/dashboard-mentee/jurusan/${item.name.toLowerCase()}`}
-                key={index}
-                className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
-              >
-                {item.icon}
-                <p className="mt-2 text-sm font-medium">{item.name}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Seluruh Jurusan Section */}
+        {/* all majors section */}
         <section>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold">Seluruh Jurusan</h2>
             <div className="relative w-64">
               <input
@@ -102,15 +101,16 @@ const DashboardJurusan = () => {
             </div>
           </div>
 
+          {/* card majors */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {seluruhJurusan.map((item, index) => (
+            {mergedData.map((item) => (
               <Link
-                to={`/dashboard-mentee/jurusan/${item.name.toLowerCase()}`}
-                key={index}
+                to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
+                key={item.id}
                 className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
               >
                 {item.icon}
-                <p className="mt-2 text-sm font-medium">{item.name}</p>
+                <p className="mt-2 text-sm font-medium">{item.major_name}</p>
               </Link>
             ))}
           </div>
