@@ -196,69 +196,73 @@ const CampusPrestasiPage = () => {
   };
 
   return (
-    <SidebarWithNavbar>
-      <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-        <CampusHeaderProfile kampus={kampus} />
+    <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
+      <CampusHeaderProfile kampus={kampus} />
 
-        <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
-          {/* Tombol Navigasi */}
-          <div className="flex flex-wrap gap-4 mb-10 justify-start">
-            <Link
-              to={`/campus-detail/${kampus.id}`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-              Deskripsi
-            </Link>
-            <Link
-              to={`/campus/${kampus.id}/prestasi`}
-              className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
-              Prestasi
-            </Link>
-            <Link
-              to={`/campus/${kampus.id}/jurusan`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-              Jurusan
-            </Link>
-            <Link
-              to={`/campus/${kampus.id}/program`}
-              className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-              Program
-            </Link>
+      <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start">
+        {/* Tombol Navigasi */}
+        <div className="flex flex-wrap gap-4 mb-10 justify-start">
+          <Link
+            to={`/dashboard-mentee/kampus/${kampus.id}`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
+            Deskripsi
+          </Link>
+          <Link
+            to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+          >
+            Prestasi
+          </Link>
+          <Link
+            to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
+            Jurusan
+          </Link>
+          <Link
+            to={`/dashboard-mentee/kampus/${kampus.id}/program`}
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
+            Program
+          </Link>
+        </div>
+
+        {/* Card Prestasi */}
+        <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
+          <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
+            Prestasi {kampus.name}
+          </h2>
+          <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
+            {kampus.id === 1
+              ? "Polibatam terus menorehkan prestasi nasional dan internasional, membuktikan kualitas unggul dalam bidang teknologi dan inovasi."
+              : kampus.id === 2
+              ? "ITEBA berkomitmen melahirkan inovator muda yang mampu menciptakan karya unggul dan berdaya saing tinggi di tingkat nasional maupun global."
+              : "UIB konsisten meraih prestasi di bidang akademik, penelitian, dan pengembangan mahasiswa yang berorientasi global."}
+          </p>
+
+          <div className="space-y-5">
+            {prestasiData[kampus.id]?.map(({ year, content }) => (
+              <div
+                key={year}
+                className="border rounded-2xl overflow-hidden shadow-sm"
+              >
+                <button
+                  onClick={() => toggleYear(year)}
+                  className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition"
+                >
+                  <span>Tahun {year}</span>
+                  <span>{openYear === year ? "−" : "+"}</span>
+                </button>
+                {openYear === year && (
+                  <div className="p-6 bg-gray-50">{content}</div>
+                )}
+              </div>
+            ))}
           </div>
-
-          {/* Card Prestasi */}
-          <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
-            <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
-              Prestasi {kampus.name}
-            </h2>
-            <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
-              {kampus.id === 1
-                ? "Polibatam terus menorehkan prestasi nasional dan internasional, membuktikan kualitas unggul dalam bidang teknologi dan inovasi."
-                : kampus.id === 2
-                ? "ITEBA berkomitmen melahirkan inovator muda yang mampu menciptakan karya unggul dan berdaya saing tinggi di tingkat nasional maupun global."
-                : "UIB konsisten meraih prestasi di bidang akademik, penelitian, dan pengembangan mahasiswa yang berorientasi global."}
-            </p>
-
-            <div className="space-y-5">
-              {prestasiData[kampus.id]?.map(({ year, content }) => (
-                <div
-                  key={year}
-                  className="border rounded-2xl overflow-hidden shadow-sm">
-                  <button
-                    onClick={() => toggleYear(year)}
-                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
-                    <span>Tahun {year}</span>
-                    <span>{openYear === year ? "−" : "+"}</span>
-                  </button>
-                  {openYear === year && (
-                    <div className="p-6 bg-gray-50">{content}</div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
-    </SidebarWithNavbar>
+        </div>
+      </section>
+    </div>
   );
 };
 

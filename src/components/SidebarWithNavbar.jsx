@@ -14,10 +14,16 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 const SidebarWithNavbar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userJwt");
+    toast.success("Anda Berhasil Keluar!");
+  };
 
   const menuItems = [
     {
@@ -35,20 +41,29 @@ const SidebarWithNavbar = ({ children }) => {
       icon: <Building2 size={18} />,
       path: "/dashboard-mentee/kampus",
     },
-    { name: "JURUSAN", icon: <Share2 size={18} />, path: "/jurusan" },
+    {
+      name: "JURUSAN",
+      icon: <Share2 size={18} />,
+      path: "/dashboard-mentee/jurusan",
+    },
+
     { separator: true },
     {
       name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
       path: "/dashboard-mentee/test-jurusan",
     },
-    { name: "MATERI", icon: <BookOpen size={18} />, path: "/dashboard-mentee/Materi" },
+    // {
+    //   name: "PENILAIAN",
+    //   icon: <Star size={18} />,
+    //   path: "/dashboard-mentee/Penilaian",
+    // },
     {
-      name: "PENILAIAN",
-      icon: <Star size={18} />,
-      path: "/dashboard-mentee/Penilaian",
+      name: "KELUAR",
+      icon: <LogOut size={18} />,
+      action: handleLogout,
+      path: "/",
     },
-    { name: "KELUAR", icon: <LogOut size={18} />, path: "/" },
   ];
 
   return (
@@ -74,7 +89,8 @@ const SidebarWithNavbar = ({ children }) => {
       <div
         className={`fixed top-16 left-0 h-full bg-[#013B36] text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}>
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
         <ul className="flex flex-col mt-4 w-full flex-1">
           {menuItems.map((item, index) =>
             item.separator ? (
@@ -86,11 +102,13 @@ const SidebarWithNavbar = ({ children }) => {
               <li key={index}>
                 <Link
                   to={item.path}
+                  onClick={item.action}
                   className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                     location.pathname === item.path
                       ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
                       : "hover:bg-white/10 text-white/80"
-                  }`}>
+                  }`}
+                >
                   {item.icon}
                   <span>{item.name}</span>
                 </Link>
@@ -105,15 +123,15 @@ const SidebarWithNavbar = ({ children }) => {
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"
-          } p-6`}>
+          } p-6`}
+        >
           {children}
         </main>
 
         {/* ✅ Ganti footer lama dengan komponen Footer */}
         <div
-          className={`${
-            isOpen ? "ml-64" : "ml-0"
-          } transition-all duration-300`}>
+          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
+        >
           <Footer />
         </div>
       </div>

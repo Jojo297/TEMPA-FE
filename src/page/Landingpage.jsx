@@ -28,7 +28,7 @@ import img1 from "@/assets/img1.png";
 import polibatam from "../assets/polibatam.jpeg";
 import iteba from "../assets/iteba.jpg";
 import uib from "../assets/uib.jpeg";
-import peta from "../assets/peta.png";
+import peta from "../assets/Peta.png";
 import {
   Dialog,
   DialogClose,
@@ -180,7 +180,8 @@ const LandingPage = () => {
                 <DialogTrigger asChild>
                   <Button
                     onClick={() => setIsDialogOpen(true)}
-                    className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition">
+                    className="bg-[#96CCEC] text-[#013B35] px-4 py-1.5 rounded-full font-semibold hover:bg-[#00a790] transition"
+                  >
                     Masuk
                   </Button>
                 </DialogTrigger>
@@ -202,6 +203,7 @@ const LandingPage = () => {
                         </div>
                       </DialogTitle>
                     </DialogHeader>
+                    {/* button login google */}
                     <LoginMentee />
                   </DialogContent>
                 )}
@@ -219,7 +221,8 @@ const LandingPage = () => {
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center right",
           backgroundSize: "contain",
-        }}>
+        }}
+      >
         {/* Gambar kiri */}
         <div className="w-[620px] h-[600px] bg-[#013B35] rounded-t-[180px] rounded-b-none flex justify-center items-center overflow-hidden">
           <img
@@ -258,7 +261,8 @@ const LandingPage = () => {
         <div className="relative flex items-center justify-center w-full">
           <button
             onClick={prevSlide}
-            className="absolute left-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10">
+            className="absolute left-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10"
+          >
             <ChevronLeft size={20} />
           </button>
 
@@ -267,7 +271,8 @@ const LandingPage = () => {
               className="flex transition-transform duration-700 ease-in-out"
               style={{
                 transform: `translateX(-${currentIndex * 100}%)`,
-              }}>
+              }}
+            >
               {kampusList.map((kampus) => (
                 <div key={kampus.id} className="min-w-full flex justify-center">
                   <div className="bg-white text-black rounded-3xl overflow-hidden w-[1000px] shadow-lg">
@@ -294,7 +299,8 @@ const LandingPage = () => {
                         {kampus.jurusan.slice(0, 4).map((jrs, i) => (
                           <span
                             key={i}
-                            className="bg-gray-100 text-gray-800 px-2 py-[2px] text-xs rounded-full">
+                            className="bg-gray-100 text-gray-800 px-2 py-[2px] text-xs rounded-full"
+                          >
                             {jrs}
                           </span>
                         ))}
@@ -309,7 +315,8 @@ const LandingPage = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10">
+            className="absolute right-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10"
+          >
             <ChevronRight size={20} />
           </button>
         </div>
@@ -320,7 +327,8 @@ const LandingPage = () => {
               key={i}
               className={`w-3 h-3 rounded-full transition-all ${
                 i === currentIndex ? "bg-white scale-110" : "bg-white/40"
-              }`}></span>
+              }`}
+            ></span>
           ))}
         </div>
       </section>
@@ -356,7 +364,8 @@ const LandingPage = () => {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-[#013B35] text-white w-36 h-36 rounded-xl flex flex-col items-center justify-center gap-3 shadow-lg hover:scale-105 transition-transform duration-300">
+                className="bg-[#013B35] text-white w-36 h-36 rounded-xl flex flex-col items-center justify-center gap-3 shadow-lg hover:scale-105 transition-transform duration-300"
+              >
                 <div className="text-[#9BD6C3]">{item.icon}</div>
                 <span className="text-sm font-medium">{item.nama}</span>
               </div>
@@ -365,7 +374,8 @@ const LandingPage = () => {
 
           <Link
             to="/JurusanPage"
-            className="mt-10 inline-block text-sm font-semibold border-b-2 border-black hover:text-[#013B35] hover:border-[#013B35] transition">
+            className="mt-10 inline-block text-sm font-semibold border-b-2 border-black hover:text-[#013B35] hover:border-[#013B35] transition"
+          >
             Lihat Selengkapnya
           </Link>
         </div>

@@ -1,118 +1,158 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import logoText from "@/assets/logo-text.png";
+import { Button } from "@/components/ui/button";
+import googleIcon from "@/assets/google-logo.svg";
+import { ArrowBigLeft } from "lucide-react";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import { toast } from "sonner";
 
-export default function GoogleSignIn() {
+const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export default function LoginCampus() {
+  // Definisi warna khusus agar lebih mudah dibaca (sesuai gambar)
+  const DARK_GREEN = "bg-[#10403D]";
+  const LIGHT_BLUE = "text-[#5BC0EB]";
+  const PROGRESS_BLUE = "bg-[#5BC0EB]";
+
+  const navigate = useNavigate();
+  const handleRedirect = () => navigate("/login-admin");
+
+  // handle oauth google and send to backend
+  window.handleCredentialResponse = async (response) => {
+    // console.log("Encoded JWT ID token: " + response.credential);
+    const googleToken = response.credential;
+    try {
+      const loginMentee = await axios.post(
+        `${BASE_URL}/login-campus`,
+        { credential: googleToken } // Backend can get req.body.credential
+      );
+      const { token, uniqueId, fullName, email } = loginMentee.data.data;
+
+      console.log(loginMentee.data.data);
+
+      // save JWT to localstorage
+      localStorage.setItem("userJwt", token);
+
+      // redirect
+      navigate("/dashboard-campus");
+
+      toast.success("Anda Berhasil Masuk!");
+    } catch (error) {
+      console.log(error);
+      const statusCode = error.response.status;
+      // Unauthorized
+      if (statusCode === 401) {
+        toast.error("Username atau Password salah!");
+        // url not found
+      } else if (statusCode === 404) {
+        const axiosMessage = error.message;
+        toast.error(`${axiosMessage}`);
+        // internal server error
+      } else if (statusCode >= 500) {
+        toast.error("Server sedang bermasalah. Coba lagi nanti.");
+      } else {
+        // get all error stautus HTTP
+        const serverMsg =
+          error.response.data.message ||
+          "Terjadi kesalahan yang tidak terduga.";
+        toast.error(serverMsg);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#fefefe] font-sans text-[#1f1f1f]">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-sm flex flex-col md:flex-row items-center md:items-start p-8">
-        {/* Left Section */}
-        <div className="flex flex-col items-center md:items-start w-full md:w-1/2 border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0 md:pr-8">
-          <div className="flex items-center mb-8 w-full justify-start">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+      <div
+        className={`flex w-[900px] h-[600px] shadow-2xl rounded-xl overflow-hidden`}
+      >
+        <div
+          className={`w-2/5 p-10 ${DARK_GREEN} text-white flex flex-col justify-start`}
+        >
+          <div className="mb-20">
+            {" "}
+            {/* logo */}
             <img
-              src="https://developers.google.com/identity/images/g-logo.png"
-              alt="Google Logo"
-              className="w-5 h-5 mr-2"
+              src={logoText}
+              alt="Logo TEMPA"
+              className="w-30 h-30 object-contain"
             />
-            <p className="text-sm text-gray-700">Sign in with Google</p>
           </div>
-          <div className="text-[#4185f4] text-6xl font-bold mb-4">T</div>
-          <h2 className="text-lg font-medium mb-6">Sign in to TEMPA</h2>
-          <div className="relative w-full max-w-sm">
-            <input
-              type="email"
-              value="example@gmail.com"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-700 bg-gray-50 focus:outline-none"
-              readOnly
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="gray"
-              className="w-4 h-4 absolute right-3 top-2.5">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 9l6 6 6-6"
-              />
-            </svg>
-          </div>
+          <h1 className="text-5xl font-extrabold leading-tight">
+            Selamat Datang Kampus!
+          </h1>
         </div>
 
-        {/* Right Section */}
-        <div className="w-full md:w-1/2 md:pl-8 pt-6 md:pt-0 text-gray-800">
-          <p className="mb-4">
-            Google will allow <b>TEMPA</b> to access this info about you
-          </p>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-gray-100 p-2 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 text-gray-700"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+        <div className="w-3/5 bg-white p-16 flex flex-col">
+          <div className="mb-10">
+            <div className="flex justify-between mb-1 font-bold text-gray-400">
+              <span className="text-gray-900">Login</span>
             </div>
-            <div>
-              <p className="text-sm font-medium">example</p>
-              <p className="text-xs text-gray-500">Name and profile picture</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-gray-100 p-2 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 text-gray-700"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M16 12H8m0 0l4-4m-4 4l4 4"
-                />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-medium">example@gmail.com</p>
-              <p className="text-xs text-gray-500">Email address</p>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`${PROGRESS_BLUE} h-full transition-all duration-300 ease-in-out`}
+              ></div>
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 mb-6">
-            Review TEMPA’s{" "}
-            <a href="#" className="text-[#4185f4]">
-              privacy policy
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-[#4185f4]">
-              Terms of Service
-            </a>{" "}
-            to understand how TEMPA will process and store your data.
-            <br />
-            <br />
-            You can remove access at any time in your{" "}
-            <a href="#" className="text-[#4185f4]">
-              Google Account
-            </a>
-            .
-          </p>
+          {/* Form Utama */}
+          <div className="flex flex-col gap-5">
+            <div>
+              <h2 className="text-2xl font-semibold mb-1">
+                Masuk ke Akun Anda
+              </h2>
+              <p className="text-sm text-gray-500 mb-8">
+                Lanjutkan dengan Google untuk pengalaman yang lebih cepat dan
+                aman.
+              </p>
+            </div>
 
-          <div className="flex gap-4">
-            <button className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-100">
-              Cancel
-            </button>
-            <button className="px-6 py-2 bg-[#064e3b] text-white rounded-md hover:bg-[#043d2f]">
-              Continue
-            </button>
+            {/* popup login google */}
+            <div
+              id="g_id_onload"
+              data-client_id={data_client_id}
+              data-context="signin"
+              data-ux_mode="popup"
+              data-callback="handleCredentialResponse"
+              data-nonce=""
+              data-itp_support="true"
+            ></div>
+            {/* end popup login google */}
+
+            {/* button login google*/}
+            <div className="flex flex-col items-center">
+              <div
+                className="g_id_signin mb-3"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signin_with"
+                data-size="large"
+                data-logo_alignment="left"
+                data-width="500"
+              ></div>
+              {/* button back */}
+              <Button
+                variant="default"
+                className="w-full py-5 bg-[#10403D] text-primary-foreground hover:bg-[#10403dcc]"
+                onClick={handleRedirect}
+              >
+                Kembali
+              </Button>
+            </div>
           </div>
         </div>
       </div>

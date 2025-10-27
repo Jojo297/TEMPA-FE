@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo2 from "@/assets/logo-text.png";
 import { useNavigate } from "react-router";
-import z from "zod";
+import z, { number } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -20,44 +20,60 @@ import { Spinner } from "@/components/ui/spinner";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export default function LoginAdmin() {
+export default function LoginMentor() {
   const navigate = useNavigate();
-  const form = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
   const DARK_GREEN = "bg-[#10403D]";
   const LIGHT_BLUE = "text-[#5BC0EB]";
   const PROGRESS_BLUE = "bg-[#5BC0EB]";
 
-  // validating form
-  const validateLoginAdmin = z.object({
-    username: z.string().min(2, "Masukkan Username!"),
+  // validating form using zod
+  const validateLoginMentor = z.object({
+    nik: z
+      .string()
+      .min(1, "Masukkan NIK Anda!")
+      // check if input number
+      .refine((val) => !isNaN(Number(val)) && val !== "", {
+        message: "Input NIK harus berupa angka!",
+      })
+      // Transform string to number.
+      .transform((val) => Number(val))
+      // wrap the resulting numbers from the transform using pipe
+      .pipe(
+        z
+          .number()
+          .int({ message: "NIK harus berupa bilangan bulat." })
+          .min(3, "Masukkan NIK minimal 2 digit!")
+      ),
     password: z.string().min(2, "Masukkan Password!"),
   });
 
-  const formLoginAdmin = useForm({
+  // handle form state and validation for mentor login
+  const formLoginMentor = useForm({
     defaultValues: {
-      username: "",
+      nik: "",
       password: "",
     },
-    resolver: zodResolver(validateLoginAdmin),
+    resolver: zodResolver(validateLoginMentor),
   });
 
-  const onSubmitLoginAdmin = async (data) => {
+  // handle submit login
+  const onSubmitLoginMentor = async (data) => {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL}/admin-login`, {
-        username: data.username,
+      const response = await axios.post(`${BASE_URL}/login-mentor`, {
+        nik: data.nik,
         password: data.password,
       });
       if (response.status == 200) {
         // const token = response.data.data.token;
         const token = response.data.data;
         // localStorage.setItem("token", token);
-        // redirect to dashboard
-        navigate("/dashboard-admin");
         toast.success("Anda berhasil Masuk!");
+        // redirect to dashboard
+        navigate("/dashboard-mentor");
       }
     } catch (error) {
       console.log(error);
@@ -100,16 +116,16 @@ export default function LoginAdmin() {
           </div>
           <h1 className="text-5xl font-extrabold leading-tight">
             Welcome <br />
-            Admin!
+            Mentor!
           </h1>
         </div>
 
         {/* Bagian Kanan (Form Login/Signup) */}
         <div className="w-3/5 bg-white p-16 flex flex-col">
           {/* Form Utama */}
-          <Form {...formLoginAdmin}>
+          <Form {...formLoginMentor}>
             <form
-              onSubmit={formLoginAdmin.handleSubmit(onSubmitLoginAdmin)}
+              onSubmit={formLoginMentor.handleSubmit(onSubmitLoginMentor)}
               className="flex flex-col"
             >
               <div className="mb-10">
@@ -126,14 +142,14 @@ export default function LoginAdmin() {
               <div className="mb-6">
                 {/* input product username */}
                 <FormField
-                  control={formLoginAdmin.control}
-                  name="username"
+                  control={formLoginMentor.control}
+                  name="nik"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="username">Username</FormLabel>
+                      <FormLabel htmlFor="nik">NIK</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Masukkan Username"
+                          placeholder="Masukkan NIK"
                           className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                           {...field}
                         />
@@ -148,7 +164,7 @@ export default function LoginAdmin() {
               <div className="mb-6">
                 {/* input product password */}
                 <FormField
-                  control={formLoginAdmin.control}
+                  control={formLoginMentor.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>

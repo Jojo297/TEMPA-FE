@@ -2,20 +2,35 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 
-// ✅ Lazy imports
+// start Route landing page
 const LandingPage = lazy(() => import("./page/Landingpage"));
+const LoginMentor = lazy(() => import("./page/loginMentor"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
+const CampusPage = lazy(() => import("./page/CampusPage"));
+const JurusanPage = lazy(() => import("./page/JurusanPage"));
+const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
+const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
+const CampusPrestasiPage = lazy(() =>
+  import("./components/CampusPrestasiPage")
+);
+const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
+const CampusProgram = lazy(() => import("./components/CampusProgram"));
+const PanduanPage = lazy(() => import("./page/PanduanPage"));
+// end Route before login
 
-// Dashboard Mentee Pages (folder DashboardMentee)
+// start Dashboard Mentee Pages (folder DashboardMentee)
+const DashboardMenteeBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
+);
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
-const DashboardCampus = lazy(() =>
+const DashboardMenteeCampus = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampus")
 );
 const DashboardCampusDetail = lazy(() =>
@@ -28,52 +43,55 @@ const DashboardCampusPrestasi = lazy(() =>
 const DashboardCampusJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusJurusan")
 );
-// const DetailProgramMentee = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
-// );
+const DetailProgramMentee = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+);
 const DashboardMenteeProgramDaftar = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
 );
 const DashboardCampusProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
 );
-
-// Other Pages
-const CampusPage = lazy(() => import("./page/campuspage"));
-const JurusanPage = lazy(() => import("./page/JurusanPage"));
-const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
-const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
-const CampusPrestasiPage = lazy(() =>
-  import("./components/CampusPrestasiPage")
-);
-const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
-const CampusProgram = lazy(() => import("./components/CampusProgram"));
-const PanduanPage = lazy(() => import("./page/PanduanPage"));
-const Materi = lazy(() => import("./page/Dashboard/DashboardMentee/materi"));
-// const DashboardProgram = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DashboardProgram")
-// );
-// const DashboardCampus = lazy(() =>
-//   import("./page/Dashboard/DashboardMentee/DashboardCampus")
-// );
 const TestJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/testJurusan")
+  import("./page/Dashboard/DashboardMentee/Testjurusan")
 );
 
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
 
-// ✅ Tambahkan ini (halaman detail program mentee)
-const DetailProgramMentee = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+const DashboardJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardJurusan")
 );
+
+const DashboardJurusanDetail = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardJurusanDetail")
+);
+// end dashboard mentee
+
+// start dashboard campus
+const DashboardCampus = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampus")
+);
+// end dashboard campus
+
+// start dashboard admin
+const DashboardAdmin = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
+);
+// end dashboard admin
+
+// start dashboard mentor
+const DashboardMentor = lazy(() =>
+  import("@/page/Dashboard/DashboardMentor/DashboardMentor")
+);
+// end dashboard mentor
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* 🌐 Landing Page */}
+        {/* start route Landing Page */}
         <Route
           path="/"
           element={
@@ -97,6 +115,14 @@ export default function App() {
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <LoginCampus />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/login-mentor"
+          element={
+            <Suspense fallback={<LoadingRedirect />}>
+              <LoginMentor />
             </Suspense>
           }
         />
@@ -176,6 +202,7 @@ export default function App() {
         />
 
         {/* 📘 Panduan */}
+        {/* 📘 Panduan */}
         <Route
           path="/panduan"
           element={
@@ -185,121 +212,183 @@ export default function App() {
           }
         />
 
-        {/* 👨‍🎓 Dashboard Mentee */}
-        <Route
-          path="/dashboard-mentee"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardMenteePage />
-            </Suspense>
-          }
-        />
+        {/* end route Landing Page */}
 
-        {/* 🧩 Program Dashboard Mentee */}
-        <Route
-          path="/dashboard-mentee/program"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardProgram />
-            </Suspense>
-          }
-        />
+        {/* start Dashboard Mentee */}
+        <Route path="dashboard-mentee" element={<DashboardMenteePage />}>
+          {/* start dashboard beranda */}
+          <Route
+            index
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardMenteeBeranda />
+              </Suspense>
+            }
+          />
+          {/* end dashboard beranda */}
 
-        {/* 🏫 Kampus Dashboard Mentee */}
+          <Route
+            path="beranda"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardMenteeBeranda />
+              </Suspense>
+            }
+          />
+
+          {/* Program Dashboard Mentee */}
+          <Route
+            path="program"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardProgram />
+              </Suspense>
+            }
+          />
+
+          {/* Kampus Dashboard Mentee */}
+          <Route
+            path="kampus"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardMenteeCampus />
+              </Suspense>
+            }
+          />
+
+          {/* Detail Kampus Dashboard */}
+          <Route
+            path="kampus/:id"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardCampusDetail />
+              </Suspense>
+            }
+          />
+
+          {/* Prestasi Kampus Dashboard */}
+          <Route
+            path="kampus/:id/prestasi"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardCampusPrestasi />
+              </Suspense>
+            }
+          />
+
+          {/* Jurusan Kampus Dashboard */}
+          <Route
+            path="kampus/:id/jurusan"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardCampusJurusan />
+              </Suspense>
+            }
+          />
+
+          {/* Detail Program Dashboard Mentee */}
+          <Route
+            path="program/:id"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DetailProgramMentee />
+              </Suspense>
+            }
+          />
+
+          {/* Form Daftar Program Dashboard Mentee */}
+          <Route
+            path="program/daftar"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardMenteeProgramDaftar />
+              </Suspense>
+            }
+          />
+
+          {/* Program Kampus Dashboard Mentee */}
+          <Route
+            path="kampus/:id/program"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardCampusProgram />
+              </Suspense>
+            }
+          />
+
+          {/* Test Jurusan Mentee */}
+          <Route
+            path="test-jurusan"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <TestJurusan />
+              </Suspense>
+            }
+          />
+
+          {/* Penilaian */}
+          {/* <Route
+            path="Penilaian"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <Penilaian />
+              </Suspense>
+            }
+          /> */}
+
+          {/* dashboard mentee jurusan */}
+          <Route
+            path="jurusan"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardJurusan />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="jurusan/:slug"
+            element={
+              <Suspense fallback={<LoadingRedirect />}>
+                <DashboardJurusanDetail />
+              </Suspense>
+            }
+          />
+        </Route>
+        {/* end Dashboard Mentee */}
+
+        {/* start dashboard campus */}
         <Route
-          path="/dashboard-mentee/kampus"
+          path="/dashboard-campus"
           element={
             <Suspense fallback={<LoadingRedirect />}>
               <DashboardCampus />
             </Suspense>
           }
         />
-        {/* Test Jurusan Mentee */}
-        <Route
-          path="/dashboard-mentee/test-jurusan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <TestJurusan />
-            </Suspense>
-          }
-        />
+        {/* end dashboard campus */}
 
-        {/* 🏫 Detail Kampus Dashboard */}
+        {/* start dashboard admin */}
         <Route
-          path="/dashboard-mentee/kampus/:id"
+          path="/dashboard-admin"
           element={
             <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampusDetail />
+              <DashboardAdmin />
             </Suspense>
           }
         />
+        {/* end dashboard admin */}
 
-        {/* 🆕 🏆 Prestasi Kampus Dashboard */}
+        {/* start dashboard mentor */}
         <Route
-          path="/dashboard-mentee/kampus/:id/prestasi"
+          path="/dashboard-mentor"
           element={
             <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampusPrestasi />
+              <DashboardMentor />
             </Suspense>
           }
         />
-
-        {/* 🏫 Jurusan Kampus Dashboard */}
-        <Route
-          path="/dashboard-mentee/kampus/:id/jurusan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampusJurusan />
-            </Suspense>
-          }
-        />
-
-        {/* 📄 Detail Program Dashboard Mentee */}
-        <Route
-          path="/dashboard-mentee/program/:id"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DetailProgramMentee />
-            </Suspense>
-          }
-        />
-
-        {/* Penilaian */}
-        <Route
-          path="/dashboard-mentee/Penilaian"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <Penilaian />
-            </Suspense>
-          }
-        />
-
-        {/* 📝 Form Daftar Program Dashboard Mentee */}
-        <Route
-          path="/dashboard-mentee/program/daftar"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardMenteeProgramDaftar />
-            </Suspense>
-          }
-        />
-        {/* 🏫 Program Kampus Dashboard Mentee */}
-        <Route
-          path="/dashboard-mentee/kampus/:id/program"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampusProgram />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/dashboard-mentee/Materi"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <Materi />
-            </Suspense>
-          }
-        />
+        {/* end dashboard admin */}
       </Routes>
     </Router>
   );
