@@ -184,7 +184,7 @@ export default function DashboardProgram() {
                       </div>
 
                       {/* description */}
-                      <p className="text-gray-600 mb-4 text-sm">
+                      <p className="text-gray-600 mb-4 text-sm line-clamp-2">
                         {item.description}
                       </p>
 

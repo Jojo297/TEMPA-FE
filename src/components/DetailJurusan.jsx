@@ -10,7 +10,8 @@ const ChevronRightIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     className="h-5 w-5"
     viewBox="0 0 20 20"
-    fill="currentColor">
+    fill="currentColor"
+  >
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -26,7 +27,8 @@ const CalendarIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -42,7 +44,8 @@ const ClockIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -58,7 +61,8 @@ const LocationIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -79,7 +83,8 @@ const UserIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -198,7 +203,8 @@ export default function DetailJurusan() {
         </h1>
         <Link
           to="/JurusanPage"
-          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]">
+          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]"
+        >
           Kembali ke daftar jurusan
         </Link>
       </div>
@@ -265,7 +271,8 @@ export default function DetailJurusan() {
               ).map((item, i) => (
                 <span
                   key={i}
-                  className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition-colors duration-300 cursor-pointer">
+                  className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition-colors duration-300 cursor-pointer"
+                >
                   {item}
                 </span>
               ))
@@ -286,7 +293,8 @@ export default function DetailJurusan() {
                   <Link
                     key={index}
                     to={`/kampus/${kampus.id}`} // Link ke halaman detail kampus
-                    className="relative rounded-xl overflow-hidden shadow-lg transform hover:scale-[1.01] transition-transform duration-300 group">
+                    className="relative rounded-xl overflow-hidden shadow-lg transform hover:scale-[1.01] transition-transform duration-300 group"
+                  >
                     <img
                       // Asumsi: properti gambar di kampusList adalah 'image' (sesuai data Anda)
                       src={kampus.image}

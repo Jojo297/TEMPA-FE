@@ -14,6 +14,7 @@ import {
   Cross,
   FileQuestionIcon,
 } from "lucide-react";
+import roboterror from "@/assets/robot-error.png";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,6 +24,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useGetAllMajors from "@/hooks/useGetAllMajors";
+import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 
 const DashboardJurusan = () => {
   const token = localStorage.getItem("userJwt");
@@ -57,6 +59,20 @@ const DashboardJurusan = () => {
       fetchMajor(token);
     }
   }, []);
+
+  // handling error
+  if (error) {
+    return (
+      <p className="justify-center text-center" style={{ color: "red" }}>
+        ❌ Error: {error}
+      </p>
+    );
+  }
+
+  // handle loading
+  if (isLoading) {
+    return <MajorsListSkeleton />;
+  }
 
   return (
     <>
@@ -103,16 +119,33 @@ const DashboardJurusan = () => {
 
           {/* card majors */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {mergedData.map((item) => (
-              <Link
-                to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
-                key={item.id}
-                className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
-              >
-                {item.icon}
-                <p className="mt-2 text-sm font-medium">{item.major_name}</p>
-              </Link>
-            ))}
+            {/* majors not found */}
+            {displayMajors.length <= 0 ? (
+              <div className="col-span-full flex justify-center py-16 w-full">
+                <div className="flex flex-col items-center justify-center">
+                  <img
+                    src={roboterror}
+                    alt="Belum Ada Aktivitas"
+                    className="w-40 mb-4"
+                  />
+                  <div className="text-center">
+                    <p className="text-gray-600">Jurusan Tidak Ada</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // card majors
+              mergedData.map((item) => (
+                <Link
+                  to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
+                  key={item.id}
+                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
+                >
+                  {item.icon}
+                  <p className="mt-2 text-sm font-medium">{item.major_name}</p>
+                </Link>
+              ))
+            )}
           </div>
         </section>
       </div>
