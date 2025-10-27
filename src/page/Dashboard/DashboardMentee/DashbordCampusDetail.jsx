@@ -1,13 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "@/components/campusHeaderProfile";
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
-import { MapPin } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CampusPrestasiPage from "./DashboardCampusPrestasi";
+import CampusDescription from "@/components/CampusDescription";
+import DashboardCampusJurusan from "./DashboardCampusJurusan";
+import DashboardCampusProgram from "./DashboardCampusProgram";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import useGetDetailCampus from "@/hooks/useGetDetailCampus";
+import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 
 const DashboardCampusDetail = () => {
   const { id } = useParams();
+  const token = localStorage.getItem("userJwt");
+  const { detailCampus, isLoading, error, fetchDetailCampus } =
+    useGetDetailCampus();
   const kampus = kampusList.find((k) => k.id === parseInt(id));
+
+  // store detail campus to displayCampusDetail
+  const displayCampusDetail = detailCampus ?? [];
+  console.log(displayCampusDetail);
+
+  // fetch detail campus
+  useEffect(() => {
+    if (token) {
+      fetchDetailCampus(token, id);
+    }
+  }, [token, fetchDetailCampus]);
 
   if (!kampus)
     return (
@@ -18,97 +46,99 @@ const DashboardCampusDetail = () => {
       </SidebarWithNavbar>
     );
 
+  if (isLoading) {
+    return <DashboardCampusDetailSkeleton />;
+  }
+
   return (
     <>
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee/kampus">Kampus</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">
+              {displayCampusDetail.campus_name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header Kampus */}
-      {/* <CampusHeaderProfile kampus={kampus} /> */}
-      <header className="bg-[#F8FAFB]">
-        <div className="max-w-7xl mx-auto rounded-xl shadow-lg overflow-hidden">
-          <div className="h-[400px]">
-            <img
-              src={kampus.image}
-              alt={`Gedung ${kampus.name}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
+      <CampusHeaderProfile kampus={displayCampusDetail} />
+      <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
+        <Tabs defaultValue="deskripsi" className="w-full">
+          {/* Navigation button */}
+          <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
+            {/* description */}
+            <TabsTrigger
+              value="deskripsi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Deskripsi
+            </TabsTrigger>
 
-          <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
-                <img
-                  src={kampus.logo}
-                  alt={`${kampus.name} Logo`}
-                  className="w-20 h-20 object-contain"
-                />
-              </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {kampus.name}
-                </h1>
-                <div className="flex items-center text-gray-300 mt-1">
-                  <MapPin size={16} className="mr-2" />
-                  <span className="text-sm">{kampus.location}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+            {/* achivment */}
+            <TabsTrigger
+              value="prestasi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Prestasi
+            </TabsTrigger>
 
-      {/* Info Kampus */}
-      <section className="mt-12 max-w-6xl bg-[#F8FAFB] mx-auto mb-20  flex flex-col items-start">
-        {/* Tombol Navigasi */}
-        <div className="flex flex-wrap gap-4 mb-10 justify-start">
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
-            Deskripsi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Prestasi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Jurusan
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/program`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Program
-          </Link>
-        </div>
+            {/* major */}
+            <TabsTrigger
+              value="jurusan"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Jurusan
+            </TabsTrigger>
 
-        {/* Deskripsi & Visi Misi */}
-        <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
-          <h2 className="text-2xl font-bold text-[#013B35]">
-            Tentang {kampus.name}
-          </h2>
-          <p className="text-gray-700 leading-relaxed">{kampus.desc}</p>
+            {/* program */}
+            <TabsTrigger
+              value="program"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Program
+            </TabsTrigger>
+          </TabsList>
 
-          <h3 className="text-2xl font-bold text-[#013B35]">Visi & Misi</h3>
-          <p className="text-gray-700">
-            <strong>Visi:</strong> {kampus.visi}
-          </p>
-          <div className="text-gray-700">
-            <strong>Misi:</strong>{" "}
-            {Array.isArray(kampus.misi) ? (
-              <ul className="list-disc list-inside mt-1">
-                {kampus.misi.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>{kampus.misi}</p>
-            )}
-          </div>
-        </div>
+          {/* content Tabs */}
+          <TabsContent value="deskripsi">
+            <CampusDescription kampus={displayCampusDetail} />
+          </TabsContent>
+
+          <TabsContent value="prestasi">
+            <CampusPrestasiPage kampus={kampus} />
+          </TabsContent>
+
+          <TabsContent value="jurusan">
+            <DashboardCampusJurusan kampus={displayCampusDetail} />
+          </TabsContent>
+
+          <TabsContent value="program">
+            <DashboardCampusProgram kampus={displayCampusDetail} />
+          </TabsContent>
+        </Tabs>
       </section>
     </>
   );

@@ -8,29 +8,6 @@ import polibatam from "../assets/Gedung.jpg";
 export const kampusList = [
   {
     id: 1,
-    name: "Politeknik Negeri Batam",
-    image: polibatam,
-    logo: logoPolibatam,
-    location: "Batam, Riau Islands, Indonesia",
-    desc: "Politeknik Negeri Batam (Polibatam) merupakan satu-satunya Perguruan Tinggi Negeri (PTN) Vokasi di kawasan perdagangan dan pelabuhan bebas Batam, Bintan, dan Karimun Provinsi Kepulauan Riau. Polibatam adalah kampus vokasi unggulan yang berfokus pada pendidikan terapan, riset, dan inovasi teknologi industri.",
-    visi: "Menjadi politeknik generasi baru yang bermutu, adaptif, inovatif, dan bermitra erat dengan industri serta masyarakat untuk mendukung Indonesia Maju dan Sejahtera 2045.",
-    misi: "Aktif dalam proses kreasi, penyebaran, dan penerapan sains serta teknologi melalui layanan pendidikan tinggi vokasi dan penelitian terapan yang bermutu, terbuka, relevan, dan berkolaborasi erat dengan masyarakat dan industri.",
-    jurusan: [
-      { name: "Teknik Informatika", slug: "informatika" },
-      { name: "Manajemen Bisnis", slug: "manajemen" },
-      { name: "Teknik Mesin", slug: "mesin" },
-      { name: "Teknik Elektronika", slug: "elektronika" },
-      { name: "Akuntansi", slug: "akuntansi" },
-      { name: "Administrasi Bisnis", slug: "administrasi-bisnis" },
-      { name: "Sistem Informasi", slug: "sistem-informasi" },
-      {
-        name: "Logistik Perdagangan internasional",
-        slug: "logistik-perdagangan",
-      },
-    ],
-  },
-  {
-    id: 2,
     name: "Institut Teknologi Batam (ITEBA)",
     image: iteba,
     logo: logoIteba,
@@ -56,6 +33,30 @@ export const kampusList = [
       { name: "Sistem Informasi", slug: "sistem-informasi" },
     ],
   },
+  {
+    id: 2,
+    name: "Politeknik Negeri Batam",
+    image: polibatam,
+    logo: logoPolibatam,
+    location: "Batam, Riau Islands, Indonesia",
+    desc: "Politeknik Negeri Batam (Polibatam) merupakan satu-satunya Perguruan Tinggi Negeri (PTN) Vokasi di kawasan perdagangan dan pelabuhan bebas Batam, Bintan, dan Karimun Provinsi Kepulauan Riau. Polibatam adalah kampus vokasi unggulan yang berfokus pada pendidikan terapan, riset, dan inovasi teknologi industri.",
+    visi: "Menjadi politeknik generasi baru yang bermutu, adaptif, inovatif, dan bermitra erat dengan industri serta masyarakat untuk mendukung Indonesia Maju dan Sejahtera 2045.",
+    misi: "Aktif dalam proses kreasi, penyebaran, dan penerapan sains serta teknologi melalui layanan pendidikan tinggi vokasi dan penelitian terapan yang bermutu, terbuka, relevan, dan berkolaborasi erat dengan masyarakat dan industri.",
+    jurusan: [
+      { name: "Teknik Informatika", slug: "informatika" },
+      { name: "Manajemen Bisnis", slug: "manajemen" },
+      { name: "Teknik Mesin", slug: "mesin" },
+      { name: "Teknik Elektronika", slug: "elektronika" },
+      { name: "Akuntansi", slug: "akuntansi" },
+      { name: "Administrasi Bisnis", slug: "administrasi-bisnis" },
+      { name: "Sistem Informasi", slug: "sistem-informasi" },
+      {
+        name: "Logistik Perdagangan internasional",
+        slug: "logistik-perdagangan",
+      },
+    ],
+  },
+
   {
     id: 3,
     name: "Universitas Internasional Batam (UIB)",

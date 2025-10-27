@@ -11,18 +11,39 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 const SidebarWithNavbar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
+    const token = localStorage.getItem("userJwt");
+
+    // logout if user Don't have have token
+    if (!token) {
+      navigate("/");
+      toast.success("Anda Berhasil Keluar!");
+    }
+
     localStorage.removeItem("userJwt");
-    toast.success("Anda Berhasil Keluar!");
+    navigate("/");
   };
 
   const menuItems = [
@@ -52,17 +73,6 @@ const SidebarWithNavbar = ({ children }) => {
       name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
       path: "/dashboard-mentee/test-jurusan",
-    },
-    // {
-    //   name: "PENILAIAN",
-    //   icon: <Star size={18} />,
-    //   path: "/dashboard-mentee/Penilaian",
-    // },
-    {
-      name: "KELUAR",
-      icon: <LogOut size={18} />,
-      action: handleLogout,
-      path: "/",
     },
   ];
 
@@ -115,11 +125,44 @@ const SidebarWithNavbar = ({ children }) => {
               </li>
             )
           )}
+          <li>
+            {/* logout */}
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                {/* <Button variant="outline">Show Dialog</Button> */}
+                <Link
+                  className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80`}
+                >
+                  <LogOut size={18} />
+                  <span>KELUAR</span>
+                </Link>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="bg-primary text-secondary">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-center">
+                    Apakah Anda Yakin Ingin Keluar?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex justify-center">
+                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
+                    Cancel
+                  </AlertDialogCancel>
+                  <Button
+                    onClick={handleLogout}
+                    className="bg-secondary text-primary hover:bg-secondary hover:text-primary transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  >
+                    Iya, Saya Yakin
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </li>
         </ul>
       </div>
 
       {/* MAIN CONTENT + FOOTER */}
-      <div className="flex flex-col pt-16 min-h-screen bg-[#F8FAFB]">
+      <div className="flex flex-col pt-16 min-h-screen">
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"

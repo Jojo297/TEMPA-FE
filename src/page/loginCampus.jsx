@@ -17,7 +17,7 @@ export default function LoginCampus() {
   const PROGRESS_BLUE = "bg-[#5BC0EB]";
 
   const navigate = useNavigate();
-  const handleRedirect = () => navigate("/login-admin");
+  const handleRedirect = () => navigate("/");
 
   // handle oauth google and send to backend
   window.handleCredentialResponse = async (response) => {
