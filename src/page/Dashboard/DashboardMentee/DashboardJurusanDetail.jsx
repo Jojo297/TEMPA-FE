@@ -9,7 +9,8 @@ const ChevronRightIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     className="h-5 w-5"
     viewBox="0 0 20 20"
-    fill="currentColor">
+    fill="currentColor"
+  >
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -25,7 +26,8 @@ const CalendarIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -41,7 +43,8 @@ const ClockIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -57,7 +60,8 @@ const LocationIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -78,7 +82,8 @@ const UserIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -152,6 +157,7 @@ export default function DashboardJurusanDetail() {
 
   if (!jurusan) {
     return (
+<<<<<<< HEAD
       <SidebarWithNavbar>
         <div className="min-h-screen flex flex-col justify-center items-center text-center">
           <h1 className="text-3xl font-bold mb-2 text-red-500">
@@ -164,6 +170,19 @@ export default function DashboardJurusanDetail() {
           </Link>
         </div>
       </SidebarWithNavbar>
+=======
+      <div className="min-h-screen flex flex-col justify-center items-center text-center">
+        <h1 className="text-3xl font-bold mb-2 text-red-500">
+          Jurusan '{slug}' tidak ditemukan.
+        </h1>
+        <Link
+          to="/dashboard-mentee/jurusan"
+          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]"
+        >
+          Kembali ke daftar jurusan
+        </Link>
+      </div>
+>>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
     );
   }
 
@@ -174,6 +193,7 @@ export default function DashboardJurusanDetail() {
   const programTerkaitJurusan = jurusan.programTerkait || [];
 
   return (
+<<<<<<< HEAD
     <SidebarWithNavbar>
       <div className="bg-white min-h-screen pb-16">
         <div className="max-w-6xl mx-auto px-4 pt-10">
@@ -267,9 +287,104 @@ export default function DashboardJurusanDetail() {
                 kampus={kampusDitemukan}
               />
             ))}
+=======
+    <div className="bg-white min-h-screen pb-16">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
+          <div className="relative w-full h-[320px]">
+            <img
+              src={
+                jurusan.heroImg ||
+                "https://via.placeholder.com/1200x320?text=HERO+JURUSAN"
+              }
+              alt={jurusan.nama}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="bg-[#013B35] py-4 px-6">
+            <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
+              {jurusan.nama}
+            </h1>
+>>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
           </div>
         </div>
       </div>
-    </SidebarWithNavbar>
+
+      <div className="max-w-6xl mx-auto px-6 mt-10">
+        <h2 className="text-2xl font-semibold text-[#013B35] mb-3">
+          Tentang Jurusan
+        </h2>
+        <p className="text-gray-700 leading-relaxed text-justify">
+          {jurusan.deskripsi || "Deskripsi jurusan belum tersedia."}
+        </p>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 mt-12">
+        <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          Prospek Kerja
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {(
+            jurusan.prospekKerja || [
+              "Programmer",
+              "UI/UX Designer",
+              "System Analyst",
+            ]
+          ).map((item, i) => (
+            <span
+              key={i}
+              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 mt-12">
+        <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          Kampus Terkait
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {kampusDitemukan.map((kampus, index) => (
+            <Link
+              key={index}
+              to={`/dashboard-mentee/kampus/${kampus.id}`}
+              className="relative rounded-xl overflow-hidden shadow-lg group"
+            >
+              <img
+                src={kampus.image}
+                alt={kampus.name}
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 flex justify-between items-center group-hover:bg-[#013B35]/70 transition">
+                <h3 className="text-lg font-semibold text-white">
+                  {kampus.name}
+                </h3>
+                <div className="p-1 rounded-full bg-white text-[#013B35]">
+                  <ChevronRightIcon />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 mt-12">
+        <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
+          Program Terkait
+        </h2>
+        <div className="space-y-6">
+          {programTerkaitJurusan.map((program, index) => (
+            <ProgramItem
+              key={index}
+              program={program}
+              jurusan={jurusan}
+              kampus={kampusDitemukan}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

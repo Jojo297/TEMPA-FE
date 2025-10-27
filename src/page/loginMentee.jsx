@@ -38,7 +38,7 @@ export default function LoginMentee() {
       // redirect
       navigate("/dashboard-mentee");
 
-      toast.success("Anda Berhasil Login!");
+      toast.success("Anda Berhasil Masuk!");
     } catch (error) {
       console.log(error);
       const statusCode = error.response.status;
