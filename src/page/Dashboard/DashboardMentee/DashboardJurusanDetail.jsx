@@ -1,16 +1,25 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { jurusanList } from "@/lib/JurusanList";
-import { kampusList } from "@/lib/kampusList";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Calendar, Home, Map, Users } from "lucide-react";
+import useGetDetailMajor from "@/hooks/useGetDetailMajor";
+import MajorDetailSkeleton from "@/components/MajorDetailSkeleton";
+import NotFounPages from "@/components/NotFoundPages";
 
 const ChevronRightIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-5 w-5"
     viewBox="0 0 20 20"
-    fill="currentColor"
-  >
+    fill="currentColor">
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -26,8 +35,7 @@ const CalendarIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}
-  >
+    strokeWidth={2}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -43,8 +51,7 @@ const ClockIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}
-  >
+    strokeWidth={2}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -60,8 +67,7 @@ const LocationIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}
-  >
+    strokeWidth={2}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -82,8 +88,7 @@ const UserIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}
-  >
+    strokeWidth={2}>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -114,7 +119,7 @@ const ProgramItem = ({ program, jurusan, kampus }) => {
         </div>
       </div>
 
-      <div className="bg-[#0E3B3D] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
+      <div className="bg-[#013B35] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
         <div>
           <p className="text-sm text-gray-200 leading-relaxed mb-2">
             {program.nama}
@@ -153,36 +158,24 @@ const ProgramItem = ({ program, jurusan, kampus }) => {
 
 export default function DashboardJurusanDetail() {
   const { slug } = useParams();
+  const token = localStorage.getItem("userJwt");
+  const { detailMajor, isLoading, error, fetchDetailMajor } =
+    useGetDetailMajor();
+  const navigate = useNavigate();
   const jurusan = jurusanList.find((j) => j.slug === slug);
 
   if (!jurusan) {
     return (
-<<<<<<< HEAD
-      <SidebarWithNavbar>
-        <div className="min-h-screen flex flex-col justify-center items-center text-center">
-          <h1 className="text-3xl font-bold mb-2 text-red-500">
-            Jurusan '{slug}' tidak ditemukan.
-          </h1>
-          <Link
-            to="/dashboard-mentee/jurusan"
-            className="mt-4 text-white bg-[#0E3B3D] px-4 py-2 rounded-lg hover:bg-[#025c54]">
-            Kembali ke daftar jurusan
-          </Link>
-        </div>
-      </SidebarWithNavbar>
-=======
       <div className="min-h-screen flex flex-col justify-center items-center text-center">
         <h1 className="text-3xl font-bold mb-2 text-red-500">
           Jurusan '{slug}' tidak ditemukan.
         </h1>
         <Link
           to="/dashboard-mentee/jurusan"
-          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]"
-        >
+          className="mt-4 text-white bg-[#013B35] px-4 py-2 rounded-lg hover:bg-[#025c54]">
           Kembali ke daftar jurusan
         </Link>
       </div>
->>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
     );
   }
 
@@ -193,101 +186,6 @@ export default function DashboardJurusanDetail() {
   const programTerkaitJurusan = jurusan.programTerkait || [];
 
   return (
-<<<<<<< HEAD
-    <SidebarWithNavbar>
-      <div className="bg-white min-h-screen pb-16">
-        <div className="max-w-6xl mx-auto px-4 pt-10">
-          <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
-            <div className="relative w-full h-[320px]">
-              <img
-                src={
-                  jurusan.heroImg ||
-                  "https://via.placeholder.com/1200x320?text=HERO+JURUSAN"
-                }
-                alt={jurusan.nama}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="bg-[#0E3B3D] py-4 px-6">
-              <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
-                {jurusan.nama}
-              </h1>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-6 mt-10">
-          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-3">
-            Tentang Jurusan
-          </h2>
-          <p className="text-gray-700 leading-relaxed text-justify">
-            {jurusan.deskripsi || "Deskripsi jurusan belum tersedia."}
-          </p>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
-            Prospek Kerja
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {(
-              jurusan.prospekKerja || [
-                "Programmer",
-                "UI/UX Designer",
-                "System Analyst",
-              ]
-            ).map((item, i) => (
-              <span
-                key={i}
-                className="px-4 py-2 border border-[#0E3B3D] text-[#0E3B3D] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
-            Kampus Terkait
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {kampusDitemukan.map((kampus, index) => (
-              <Link
-                key={index}
-                to={`/dashboard-mentee/kampus/${kampus.id}`}
-                className="relative rounded-xl overflow-hidden shadow-lg group">
-                <img
-                  src={kampus.image}
-                  alt={kampus.name}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 flex justify-between items-center group-hover:bg-[#013B35]/70 transition">
-                  <h3 className="text-lg font-semibold text-white">
-                    {kampus.name}
-                  </h3>
-                  <div className="p-1 rounded-full bg-white text-[#0E3B3D]">
-                    <ChevronRightIcon />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="max-w-6xl mx-auto px-6 mt-12">
-          <h2 className="text-2xl font-semibold text-[#0E3B3D] mb-4">
-            Program Terkait
-          </h2>
-          <div className="space-y-6">
-            {programTerkaitJurusan.map((program, index) => (
-              <ProgramItem
-                key={index}
-                program={program}
-                jurusan={jurusan}
-                kampus={kampusDitemukan}
-              />
-            ))}
-=======
     <div className="bg-white min-h-screen pb-16">
       <div className="max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
@@ -303,9 +201,9 @@ export default function DashboardJurusanDetail() {
           </div>
           <div className="bg-[#013B35] py-4 px-6">
             <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
-              {jurusan.nama}
+              {displayDetailMajor.major_name}
             </h1>
->>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
+            >>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
           </div>
         </div>
       </div>
@@ -315,7 +213,8 @@ export default function DashboardJurusanDetail() {
           Tentang Jurusan
         </h2>
         <p className="text-gray-700 leading-relaxed text-justify">
-          {jurusan.deskripsi || "Deskripsi jurusan belum tersedia."}
+          {displayDetailMajor.description ||
+            "Deskripsi jurusan belum tersedia."}
         </p>
       </div>
 
@@ -324,17 +223,10 @@ export default function DashboardJurusanDetail() {
           Prospek Kerja
         </h2>
         <div className="flex flex-wrap gap-2">
-          {(
-            jurusan.prospekKerja || [
-              "Programmer",
-              "UI/UX Designer",
-              "System Analyst",
-            ]
-          ).map((item, i) => (
+          {displayDetailMajor.prospek_kerja?.map((item, i) => (
             <span
               key={i}
-              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
-            >
+              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
               {item}
             </span>
           ))}
@@ -346,23 +238,33 @@ export default function DashboardJurusanDetail() {
           Kampus Terkait
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {kampusDitemukan.map((kampus, index) => (
+          {getCampus.map((kampus, index) => (
             <Link
               key={index}
-              to={`/dashboard-mentee/kampus/${kampus.id}`}
-              className="relative rounded-xl overflow-hidden shadow-lg group"
-            >
+              to={`/dashboard-mentee/kampus/${kampus.campus?.id}`}
+              className="relative rounded-xl overflow-hidden shadow-lg group">
+              {/* banner */}
               <img
-                src={kampus.image}
-                alt={kampus.name}
+                src={kampus.campus?.banner_url}
+                alt={kampus.campus?.campus_name}
                 className="w-full h-64 object-cover"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 flex justify-between items-center group-hover:bg-[#013B35]/70 transition">
-                <h3 className="text-lg font-semibold text-white">
-                  {kampus.name}
-                </h3>
-                <div className="p-1 rounded-full bg-white text-[#013B35]">
-                  <ChevronRightIcon />
+
+              <div
+                className="absolute bottom-0 left-0 right-0 bg-black/50 p-3 group-hover:bg-[#013B35]/70 transition-all duration-300 max-h-16 overflow-hidden group-hover:max-h-32 group-hover:p-4" // Tinggi saat hover (sesuaikan 32 atau p-4)
+              >
+                <div className="flex justify-between items-start">
+                  {/* campus name */}
+                  <h3
+                    className="text-lg font-semibold text-white 
+                         /* Batasi baris dan sembunyikan sisanya */
+                         line-clamp-1 group-hover:line-clamp-none transition-all duration-300">
+                    {kampus.campus?.campus_name}
+                  </h3>
+
+                  <div className="p-1 rounded-full bg-white text-[#013B35] flex-shrink-0 ml-2 mt-1">
+                    <ChevronRightIcon />
+                  </div>
                 </div>
               </div>
             </Link>
@@ -374,14 +276,95 @@ export default function DashboardJurusanDetail() {
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Program Terkait
         </h2>
-        <div className="space-y-6">
-          {programTerkaitJurusan.map((program, index) => (
-            <ProgramItem
-              key={index}
-              program={program}
-              jurusan={jurusan}
-              kampus={kampusDitemukan}
-            />
+        {/* Card Program */}
+        <div className="flex flex-col gap-8">
+          {getProgram.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
+              {/* left side */}
+              <div
+                className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+                // Menggunakan background image dengan overlay warna untuk efek keren
+                style={{
+                  backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_image_url})`,
+                  backgroundColor: "#013B35",
+                  minHeight: "200px",
+                }}>
+                {/* Completion Status */}
+                {(() => {
+                  // get badge status
+                  const statusData = getBadgeClass(item.program_status);
+                  return (
+                    <div
+                      className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
+                      {statusData.text}
+                    </div>
+                  );
+                })()}
+                <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                  {item.program_name}
+                </h3>
+              </div>
+
+              {/* right side */}
+              <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+                <div>
+                  {/* Main info: Kampus, Jurusan */}
+                  <div className="flex flex-wrap items-center space-x-4 mb-4">
+                    <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                      <span>{item.program_name}</span>
+                    </div>
+
+                    <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                      {item.type_sesi}
+                    </div>
+                  </div>
+
+                  {/* description */}
+                  <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                    {item.description}
+                  </p>
+
+                  {/* date and location */}
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                    <div className="flex items-center">
+                      <Calendar size={16} className="mr-2 text-[#013B35]" />
+                      <span>
+                        {new Date(item.start_date).toLocaleDateString("id-ID", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Home size={16} className="mr-2 text-[#013B35]" />
+                      <span>
+                        {item.campus_program_id_campusTocampus?.campus_name}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Users size={16} className="mr-2 text-[#013B35]" />
+                      <span>{item.capacity}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Map size={16} className="mr-2 text-[#013B35]" />
+                      <span>Tempat: {getLocation(item.type_sesi, item)}</span>
+                    </div>
+                  </div>
+
+                  {/* Button */}
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard-mentee/program/${item.id}`)
+                    }
+                    className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                    Lihat Detail Program
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

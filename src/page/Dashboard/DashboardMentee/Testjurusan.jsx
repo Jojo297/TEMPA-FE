@@ -24,7 +24,7 @@ export default function TestJurusan() {
 
       {/* Riwayat Tes*/}
       <section>
-        <h2 className="text-xl font-semibold mb-6">Riwayat Tes</h2>
+        <h2 className="text-xl font-semibold mb-6 mt-6">Riwayat Tes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {history.map((item) => (
             <div

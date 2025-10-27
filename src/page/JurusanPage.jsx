@@ -18,6 +18,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import notfound from "../assets/robot-error.png";
+import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 
 const jurusanList = [
   {
@@ -121,7 +122,8 @@ const JurusanPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
       {/* Header */}
       <section className="text-center py-16">
@@ -158,7 +160,8 @@ const JurusanPage = () => {
               <Link
                 to={`/jurusan/${j.slug}`}
                 key={j.id}
-                className="bg-[#013B35] text-white rounded-2xl w-32 h-32 flex flex-col justify-center items-center hover:scale-105 transition-transform duration-300">
+                className="bg-[#013B35] text-white rounded-2xl w-32 h-32 flex flex-col justify-center items-center hover:scale-105 transition-transform duration-300"
+              >
                 <div className="mb-2 text-[#9EE6D7]">{j.icon}</div>
                 <p className="text-sm font-semibold text-[#A8E8DA] text-center">
                   {j.name}

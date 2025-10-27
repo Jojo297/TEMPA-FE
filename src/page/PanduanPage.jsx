@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import notfound from "../assets/robot-error.png"; // 🖼️ pastikan kamu punya file ini
+import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 
 const PanduanPage = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -72,13 +73,15 @@ const PanduanPage = () => {
     <div className="mb-5 border border-[#013B35] rounded-sm">
       <button
         onClick={onClick}
-        className="w-full text-left bg-[#013B35] text-white px-5 py-3 text-[15px] font-semibold hover:bg-[#015047] transition">
+        className="w-full text-left bg-[#013B35] text-white px-5 py-3 text-[15px] font-semibold hover:bg-[#015047] transition"
+      >
         {title}
       </button>
       <div
         className={`bg-white transition-all duration-300 overflow-hidden ${
           isOpen ? "max-h-[1000px] p-5" : "max-h-0 p-0"
-        }`}>
+        }`}
+      >
         {children}
       </div>
     </div>
@@ -86,7 +89,8 @@ const PanduanPage = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
       {/* ===== Header ===== */}
       <section className="text-center py-12">
@@ -108,7 +112,8 @@ const PanduanPage = () => {
           />
           <button
             onClick={() => setSearchTerm(searchTerm.trim())}
-            className="bg-[#96CCEC] text-black font-semibold px-6 py-2 rounded-md hover:opacity-90 transition">
+            className="bg-[#96CCEC] text-black font-semibold px-6 py-2 rounded-md hover:opacity-90 transition"
+          >
             Cari
           </button>
         </div>
@@ -124,7 +129,8 @@ const PanduanPage = () => {
               key={index}
               title={item.title}
               isOpen={openIndex === index}
-              onClick={() => handleAccordionClick(index)}>
+              onClick={() => handleAccordionClick(index)}
+            >
               {item.content}
             </AccordionItem>
           ))

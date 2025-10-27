@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock, Map, Home } from "lucide-react";
 
 import SidebarWithNavbar from "@/components/SidebarWithNavbar";
@@ -83,71 +83,40 @@ const programData = {
   ],
 };
 
-// --- Program Card ---
-const ProgramCard = ({ program }) => (
-  <div className="flex flex-col lg:flex-row border rounded-2xl overflow-hidden shadow-lg bg-white transition hover:shadow-xl">
-    <div
-      className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
-      style={{
-        backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)), url(${program.Image})`,
-        backgroundColor: "#013B35",
-        minHeight: "200px",
-      }}
-    >
-      <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
-        {program.Program}
-      </h3>
-    </div>
+export default function DashboardCampusProgram({ kampus }) {
+  const navigate = useNavigate();
+  const programs = kampus.program_program_id_campusTocampus;
+  // console.log(programs);
 
-    <div className="lg:w-2/3 p-6 flex flex-col justify-between">
-      <div>
-        <p className="text-gray-600 mb-4 text-sm">{program.Deskripsi}</p>
-        <div className="flex flex-wrap items-center space-x-4 mb-4">
-          <div className="flex items-center text-[#013B35] font-semibold text-lg">
-            <Home size={18} className="mr-2" />
-            <span>{program.Kampus}</span>
-          </div>
-          <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
-            {program.Jurusan}
-          </div>
-          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
-            {program.Tipe}
-          </div>
-        </div>
+  // badge for status program
+  const getBadgeClass = (status) => {
+    switch (status) {
+      case "open":
+        return {
+          text: "Buka",
+          bgColor: "bg-green-200",
+          textColor: "text-green-800",
+        };
+      case "closed":
+        return {
+          text: "Tutup",
+          bgColor: "bg-red-100",
+          textColor: "text-red-800",
+        };
+    }
+  };
 
-        <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
-          <div className="flex items-center">
-            <Calendar size={16} className="mr-2 text-[#013B35]" />
-            <span>{program.Tanggal}</span>
-          </div>
-          <div className="flex items-center">
-            <Clock size={16} className="mr-2 text-[#013B35]" />
-            <span>{program.Waktu}</span>
-          </div>
-          <div className="flex items-center">
-            <Users size={16} className="mr-2 text-[#013B35]" />
-            <span>{program.Peserta}</span>
-          </div>
-          <div className="flex items-center">
-            <Map size={16} className="mr-2 text-[#013B35]" />
-            <span>Tempat: {program.Tempat}</span>
-          </div>
-        </div>
-      </div>
-
-      <button className="w-full lg:w-auto self-start min-w-[559px] px-10 py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
-        Ikut Program
-      </button>
-    </div>
-  </div>
-);
-
-// --- Halaman Utama ---
-export default function DashboardCampusProgram() {
-  const { id } = useParams();
-  const campusId = parseInt(id);
-  const kampus = kampusList.find((k) => k.id === campusId);
-  const currentProgramData = programData[campusId] || [];
+  // get location if program online
+  const getLocation = (status, item) => {
+    switch (status) {
+      case "online":
+        return "Zoom/Gmeet";
+      case "onsite":
+        return item.sesi_description;
+      default: // 🏆 Tambahkan ini
+        return "Tempat belum ditentukan";
+    }
+  };
 
   if (!kampus) {
     return (
@@ -158,63 +127,125 @@ export default function DashboardCampusProgram() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+    <>
+      {/* List Program */}
+      <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-8 w-full">
+        <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
+          Program yang Ditawarkan {kampus.name}
+        </h2>
+        <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
+          Melalui TEMPA, {kampus.name} membuka ruang bagi siswa untuk menjalani
+          minat, mengenal dunia kampus, dan mempersiapkan arah masa depan
+          melalui berbagai program pembelajaran dan pengalaman langsung.
+        </p>
 
-      {/* Navigasi Dashboard */}
-      <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
-        <div className="flex flex-wrap gap-4 mb-10 justify-start">
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Deskripsi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Prestasi
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Jurusan
-          </Link>
-          <Link
-            to={`/dashboard-mentee/kampus/${kampus.id}/program`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
-            Program
-          </Link>
+        <div className="space-y-6">
+          {programs.length > 0 ? (
+            programs.map((item, index) => (
+              <div
+                key={item.id}
+                className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
+              >
+                {/* left side */}
+                <div
+                  className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+                  // Menggunakan background image dengan overlay warna untuk efek keren
+                  style={{
+                    backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
+                    backgroundColor: "#013B35",
+                    minHeight: "200px",
+                  }}
+                >
+                  {/* Completion Status */}
+                  {(() => {
+                    // get badge status
+                    const statusData = getBadgeClass(item.program_status);
+                    return (
+                      <div
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                      >
+                        {statusData.text}
+                      </div>
+                    );
+                  })()}
+                  <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                    {item.program_name}
+                  </h3>
+                </div>
+
+                {/* right side */}
+                <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+                  <div>
+                    {/* Main info: Kampus, Jurusan */}
+                    <div className="flex flex-wrap items-center space-x-4 mb-4">
+                      <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                        <span>{item.program_name}</span>
+                      </div>
+                      <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
+                        {
+                          item.campus_program_id_majorTocampus.standard_major
+                            .major_name
+                        }
+                      </div>
+                      <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                        {item.type_sesi}
+                      </div>
+                    </div>
+
+                    {/* description */}
+                    <p className="text-gray-600 mb-4 text-sm">
+                      {item.description}
+                    </p>
+
+                    {/* date and location */}
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                      <div className="flex items-center">
+                        <Calendar size={16} className="mr-2 text-[#013B35]" />
+                        <span>
+                          {new Date(item.start_date).toLocaleDateString(
+                            "id-ID",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <Home size={16} className="mr-2 text-[#013B35]" />
+                        <span>{kampus.campus_name}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Users size={16} className="mr-2 text-[#013B35]" />
+                        <span>{item.capacity} Orang</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Map size={16} className="mr-2 text-[#013B35]" />
+                        <span>Tempat: {getLocation(item.type_sesi, item)}</span>
+                      </div>
+                    </div>
+
+                    {/* Button */}
+                    <button
+                      onClick={() =>
+                        navigate(`/dashboard-mentee/program/${item.id}`)
+                      }
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                    >
+                      Lihat Detail Program
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">
+              Data Program belum tersedia untuk kampus ini.
+            </p>
+          )}
         </div>
-
-        {/* List Program */}
-        <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-8 w-full">
-          <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
-            Program yang Ditawarkan {kampus.name}
-          </h2>
-          <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
-            Melalui TEMPA, {kampus.name} membuka ruang bagi siswa untuk
-            menjalani minat, mengenal dunia kampus, dan mempersiapkan arah masa
-            depan melalui berbagai program pembelajaran dan pengalaman langsung.
-          </p>
-
-          <div className="space-y-6">
-            {currentProgramData.length > 0 ? (
-              currentProgramData.map((program, index) => (
-                <ProgramCard key={index} program={program} />
-              ))
-            ) : (
-              <p className="text-center text-gray-500">
-                Data Program belum tersedia untuk kampus ini.
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

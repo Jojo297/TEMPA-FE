@@ -1,21 +1,14 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { MapPin, Calendar, Users, Clock, Map, Home } from "lucide-react";
+import { Calendar, Users, Clock, Map, Home } from "lucide-react";
 
 // *** ASUMSI IMPORTS: Pastikan semua komponen dan data ini tersedia di proyek Anda ***
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
 import kuliah from "../assets/kuliah.png";
 import { CampusHeaderProfile } from "./campusHeaderProfile";
-// Ganti dengan import aktual di proyek Anda
+import { NavbarLandingPage } from "./NavbarLandingPage";
 
-// --- Data Placeholder untuk kampusList (Hanya untuk referensi) ---
-// ASUMSI: kampus.id = 1 adalah Politeknik Negeri Batam
-
-// ------------------------------------------------------------------
-
-// === DATA PROGRAM PER KAMPUS (Dibuat berdasarkan konten gambar) ===
 const programData = {
   // ID 1: Politeknik Negeri Batam
   1: [
@@ -183,7 +176,7 @@ const programData = {
   // Data Program untuk kampus lain (ID 2, 3, dst.) akan ditambahkan di sini
 };
 
-// --- KOMPONEN PROGRAM CARD ---
+// Card program
 const ProgramCard = ({ program }) => (
   <div className="flex flex-col lg:flex-row border rounded-2xl overflow-hidden shadow-lg bg-white transition hover:shadow-xl">
     {/* Bagian Kiri: Gambar dan Judul Program Utama */}
@@ -194,7 +187,8 @@ const ProgramCard = ({ program }) => (
         backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)), url(${program.Image})`,
         backgroundColor: "#013B35",
         minHeight: "200px",
-      }}>
+      }}
+    >
       <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
         {program.Program}
       </h3>
@@ -203,9 +197,6 @@ const ProgramCard = ({ program }) => (
     {/* Bagian Kanan: Detail dan Tombol */}
     <div className="lg:w-2/3 p-6 flex flex-col justify-between">
       <div>
-        {/* Deskripsi */}
-        <p className="text-gray-600 mb-4 text-sm">{program.Deskripsi}</p>
-
         {/* Info Utama: Kampus, Jurusan, Tipe */}
         <div className="flex flex-wrap items-center space-x-4 mb-4">
           <div className="flex items-center text-[#013B35] font-semibold text-lg">
@@ -219,6 +210,9 @@ const ProgramCard = ({ program }) => (
             {program.Tipe}
           </div>
         </div>
+
+        {/* Deskripsi */}
+        <p className="text-gray-600 mb-4 text-sm">{program.Deskripsi}</p>
 
         {/* Grid Detail Waktu & Tempat */}
         <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
@@ -249,7 +243,6 @@ const ProgramCard = ({ program }) => (
   </div>
 );
 
-// --- KOMPONEN UTAMA ---
 export default function CampusProgram() {
   const { id } = useParams();
   const campusId = parseInt(id);
@@ -266,11 +259,13 @@ export default function CampusProgram() {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans flex flex-col">
-      <Navbar />
+      {/* Navbar */}
+      <NavbarLandingPage />
 
-      {/* 1. Header Kampus (Menggunakan struktur dari CampusJurusanPage) */}
       {/* Header Kampus */}
-      <CampusHeaderProfile kampus={kampus} />
+      <div className="mt-4">
+        <CampusHeaderProfile kampus={kampus} />
+      </div>
 
       {/* 2. Konten Program */}
       <section className="mt-12 max-w-6xl mx-auto px-6 md:px-0 mb-20 flex flex-col items-start w-full">
@@ -278,23 +273,27 @@ export default function CampusProgram() {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Deskripsi
           </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Prestasi
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
+          >
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
             // Kelas aktif sesuai dengan tampilan gambar (warna biru/hijau tua)
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
+          >
             Program
           </Link>
         </div>
