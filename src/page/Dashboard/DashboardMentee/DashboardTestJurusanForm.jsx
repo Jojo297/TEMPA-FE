@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { useBlocker } from "react-router";
+import useRecomendationMajors from "@/hooks/useRecomendationMajors";
 
 // validation
 const formSchema = z.object({
@@ -314,6 +315,9 @@ const QuestionRenderer = ({ question, field, error }) => {
 };
 
 export default function DashboardTestJurusanForm() {
+  const token = localStorage.getItem("userJwt");
+  const { recomendationMajors, isLoading, error, getMajors } =
+    useRecomendationMajors();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -355,6 +359,7 @@ export default function DashboardTestJurusanForm() {
   const totalQuestions = newQuestionsData.length;
   const progressValue = (answeredCount / totalQuestions) * 100;
 
+  // handle submit
   const onSubmit = (data) => {
     const processedData = { ...data };
 
@@ -380,13 +385,29 @@ export default function DashboardTestJurusanForm() {
         }
       }
     });
-    console.log("Data Asli (Tervalidasi RHF):", data);
-    console.log("Data Diproses (Siap Kirim ke Backend):", processedData);
 
-    alert(
-      "Tes selesai! Data sudah divalidasi dan siap dikirim. Silakan cek konsol."
-    );
+    // new object for format key
+    const finalDataForBackend = {};
+
+    for (let i = 1; i <= 10; i++) {
+      const oldKey = String(i);
+      const newKey = `q${i}`; // ( "q1", "q2")
+
+      if (oldKey in processedData) {
+        finalDataForBackend[newKey] = processedData[oldKey];
+      }
+    }
+
+    // console.log("Data Final (Key q1, q2, dst.):", finalDataForBackend);
+
+    // send answer
+    if (token) {
+      getMajors(token, finalDataForBackend);
+    }
   };
+
+  // store response to displayResponse
+  const displayResponse = recomendationMajors ?? [];
 
   const isFormComplete = answeredCount === totalQuestions;
 
@@ -427,6 +448,29 @@ export default function DashboardTestJurusanForm() {
     }
   }, [blocker, leaveMessage]);
 
+  if (isLoading) {
+    return <p className="flex justify-center">AI sedang berpikir 🤔...</p>;
+  }
+
+  // if (recomendationMajors.length <= 0) {
+  //   return (
+  //     <>
+  //       <div>Ini hasil response IA</div>
+  //       {displayResponse.map((item) => (
+  //         <li>item</li>
+  //       ))}
+  //     </>
+  //   );
+  // }
+
+  if (error) {
+    return (
+      <>
+        <div className="flex justify-center">{error}</div>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Header */}
@@ -445,7 +489,7 @@ export default function DashboardTestJurusanForm() {
 
       {/* alert */}
       <div className="mt-4">
-        <Alert variant="warning">
+        <Alert variant="warning" className="bg-white shadow-sm">
           <AlertCircleIcon />
           <AlertTitle>PENTING: Tes Hanya Bisa Diisi Sekali!</AlertTitle>
           <AlertDescription>
@@ -480,7 +524,7 @@ export default function DashboardTestJurusanForm() {
           ></div>
         </div>
 
-        {/* Form  */}
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
           {newQuestionsData.map((question) => (
             <Controller
