@@ -160,24 +160,6 @@ const SidebarWithNavbar = ({ children }) => {
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
-              {/* <AlertDialogContent className="bg-primary text-secondary">
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-center">
-                    Apakah Anda Yakin Ingin Keluar?
-                  </AlertDialogTitle>
-                </AlertDialogHeader>
-                <AlertDialogFooter className="">
-                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
-                    Batal
-                  </AlertDialogCancel>
-                  <Button
-                    onClick={handleLogout}
-                    className="bg-secondary text-primary hover:bg-secondary hover:text-primary transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  >
-                    Iya
-                  </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent> */}
             </AlertDialog>
           </li>
         </ul>

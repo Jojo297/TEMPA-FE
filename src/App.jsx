@@ -1,10 +1,21 @@
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+// Import dari 'react-router-dom' hanya yang dibutuhkan untuk Data Router
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
 
-// start Route landing page
+// Catatan: ScrollToTop harus direimplementasi sebagai listener di RouterProvider
+// atau sebagai hook/component yang menggunakan useLocation di dalam elemen.
+
+const SuspenseWrapper = ({ Component }) => (
+  <Suspense fallback={<LoadingRedirect />}>
+    <ScrollToTop />
+    <Component />
+  </Suspense>
+);
+
+// --- Lazy Imports ---
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentor = lazy(() => import("./page/loginMentor"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
@@ -20,14 +31,13 @@ const CampusPrestasiPage = lazy(() =>
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
-// end Route before login
 
-// start Dashboard Mentee Pages (folder DashboardMentee)
-const DashboardMenteeBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
-);
+// start Dashboard Mentee Pages
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
+);
+const DashboardMenteeBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
 );
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
@@ -38,7 +48,6 @@ const DashboardMenteeCampus = lazy(() =>
 const DashboardCampusDetail = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordCampusDetail")
 );
-
 const DashboardCampusPrestasi = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusPrestasi")
 );
@@ -57,352 +66,178 @@ const DashboardCampusProgram = lazy(() =>
 const TestJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Testjurusan")
 );
-
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
-
 const DashboardJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardJurusan")
 );
-
 const DashboardJurusanDetail = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardJurusanDetail")
 );
+const DashboardTestJurusanForm = lazy(() =>
+  import("@/page/Dashboard/DashboardMentee/DashboardTestJurusanForm")
+);
 // end dashboard mentee
 
-// start dashboard campus
+// start dashboard lainnya
 const DashboardCampus = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampus")
 );
-// end dashboard campus
-
-// start dashboard admin
 const DashboardAdmin = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
 );
-// end dashboard admin
-
-// start dashboard mentor
 const DashboardMentor = lazy(() =>
   import("@/page/Dashboard/DashboardMentor/DashboardMentor")
 );
-// end dashboard mentor
+// end dashboard lainnya
 
-export default function App() {
-  return (
-    <Router>
-      {/* for auto scroll top */}
-      <ScrollToTop />
-      <Routes>
-        {/* start route Landing Page */}
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LandingPage />
-            </Suspense>
-          }
-        />
+// --- Konfigurasi Data Router ---
+const router = createBrowserRouter([
+  // Rute Landing Page dan Halaman Publik
+  {
+    path: "/",
+    element: <SuspenseWrapper Component={LandingPage} />,
+  },
+  {
+    path: "/login-mentee",
+    element: <SuspenseWrapper Component={LoginMentee} />,
+  },
+  {
+    path: "/login-campus",
+    element: <SuspenseWrapper Component={LoginCampus} />,
+  },
+  {
+    path: "/login-mentor",
+    element: <SuspenseWrapper Component={LoginMentor} />,
+  },
+  { path: "/login-admin", element: <SuspenseWrapper Component={LoginAdmin} /> },
 
-        {/* 🔐 Login Pages */}
-        <Route
-          path="/login-mentee"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginMentee />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/login-campus"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginCampus />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/login-mentor"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginMentor />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/login-admin"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <LoginAdmin />
-            </Suspense>
-          }
-        />
+  // Rute Halaman Kampus/Jurusan Publik
+  { path: "/CampusPage", element: <SuspenseWrapper Component={CampusPage} /> },
+  {
+    path: "/JurusanPage",
+    element: <SuspenseWrapper Component={JurusanPage} />,
+  },
+  {
+    path: "/campus-detail/:id",
+    element: <SuspenseWrapper Component={CampusDetailPage} />,
+  },
+  {
+    path: "/campus/:id",
+    element: <SuspenseWrapper Component={CampusDetailPage} />,
+  },
+  {
+    path: "/campus/:id/prestasi",
+    element: <SuspenseWrapper Component={CampusPrestasiPage} />,
+  },
+  {
+    path: "/jurusan/:slug",
+    element: <SuspenseWrapper Component={DetailJurusan} />,
+  },
+  {
+    path: "/campus/:id/jurusan",
+    element: <SuspenseWrapper Component={CampusJurusanPage} />,
+  },
+  {
+    path: "/campus/:id/program",
+    element: <SuspenseWrapper Component={CampusProgram} />,
+  },
+  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
 
-        {/* 🎓 Campus Related Pages */}
-        <Route
-          path="/CampusPage"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/JurusanPage"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <JurusanPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/campus-detail/:id"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusDetailPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/campus/:id"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusDetailPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/campus/:id/prestasi"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusPrestasiPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/jurusan/:slug"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DetailJurusan />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/campus/:id/jurusan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusJurusanPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/campus/:id/program"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <CampusProgram />
-            </Suspense>
-          }
-        />
+  // --- Rute Dashboard Utama ---
+  {
+    path: "/dashboard-campus",
+    element: <SuspenseWrapper Component={DashboardCampus} />,
+  },
+  {
+    path: "/dashboard-admin",
+    element: <SuspenseWrapper Component={DashboardAdmin} />,
+  },
+  {
+    path: "/dashboard-mentor",
+    element: <SuspenseWrapper Component={DashboardMentor} />,
+  },
 
-        {/* Panduan */}
-        <Route
-          path="/panduan"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <PanduanPage />
-            </Suspense>
-          }
-        />
+  // --- Rute DASHBOARD MENTEE (NESTED ROUTES) ---
+  {
+    path: "dashboard-mentee",
+    element: <SuspenseWrapper Component={DashboardMenteePage} />, // Ini adalah Layout Dashboard Mentee
+    children: [
+      // Index Route (dashboard-mentee/)
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
+      },
+      // Rute eksplisit (dashboard-mentee/beranda)
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
+      },
+      {
+        path: "program",
+        element: <SuspenseWrapper Component={DashboardProgram} />,
+      },
+      {
+        path: "kampus",
+        element: <SuspenseWrapper Component={DashboardMenteeCampus} />,
+      },
+      {
+        path: "program/:id",
+        element: <SuspenseWrapper Component={DetailProgramMentee} />,
+      },
+      {
+        path: "program/daftar",
+        element: <SuspenseWrapper Component={DashboardMenteeProgramDaftar} />,
+      },
+      {
+        path: "test-jurusan",
+        element: <SuspenseWrapper Component={TestJurusan} />,
+      },
+      {
+        path: "test-jurusan/form",
+        element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
+      },
+      {
+        path: "jurusan",
+        element: <SuspenseWrapper Component={DashboardJurusan} />,
+      },
+      {
+        path: "jurusan/:slug",
+        element: <SuspenseWrapper Component={DashboardJurusanDetail} />,
+      },
 
-        {/* end route Landing Page */}
+      // Nested Route untuk Detail Kampus Dashboard (dashboard-mentee/kampus/:id/*)
+      {
+        path: "kampus/:id",
+        element: <SuspenseWrapper Component={DashboardCampusDetail} />,
+        children: [
+          {
+            index: true,
+            element: <CampusDescription />,
+          },
+          {
+            path: "prestasi",
+            element: <SuspenseWrapper Component={DashboardCampusPrestasi} />,
+          },
+          {
+            path: "jurusan",
+            element: <SuspenseWrapper Component={DashboardCampusJurusan} />,
+          },
+          {
+            path: "program",
+            element: <SuspenseWrapper Component={DashboardCampusProgram} />,
+          },
+        ],
+      },
+      // Rute Penilaian (jika diperlukan)
+      // {
+      //   path: "penilaian",
+      //   element: <SuspenseWrapper Component={Penilaian} />,
+      // },
+    ],
+  },
+]);
 
-        {/* start Dashboard Mentee */}
-        <Route path="dashboard-mentee" element={<DashboardMenteePage />}>
-          {/* start dashboard beranda */}
-          <Route
-            index
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardMenteeBeranda />
-              </Suspense>
-            }
-          />
-          {/* end dashboard beranda */}
-
-          <Route
-            path="beranda"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardMenteeBeranda />
-              </Suspense>
-            }
-          />
-
-          {/* Program Dashboard Mentee */}
-          <Route
-            path="program"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardProgram />
-              </Suspense>
-            }
-          />
-
-          {/* Kampus Dashboard Mentee */}
-          <Route
-            path="kampus"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardMenteeCampus />
-              </Suspense>
-            }
-          />
-
-          {/* Detail Kampus Dashboard */}
-          <Route
-            path="kampus/:id"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardCampusDetail />
-              </Suspense>
-            }
-          >
-            {/* child route detail campus */}
-
-            {/* description campus */}
-            <Route
-              index
-              element={
-                <Suspense fallback={<LoadingRedirect />}>
-                  <CampusDescription />
-                </Suspense>
-              }
-            />
-            {/* Prestasi Kampus Dashboard */}
-            <Route
-              path="prestasi"
-              element={
-                <Suspense fallback={<LoadingRedirect />}>
-                  <DashboardCampusPrestasi />
-                </Suspense>
-              }
-            />
-            {/* Jurusan Kampus Dashboard */}
-            <Route
-              path="jurusan"
-              element={
-                <Suspense fallback={<LoadingRedirect />}>
-                  <DashboardCampusJurusan />
-                </Suspense>
-              }
-            />
-
-            {/* Program Kampus Dashboard Mentee */}
-            <Route
-              path="program"
-              element={
-                <Suspense fallback={<LoadingRedirect />}>
-                  <DashboardCampusProgram />
-                </Suspense>
-              }
-            />
-          </Route>
-
-          {/* Detail Program Dashboard Mentee */}
-          <Route
-            path="program/:id"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DetailProgramMentee />
-              </Suspense>
-            }
-          />
-
-          {/* Form Daftar Program Dashboard Mentee */}
-          <Route
-            path="program/daftar"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardMenteeProgramDaftar />
-              </Suspense>
-            }
-          />
-
-          {/* Test Jurusan Mentee */}
-          <Route
-            path="test-jurusan"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <TestJurusan />
-              </Suspense>
-            }
-          />
-
-          {/* Penilaian */}
-          {/* <Route
-            path="Penilaian"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <Penilaian />
-              </Suspense>
-            }
-          /> */}
-
-          {/* dashboard mentee jurusan */}
-          <Route
-            path="jurusan"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardJurusan />
-              </Suspense>
-            }
-          />
-
-          <Route
-            path="jurusan/:slug"
-            element={
-              <Suspense fallback={<LoadingRedirect />}>
-                <DashboardJurusanDetail />
-              </Suspense>
-            }
-          />
-        </Route>
-        {/* end Dashboard Mentee */}
-
-        {/* start dashboard campus */}
-        <Route
-          path="/dashboard-campus"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardCampus />
-            </Suspense>
-          }
-        />
-        {/* end dashboard campus */}
-
-        {/* start dashboard admin */}
-        <Route
-          path="/dashboard-admin"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardAdmin />
-            </Suspense>
-          }
-        />
-        {/* end dashboard admin */}
-
-        {/* start dashboard mentor */}
-        <Route
-          path="/dashboard-mentor"
-          element={
-            <Suspense fallback={<LoadingRedirect />}>
-              <DashboardMentor />
-            </Suspense>
-          }
-        />
-        {/* end dashboard admin */}
-      </Routes>
-    </Router>
-  );
-}
+// Ekspor objek router untuk digunakan di main.jsx
+export default router;
