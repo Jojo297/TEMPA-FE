@@ -9,6 +9,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useBlocker, useNavigate } from "react-router";
 import useRecomendationMajors from "@/hooks/useRecomendationMajors";
 import RecomendationMajors from "@/components/RecomendationMajors";
+import LoadingAiRecomendationMajors from "@/components/LoadingAiRecomendationMajors";
+import LoadingSkeletonFetchRecomendationMajors from "@/components/LoadingSkeletonFetchRecomendationMajors";
 
 // validation
 const formSchema = z.object({
@@ -404,29 +406,6 @@ export default function DashboardTestJurusanForm() {
     }
   }, [blocker, leaveMessage]);
 
-  // State untuk teks loading yang dinamis
-  const [loadingText, setLoadingText] = useState("Menganalisis minat Anda");
-
-  // Efek untuk mengubah teks loading setiap beberapa detik
-  useEffect(() => {
-    if (isLoadingSubmit) {
-      const texts = [
-        "Menganalisis minat Anda...",
-        "Menghubungkan data kecocokan...",
-        "Membandingkan dengan 10.000 profil...",
-        "Merumuskan rekomendasi terbaik...",
-      ];
-      let index = 0;
-
-      const interval = setInterval(() => {
-        index = (index + 1) % texts.length;
-        setLoadingText(texts[index]);
-      }, 3000); // Ganti teks setiap 3 detik
-
-      return () => clearInterval(interval);
-    }
-  }, [isLoadingSubmit]);
-
   // response ai
   useEffect(() => {
     if (token) {
@@ -437,12 +416,13 @@ export default function DashboardTestJurusanForm() {
   const displayResponse = recomendationMajors ?? [];
   console.log(displayResponse);
 
+  // if mentee already assign form
   if (displayResponse.length > 0) {
     return <RecomendationMajors responseAI={displayResponse} />;
   }
 
   // handle submit
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const processedData = { ...data };
 
     // filter to get question type radio
@@ -484,83 +464,21 @@ export default function DashboardTestJurusanForm() {
 
     // send answer
     if (token) {
-      getMajors(token, finalDataForBackend);
+      await getMajors(token, finalDataForBackend);
+      await fetchResponseAi(token);
     }
   };
 
   const isFormComplete = answeredCount === totalQuestions;
 
+  // loading submit
+  if (isLoadingSubmit) {
+    return <LoadingAiRecomendationMajors />;
+  }
+
+  // loading fetch
   if (isLoadingFetch) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 bg-gray-50">
-        {/* Kontainer Animasi Robot/AI */}
-        <div className="relative w-24 h-24 mb-6">
-          {/* Base Lingkaran / Otak AI */}
-          <div className="absolute inset-0 bg-secondary rounded-full opacity-30 animate-ping-slow"></div>
-
-          {/* Ikon Utama */}
-          <div className="absolute inset-0 flex items-center justify-center bg-primary rounded-full shadow-lg">
-            {/* Mengganti ikon robot dengan ikon otak atau kecerdasan buatan */}
-            <svg
-              className="w-12 h-12 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 11h10a3 3 0 013 3v1a3 3 0 01-3 3H7a3 3 0 01-3-3v-1a3 3 0 013-3z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-
-        {/* Teks Loading Dinamis */}
-        <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
-          AI sedang berpikir...
-        </h2>
-
-        <p className="text-md text-gray-600 font-medium text-center transition-opacity duration-500">
-          {loadingText}
-        </p>
-
-        {/* Animasi Dots Berkedip (Opsional) */}
-        <div className="flex space-x-1 mt-4">
-          <div
-            className="w-2 h-2 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0s" }}
-          ></div>
-          <div
-            className="w-2 h-2 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0.2s" }}
-          ></div>
-          <div
-            className="w-2 h-2 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0.4s" }}
-          ></div>
-        </div>
-
-        {/* Tambahkan custom CSS untuk ping-slow di file CSS global atau blok style jika perlu */}
-        <style jsx global>{`
-          @keyframes ping-slow {
-            0% {
-              transform: scale(0.6);
-              opacity: 0.8;
-            }
-            100% {
-              transform: scale(1.5);
-              opacity: 0;
-            }
-          }
-          .animate-ping-slow {
-            animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
-          }
-        `}</style>
-      </div>
-    );
+    return <LoadingSkeletonFetchRecomendationMajors />;
   }
 
   // error handling

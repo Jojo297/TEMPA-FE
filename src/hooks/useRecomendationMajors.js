@@ -8,14 +8,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const useRecomendationMajors = create((set) => ({
   // State
   recomendationMajors: [],
-  isLoadingSubmit: false, // Digunakan untuk submit form (getMajors)
-  isLoadingFetch: false, // Digunakan untuk cek hasil awal (fetchResponseAi)
+  isLoadingSubmit: false, // use for submit form (getMajors)
+  isLoadingFetch: false, // use for (fetchResponseAi)
   error: null,
 
-  // Actions get data program mentee
+  // Actions submit form
   getMajors: async (token, data) => {
-    set({ isLoadingSubmit: true, error: null }); // <-- Gunakan isLoadingSubmit
-
+    set({ isLoadingSubmit: true, error: null });
     try {
       const API_URL = `${API_BASE_URL}/mentee/recomendation-major`;
 
@@ -37,11 +36,8 @@ const useRecomendationMajors = create((set) => ({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      // Setelah POST berhasil, kita TIDAK mengupdate data di sini,
-      // tapi akan memanggil fetchResponseAi di komponen.
       set({
-        isLoadingSubmit: false, // <-- Setel ke false
+        isLoadingSubmit: false,
         error: null,
       });
     } catch (error) {
@@ -53,16 +49,16 @@ const useRecomendationMajors = create((set) => ({
           : error.response?.data?.message || "Gagal mengirim data program.";
 
       set({
-        isLoadingSubmit: false, // <-- Setel ke false
+        isLoadingSubmit: false,
         error: errorMessage,
       });
-      throw error; // Lempar error agar bisa di-catch saat submit
+      throw error;
     }
   },
 
-  // Actions get data program mentee
+  // Actions get data response ai from database
   fetchResponseAi: async (token) => {
-    set({ isLoadingFetch: true, error: null }); // <-- Gunakan isLoadingFetch
+    set({ isLoadingFetch: true, error: null });
 
     try {
       const API_URL = `${API_BASE_URL}/mentee/get-response`;
@@ -71,26 +67,33 @@ const useRecomendationMajors = create((set) => ({
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // PENTING: Asumsi struktur data adalah response.data.data.response_ai
-      // Jika response.data.data sudah berupa array/objek rekomendasi,
-      // hapus .response_ai, tapi saya asumsikan perlu sesuai pengalaman sebelumnya.
-      const fetchedResponseAi =
-        response.data.data.response_ai || response.data.data;
+      const fetchedResponseAi = response.data.data.response_ai ?? [];
 
       set({
         recomendationMajors: fetchedResponseAi,
-        isLoadingFetch: false, // <-- Setel ke false
+        isLoadingFetch: false,
         error: null,
       });
     } catch (error) {
       console.error("Failed to fetch response:", error);
 
+      // if status 404 thats means mentee is have never filled out the form
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        set({
+          recomendationMajors: [],
+          isLoadingFetch: false,
+          error: null,
+        });
+        return;
+      }
+
+      // Untuk error lain (500, jaringan, dll) tetap set error
       const errorMessage =
         error.response?.data?.message || "Gagal mengambil response ai.";
 
       set({
-        isLoadingFetch: false, // <-- Setel ke false
-        error: errorMessage,
+        isLoadingFetch: false,
+        error: errorMessage, // Ini akan memicu render Error di komponen
       });
     }
   },
