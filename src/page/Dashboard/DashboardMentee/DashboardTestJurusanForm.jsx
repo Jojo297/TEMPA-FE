@@ -5,9 +5,10 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, AlertCircleIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo } from "react";
-import { useBlocker } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useBlocker, useNavigate } from "react-router";
 import useRecomendationMajors from "@/hooks/useRecomendationMajors";
+import RecomendationMajors from "@/components/RecomendationMajors";
 
 // validation
 const formSchema = z.object({
@@ -316,8 +317,15 @@ const QuestionRenderer = ({ question, field, error }) => {
 
 export default function DashboardTestJurusanForm() {
   const token = localStorage.getItem("userJwt");
-  const { recomendationMajors, isLoading, error, getMajors } =
-    useRecomendationMajors();
+  const {
+    recomendationMajors,
+    isLoadingSubmit,
+    isLoadingFetch,
+    error,
+    getMajors,
+    fetchResponseAi,
+  } = useRecomendationMajors();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -358,6 +366,80 @@ export default function DashboardTestJurusanForm() {
 
   const totalQuestions = newQuestionsData.length;
   const progressValue = (answeredCount / totalQuestions) * 100;
+
+  // handle if the user suddenly exits the form (reload or close tab)
+  const shouldBlockNavigation = isDirty && !isSubmitting;
+  const leaveMessage =
+    "Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?";
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (isDirty && !isSubmitting) {
+        event.preventDefault();
+        event.returnValue = "";
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty, isSubmitting, shouldBlockNavigation]);
+
+  let blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      shouldBlockNavigation &&
+      currentLocation.pathname !== nextLocation.pathname
+  );
+
+  // handle if the user suddenly exits the form (navigate client side)
+  useEffect(() => {
+    if (blocker.state === "blocked") {
+      if (window.confirm(leaveMessage)) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker, leaveMessage]);
+
+  // State untuk teks loading yang dinamis
+  const [loadingText, setLoadingText] = useState("Menganalisis minat Anda");
+
+  // Efek untuk mengubah teks loading setiap beberapa detik
+  useEffect(() => {
+    if (isLoadingSubmit) {
+      const texts = [
+        "Menganalisis minat Anda...",
+        "Menghubungkan data kecocokan...",
+        "Membandingkan dengan 10.000 profil...",
+        "Merumuskan rekomendasi terbaik...",
+      ];
+      let index = 0;
+
+      const interval = setInterval(() => {
+        index = (index + 1) % texts.length;
+        setLoadingText(texts[index]);
+      }, 3000); // Ganti teks setiap 3 detik
+
+      return () => clearInterval(interval);
+    }
+  }, [isLoadingSubmit]);
+
+  // response ai
+  useEffect(() => {
+    if (token) {
+      fetchResponseAi(token);
+    }
+  }, [token, fetchResponseAi]);
+  // store response to displayResponse
+  const displayResponse = recomendationMajors ?? [];
+  console.log(displayResponse);
+
+  if (displayResponse.length > 0) {
+    return <RecomendationMajors responseAI={displayResponse} />;
+  }
 
   // handle submit
   const onSubmit = (data) => {
@@ -406,63 +488,82 @@ export default function DashboardTestJurusanForm() {
     }
   };
 
-  // store response to displayResponse
-  const displayResponse = recomendationMajors ?? [];
-
   const isFormComplete = answeredCount === totalQuestions;
 
-  // handle if the user suddenly exits the form (reload or close tab)
-  const shouldBlockNavigation = isDirty && !isSubmitting;
-  const leaveMessage =
-    "Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?";
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (isDirty && !isSubmitting) {
-        event.preventDefault();
-        event.returnValue = "";
-        return "";
-      }
-    };
+  if (isLoadingFetch) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 bg-gray-50">
+        {/* Kontainer Animasi Robot/AI */}
+        <div className="relative w-24 h-24 mb-6">
+          {/* Base Lingkaran / Otak AI */}
+          <div className="absolute inset-0 bg-secondary rounded-full opacity-30 animate-ping-slow"></div>
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+          {/* Ikon Utama */}
+          <div className="absolute inset-0 flex items-center justify-center bg-primary rounded-full shadow-lg">
+            {/* Mengganti ikon robot dengan ikon otak atau kecerdasan buatan */}
+            <svg
+              className="w-12 h-12 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 11h10a3 3 0 013 3v1a3 3 0 01-3 3H7a3 3 0 01-3-3v-1a3 3 0 013-3z"
+              ></path>
+            </svg>
+          </div>
+        </div>
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isDirty, isSubmitting, shouldBlockNavigation]);
+        {/* Teks Loading Dinamis */}
+        <h2 className="text-xl font-semibold text-gray-800 text-center mb-2">
+          AI sedang berpikir...
+        </h2>
 
-  let blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      shouldBlockNavigation &&
-      currentLocation.pathname !== nextLocation.pathname
-  );
+        <p className="text-md text-gray-600 font-medium text-center transition-opacity duration-500">
+          {loadingText}
+        </p>
 
-  // handle if the user suddenly exits the form (navigate client side)
-  useEffect(() => {
-    if (blocker.state === "blocked") {
-      if (window.confirm(leaveMessage)) {
-        blocker.proceed();
-      } else {
-        blocker.reset();
-      }
-    }
-  }, [blocker, leaveMessage]);
+        {/* Animasi Dots Berkedip (Opsional) */}
+        <div className="flex space-x-1 mt-4">
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-pulse"
+            style={{ animationDelay: "0s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-pulse"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-pulse"
+            style={{ animationDelay: "0.4s" }}
+          ></div>
+        </div>
 
-  if (isLoading) {
-    return <p className="flex justify-center">AI sedang berpikir 🤔...</p>;
+        {/* Tambahkan custom CSS untuk ping-slow di file CSS global atau blok style jika perlu */}
+        <style jsx global>{`
+          @keyframes ping-slow {
+            0% {
+              transform: scale(0.6);
+              opacity: 0.8;
+            }
+            100% {
+              transform: scale(1.5);
+              opacity: 0;
+            }
+          }
+          .animate-ping-slow {
+            animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+          }
+        `}</style>
+      </div>
+    );
   }
 
-  // if (recomendationMajors.length <= 0) {
-  //   return (
-  //     <>
-  //       <div>Ini hasil response IA</div>
-  //       {displayResponse.map((item) => (
-  //         <li>item</li>
-  //       ))}
-  //     </>
-  //   );
-  // }
-
+  // error handling
   if (error) {
     return (
       <>

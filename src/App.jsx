@@ -190,12 +190,12 @@ const router = createBrowserRouter([
         path: "program/daftar",
         element: <SuspenseWrapper Component={DashboardMenteeProgramDaftar} />,
       },
+      // {
+      //   path: "test-jurusan",
+      //   element: <SuspenseWrapper Component={TestJurusan} />,
+      // },
       {
         path: "test-jurusan",
-        element: <SuspenseWrapper Component={TestJurusan} />,
-      },
-      {
-        path: "test-jurusan/form",
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
       },
       {

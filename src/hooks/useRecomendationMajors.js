@@ -1,3 +1,5 @@
+// File: src/hooks/useRecomendationMajors.js
+
 import { create } from "zustand";
 import axios from "axios";
 
@@ -6,18 +8,18 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const useRecomendationMajors = create((set) => ({
   // State
   recomendationMajors: [],
-  isLoading: false,
+  isLoadingSubmit: false, // Digunakan untuk submit form (getMajors)
+  isLoadingFetch: false, // Digunakan untuk cek hasil awal (fetchResponseAi)
   error: null,
 
   // Actions get data program mentee
   getMajors: async (token, data) => {
-    set({ isLoading: true, error: null });
+    set({ isLoadingSubmit: true, error: null }); // <-- Gunakan isLoadingSubmit
 
     try {
-      console.log(data);
-      const API_URL = `${API_BASE_URL}/mentee/recomendation-major`; // Ganti dengan URL API Anda
+      const API_URL = `${API_BASE_URL}/mentee/recomendation-major`;
 
-      const response = await axios.post(
+      await axios.post(
         API_URL,
         {
           q1: data.q1,
@@ -32,31 +34,62 @@ const useRecomendationMajors = create((set) => ({
           q10: data.q10,
         },
         {
-          headers: {
-            // Mengirim JWT dalam header Authorization
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      const fetchedPrograms = response.data.data;
-
+      // Setelah POST berhasil, kita TIDAK mengupdate data di sini,
+      // tapi akan memanggil fetchResponseAi di komponen.
       set({
-        recomendationMajors: fetchedPrograms,
-        isLoading: false,
+        isLoadingSubmit: false, // <-- Setel ke false
         error: null,
       });
     } catch (error) {
-      console.error("Failed to fetch programs:", error);
-
+      console.error("Failed to post submission:", error);
       const errorMessage =
         error.response?.data?.message ===
         "The model is overloaded. Please try again later."
           ? "Server AI sedang sibuk. Mohon tunggu 1-2 menit lalu coba KIRIM ULANG."
-          : error.response?.data?.message || "Gagal mengambil data program.";
+          : error.response?.data?.message || "Gagal mengirim data program.";
 
       set({
-        isLoading: false,
+        isLoadingSubmit: false, // <-- Setel ke false
+        error: errorMessage,
+      });
+      throw error; // Lempar error agar bisa di-catch saat submit
+    }
+  },
+
+  // Actions get data program mentee
+  fetchResponseAi: async (token) => {
+    set({ isLoadingFetch: true, error: null }); // <-- Gunakan isLoadingFetch
+
+    try {
+      const API_URL = `${API_BASE_URL}/mentee/get-response`;
+
+      const response = await axios.get(API_URL, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // PENTING: Asumsi struktur data adalah response.data.data.response_ai
+      // Jika response.data.data sudah berupa array/objek rekomendasi,
+      // hapus .response_ai, tapi saya asumsikan perlu sesuai pengalaman sebelumnya.
+      const fetchedResponseAi =
+        response.data.data.response_ai || response.data.data;
+
+      set({
+        recomendationMajors: fetchedResponseAi,
+        isLoadingFetch: false, // <-- Setel ke false
+        error: null,
+      });
+    } catch (error) {
+      console.error("Failed to fetch response:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Gagal mengambil response ai.";
+
+      set({
+        isLoadingFetch: false, // <-- Setel ke false
         error: errorMessage,
       });
     }
@@ -64,7 +97,12 @@ const useRecomendationMajors = create((set) => ({
 
   // function for clear state
   clearRecomdationMajors: () =>
-    set({ recomendationMajors: [], isLoading: false, error: null }),
+    set({
+      recomendationMajors: [],
+      isLoadingSubmit: false,
+      isLoadingFetch: false,
+      error: null,
+    }),
 }));
 
 export default useRecomendationMajors;
