@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGetAllProgram from "@/hooks/useGetAllProgram";
 import DashboardProgramSkeleton from "@/components/DashboardProgramSkeleton";
 import {
@@ -12,15 +12,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import NotFounPages from "@/components/NotFoundPages";
 
 export default function DashboardProgram() {
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const { programs, isLoading, error, fetchPrograms } = useGetAllProgram();
 
   // store all program
   const displayAllProgram = programs ?? [];
-  console.log(displayAllProgram);
+  // console.log(displayAllProgram);
 
   // badge for status program
   const getBadgeClass = (status) => {
@@ -40,6 +42,7 @@ export default function DashboardProgram() {
     }
   };
 
+  // get location if type program onsite
   const getLocation = (status, item) => {
     switch (status) {
       case "online":
@@ -62,8 +65,14 @@ export default function DashboardProgram() {
     return <DashboardProgramSkeleton />;
   }
 
+  // handle search majors
+  const filteredPrograms = displayAllProgram.filter((item) =>
+    item.program_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // handle not found
   if (!displayAllProgram) {
-    return <p>Program tidak ditemukan.</p>;
+    return <NotFounPages message={"Program tidak ditemukan"} />;
   }
 
   // handling error
@@ -114,93 +123,131 @@ export default function DashboardProgram() {
           </div>
 
           {/* Rekomendasi Section */}
-          <section className="mb-12">
-            <h2 className="text-xl font-bold mb-4">Rekomendasi</h2>
-            <div className="bg-white shadow-md rounded-xl overflow-hidden flex flex-col md:flex-row">
-              <div className="md:w-1/3 relative">
-                <img
-                  src={programs[0].img}
-                  alt="Program"
-                  className="object-cover w-full h-full"
+
+          {/* Seluruh Program Section */}
+          <section>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+              <h2 className="text-xl font-bold mb-4 items-center">
+                Seluruh Program
+              </h2>
+              {/* input search */}
+              <div className="relative w-full md:w-60">
+                <Search
+                  size={16}
+                  className="absolute top-2.5 left-3 text-gray-400"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <h3 className="text-white text-xl font-bold text-center leading-tight">
-                    KULIAH <br /> BERSERTIFIKAT <br /> 1 HARI
-                  </h3>
-                </div>
-              </div>
-              <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
-                <p className="text-sm mb-4">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
-                <div className="flex flex-wrap text-sm mb-4 border-t border-gray-500 pt-4">
-                  <p className="mr-4">
-                    {programs[0].campus} | {programs[0].category} |{" "}
-                    {programs[0].type}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-6 text-sm mb-4">
-                  <p>📅 {programs[0].date}</p>
-                  <p>🕒 {programs[0].time}</p>
-                  <p>👥 {programs[0].capacity}</p>
-                  <p>📍 {programs[0].location}</p>
-                </div>
-                <Link
-                  to={`/dashboard-mentee/program/${programs[0].id}`}
-                  className="mt-6 bg-[#B4D0E7] text-[#0E3B3D] py-2 px-48 rounded-md font-semibold hover:bg-[#A3C5E0] transition inline-block text-center">
-                  Lihat Detail
-                </Link>
+                <input
+                  type="text"
+                  placeholder="Cari program..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
+                />
               </div>
             </div>
             {/* Card Program */}
             <div className="flex flex-col gap-8">
               {/* Card Program */}
-              {displayAllProgram.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
-                  {/* left side */}
+              {filteredPrograms.length <= 0 ? (
+                <NotFounPages message={"Program tidak ditemukan"} />
+              ) : (
+                filteredPrograms.map((item) => (
                   <div
-                    className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
-                    // Menggunakan background image dengan overlay warna untuk efek keren
-                    style={{
-                      backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
-                      backgroundColor: "#013B35",
-                      minHeight: "200px",
-                    }}>
-                    {/* Completion Status */}
-                    {(() => {
-                      // get badge status
-                      const statusData = getBadgeClass(item.program_status);
-                      return (
-                        <div
-                          className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
-                          {statusData.text}
+                    key={item.id}
+                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
+                    {/* left side */}
+                    <div
+                      className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+                      // Menggunakan background image dengan overlay warna untuk efek keren
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
+                        backgroundColor: "#013B35",
+                        minHeight: "200px",
+                      }}>
+                      {/* Completion Status */}
+                      {(() => {
+                        // get badge status
+                        const statusData = getBadgeClass(item.program_status);
+                        return (
+                          <div
+                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
+                            {statusData.text}
+                          </div>
+                        );
+                      })()}
+                      <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                        {item.program_name}
+                      </h3>
+                    </div>
+
+                    {/* right side */}
+                    <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+                      <div>
+                        {/* Main info: Kampus, Jurusan */}
+                        <div className="flex flex-wrap items-center space-x-4 mb-4">
+                          <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                            <span>{item.program_name}</span>
+                          </div>
+                          <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
+                            {item.major_name}
+                          </div>
+                          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                            {item.type_sesi}
+                          </div>
                         </div>
-                      );
-                    })()}
-                    <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
-                      {item.program_name}
-                    </h3>
-                  </div>
-                  <div className="md:w-2/3 p-6 bg-[#0E3B3D] text-white flex flex-col justify-between">
-                    <p className="text-sm mb-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                    <div className="flex flex-wrap text-sm mb-4 border-t border-gray-500 pt-4">
-                      <p className="mr-4">
-                        {item.campus} | {item.category} | {item.type}
-                      </p>
+
+                        {/* description */}
+                        <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                          {item.description}
+                        </p>
+
+                        {/* date and location */}
+                        <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                          <div className="flex items-center">
+                            <Calendar
+                              size={16}
+                              className="mr-2 text-[#013B35]"
+                            />
+                            <span>
+                              {new Date(item.start_date).toLocaleDateString(
+                                "id-ID",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Home size={16} className="mr-2 text-[#013B35]" />
+                            <span>{item.campus_name}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users size={16} className="mr-2 text-[#013B35]" />
+                            <span>{item.capacity} Orang</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Map size={16} className="mr-2 text-[#013B35]" />
+                            <span>
+                              Tempat: {getLocation(item.type_sesi, item)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Button */}
+                        <button
+                          onClick={() =>
+                            navigate(`/dashboard-mentee/program/${item.id}`)
+                          }
+                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                          Lihat Detail Program
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-6 text-sm mb-4">
-                      <p>📅 {item.date}</p>
-                      <p>🕒 {item.time}</p>
-                      <p>👥 {item.capacity}</p>
-                      <p>📍 {item.location}</p>
-                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </section>
         </main>

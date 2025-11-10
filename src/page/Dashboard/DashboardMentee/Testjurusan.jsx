@@ -1,7 +1,8 @@
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
-import robot1 from "@/assets/robot-normal.png"; // ganti dengan path gambar robot kamu
+import robot1 from "@/assets/robot-normal.png";
+import { useNavigate } from "react-router";
 
 export default function TestJurusan() {
+  const navigate = useNavigate();
   const history = [
     { id: 1, date: "Kamis, 16 Oktober 2025" },
     { id: 2, date: "Kamis, 16 Oktober 2025" },
@@ -10,14 +11,17 @@ export default function TestJurusan() {
 
   return (
     <>
-      {/* Tes Jurusan */}
+      {/* Header */}
       <section className="bg-[#013B35] text-center text-white rounded-2xl py-10 px-6 shadow-md">
         <h1 className="text-2xl font-semibold mb-2">Tes Jurusan</h1>
         <p className="text-gray-200 max-w-2xl mx-auto mb-6">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <button className="bg-[#A5E3E7] text-[#013B35] font-semibold px-6 py-2 rounded-lg hover:bg-[#90d6db] transition">
+        <button
+          onClick={() => navigate("form")}
+          className="bg-[#A5E3E7] text-[#013B35] font-semibold px-6 py-2 rounded-lg hover:bg-[#90d6db] transition"
+        >
           Mulai Tes
         </button>
       </section>
