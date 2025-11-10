@@ -138,22 +138,26 @@ const SidebarWithNavbar = ({ children }) => {
                   <span>KELUAR</span>
                 </Link>
               </AlertDialogTrigger>
-              <AlertDialogContent className="bg-primary text-secondary">
+              <AlertDialogContent className="bg-primary">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-center">
-                    Apakah Anda Yakin Ingin Keluar?
+                  <AlertDialogTitle className="text-secondary">
+                    Yakin ingin keluar?
                   </AlertDialogTitle>
+                  <AlertDialogDescription className="text-secondary">
+                    Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
+                    kembali kapan saja dengan alamat email Anda.
+                  </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="flex justify-center">
-                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
+                <AlertDialogFooter className="flex justify-end">
+                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70 hover:duration-100">
                     Cancel
                   </AlertDialogCancel>
-                  <Button
+                  <AlertDialogAction
                     onClick={handleLogout}
-                    className="bg-secondary text-primary hover:bg-secondary hover:text-primary transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70 hover:duration-100"
                   >
-                    Iya, Saya Yakin
-                  </Button>
+                    Continue
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import useGetAllCampus from "@/hooks/useGetAllCampus";
 import DashboardCampusSkeleton from "@/components/DashboardCampusSkeleton";
+import NotFounPages from "@/components/NotFoundPages";
 
 export default function DashboardCampus() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,6 +111,7 @@ export default function DashboardCampus() {
       <section>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
           <h2 className="text-xl font-bold">Seluruh Kampus</h2>
+          {/* input search */}
           <div className="relative w-full md:w-60">
             <Search
               size={16}
@@ -152,9 +154,7 @@ export default function DashboardCampus() {
             </Link>
           ))}
           {filteredKampus.length === 0 && (
-            <p className="text-center text-gray-500 col-span-full">
-              Kampus tidak ditemukan
-            </p>
+            <NotFounPages message={"Kampus tidak ditemukan"} />
           )}
         </div>
       </section>
