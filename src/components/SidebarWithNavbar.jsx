@@ -44,6 +44,7 @@ const SidebarWithNavbar = ({ children }) => {
 
     localStorage.removeItem("userJwt");
     navigate("/");
+    toast.success("Anda Berhasil Keluar!");
   };
 
   const menuItems = [
@@ -138,12 +139,12 @@ const SidebarWithNavbar = ({ children }) => {
                   <span>KELUAR</span>
                 </Link>
               </AlertDialogTrigger>
-              <AlertDialogContent className="bg-primary">
+              <AlertDialogContent className="bg-primary text-white">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-secondary">
+                  <AlertDialogTitle className="">
                     Yakin ingin keluar?
                   </AlertDialogTitle>
-                  <AlertDialogDescription className="text-secondary">
+                  <AlertDialogDescription className="text-white">
                     Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
                     kembali kapan saja dengan alamat email Anda.
                   </AlertDialogDescription>
