@@ -203,7 +203,6 @@ export default function DashboardJurusanDetail() {
             <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
               {displayDetailMajor.major_name}
             </h1>
-            >>>>>>> 3bd7954171237497e5f299113dfce8d57432e9af
           </div>
         </div>
       </div>

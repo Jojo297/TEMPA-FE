@@ -75,46 +75,80 @@ const DashboardJurusan = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 py-6">
-      {/* Header Section */}
-      <div className="bg-[#003135] text-white p-6 rounded-2xl shadow-md mb-8 text-center">
-        <h1 className="text-2xl font-semibold mb-2">Jurusan</h1>
-        <p className="text-sm">
-          Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan minat
-          serta bakatmu.
-        </p>
-      </div>
+    <>
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">Jurusan</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="min-h-screen  ">
+        {/* header Section */}
+        <div className="bg-primary text-white p-6 rounded-2xl shadow-md mb-8 text-center">
+          <h1 className="text-2xl font-semibold mb-2">Jurusan</h1>
+          <p className="text-sm">
+            Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan
+            minat serta bakatmu.
+          </p>
+        </div>
 
-      {/* all majors section */}
-      <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Seluruh Jurusan</h2>
-          <div className="relative w-64">
-            <input
-              type="text"
-              placeholder="Cari Jurusan"
-              className="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#003135]"
-            />
-            <Search
-              className="absolute left-3 top-2.5 text-gray-500"
-              size={18}
-            />
+        {/* all majors section */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold">Seluruh Jurusan</h2>
+            <div className="relative w-64">
+              <input
+                type="text"
+                placeholder="Cari Jurusan"
+                className="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#003135]"
+              />
+              <Search
+                className="absolute left-3 top-2.5 text-gray-500"
+                size={18}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          {seluruhJurusan.map((item, index) => (
-            <Link
-              to={`/dashboard-mentee/jurusan/${item.name.toLowerCase()}`}
-              key={index}
-              className="bg-[#003135] text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
-              {item.icon}
-              <p className="mt-2 text-sm font-medium">{item.name}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </div>
+          {/* card majors */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {/* majors not found */}
+            {displayMajors.length <= 0 ? (
+              <div className="col-span-full flex justify-center py-16 w-full">
+                <div className="flex flex-col items-center justify-center">
+                  <img
+                    src={roboterror}
+                    alt="Belum Ada Aktivitas"
+                    className="w-40 mb-4"
+                  />
+                  <div className="text-center">
+                    <p className="text-gray-600">Jurusan Tidak Ada</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // card majors
+              mergedData.map((item) => (
+                <Link
+                  to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
+                  key={item.id}
+                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
+                  {item.icon}
+                  <p className="mt-2 text-sm font-medium">{item.major_name}</p>
+                </Link>
+              ))
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 
