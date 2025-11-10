@@ -16,7 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetDetailCampus from "@/hooks/useGetDetailCampus";
+import useGetDetailCampus from "@/hooks/hooksMentee/useGetDetailCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 
 const DashboardCampusDetail = () => {

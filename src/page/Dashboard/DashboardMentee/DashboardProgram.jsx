@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import useGetAllProgram from "@/hooks/useGetAllProgram";
+import useGetAllProgram from "@/hooks/hooksMentee/useGetAllProgram";
 import DashboardProgramSkeleton from "@/components/DashboardProgramSkeleton";
 import {
   Breadcrumb,

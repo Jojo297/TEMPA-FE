@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Calendar, Home, Map, Users } from "lucide-react";
-import useGetDetailMajor from "@/hooks/useGetDetailMajor";
+import useGetDetailMajor from "@/hooks/hooksMentee/useGetDetailMajor";
 import MajorDetailSkeleton from "@/components/MajorDetailSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 

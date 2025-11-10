@@ -179,7 +179,7 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
       },
       {
-        path: "materi",
+        path: "materi/:id",
         element: <SuspenseWrapper Component={DashboardMenteeMateri} />,
       },
       {

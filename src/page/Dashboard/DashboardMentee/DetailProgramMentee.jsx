@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import useGetDetailProgram from "@/hooks/useGetDetailProgram";
+import useGetDetailProgram from "@/hooks/hooksMentee/useGetDetailProgram";
 import DetailProgramSkeleton from "@/components/DetailProgramSkeleton";
 import {
   Breadcrumb,
@@ -21,7 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useRegisterProgram from "@/hooks/useRegisterProgram";
+import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
