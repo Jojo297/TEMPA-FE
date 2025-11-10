@@ -78,6 +78,10 @@ const DashboardJurusanDetail = lazy(() =>
 const DashboardTestJurusanForm = lazy(() =>
   import("@/page/Dashboard/DashboardMentee/DashboardTestJurusanForm")
 );
+const DashboardMenteeMateri = lazy(() =>
+  import("@/page/Dashboard/DashboardMentee/DashboardMenteeMateri")
+);
+
 // end dashboard mentee
 
 // start dashboard lainnya
@@ -173,6 +177,10 @@ const router = createBrowserRouter([
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
+      },
+      {
+        path: "materi",
+        element: <SuspenseWrapper Component={DashboardMenteeMateri} />,
       },
       {
         path: "program",
