@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { useBlocker, useNavigate } from "react-router";
-import useRecomendationMajors from "@/hooks/useRecomendationMajors";
+import useRecomendationMajors from "@/hooks/hooksMentee/useRecomendationMajors";
 import RecomendationMajors from "@/components/RecomendationMajors";
 import LoadingAiRecomendationMajors from "@/components/LoadingAiRecomendationMajors";
 import LoadingSkeletonFetchRecomendationMajors from "@/components/LoadingSkeletonFetchRecomendationMajors";

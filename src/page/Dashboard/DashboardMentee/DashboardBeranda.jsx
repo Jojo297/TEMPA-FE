@@ -15,7 +15,7 @@ import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
-import useProgramStoreMentee from "@/hooks/useProgramMentee";
+import useProgramStoreMentee from "@/hooks/hooksMentee/useProgramMentee";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
@@ -264,7 +264,12 @@ export default function DashboardBeranda() {
                     </div>
 
                     {/* Button */}
-                    <button className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                    <button
+                      onClick={() => {
+                        navigate(`materi/${item.program_details?.id}`);
+                      }}
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                    >
                       Lihat Materi
                     </button>
                   </div>

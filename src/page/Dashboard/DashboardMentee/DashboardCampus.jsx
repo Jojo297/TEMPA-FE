@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetAllCampus from "@/hooks/useGetAllCampus";
+import useGetAllCampus from "@/hooks/hooksMentee/useGetAllCampus";
 import DashboardCampusSkeleton from "@/components/DashboardCampusSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 

@@ -1,4 +1,4 @@
-import useGetResponseAi from "@/hooks/useGetResponseAi";
+import useGetResponseAi from "@/hooks/hooksMentee/useGetResponseAi";
 import NotFounPages from "./NotFoundPages";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";

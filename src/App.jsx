@@ -15,7 +15,6 @@ const SuspenseWrapper = ({ Component }) => (
 // --- Lazy Imports ---
 // Halaman publik
 const LandingPage = lazy(() => import("./page/Landingpage"));
-const LoginMentor = lazy(() => import("./page/loginMentor"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
@@ -34,9 +33,6 @@ const PanduanPage = lazy(() => import("./page/PanduanPage"));
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
-const DashboardMenteeBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
-);
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
@@ -46,15 +42,16 @@ const DashboardMenteeCampus = lazy(() =>
 const DashboardCampusDetail = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordCampusDetail")
 );
+
 const DashboardCampusPrestasi = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusPrestasi")
 );
 const DashboardCampusJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusJurusan")
 );
-const DetailProgramMentee = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
-);
+// const DetailProgramMentee = lazy(() =>
+//   import("./page/Dashboard/DashboardMentee/DetailProgramMentee")
+// );
 const DashboardMenteeProgramDaftar = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
 );

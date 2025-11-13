@@ -23,7 +23,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetAllMajors from "@/hooks/useGetAllMajors";
+import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 
