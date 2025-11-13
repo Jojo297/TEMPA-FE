@@ -1,13 +1,10 @@
 import { lazy, Suspense } from "react";
-// Import dari 'react-router-dom' hanya yang dibutuhkan untuk Data Router
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Catatan: ScrollToTop harus direimplementasi sebagai listener di RouterProvider
-// atau sebagai hook/component yang menggunakan useLocation di dalam elemen.
-
+// Suspense Wrapper
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
     <ScrollToTop />
@@ -16,6 +13,7 @@ const SuspenseWrapper = ({ Component }) => (
 );
 
 // --- Lazy Imports ---
+// Halaman publik
 const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentor = lazy(() => import("./page/loginMentor"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
@@ -32,7 +30,7 @@ const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
 
-// start Dashboard Mentee Pages
+// Dashboard Mentee
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
@@ -63,12 +61,6 @@ const DashboardMenteeProgramDaftar = lazy(() =>
 const DashboardCampusProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
 );
-const TestJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Testjurusan")
-);
-const Penilaian = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Penilaian")
-);
 const DashboardJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardJurusan")
 );
@@ -78,9 +70,14 @@ const DashboardJurusanDetail = lazy(() =>
 const DashboardTestJurusanForm = lazy(() =>
   import("@/page/Dashboard/DashboardMentee/DashboardTestJurusanForm")
 );
-// end dashboard mentee
+const TestJurusan = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/Testjurusan")
+);
+const Penilaian = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/Penilaian")
+);
 
-// start dashboard lainnya
+// Dashboard lainnya
 const DashboardCampus = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampus")
 );
@@ -90,15 +87,28 @@ const DashboardAdmin = lazy(() =>
 const DashboardMentor = lazy(() =>
   import("@/page/Dashboard/DashboardMentor/DashboardMentor")
 );
-// end dashboard lainnya
 
-// --- Konfigurasi Data Router ---
+// --- Tambahan untuk Kampus ---
+const KampusDataForm = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/KampusDataForm")
+);
+const KampusVerifikasi = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/KampusVerifikasi")
+);
+const KampusVerifikasiBerhasil = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/KampusVerifikasiBerhasil")
+);
+const KampusVerifikasiGagal = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/KampusVerifikasiGagal")
+);
+const DashboardCampusBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
+);
+
+// --- Konfigurasi Router ---
 const router = createBrowserRouter([
-  // Rute Landing Page dan Halaman Publik
-  {
-    path: "/",
-    element: <SuspenseWrapper Component={LandingPage} />,
-  },
+  // Halaman publik
+  { path: "/", element: <SuspenseWrapper Component={LandingPage} /> },
   {
     path: "/login-mentee",
     element: <SuspenseWrapper Component={LoginMentee} />,
@@ -112,8 +122,6 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={LoginMentor} />,
   },
   { path: "/login-admin", element: <SuspenseWrapper Component={LoginAdmin} /> },
-
-  // Rute Halaman Kampus/Jurusan Publik
   { path: "/CampusPage", element: <SuspenseWrapper Component={CampusPage} /> },
   {
     path: "/JurusanPage",
@@ -145,11 +153,39 @@ const router = createBrowserRouter([
   },
   { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
 
-  // --- Rute Dashboard Utama ---
+  // Dashboard Campus (nested)
   {
     path: "/dashboard-campus",
     element: <SuspenseWrapper Component={DashboardCampus} />,
+    children: [
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
+      },
+      {
+        path: "form-data",
+        element: <SuspenseWrapper Component={KampusDataForm} />,
+      },
+      {
+        path: "kampus-verifikasi",
+        element: <SuspenseWrapper Component={KampusVerifikasi} />,
+      },
+      {
+        path: "kampus-verifikasi-berhasil",
+        element: <SuspenseWrapper Component={KampusVerifikasiBerhasil} />,
+      },
+      {
+        path: "kampus-verifikasi-gagal",
+        element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
+      },
+    ],
   },
+
+  // Dashboard Admin & Mentor
   {
     path: "/dashboard-admin",
     element: <SuspenseWrapper Component={DashboardAdmin} />,
@@ -159,17 +195,15 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={DashboardMentor} />,
   },
 
-  // --- Rute DASHBOARD MENTEE (NESTED ROUTES) ---
+  // Dashboard Mentee (Nested)
   {
     path: "dashboard-mentee",
-    element: <SuspenseWrapper Component={DashboardMenteePage} />, // Ini adalah Layout Dashboard Mentee
+    element: <SuspenseWrapper Component={DashboardMenteePage} />,
     children: [
-      // Index Route (dashboard-mentee/)
       {
         index: true,
         element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
       },
-      // Rute eksplisit (dashboard-mentee/beranda)
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
@@ -190,10 +224,6 @@ const router = createBrowserRouter([
         path: "program/daftar",
         element: <SuspenseWrapper Component={DashboardMenteeProgramDaftar} />,
       },
-      // {
-      //   path: "test-jurusan",
-      //   element: <SuspenseWrapper Component={TestJurusan} />,
-      // },
       {
         path: "test-jurusan",
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
@@ -206,16 +236,11 @@ const router = createBrowserRouter([
         path: "jurusan/:slug",
         element: <SuspenseWrapper Component={DashboardJurusanDetail} />,
       },
-
-      // Nested Route untuk Detail Kampus Dashboard (dashboard-mentee/kampus/:id/*)
       {
         path: "kampus/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetail} />,
         children: [
-          {
-            index: true,
-            element: <CampusDescription />,
-          },
+          { index: true, element: <CampusDescription /> },
           {
             path: "prestasi",
             element: <SuspenseWrapper Component={DashboardCampusPrestasi} />,
@@ -230,14 +255,8 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // Rute Penilaian (jika diperlukan)
-      // {
-      //   path: "penilaian",
-      //   element: <SuspenseWrapper Component={Penilaian} />,
-      // },
     ],
   },
 ]);
 
-// Ekspor objek router untuk digunakan di main.jsx
 export default router;
