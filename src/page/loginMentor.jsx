@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import LoginMentor from "@/pages/Auth/LoginMentor";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -102,11 +103,9 @@ export default function LoginMentor() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div
-        className={`flex w-[900px] h-[600px] shadow-2xl rounded-xl overflow-hidden`}
-      >
+        className={`flex w-[900px] h-[600px] shadow-2xl rounded-xl overflow-hidden`}>
         <div
-          className={`w-2/5 p-10 ${DARK_GREEN} text-white flex flex-col justify-start`}
-        >
+          className={`w-2/5 p-10 ${DARK_GREEN} text-white flex flex-col justify-start`}>
           <div className="mb-20">
             <img
               src={logo2}
@@ -126,8 +125,7 @@ export default function LoginMentor() {
           <Form {...formLoginMentor}>
             <form
               onSubmit={formLoginMentor.handleSubmit(onSubmitLoginMentor)}
-              className="flex flex-col"
-            >
+              className="flex flex-col">
               <div className="mb-10">
                 <h2 className="text-2xl font-semibold mb-2">Login</h2>
                 <p className="text-sm text-gray-500 mb-2">
@@ -135,8 +133,7 @@ export default function LoginMentor() {
                 </p>
                 <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className={`${PROGRESS_BLUE} h-full transition-all duration-300 ease-in-out `}
-                  ></div>
+                    className={`${PROGRESS_BLUE} h-full transition-all duration-300 ease-in-out `}></div>
                 </div>
               </div>
               <div className="mb-6">
@@ -187,16 +184,14 @@ export default function LoginMentor() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full p-3 ${DARK_GREEN} text-white font-semibold text-center flex justify-center rounded-lg mt-4 hover:bg-opacity-90 transition duration-300`}
-              >
+                className={`w-full p-3 ${DARK_GREEN} text-white font-semibold text-center flex justify-center rounded-lg mt-4 hover:bg-opacity-90 transition duration-300`}>
                 {isLoading ? <Spinner /> : "Masuk"}
               </button>
             </form>
             <button
               type="submit"
               onClick={() => navigate("/")}
-              className={`w-full p-3 bg-white border border-green-900 text-[#10403D] font-semibold rounded-lg mt-4 hover:bg-opacity-100 transition duration-300`}
-            >
+              className={`w-full p-3 bg-white border border-green-900 text-[#10403D] font-semibold rounded-lg mt-4 hover:bg-opacity-100 transition duration-300`}>
               Kembali
             </button>
           </Form>
