@@ -18,6 +18,7 @@ const LandingPage = lazy(() => import("./page/Landingpage"));
 const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
+const LoginMentor = lazy(() => import("./page/loginMentor"));
 const CampusPage = lazy(() => import("./page/CampusPage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
@@ -33,6 +34,10 @@ const PanduanPage = lazy(() => import("./page/PanduanPage"));
 const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
+const DashboardMenteeBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
+);
+
 const DashboardProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
@@ -41,6 +46,9 @@ const DashboardMenteeCampus = lazy(() =>
 );
 const DashboardCampusDetail = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordCampusDetail")
+);
+const DetailProgramMentee = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardProgram")
 );
 
 const DashboardCampusPrestasi = lazy(() =>
@@ -101,6 +109,9 @@ const KampusVerifikasiGagal = lazy(() =>
 const DashboardCampusBeranda = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
 );
+
+// --- ✨ Tambahan: JURUSAN (Dashboard Campus) ---
+const Jurusan = lazy(() => import("./page/Dashboard/DashboardCampus/Jurusan"));
 
 // --- Konfigurasi Router ---
 const router = createBrowserRouter([
@@ -178,6 +189,12 @@ const router = createBrowserRouter([
       {
         path: "kampus-verifikasi-gagal",
         element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
+      },
+
+      // --- ✨ ROUTE BARU UNTUK JURUSAN ---
+      {
+        path: "jurusan",
+        element: <SuspenseWrapper Component={Jurusan} />,
       },
     ],
   },
