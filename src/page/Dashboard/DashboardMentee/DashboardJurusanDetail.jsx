@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Calendar, Home, Map, Users } from "lucide-react";
-import useGetDetailMajor from "@/hooks/useGetDetailMajor";
+import useGetDetailMajor from "@/hooks/hooksMentee/useGetDetailMajor";
 import MajorDetailSkeleton from "@/components/MajorDetailSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 
@@ -19,8 +19,7 @@ const ChevronRightIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     className="h-5 w-5"
     viewBox="0 0 20 20"
-    fill="currentColor"
-  >
+    fill="currentColor">
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -28,6 +27,134 @@ const ChevronRightIcon = () => (
     />
   </svg>
 );
+
+const CalendarIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-4 w-4 mr-1 inline"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+    />
+  </svg>
+);
+
+const ClockIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-4 w-4 mr-1 inline"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+);
+
+const LocationIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-4 w-4 mr-1 inline"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-4 w-4 mr-1 inline"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    />
+  </svg>
+);
+
+const ProgramItem = ({ program, jurusan, kampus }) => {
+  const shortCampusName = program.lokasi.split(" - ")[0].trim();
+  const matchedCampus = kampus.find((k) => k.name.includes(shortCampusName));
+  const displayedCampusName = matchedCampus
+    ? matchedCampus.name
+    : shortCampusName;
+
+  return (
+    <div className="flex bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+      <div className="relative w-2/5 max-w-[300px] flex-shrink-0">
+        <img
+          src={program.gambar}
+          alt={program.nama}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white p-2 text-center">
+          <p className="text-2xl font-extrabold uppercase leading-tight">
+            {program.nama}
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-[#013B35] text-white flex flex-col justify-between p-5 flex-grow rounded-r-xl">
+        <div>
+          <p className="text-sm text-gray-200 leading-relaxed mb-2">
+            {program.nama}
+          </p>
+          <div className="flex flex-wrap gap-x-4 text-sm text-gray-100 mb-2">
+            <span>{displayedCampusName}</span>
+            <span>{jurusan.nama}</span>
+            <span>• Onsite</span>
+          </div>
+          <hr className="border-gray-500 mb-3" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-gray-200">
+            <p>
+              <CalendarIcon /> {program.tanggal}
+            </p>
+            <p>
+              <ClockIcon /> {program.waktu}
+            </p>
+            <p>
+              <UserIcon /> {program.peserta}
+            </p>
+            <p>
+              <LocationIcon /> {program.lokasi}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex justify-center">
+          <button className="w-full bg-[#007F7F] text-white font-semibold py-2 rounded-md hover:bg-[#019E9E] transition">
+            Ikut Program
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function DashboardJurusanDetail() {
   const { slug } = useParams();
@@ -97,32 +224,9 @@ export default function DashboardJurusanDetail() {
   }
 
   return (
-    <div className="min-h-screen pb-16">
-      {/* breadcum */}
-      <Breadcrumb className="mb-2">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee">Beranda</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee/jurusan">Jurusan</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">
-              {displayDetailMajor.major_name}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      {/* header */}
-      <div className="max-w-7xl mx-auto ">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+    <div className="bg-white min-h-screen pb-16">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
           <div className="relative w-full h-[320px]">
             <img
               src={
@@ -159,8 +263,7 @@ export default function DashboardJurusanDetail() {
           {displayDetailMajor.prospek_kerja?.map((item, i) => (
             <span
               key={i}
-              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
-            >
+              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
               {item}
             </span>
           ))}
@@ -184,8 +287,7 @@ export default function DashboardJurusanDetail() {
               <Link
                 key={index}
                 to={`/dashboard-mentee/kampus/${kampus.campus?.id}`}
-                className="relative rounded-xl overflow-hidden shadow-lg group"
-              >
+                className="relative rounded-xl overflow-hidden shadow-lg group">
                 {/* banner */}
                 <img
                   src={kampus.campus?.banner_url}
@@ -227,8 +329,7 @@ export default function DashboardJurusanDetail() {
             getProgram.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
-              >
+                className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
                 {/* left side */}
                 <div
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -237,16 +338,14 @@ export default function DashboardJurusanDetail() {
                     backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_image_url})`,
                     backgroundColor: "#013B35",
                     minHeight: "200px",
-                  }}
-                >
+                  }}>
                   {/* Completion Status */}
                   {(() => {
                     // get badge status
                     const statusData = getBadgeClass(item.program_status);
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
-                      >
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
                         {statusData.text}
                       </div>
                     );
@@ -311,8 +410,7 @@ export default function DashboardJurusanDetail() {
                       onClick={() =>
                         navigate(`/dashboard-mentee/program/${item.id}`)
                       }
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
-                    >
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
                       Lihat Detail Program
                     </button>
                   </div>

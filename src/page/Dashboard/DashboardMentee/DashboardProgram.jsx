@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import useGetAllProgram from "@/hooks/useGetAllProgram";
+import useGetAllProgram from "@/hooks/hooksMentee/useGetAllProgram";
 import DashboardProgramSkeleton from "@/components/DashboardProgramSkeleton";
 import {
   Breadcrumb,
@@ -85,7 +85,10 @@ export default function DashboardProgram() {
   }
 
   return (
-    <div className="flex min-h-screen ">
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+
+      {/* Konten utama */}
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-y-auto ">
           <div className="mb-2">
@@ -151,8 +154,7 @@ export default function DashboardProgram() {
                 filteredPrograms.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
-                  >
+                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
                     {/* left side */}
                     <div
                       className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -161,16 +163,14 @@ export default function DashboardProgram() {
                         backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
                         backgroundColor: "#013B35",
                         minHeight: "200px",
-                      }}
-                    >
+                      }}>
                       {/* Completion Status */}
                       {(() => {
                         // get badge status
                         const statusData = getBadgeClass(item.program_status);
                         return (
                           <div
-                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
-                          >
+                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
                             {statusData.text}
                           </div>
                         );
@@ -240,8 +240,7 @@ export default function DashboardProgram() {
                           onClick={() =>
                             navigate(`/dashboard-mentee/program/${item.id}`)
                           }
-                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
-                        >
+                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
                           Lihat Detail Program
                         </button>
                       </div>

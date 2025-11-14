@@ -23,7 +23,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetAllMajors from "@/hooks/useGetAllMajors";
+import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 
@@ -138,8 +138,7 @@ const DashboardJurusan = () => {
                 <Link
                   to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
                   key={item.id}
-                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
-                >
+                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
                   {item.icon}
                   <p className="mt-2 text-sm font-medium">{item.major_name}</p>
                 </Link>
