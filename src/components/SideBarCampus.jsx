@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
+  FileEdit,
   LayoutGrid,
+  Notebook,
   GraduationCap,
-  Building2,
-  Share2,
-  FileQuestion,
-  BookOpen,
-  Star,
+  ListChecks,
+  Trophy,
   LogOut,
   Menu,
   X,
 } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
@@ -36,7 +36,6 @@ const Sidebarcampus = ({ children }) => {
   const handleLogout = () => {
     const token = localStorage.getItem("userJwt");
 
-    // logout if user Don't have have token
     if (!token) {
       navigate("/");
       toast.success("Anda Berhasil Keluar!");
@@ -47,21 +46,36 @@ const Sidebarcampus = ({ children }) => {
     toast.success("Anda Berhasil Keluar!");
   };
 
-  const menuItems = [
+  const menu = [
+    {
+      name: "FORM",
+      icon: <FileEdit size={18} />,
+      path: "/dashboard-campus/form-data",
+    },
     {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
-    //   path: "/dashboard-mentee",
+      path: "/dashboard-campus/beranda",
+    },
+    {
+      name: "DESKRIPSI",
+      icon: <Notebook size={18} />,
+      path: "/dashboard-campus/detailcampus",
+    },
+    {
+      name: "JURUSAN",
+      icon: <GraduationCap size={18} />,
+      path: "/dashboard-campus/jurusan",
+    },
+    {
+      name: "PRESTASI",
+      icon: <Trophy size={18} />,
+      path: "/dashboard-campus/prestasi",
     },
     {
       name: "PROGRAM",
-      icon: <GraduationCap size={18} />,
-    //   path: "/dashboard-mentee/program",
-    },
-    {
-      name: "KAMPUS",
-      icon: <Building2 size={18} />,
-    //   path: "/dashboard-mentee/kampus",
+      icon: <ListChecks size={18} />,
+      path: "/dashboard-campus/program",
     },
   ];
 
@@ -76,7 +90,6 @@ const Sidebarcampus = ({ children }) => {
           <img src={logo} alt="Logo TEMPA" className="h-6 object-contain" />
         </div>
 
-        {/* Profil / Avatar */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
             <span className="text-sm font-semibold">P</span>
@@ -88,63 +101,50 @@ const Sidebarcampus = ({ children }) => {
       <div
         className={`fixed top-16 left-0 h-full bg-[#013B36] text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}
-      >
+        } transition-transform duration-300 ease-in-out z-40`}>
         <ul className="flex flex-col mt-4 w-full flex-1">
-          {menuItems.map((item, index) =>
-            item.separator ? (
-              <hr
-                key={`sep-${index}`}
-                className="my-3 mx-auto w-[70%] border-t border-white/50"
-              />
-            ) : (
-              <li key={index}>
-                <Link
-                  to={item.path}
-                  onClick={item.action}
-                  className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
+          {menu.map((item, index) => (
+            <li key={index}>
+              <Link
+                to={item.path}
+                className={`flex items-center gap-3 px-6 py-3 transition 
+                  ${
                     location.pathname === item.path
-                      ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
-                      : "hover:bg-white/10 text-white/80"
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              </li>
-            )
-          )}
-          <li>
-            {/* logout */}
+                      ? "bg-white text-[#013B35] font-semibold"
+                      : "text-white hover:bg-[#014840]"
+                  }`}>
+                {item.icon}
+                <span>{item.name}</span>
+              </Link>
+            </li>
+          ))}
 
+          {/* LOGOUT */}
+          <li>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                {/* <Button variant="outline">Show Dialog</Button> */}
-                <Link
-                  className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80`}
-                >
+                <Link className="flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80">
                   <LogOut size={18} />
                   <span>KELUAR</span>
                 </Link>
               </AlertDialogTrigger>
+
               <AlertDialogContent className="bg-primary text-white">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="">
-                    Yakin ingin keluar?
-                  </AlertDialogTitle>
+                  <AlertDialogTitle>Yakin ingin keluar?</AlertDialogTitle>
                   <AlertDialogDescription className="text-white">
                     Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
                     kembali kapan saja dengan alamat email Anda.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter className="flex justify-end">
-                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70 hover:duration-100">
+                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70">
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleLogout}
-                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70 hover:duration-100"
-                  >
+                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70">
                     Continue
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -159,15 +159,14 @@ const Sidebarcampus = ({ children }) => {
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"
-          } p-6`}
-        >
+          } p-6`}>
           {children}
         </main>
 
-        {/* ✅ Ganti footer lama dengan komponen Footer */}
         <div
-          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
-        >
+          className={`${
+            isOpen ? "ml-64" : "ml-0"
+          } transition-all duration-300`}>
           <Footer />
         </div>
       </div>

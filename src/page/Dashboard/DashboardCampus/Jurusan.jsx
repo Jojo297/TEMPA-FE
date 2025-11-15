@@ -66,32 +66,30 @@ export default function Jurusan() {
               )}
             </div>
 
-            <h1 className="text-3xl font-bold text-[#013B35]">{campusData.name}</h1>
+            <h1 className="text-3xl font-bold text-[#013B35]">
+              {campusData.name}
+            </h1>
 
             {/* navigasi  */}
             <div className="flex flex-wrap gap-4 mt-6 mb-6 font-medium">
               <Link
-                to=""
-                className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-              >
+                to="/dashboard-campus/detailcampus"
+                className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
                 Deskripsi
               </Link>
               <Link
-                to=""
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-              >
-                Prestasi
-              </Link>
-              <Link
-                to=""
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-              >
+                to="/dashboard-campus/jurusan"
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Jurusan
               </Link>
               <Link
-                to=""
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-              >
+                to="../prestasi"
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+                Prestasi
+              </Link>
+              <Link
+                to="/dashboard-campus/jurusan"
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Program
               </Link>
             </div>
@@ -105,8 +103,7 @@ export default function Jurusan() {
               <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
               <button
                 onClick={() => setIsEditOpen(true)}
-                className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-              >
+                className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors">
                 <Pencil size={18} /> Tambah Jurusan
               </button>
             </div>
@@ -114,7 +111,9 @@ export default function Jurusan() {
             {/* Bubble list jurusan */}
             <div className="flex flex-wrap gap-3">
               {jurusanList.length === 0 && (
-                <span className="text-gray-500">Belum ada jurusan yang ditambahkan.</span>
+                <span className="text-gray-500">
+                  Belum ada jurusan yang ditambahkan.
+                </span>
               )}
               {jurusanList.map((j) => (
                 <button
@@ -124,8 +123,7 @@ export default function Jurusan() {
                     selectedJurusan?.id === j.id
                       ? "bg-[#013B35] text-white"
                       : "bg-gray-100 text-gray-700"
-                  }`}
-                >
+                  }`}>
                   {j.name}
                 </button>
               ))}
@@ -134,7 +132,9 @@ export default function Jurusan() {
             {/* Detail jurusan */}
             {selectedJurusan && (
               <div className="mt-6 space-y-4">
-                <h3 className="text-xl font-bold text-[#013B35]">{selectedJurusan.name}</h3>
+                <h3 className="text-xl font-bold text-[#013B35]">
+                  {selectedJurusan.name}
+                </h3>
                 {selectedJurusan.logo && (
                   <img
                     src={selectedJurusan.logo}
@@ -150,7 +150,9 @@ export default function Jurusan() {
 
         {/*tambah jurusan popup */}
         {isEditOpen && (
-          <EditPopup title="Tambah Jurusan" onClose={() => setIsEditOpen(false)}>
+          <EditPopup
+            title="Tambah Jurusan"
+            onClose={() => setIsEditOpen(false)}>
             <EditJurusanForm onSave={handleAddJurusan} />
           </EditPopup>
         )}
@@ -166,8 +168,7 @@ function EditPopup({ title, children, onClose }) {
       <div className="bg-[#F7F9F7] w-full max-w-xl rounded-2xl p-8 relative shadow-xl max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-600 hover:text-black"
-        >
+          className="absolute top-6 right-6 text-gray-600 hover:text-black">
           <X size={24} />
         </button>
         <h2 className="text-2xl font-bold mb-8">{title}</h2>
@@ -181,7 +182,8 @@ function EditPopup({ title, children, onClose }) {
 function EditJurusanForm({ onSave }) {
   const [form, setForm] = useState({ name: "", desc: "", logo: "" });
 
-  const handleInput = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleInput = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   // upload logo
   const handleLogoUpload = (e) => {
@@ -194,26 +196,45 @@ function EditJurusanForm({ onSave }) {
 
   return (
     <div className="space-y-6">
-      <InputField label="Nama Jurusan *" name="name" value={form.name} onChange={handleInput} />
-      <TextAreaField label="Deskripsi Jurusan" name="desc" value={form.desc} onChange={handleInput} height="h-24" />
+      <InputField
+        label="Nama Jurusan *"
+        name="name"
+        value={form.name}
+        onChange={handleInput}
+      />
+      <TextAreaField
+        label="Deskripsi Jurusan"
+        name="desc"
+        value={form.desc}
+        onChange={handleInput}
+        height="h-24"
+      />
 
       {/* Logo Jurusan */}
       <div>
         <label className="block font-medium mb-2">Logo Jurusan</label>
         {form.logo && (
-          <img src={form.logo} alt="Logo Preview" className="w-32 h-32 object-cover rounded-full mb-2 border" />
+          <img
+            src={form.logo}
+            alt="Logo Preview"
+            className="w-32 h-32 object-cover rounded-full mb-2 border"
+          />
         )}
         <label className="cursor-pointer border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
           <Pencil size={16} /> Unggah Logo
-          <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleLogoUpload}
+          />
         </label>
       </div>
 
       <div className="flex justify-end">
         <button
           onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold"
-        >
+          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
           Simpan
         </button>
       </div>

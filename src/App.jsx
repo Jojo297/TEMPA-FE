@@ -21,9 +21,11 @@ const CampusPage = lazy(() => import("./page/CampusPage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
 const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
-const CampusPrestasiPage = lazy(() => import("./components/CampusPrestasiPage"));
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
+const CampusPrestasiPage = lazy(() =>
+  import("./components/CampusPrestasiPage")
+);
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
 
 // Dashboard Mentee
@@ -100,31 +102,64 @@ const DashboardCampusBeranda = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
 );
 
-const Jurusan = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/Jurusan")
-);
+const Jurusan = lazy(() => import("./page/Dashboard/DashboardCampus/Jurusan"));
 const DetailCampus = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DetailCampus")
+);
+
+// ✅ Perbaikan: import PRESTASI YANG BENAR
+const CampusPrestasiDashboard = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/prestasi")
 );
 
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
   { path: "/", element: <SuspenseWrapper Component={LandingPage} /> },
-  { path: "/login-mentee", element: <SuspenseWrapper Component={LoginMentee} /> },
-  { path: "/login-campus", element: <SuspenseWrapper Component={LoginCampus} /> },
+  {
+    path: "/login-mentee",
+    element: <SuspenseWrapper Component={LoginMentee} />,
+  },
+  {
+    path: "/login-campus",
+    element: <SuspenseWrapper Component={LoginCampus} />,
+  },
   { path: "/login-admin", element: <SuspenseWrapper Component={LoginAdmin} /> },
-  { path: "/login-mentor", element: <SuspenseWrapper Component={LoginMentor} /> },
+  {
+    path: "/login-mentor",
+    element: <SuspenseWrapper Component={LoginMentor} />,
+  },
   { path: "/CampusPage", element: <SuspenseWrapper Component={CampusPage} /> },
-  { path: "/JurusanPage", element: <SuspenseWrapper Component={JurusanPage} /> },
+  {
+    path: "/JurusanPage",
+    element: <SuspenseWrapper Component={JurusanPage} />,
+  },
 
   // Campus detail publik
-  { path: "/campus-detail/:id", element: <SuspenseWrapper Component={CampusDetailPage} /> },
-  { path: "/campus/:id", element: <SuspenseWrapper Component={CampusDetailPage} /> },
-  { path: "/campus/:id/prestasi", element: <SuspenseWrapper Component={CampusPrestasiPage} /> },
-  { path: "/jurusan/:slug", element: <SuspenseWrapper Component={DetailJurusan} /> },
-  { path: "/campus/:id/jurusan", element: <SuspenseWrapper Component={CampusJurusanPage} /> },
-  { path: "/campus/:id/program", element: <SuspenseWrapper Component={CampusProgram} /> },
+  {
+    path: "/campus-detail/:id",
+    element: <SuspenseWrapper Component={CampusDetailPage} />,
+  },
+  {
+    path: "/campus/:id",
+    element: <SuspenseWrapper Component={CampusDetailPage} />,
+  },
+  {
+    path: "/campus/:id/prestasi",
+    element: <SuspenseWrapper Component={CampusPrestasiPage} />,
+  },
+  {
+    path: "/jurusan/:slug",
+    element: <SuspenseWrapper Component={DetailJurusan} />,
+  },
+  {
+    path: "/campus/:id/jurusan",
+    element: <SuspenseWrapper Component={CampusJurusanPage} />,
+  },
+  {
+    path: "/campus/:id/program",
+    element: <SuspenseWrapper Component={CampusProgram} />,
+  },
   { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
 
   // ======================= DASHBOARD CAMPUS =======================
@@ -132,17 +167,40 @@ const router = createBrowserRouter([
     path: "/dashboard-campus",
     element: <SuspenseWrapper Component={DashboardCampus} />,
     children: [
-      { index: true, element: <SuspenseWrapper Component={DashboardCampusBeranda} /> },
-      { path: "beranda", element: <SuspenseWrapper Component={DashboardCampusBeranda} /> },
-      { path: "form-data", element: <SuspenseWrapper Component={KampusDataForm} /> },
-      { path: "kampus-verifikasi", element: <SuspenseWrapper Component={KampusVerifikasi} /> },
-      { path: "kampus-verifikasi-berhasil", element: <SuspenseWrapper Component={KampusVerifikasiBerhasil} /> },
-      { path: "kampus-verifikasi-gagal", element: <SuspenseWrapper Component={KampusVerifikasiGagal} /> },
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
+      },
+      {
+        path: "form-data",
+        element: <SuspenseWrapper Component={KampusDataForm} />,
+      },
+      {
+        path: "kampus-verifikasi",
+        element: <SuspenseWrapper Component={KampusVerifikasi} />,
+      },
+      {
+        path: "kampus-verifikasi-berhasil",
+        element: <SuspenseWrapper Component={KampusVerifikasiBerhasil} />,
+      },
+      {
+        path: "kampus-verifikasi-gagal",
+        element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
+      },
 
-      // Jurusan dashboard campus
+      // Jurusan Dashboard Campus
       { path: "jurusan", element: <SuspenseWrapper Component={Jurusan} /> },
 
-      // ✅ ROUTE DETAIL KAMPUS (perbaikan disini!)
+      // ✅ PRESTASI DASHBOARD CAMPUS — SUDAH BENAR
+      {
+        path: "prestasi",
+        element: <SuspenseWrapper Component={CampusPrestasiDashboard} />,
+      },
+
       {
         path: "detailcampus",
         element: <SuspenseWrapper Component={DetailCampus} />,
@@ -151,32 +209,74 @@ const router = createBrowserRouter([
   },
 
   // ===================== Dashboard lainnya =====================
-  { path: "/dashboard-admin", element: <SuspenseWrapper Component={DashboardAdmin} /> },
-  { path: "/dashboard-mentor", element: <SuspenseWrapper Component={DashboardMentor} /> },
+  {
+    path: "/dashboard-admin",
+    element: <SuspenseWrapper Component={DashboardAdmin} />,
+  },
+  {
+    path: "/dashboard-mentor",
+    element: <SuspenseWrapper Component={DashboardMentor} />,
+  },
 
   // ===================== Dashboard Mentee =====================
   {
     path: "dashboard-mentee",
     element: <SuspenseWrapper Component={DashboardMenteePage} />,
     children: [
-      { index: true, element: <SuspenseWrapper Component={DashboardMenteeBeranda} /> },
-      { path: "beranda", element: <SuspenseWrapper Component={DashboardMenteeBeranda} /> },
-      { path: "program", element: <SuspenseWrapper Component={DashboardProgram} /> },
-      { path: "kampus", element: <SuspenseWrapper Component={DashboardMenteeCampus} /> },
-      { path: "program/:id", element: <SuspenseWrapper Component={DetailProgramMentee} /> },
-      { path: "program/daftar", element: <SuspenseWrapper Component={DashboardMenteeProgramDaftar} /> },
-      { path: "test-jurusan", element: <SuspenseWrapper Component={DashboardTestJurusanForm} /> },
-      { path: "jurusan", element: <SuspenseWrapper Component={DashboardJurusan} /> },
-      { path: "jurusan/:slug", element: <SuspenseWrapper Component={DashboardJurusanDetail} /> },
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardMenteeBeranda} />,
+      },
+      {
+        path: "program",
+        element: <SuspenseWrapper Component={DashboardProgram} />,
+      },
+      {
+        path: "kampus",
+        element: <SuspenseWrapper Component={DashboardMenteeCampus} />,
+      },
+      {
+        path: "program/:id",
+        element: <SuspenseWrapper Component={DetailProgramMentee} />,
+      },
+      {
+        path: "program/daftar",
+        element: <SuspenseWrapper Component={DashboardMenteeProgramDaftar} />,
+      },
+      {
+        path: "test-jurusan",
+        element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
+      },
+      {
+        path: "jurusan",
+        element: <SuspenseWrapper Component={DashboardJurusan} />,
+      },
+      {
+        path: "jurusan/:slug",
+        element: <SuspenseWrapper Component={DashboardJurusanDetail} />,
+      },
 
       {
         path: "kampus/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetail} />,
         children: [
           { index: true, element: <CampusDescription /> },
-          { path: "prestasi", element: <SuspenseWrapper Component={DashboardCampusPrestasi} /> },
-          { path: "jurusan", element: <SuspenseWrapper Component={DashboardCampusJurusan} /> },
-          { path: "program", element: <SuspenseWrapper Component={DashboardCampusProgram} /> },
+          {
+            path: "prestasi",
+            element: <SuspenseWrapper Component={DashboardCampusPrestasi} />,
+          },
+          {
+            path: "jurusan",
+            element: <SuspenseWrapper Component={DashboardCampusJurusan} />,
+          },
+          {
+            path: "program",
+            element: <SuspenseWrapper Component={DashboardCampusProgram} />,
+          },
         ],
       },
     ],
