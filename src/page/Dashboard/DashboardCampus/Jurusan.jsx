@@ -8,7 +8,9 @@ const initialCampusData = {
   id: 1,
   name: "Nama Kampus",
   logo: "",
-  images: [{ id: 1, url: "" }],
+  images: [{ id: 1, url: "" }], // Banner
+  email: "",
+  location: "",
 };
 
 // Mock jurusan awal kosong
@@ -27,78 +29,64 @@ export default function Jurusan() {
     setIsEditOpen(false);
   };
 
-  const mainImage = campusData.images.length > 0 ? campusData.images[0] : null;
+  const mainImage =
+    campusData.images.length > 0 && campusData.images[0].url
+      ? campusData.images[0].url
+      : "https://placehold.co/1200x400?text=Banner+Kampus";
 
   return (
     <SidebarCampus>
       <div className="min-h-screen bg-[#F8FAF8] font-sans pb-20">
-        {/* HEADER */}
-        <div className="max-w-6xl mx-auto mt-6 px-6 w-full">
-          <div className="bg-[#013B35] text-white rounded-2xl p-8 relative">
-            <div className="mb-6 h-72 w-full">
-              {mainImage && mainImage.url ? (
-                <img
-                  src={mainImage.url}
-                  alt="Foto Kampus"
-                  className="w-full h-full object-cover rounded-xl bg-white/20"
-                />
-              ) : (
-                <div className="w-full h-full bg-white/20 rounded-xl flex items-center justify-center">
-                  <span className="opacity-60 text-xl font-semibold">
-                    Foto Kampus Belum Diunggah
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* LOGO + NAMA KAMPUS */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 -mt-16 relative z-10">
-            <div className="w-28 h-28 bg-white rounded-full border-4 border-white shadow-xl -mt-40 mb-4 flex items-center justify-center text-[#013B35] text-xl font-bold">
-              {campusData.logo ? (
+        {/* ====================== HEADER BANNER ====================== */}
+        <header className="bg-[#F8FAFB] mb-20">
+          <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
+
+            {/* Banner */}
+            <div className="h-[400px] relative">
+              <img
+                src={mainImage}
+                alt="Banner Kampus"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Info Kampus */}
+            <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
+              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
                 <img
-                  src={campusData.logo}
-                  className="w-full h-full rounded-full object-cover"
+                  src={
+                    campusData.logo ||
+                    "https://placehold.co/200?text=Logo"
+                  }
                   alt="Logo Kampus"
+                  className="w-20 h-20 object-contain"
                 />
-              ) : (
-                "Logo"
-              )}
-            </div>
+              </div>
 
-            <h1 className="text-3xl font-bold text-[#013B35]">
-              {campusData.name}
-            </h1>
+              <div>
+                <h1 className="text-3xl font-bold text-white">
+                  {campusData.name}
+                </h1>
 
-            {/* navigasi  */}
-            <div className="flex flex-wrap gap-4 mt-6 mb-6 font-medium">
-              <Link
-                to="/dashboard-campus/detailcampus"
-                className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
-                Deskripsi
-              </Link>
-              <Link
-                to="/dashboard-campus/jurusan"
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-                Jurusan
-              </Link>
-              <Link
-                to="../prestasi"
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-                Prestasi
-              </Link>
-              <Link
-                to="/dashboard-campus/jurusan"
-                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
-                Program
-              </Link>
+                {/* lokasi + email jika ada */}
+                <p className="text-sm text-gray-300">
+                  {campusData.location || ""}
+                </p>
+                <p className="text-sm text-gray-300">
+                  {campusData.email || ""}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* kontent: Tambah Jurusan */}
+      
+
+        {/* ====================== KONTEN: JURUSAN ====================== */}
         <section className="mt-6 max-w-6xl mx-auto px-6 mb-20 w-full">
           <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
               <button
@@ -108,13 +96,14 @@ export default function Jurusan() {
               </button>
             </div>
 
-            {/* Bubble list jurusan */}
+            {/* Bubble list */}
             <div className="flex flex-wrap gap-3">
               {jurusanList.length === 0 && (
                 <span className="text-gray-500">
                   Belum ada jurusan yang ditambahkan.
                 </span>
               )}
+
               {jurusanList.map((j) => (
                 <button
                   key={j.id}
@@ -148,7 +137,7 @@ export default function Jurusan() {
           </div>
         </section>
 
-        {/*tambah jurusan popup */}
+        {/* popup tambah jurusan */}
         {isEditOpen && (
           <EditPopup
             title="Tambah Jurusan"
@@ -161,7 +150,7 @@ export default function Jurusan() {
   );
 }
 
-/*popup*/
+/* POPUP */
 function EditPopup({ title, children, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999] p-4">
@@ -178,7 +167,7 @@ function EditPopup({ title, children, onClose }) {
   );
 }
 
-/*FORM JURUSAN DENGAN UPLOAD LOGO*/
+/* FORM JURUSAN */
 function EditJurusanForm({ onSave }) {
   const [form, setForm] = useState({ name: "", desc: "", logo: "" });
 
@@ -202,6 +191,7 @@ function EditJurusanForm({ onSave }) {
         value={form.name}
         onChange={handleInput}
       />
+
       <TextAreaField
         label="Deskripsi Jurusan"
         name="desc"
@@ -210,7 +200,7 @@ function EditJurusanForm({ onSave }) {
         height="h-24"
       />
 
-      {/* Logo Jurusan */}
+      {/* logo */}
       <div>
         <label className="block font-medium mb-2">Logo Jurusan</label>
         {form.logo && (
@@ -220,6 +210,7 @@ function EditJurusanForm({ onSave }) {
             className="w-32 h-32 object-cover rounded-full mb-2 border"
           />
         )}
+
         <label className="cursor-pointer border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
           <Pencil size={16} /> Unggah Logo
           <input

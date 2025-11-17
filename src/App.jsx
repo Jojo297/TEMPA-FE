@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
+import Program from "./page/Dashboard/DashboardCampus/program";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
@@ -204,6 +205,11 @@ const router = createBrowserRouter([
       {
         path: "detailcampus",
         element: <SuspenseWrapper Component={DetailCampus} />,
+      },
+
+       {
+        path: "program",
+        element: <SuspenseWrapper Component={Program} />,
       },
     ],
   },
