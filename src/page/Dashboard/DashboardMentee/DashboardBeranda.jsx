@@ -47,7 +47,23 @@ export default function DashboardBeranda() {
   const countUnCompleted = unCompleted.length;
 
   // badge for status program
-  const getBadgeClass = (status) => {
+  const getBadgeClass = (status, start_date, end_date) => {
+    const startDate = new Date(start_date);
+    console.log(start_date);
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    if (startDate.getTime() > today.getTime()) {
+      return {
+        text: "Program Belum Dimulai",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
+      };
+    }
+
+    // 4. Masuk ke switch statement jika program sudah dimulai atau selesai
     switch (status) {
       case "completed":
         return {
@@ -66,6 +82,13 @@ export default function DashboardBeranda() {
           text: "Sedang Berjalan",
           bgColor: "bg-yellow-100",
           textColor: "text-yellow-800",
+        };
+      // Kasus default opsional
+      default:
+        return {
+          text: "Status Lain",
+          bgColor: "bg-gray-100",
+          textColor: "text-gray-800",
         };
     }
   };
@@ -202,7 +225,11 @@ export default function DashboardBeranda() {
                   {/* Completion Status */}
                   {(() => {
                     // get badge status
-                    const statusData = getBadgeClass(item.completion_status);
+                    const statusData = getBadgeClass(
+                      item.completion_status,
+                      item.program_details?.start_date,
+                      item.program_details?.end_date
+                    );
                     return (
                       <div
                         className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
