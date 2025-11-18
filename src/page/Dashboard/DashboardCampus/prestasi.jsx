@@ -6,78 +6,99 @@ import { useState } from "react";
 
 export default function Prestasi() {
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false); // <-- TAMBAHAN
+  const [showAddModal, setShowAddModal] = useState(false);
   const [deskripsi, setDeskripsi] = useState("");
+
+  // ================= FIX ERROR =================
+  const [mainImage, setMainImage] = useState(null);
+
+  const campusData = {
+    name: "Politeknik Negeri Batam",
+    logo: "",
+  };
+  // =============================================
 
   return (
     <SidebarCampus>
-      <div className="w-full min-h-screen bg-[#F8FAF8] pb-32">
-        {/* BAGIAN HEADER HIJAU */}
-        <div className="w-full bg-[#013B35] pb-32 relative">
-          <div className="max-w-6xl mx-auto px-6 pt-8">
-            <div className="grid grid-cols-4 gap-3 h-60 overflow-hidden rounded-xl">
-              <img
-                src=""
-                className="col-span-2 w-full h-full object-cover rounded-xl"
-              />
-              <img src="" className="w-full h-full object-cover rounded-xl" />
-              <img src="" className="w-full h-full object-cover rounded-xl" />
-            </div>
-
-            <div className="absolute -bottom-16 left-12">
-              <div className="w-32 h-32 rounded-full overflow-hidden bg-white shadow-2xl border-4 border-white">
-                <img src="" className="w-full h-full object-cover" />
-              </div>
+      <div className="min-h-screen bg-[#F8FAF8] font-sans pb-20">
+        {/* HEADER */}
+        <div className="max-w-6xl mx-auto mt-6 px-6 w-full">
+          <div className="bg-[#013B35] text-white rounded-2xl p-8 relative">
+            {/* FOTO UTAMA */}
+            <div className="mb-6 h-72 w-full">
+              {mainImage && mainImage.url ? (
+                <img
+                  src={mainImage.url}
+                  alt="Foto Utama Kampus"
+                  className="w-full h-full object-cover rounded-xl bg-white/20"
+                />
+              ) : (
+                <div className="w-full h-full bg-white/20 rounded-xl flex items-center justify-center">
+                  <span className="opacity-60 text-xl font-semibold">
+                    Foto Utama Kampus Belum Diunggah
+                  </span>
+                </div>
+              )}
             </div>
           </div>
-        </div>
 
-        {/* BAGIAN NAMA */}
-        <div className="max-w-6xl mx-auto px-6 mt-24">
-          <div className="bg-white rounded-xl shadow-md p-8">
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-[#013B35]">
-                Politeknik Negeri Batam
-              </h1>
-              <Pencil size={18} className="text-[#013B35] cursor-pointer" />
+          {/* LOGO + NAMA */}
+          <div className="bg-white rounded-2xl shadow-lg p-8 -mt-16 relative z-10">
+            <div className="w-28 h-28 bg-white rounded-full border-4 border-white shadow-xl -mt-40 mb-4 flex items-center justify-center text-[#013B35] text-xl font-bold">
+              {campusData.logo ? (
+                <img
+                  src={campusData.logo}
+                  className="w-full h-full rounded-full object-cover"
+                  alt="logo"
+                />
+              ) : (
+                "Logo"
+              )}
             </div>
 
-            <p className="text-sm text-gray-500 mt-1">
-              Batam • Provinsi Kepulauan Riau, Indonesia
-            </p>
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold text-[#013B35]">
+                {campusData.name}
+              </h1>
 
-            <div className="flex gap-4 mt-6">
+              {/* <button className="p-2 bg-[#4BA8FF] text-white rounded-full hover:bg-blue-600 transition-colors">
+                <Pencil size={18} />
+              </button> */}
+            </div>
+
+            {/* TAB */}
+            {/* <div className="flex flex-wrap gap-4 mt-6 mb-2 font-medium">
               <Link
                 to="../detailcampus"
-                className="px-6 py-2 border border-[#013B35] rounded-full text-[#013B35] font-medium">
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Deskripsi
               </Link>
 
               <Link
                 to="../jurusan"
-                className="px-6 py-2 border border-[#013B35] rounded-full text-[#013B35] font-medium">
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Jurusan
               </Link>
 
-              <button className="px-6 py-2 bg-[#013B35] rounded-full text-white font-medium">
+              <button className="px-6 py-2 bg-[#013B35] text-white rounded-full font-semibold">
                 Prestasi
               </button>
 
               <Link
                 to="../program"
-                className="px-6 py-2 border border-[#013B35] rounded-full text-[#013B35] font-medium">
+                className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Program
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 
-        {/* ISI PRESTASI */}
+        {/* ===================== ISI PRESTASI ===================== */}
         <div className="max-w-6xl mx-auto px-6 mt-10">
           <div className="bg-white shadow-md rounded-xl p-8">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-[#013B35]">
-                Prestasi Politeknik Negeri Batam
+                Prestasi {campusData.name}
               </h2>
               <Pencil
                 size={18}
@@ -94,8 +115,7 @@ export default function Prestasi() {
             <div className="flex justify-end mt-4">
               <button
                 className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full font-medium shadow hover:bg-blue-600 transition"
-                onClick={() => setShowAddModal(true)} // <-- BUKA MODAL
-              >
+                onClick={() => setShowAddModal(true)}>
                 Tambah Prestasi
               </button>
             </div>
@@ -110,7 +130,7 @@ export default function Prestasi() {
         </div>
       </div>
 
-      {/* ================= MODAL EDIT DESKRIPSI ================ */}
+      {/* ===================== MODAL EDIT DESKRIPSI ===================== */}
       {showEditModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center z-50">
           <div className="bg-[#F8FAF8] w-[700px] rounded-xl shadow-xl p-6 relative border border-gray-200">
@@ -124,9 +144,6 @@ export default function Prestasi() {
               Tambahkan Deskripsi Prestasi Kampus
             </h2>
 
-            <label className="text-sm font-medium text-gray-700">
-              Deskripsi *
-            </label>
             <textarea
               className="mt-2 w-full h-40 border border-[#013B35] rounded-xl p-4 outline-none bg-white"
               value={deskripsi}
@@ -144,23 +161,20 @@ export default function Prestasi() {
         </div>
       )}
 
-      {/* ================= MODAL TAMBAH PRESTASI ================= */}
+      {/* ===================== MODAL TAMBAH PRESTASI ===================== */}
       {showAddModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center z-50">
           <div className="bg-[#F8FAF8] w-[900px] rounded-xl shadow-xl p-8 relative border border-gray-200">
-            {/* CLOSE BUTTON */}
             <button
               className="absolute top-5 right-5 text-gray-600 hover:text-black"
               onClick={() => setShowAddModal(false)}>
               <X size={20} />
             </button>
 
-            {/* TITLE */}
             <h2 className="text-2xl font-bold text-[#013B35] mb-8">
               Tambahkan Prestasi
             </h2>
 
-            {/* FORM */}
             <label className="text-sm font-medium mb-2 block">Judul *</label>
             <input
               type="text"

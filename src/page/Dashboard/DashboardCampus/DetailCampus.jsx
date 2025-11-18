@@ -92,7 +92,7 @@ export default function DetailCampus() {
             </div>
 
             {/* TAB */}
-            <div className="flex flex-wrap gap-4 mt-6 mb-2 font-medium">
+            {/* <div className="flex flex-wrap gap-4 mt-6 mb-2 font-medium">
               <Link
                 to=""
                 className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
@@ -116,7 +116,7 @@ export default function DetailCampus() {
                 className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Program
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 

@@ -48,7 +48,7 @@ const Sidebarcampus = ({ children }) => {
 
   const menu = [
     {
-      name: "FORM",
+      name: "DATA KAMPUS",
       icon: <FileEdit size={18} />,
       path: "/dashboard-campus/form-data",
     },

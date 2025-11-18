@@ -71,7 +71,7 @@ export default function Jurusan() {
             </h1>
 
             {/* navigasi  */}
-            <div className="flex flex-wrap gap-4 mt-6 mb-6 font-medium">
+            {/* <div className="flex flex-wrap gap-4 mt-6 mb-6 font-medium">
               <Link
                 to="/dashboard-campus/detailcampus"
                 className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
@@ -92,7 +92,7 @@ export default function Jurusan() {
                 className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
                 Program
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 
