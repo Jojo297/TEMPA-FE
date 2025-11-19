@@ -30,7 +30,8 @@ export default function DashboardMenteeMateri() {
   const { id } = useParams();
   const idProgram = parseInt(id);
   const token = localStorage.getItem("userJwt");
-  const { materi, fetchMateri, isLoading, error } = useGetProgramMateri();
+  const { materi, fetchMateri, isLoading, error, statusCode } =
+    useGetProgramMateri();
   let program_name = "Nama Program Tidak Ditemukan";
   let program_description = "Deskripsi Program Tidak Ditemukan";
 
@@ -70,6 +71,9 @@ export default function DashboardMenteeMateri() {
   const isMateriNotAdded =
     displayMateri.length === 1 && displayMateri[0].resources.length === 0;
 
+  if (statusCode == 404) {
+    return <NotFounPages message={"Materi Program Tidak ditemukan"} />;
+  }
   return (
     <>
       {/* breadcum */}

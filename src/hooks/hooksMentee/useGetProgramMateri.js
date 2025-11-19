@@ -8,6 +8,7 @@ const useGetProgramMateri = create((set) => ({
   materi: [],
   isLoading: false,
   error: null,
+  statusCode: 0,
 
   // get materi program
   fetchMateri: async (token, slug) => {
@@ -43,12 +44,14 @@ const useGetProgramMateri = create((set) => ({
 
       if (error.status == 404) {
         set({ error: "404 not fount" });
+        set({ statusCode: error.status });
       }
     }
   },
 
   // clear state
-  clearDetailMajor: () => set({ materi: [], isLoading: false, errors: false }),
+  clearDetailMajor: () =>
+    set({ materi: [], isLoading: false, errors: false, statusCode: 0 }),
 }));
 
 export default useGetProgramMateri;
