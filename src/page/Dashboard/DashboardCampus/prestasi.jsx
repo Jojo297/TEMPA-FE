@@ -151,7 +151,7 @@ export default function Prestasi() {
         </div>
       </div>
 
-      {/* ================= MODAL EDIT DESKRIPSI ================ */}
+      {/* ===================== MODAL EDIT DESKRIPSI ===================== */}
       {showEditModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center z-50">
           <div className="bg-[#F8FAF8] w-[700px] rounded-xl shadow-xl p-6 relative border border-gray-200">
@@ -166,9 +166,6 @@ export default function Prestasi() {
               Tambahkan Deskripsi Prestasi Kampus
             </h2>
 
-            <label className="text-sm font-medium text-gray-700">
-              Deskripsi *
-            </label>
             <textarea
               className="mt-2 w-full h-40 border border-[#013B35] rounded-xl p-4 outline-none bg-white"
               value={deskripsi}
@@ -266,7 +263,7 @@ export default function Prestasi() {
         </div>
       )}
 
-      {/* ================= MODAL TAMBAH PRESTASI ================= */}
+      {/* ===================== MODAL TAMBAH PRESTASI ===================== */}
       {showAddModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center z-50">
           <div className="bg-[#F8FAF8] w-[900px] rounded-xl shadow-xl p-8 relative border border-gray-200">

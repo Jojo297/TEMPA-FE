@@ -10,4 +10,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    allowedHosts: [
+      "pegasus-accepted-surely.ngrok-free.app",
+      "*.ngrok-free.app",
+    ],
+  },
 });

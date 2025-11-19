@@ -14,6 +14,12 @@ import {
 } from "@/components/ui/breadcrumb";
 import NotFounPages from "@/components/NotFoundPages";
 
+import { SelectTypeProgram } from "@/components/SelectTypeProgram";
+import { SearchMajors } from "@/components/SearchMajors";
+import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
+import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
+import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
+
 export default function DashboardProgram() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -23,6 +29,35 @@ export default function DashboardProgram() {
   // store all program
   const displayAllProgram = programs ?? [];
   // console.log(displayAllProgram);
+
+  // get selected major from SelectTypeProgram
+  const selectedMajor = useFilterStore((state) => state.selectedMajor);
+
+  // get selected major from SearchMajors
+  const selectedType = useFilterProgramType((state) => state.selectedType);
+
+  // filtering selected major from SelectTypeProgram
+  const programsAfterMajorFilter = displayAllProgram.filter((program) => {
+    if (!selectedMajor || selectedMajor === "") {
+      return true;
+    }
+    return program.major_name === selectedMajor;
+  });
+
+  // filter program by sesi type
+  const programsAfterTypeFilter = programsAfterMajorFilter.filter((program) => {
+    // Jika selectedType kosong, lewati filter ini
+    if (!selectedType || selectedType === "") {
+      return true;
+    }
+    // Jika ada type yang dipilih, hanya kembalikan program yang cocok
+    return program.type_sesi === selectedType;
+  });
+
+  // search program by name
+  const filteredPrograms = programsAfterTypeFilter.filter((item) =>
+    item.program_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // badge for status program
   const getBadgeClass = (status) => {
@@ -54,7 +89,7 @@ export default function DashboardProgram() {
     }
   };
 
-  // get all program
+  // get all programs and majors
   useEffect(() => {
     if (token) {
       fetchPrograms(token);
@@ -64,11 +99,6 @@ export default function DashboardProgram() {
   if (isLoading) {
     return <DashboardProgramSkeleton />;
   }
-
-  // handle search majors
-  const filteredPrograms = displayAllProgram.filter((item) =>
-    item.program_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   // handle not found
   if (!displayAllProgram) {
@@ -131,18 +161,22 @@ export default function DashboardProgram() {
                 Seluruh Program
               </h2>
               {/* input search */}
-              <div className="relative w-full md:w-60">
-                <Search
-                  size={16}
-                  className="absolute top-2.5 left-3 text-gray-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Cari program..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
-                />
+              <div className="flex gap-2">
+                <SelectTypeProgram />
+                <SearchMajors />
+                <div className="relative w-full md:w-60">
+                  <Search
+                    size={16}
+                    className="absolute top-2.5 left-3 text-gray-400"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Cari program..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
+                  />
+                </div>
               </div>
             </div>
             {/* Card Program */}
