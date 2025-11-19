@@ -75,6 +75,9 @@ const TestJurusan = lazy(() =>
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
+const DashboardMenteeMateri = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeMateri")
+);
 
 // Dashboard Kampus
 const DashboardCampus = lazy(() =>
@@ -207,7 +210,7 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DetailCampus} />,
       },
 
-       {
+      {
         path: "program",
         element: <SuspenseWrapper Component={Program} />,
       },
@@ -264,6 +267,10 @@ const router = createBrowserRouter([
       {
         path: "jurusan/:slug",
         element: <SuspenseWrapper Component={DashboardJurusanDetail} />,
+      },
+      {
+        path: "materi/:id",
+        element: <SuspenseWrapper Component={DashboardMenteeMateri} />,
       },
 
       {

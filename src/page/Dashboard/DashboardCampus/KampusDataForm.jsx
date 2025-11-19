@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 
 export default function KampusDataForm() {
   const navigate = useNavigate();
@@ -40,7 +40,8 @@ export default function KampusDataForm() {
         <main className="flex-grow flex justify-center mt-10">
           <form
             onSubmit={handleSubmit}
-            className="bg-[#013D3A] text-white w-[85%] md:w-[65%] rounded-lg p-8 shadow-lg">
+            className="bg-[#013D3A] text-white w-[85%] md:w-[65%] rounded-lg p-8 shadow-lg"
+          >
             <div className="grid grid-cols-1 gap-5">
               <div>
                 <label className="block text-sm mb-1">Nama Kampus</label>
@@ -118,7 +119,8 @@ export default function KampusDataForm() {
             <div className="flex justify-center mt-8">
               <button
                 type="submit"
-                className="bg-[#5CC6BA] text-[#013D3A] font-semibold px-12 py-2 rounded-md hover:bg-[#4bb2a8] transition-all">
+                className="bg-[#5CC6BA] text-[#013D3A] font-semibold px-12 py-2 rounded-md hover:bg-[#4bb2a8] transition-all"
+              >
                 Kirim
               </button>
             </div>

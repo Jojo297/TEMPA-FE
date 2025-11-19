@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 
 const chartData = [
   { jurusan: "Informatika", Laki_laki: 25, Perempuan: 50 },
@@ -106,7 +106,8 @@ export default function DashboardBerandaCampus() {
                 <select
                   className="bg-transparent text-white rounded-md px-3 py-1 text-xs border border-white/30 focus:outline-none pr-6 cursor-pointer"
                   value={jurusanDipilih}
-                  onChange={(e) => setJurusanDipilih(e.target.value)}>
+                  onChange={(e) => setJurusanDipilih(e.target.value)}
+                >
                   <option value="" className="bg-[#013D3A]">
                     Pilih Jurusan
                   </option>
@@ -114,7 +115,8 @@ export default function DashboardBerandaCampus() {
                     <option
                       key={index}
                       value={item.jurusan}
-                      className="bg-[#013D3A]">
+                      className="bg-[#013D3A]"
+                    >
                       {item.jurusan}
                     </option>
                   ))}
@@ -130,7 +132,8 @@ export default function DashboardBerandaCampus() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={chartData}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
+                  margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
+                >
                   <XAxis
                     dataKey="jurusan"
                     stroke="#FFFFFF"
@@ -161,7 +164,8 @@ export default function DashboardBerandaCampus() {
 
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-[#5CC6BA] text-[#013D3A] hover:bg-[#4ab6a9] flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-semibold">
+                className="bg-[#5CC6BA] text-[#013D3A] hover:bg-[#4ab6a9] flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-semibold"
+              >
                 <Plus size={16} /> Tambah Mentor
               </button>
             </div>
@@ -170,7 +174,8 @@ export default function DashboardBerandaCampus() {
               {mentorList.map((mentor) => (
                 <div
                   key={mentor.id}
-                  className="flex justify-between items-center py-3">
+                  className="flex justify-between items-center py-3"
+                >
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -208,7 +213,8 @@ export default function DashboardBerandaCampus() {
                 </h2>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-gray-600 hover:text-black">
+                  className="text-gray-600 hover:text-black"
+                >
                   ✕
                 </button>
               </div>
@@ -227,7 +233,8 @@ export default function DashboardBerandaCampus() {
               <div className="flex justify-end">
                 <button
                   onClick={handleTambahMentor}
-                  className="bg-[#A0DCE5] text-[#013B35] font-semibold px-6 py-2 rounded-full hover:bg-[#8AD0D9] transition">
+                  className="bg-[#A0DCE5] text-[#013B35] font-semibold px-6 py-2 rounded-full hover:bg-[#8AD0D9] transition"
+                >
                   Tambahkan
                 </button>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 
 // Mock data kampus
 const initialCampusData = {
@@ -37,11 +37,9 @@ export default function Jurusan() {
   return (
     <SidebarCampus>
       <div className="min-h-screen bg-[#F8FAF8] font-sans pb-20">
-
         {/* ====================== HEADER BANNER ====================== */}
         <header className="bg-[#F8FAFB] mb-20">
           <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-
             {/* Banner */}
             <div className="h-[400px] relative">
               <img
@@ -55,10 +53,7 @@ export default function Jurusan() {
             <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
               <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
                 <img
-                  src={
-                    campusData.logo ||
-                    "https://placehold.co/200?text=Logo"
-                  }
+                  src={campusData.logo || "https://placehold.co/200?text=Logo"}
                   alt="Logo Kampus"
                   className="w-20 h-20 object-contain"
                 />
@@ -81,17 +76,15 @@ export default function Jurusan() {
           </div>
         </header>
 
-      
-
         {/* ====================== KONTEN: JURUSAN ====================== */}
         <section className="mt-6 max-w-6xl mx-auto px-6 mb-20 w-full">
           <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
               <button
                 onClick={() => setIsEditOpen(true)}
-                className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors">
+                className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
+              >
                 <Pencil size={18} /> Tambah Jurusan
               </button>
             </div>
@@ -112,7 +105,8 @@ export default function Jurusan() {
                     selectedJurusan?.id === j.id
                       ? "bg-[#013B35] text-white"
                       : "bg-gray-100 text-gray-700"
-                  }`}>
+                  }`}
+                >
                   {j.name}
                 </button>
               ))}
@@ -141,7 +135,8 @@ export default function Jurusan() {
         {isEditOpen && (
           <EditPopup
             title="Tambah Jurusan"
-            onClose={() => setIsEditOpen(false)}>
+            onClose={() => setIsEditOpen(false)}
+          >
             <EditJurusanForm onSave={handleAddJurusan} />
           </EditPopup>
         )}
@@ -157,7 +152,8 @@ function EditPopup({ title, children, onClose }) {
       <div className="bg-[#F7F9F7] w-full max-w-xl rounded-2xl p-8 relative shadow-xl max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-600 hover:text-black">
+          className="absolute top-6 right-6 text-gray-600 hover:text-black"
+        >
           <X size={24} />
         </button>
         <h2 className="text-2xl font-bold mb-8">{title}</h2>
@@ -225,7 +221,8 @@ function EditJurusanForm({ onSave }) {
       <div className="flex justify-end">
         <button
           onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
+          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold"
+        >
           Simpan
         </button>
       </div>

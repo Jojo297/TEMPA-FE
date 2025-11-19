@@ -1,4 +1,4 @@
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 import { Pencil, X, Plus, MapPin } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -63,13 +63,11 @@ export default function Prestasi() {
       {/* ====================== HEADER BANNER ====================== */}
       <header className="bg-[#F8FAFB]">
         <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-
           {/* Banner Kampus */}
           <div className="h-[400px] relative">
             <img
               src={
-                mainImage ||
-                "https://placehold.co/1200x400?text=Banner+Kampus"
+                mainImage || "https://placehold.co/1200x400?text=Banner+Kampus"
               }
               alt="Banner Kampus"
               className="w-full h-full object-cover"
@@ -86,7 +84,6 @@ export default function Prestasi() {
 
           {/* ====================== INFO KAMPUS ====================== */}
           <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
-
             {/* LOGO */}
             <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
               <img
@@ -267,7 +264,6 @@ export default function Prestasi() {
       {showAddModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center z-50">
           <div className="bg-[#F8FAF8] w-[900px] rounded-xl shadow-xl p-8 relative border border-gray-200">
-
             <button
               className="absolute top-5 right-5 text-gray-600 hover:text-black"
               onClick={() => setShowAddModal(false)}
@@ -286,7 +282,9 @@ export default function Prestasi() {
               placeholder="Masukkan judul prestasi"
             />
 
-            <label className="text-sm font-medium mb-2 block">Deskripsi *</label>
+            <label className="text-sm font-medium mb-2 block">
+              Deskripsi *
+            </label>
             <textarea
               className="w-full h-40 border border-[#013B35] rounded-xl p-4 bg-white outline-none"
               placeholder="Masukkan deskripsi prestasi"

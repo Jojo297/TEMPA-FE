@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Pencil } from "lucide-react";
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 
 export default function Program() {
   const [program, setProgram] = useState({

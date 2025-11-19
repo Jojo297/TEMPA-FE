@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Plus, Pencil, MapPin } from "lucide-react";
-import SidebarCampus from "@/components/SidebarCampus";
+import SidebarCampus from "@/components/SideBarCampus";
 import React from "react";
 
 // Mock images kosong
@@ -45,15 +45,16 @@ export default function DetailCampus() {
   return (
     <>
       <SidebarCampus>
-
         {/* ====================== HEADER BANNER ====================== */}
         <header className="bg-[#F8FAFB]">
           <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-
             {/* Banner Kampus */}
             <div className="h-[400px] relative">
               <img
-                src={mainImage || "https://placehold.co/1200x400?text=Banner+Kampus"}
+                src={
+                  mainImage ||
+                  "https://placehold.co/1200x400?text=Banner+Kampus"
+                }
                 alt="Banner Kampus"
                 className="w-full h-full object-cover"
               />
@@ -69,7 +70,6 @@ export default function DetailCampus() {
 
             {/* ====================== INFO KAMPUS ====================== */}
             <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
-
               {/* LOGO */}
               <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
                 <img
@@ -81,14 +81,20 @@ export default function DetailCampus() {
 
               {/* TEXT INFO */}
               <div>
-                <h1 className="text-3xl font-bold text-white">{campusData.name}</h1>
+                <h1 className="text-3xl font-bold text-white">
+                  {campusData.name}
+                </h1>
 
                 <div className="flex items-center text-gray-300 mt-1">
                   <MapPin size={16} className="mr-2" />
-                  <span className="text-sm">{campusData.address || "Alamat belum diisi"}</span>
+                  <span className="text-sm">
+                    {campusData.address || "Alamat belum diisi"}
+                  </span>
                 </div>
 
-                <p className="text-sm mt-1">{campusData.email || "Email belum diisi"}</p>
+                <p className="text-sm mt-1">
+                  {campusData.email || "Email belum diisi"}
+                </p>
               </div>
             </div>
           </div>
@@ -97,7 +103,9 @@ export default function DetailCampus() {
         {/* ====================== DESKRIPSI ====================== */}
         <section className="max-w-6xl mx-auto mt-10 px-8">
           <div className="flex justify-between items-start">
-            <h2 className="text-2xl font-bold text-[#013B35]">Deskripsi Kampus</h2>
+            <h2 className="text-2xl font-bold text-[#013B35]">
+              Deskripsi Kampus
+            </h2>
 
             <button
               onClick={() => setIsDescEditOpen(true)}
@@ -113,7 +121,9 @@ export default function DetailCampus() {
 
           <div className="mt-6">
             <h3 className="font-semibold text-lg">Visi</h3>
-            <p className="text-gray-700 mt-2">{campusData.visi || "Belum diisi."}</p>
+            <p className="text-gray-700 mt-2">
+              {campusData.visi || "Belum diisi."}
+            </p>
           </div>
 
           <div className="mt-6">
@@ -178,7 +188,8 @@ function EditCampusInfoForm({ initialData, onSave }) {
     images: initialData.images.slice(0, 1),
   });
 
-  const handleInput = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleInput = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleBannerUpload = () => {
     setForm({
@@ -193,11 +204,30 @@ function EditCampusInfoForm({ initialData, onSave }) {
 
   return (
     <div className="space-y-6">
-
-      <InputField label="Nama Kampus" name="name" value={form.name} onChange={handleInput} />
-      <InputField label="Website" name="website" value={form.website} onChange={handleInput} />
-      <InputField label="Email" name="email" value={form.email} onChange={handleInput} />
-      <InputField label="Alamat" name="address" value={form.address} onChange={handleInput} />
+      <InputField
+        label="Nama Kampus"
+        name="name"
+        value={form.name}
+        onChange={handleInput}
+      />
+      <InputField
+        label="Website"
+        name="website"
+        value={form.website}
+        onChange={handleInput}
+      />
+      <InputField
+        label="Email"
+        name="email"
+        value={form.email}
+        onChange={handleInput}
+      />
+      <InputField
+        label="Alamat"
+        name="address"
+        value={form.address}
+        onChange={handleInput}
+      />
 
       {/* Upload Logo */}
       <div>
@@ -237,13 +267,32 @@ function EditCampusInfoForm({ initialData, onSave }) {
 
 function EditCampusVisiMisiForm({ initialData, onSave }) {
   const [form, setForm] = useState(initialData);
-  const handleInput = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleInput = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
     <div className="space-y-6">
-      <TextAreaField label="Deskripsi" name="desc" height="h-32" value={form.desc} onChange={handleInput} />
-      <TextAreaField label="Visi" name="visi" height="h-24" value={form.visi} onChange={handleInput} />
-      <TextAreaField label="Misi" name="misi" height="h-24" value={form.misi} onChange={handleInput} />
+      <TextAreaField
+        label="Deskripsi"
+        name="desc"
+        height="h-32"
+        value={form.desc}
+        onChange={handleInput}
+      />
+      <TextAreaField
+        label="Visi"
+        name="visi"
+        height="h-24"
+        value={form.visi}
+        onChange={handleInput}
+      />
+      <TextAreaField
+        label="Misi"
+        name="misi"
+        height="h-24"
+        value={form.misi}
+        onChange={handleInput}
+      />
 
       <div className="flex justify-end">
         <button
