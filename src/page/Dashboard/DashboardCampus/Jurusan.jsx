@@ -35,113 +35,44 @@ export default function Jurusan() {
       : "https://placehold.co/1200x400?text=Banner+Kampus";
 
   return (
-    <SidebarCampus>
-      <div className="min-h-screen bg-[#F8FAF8] font-sans pb-20">
-        {/* ====================== HEADER BANNER ====================== */}
-        <header className="bg-[#F8FAFB] mb-20">
-          <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-            {/* Banner */}
-            <div className="h-[400px] relative">
+    <div className="min-h-screen bg-[#F8FAF8] font-sans pb-20">
+      {/* ====================== HEADER BANNER ====================== */}
+      <header className="bg-[#F8FAFB] mb-20">
+        <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
+          {/* Banner */}
+          <div className="h-[400px] relative">
+            <img
+              src={mainImage}
+              alt="Banner Kampus"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Info Kampus */}
+          <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
+            <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
               <img
-                src={mainImage}
-                alt="Banner Kampus"
-                className="w-full h-full object-cover"
+                src={campusData.logo || "https://placehold.co/200?text=Logo"}
+                alt="Logo Kampus"
+                className="w-20 h-20 object-contain"
               />
             </div>
 
-            {/* Info Kampus */}
-            <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
-              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
-                <img
-                  src={campusData.logo || "https://placehold.co/200?text=Logo"}
-                  alt="Logo Kampus"
-                  className="w-20 h-20 object-contain"
-                />
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">
+                {campusData.name}
+              </h1>
 
-              <div>
-                <h1 className="text-3xl font-bold text-white">
-                  {campusData.name}
-                </h1>
-
-                {/* lokasi + email jika ada */}
-                <p className="text-sm text-gray-300">
-                  {campusData.location || ""}
-                </p>
-                <p className="text-sm text-gray-300">
-                  {campusData.email || ""}
-                </p>
-              </div>
+              {/* lokasi + email jika ada */}
+              <p className="text-sm text-gray-300">
+                {campusData.location || ""}
+              </p>
+              <p className="text-sm text-gray-300">{campusData.email || ""}</p>
             </div>
           </div>
-        </header>
-
-        {/* ====================== KONTEN: JURUSAN ====================== */}
-        <section className="mt-6 max-w-6xl mx-auto px-6 mb-20 w-full">
-          <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
-              <button
-                onClick={() => setIsEditOpen(true)}
-                className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-              >
-                <Pencil size={18} /> Tambah Jurusan
-              </button>
-            </div>
-
-            {/* Bubble list */}
-            <div className="flex flex-wrap gap-3">
-              {jurusanList.length === 0 && (
-                <span className="text-gray-500">
-                  Belum ada jurusan yang ditambahkan.
-                </span>
-              )}
-
-              {jurusanList.map((j) => (
-                <button
-                  key={j.id}
-                  onClick={() => setSelectedJurusan(j)}
-                  className={`px-4 py-2 rounded-full border ${
-                    selectedJurusan?.id === j.id
-                      ? "bg-[#013B35] text-white"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {j.name}
-                </button>
-              ))}
-            </div>
-
-            {/* Detail jurusan */}
-            {selectedJurusan && (
-              <div className="mt-6 space-y-4">
-                <h3 className="text-xl font-bold text-[#013B35]">
-                  {selectedJurusan.name}
-                </h3>
-                {selectedJurusan.logo && (
-                  <img
-                    src={selectedJurusan.logo}
-                    alt="Logo Jurusan"
-                    className="w-32 h-32 object-cover rounded-full border"
-                  />
-                )}
-                <p className="text-gray-700">{selectedJurusan.desc}</p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* popup tambah jurusan */}
-        {isEditOpen && (
-          <EditPopup
-            title="Tambah Jurusan"
-            onClose={() => setIsEditOpen(false)}
-          >
-            <EditJurusanForm onSave={handleAddJurusan} />
-          </EditPopup>
-        )}
-      </div>
-    </SidebarCampus>
+        </div>
+      </header>
+    </div>
   );
 }
 

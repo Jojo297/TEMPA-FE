@@ -4,6 +4,8 @@ import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
 import Program from "./page/Dashboard/DashboardCampus/program";
+import ProtectedMenteeRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
@@ -230,7 +232,12 @@ const router = createBrowserRouter([
   // ===================== Dashboard Mentee =====================
   {
     path: "dashboard-mentee",
-    element: <SuspenseWrapper Component={DashboardMenteePage} />,
+    element: (
+      <ProtectedRoute
+        Component={DashboardMenteePage}
+        allowedRoles={["mentee"]}
+      />
+    ),
     children: [
       {
         index: true,

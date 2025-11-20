@@ -59,7 +59,7 @@ export default function Prestasi() {
   };
 
   return (
-    <SidebarCampus>
+    <>
       {/* ====================== HEADER BANNER ====================== */}
       <header className="bg-[#F8FAFB]">
         <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
@@ -305,6 +305,6 @@ export default function Prestasi() {
           </div>
         </div>
       )}
-    </SidebarCampus>
+    </>
   );
 }

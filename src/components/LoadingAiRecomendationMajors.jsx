@@ -1,4 +1,5 @@
 import { useState } from "react";
+import robotLoading from "@/assets/robotLoading.png";
 
 export default function LoadingAiRecomendationMajors() {
   // State untuk teks loading yang dinamis
@@ -6,27 +7,18 @@ export default function LoadingAiRecomendationMajors() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 bg-gray-50">
       {/* Kontainer Animasi Robot/AI */}
-      <div className="relative w-24 h-24 mb-6">
+      <div className="relative w-32 h-32 mb-6">
         {/* Base Lingkaran / Otak AI */}
         <div className="absolute inset-0 bg-secondary rounded-full opacity-30 animate-ping-slow"></div>
 
         {/* Ikon Utama */}
         <div className="absolute inset-0 flex items-center justify-center bg-primary rounded-full shadow-lg">
-          {/* Mengganti ikon robot dengan ikon otak atau kecerdasan buatan */}
-          <svg
-            className="w-12 h-12 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 11h10a3 3 0 013 3v1a3 3 0 01-3 3H7a3 3 0 01-3-3v-1a3 3 0 013-3z"
-            ></path>
-          </svg>
+          <img
+            src={robotLoading}
+            alt=""
+            srcset=""
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
 

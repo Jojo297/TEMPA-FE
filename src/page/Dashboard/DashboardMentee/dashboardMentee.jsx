@@ -6,10 +6,6 @@ import roboterror from "@/assets/robot-error.png";
 import { Outlet } from "react-router";
 
 const DashboardMentee = () => {
-  const darkText = "#003C3C";
-  const cardBgColor = "#E6F3F3";
-  const heroBg = "#003C3C";
-
   return (
     <SidebarWithNavbar>
       <main className="px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">

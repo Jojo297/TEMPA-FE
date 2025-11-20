@@ -19,8 +19,12 @@ const initialCampusData = {
   images: mockImages, // banner utama
 };
 
+// Mock jurusan awal kosong
+const initialJurusanList = [];
+
 export default function DetailCampus() {
   const [campusData, setCampusData] = useState(initialCampusData);
+  const [jurusanList, setJurusanList] = useState(initialJurusanList);
   const [isInfoEditOpen, setIsInfoEditOpen] = useState(false);
   const [isDescEditOpen, setIsDescEditOpen] = useState(false);
 
@@ -40,100 +44,107 @@ export default function DetailCampus() {
     setIsDescEditOpen(false);
   };
 
+  const [selectedJurusan, setSelectedJurusan] = useState(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const handleAddJurusan = (newJurusan) => {
+    const jurusanWithId = { ...newJurusan, id: Date.now() };
+    setJurusanList([...jurusanList, jurusanWithId]);
+    setSelectedJurusan(jurusanWithId);
+    setIsEditOpen(false);
+  };
+
   const mainImage = campusData.images[0]?.url || "";
 
   return (
     <>
-      <SidebarCampus>
-        {/* ====================== HEADER BANNER ====================== */}
-        <header className="bg-[#F8FAFB]">
-          <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-            {/* Banner Kampus */}
-            <div className="h-[400px] relative">
-              <img
-                src={
-                  mainImage ||
-                  "https://placehold.co/1200x400?text=Banner+Kampus"
-                }
-                alt="Banner Kampus"
-                className="w-full h-full object-cover"
-              />
+      {/* ====================== HEADER BANNER ====================== */}
+      <header className="bg-[#F8FAFB]">
+        <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
+          {/* Banner Kampus */}
+          <div className="h-[400px] relative">
+            <img
+              src={
+                mainImage || "https://placehold.co/1200x400?text=Banner+Kampus"
+              }
+              alt="Banner Kampus"
+              className="w-full h-full object-cover"
+            />
 
-              {/* EDIT BUTTON */}
-              <button
-                onClick={() => setIsInfoEditOpen(true)}
-                className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2"
-              >
-                <Pencil size={16} /> Edit Info
-              </button>
-            </div>
-
-            {/* ====================== INFO KAMPUS ====================== */}
-            <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
-              {/* LOGO */}
-              <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
-                <img
-                  src={campusData.logo || "https://placehold.co/200?text=Logo"}
-                  alt="Logo Kampus"
-                  className="w-20 h-20 object-contain"
-                />
-              </div>
-
-              {/* TEXT INFO */}
-              <div>
-                <h1 className="text-3xl font-bold text-white">
-                  {campusData.name}
-                </h1>
-
-                <div className="flex items-center text-gray-300 mt-1">
-                  <MapPin size={16} className="mr-2" />
-                  <span className="text-sm">
-                    {campusData.address || "Alamat belum diisi"}
-                  </span>
-                </div>
-
-                <p className="text-sm mt-1">
-                  {campusData.email || "Email belum diisi"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* ====================== DESKRIPSI ====================== */}
-        <section className="max-w-6xl mx-auto mt-10 px-8">
-          <div className="flex justify-between items-start">
-            <h2 className="text-2xl font-bold text-[#013B35]">
-              Deskripsi Kampus
-            </h2>
-
+            {/* EDIT BUTTON */}
             <button
-              onClick={() => setIsDescEditOpen(true)}
-              className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
+              onClick={() => setIsInfoEditOpen(true)}
+              className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2"
             >
-              <Pencil size={16} /> Edit
+              <Pencil size={16} /> Edit Info
             </button>
           </div>
 
-          <p className="text-gray-700 mt-4 leading-relaxed">
-            {campusData.desc || "Belum ada deskripsi."}
+          {/* ====================== INFO KAMPUS ====================== */}
+          <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
+            {/* LOGO */}
+            <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+              <img
+                src={campusData.logo || "https://placehold.co/200?text=Logo"}
+                alt="Logo Kampus"
+                className="w-20 h-20 object-contain"
+              />
+            </div>
+
+            {/* TEXT INFO */}
+            <div>
+              <h1 className="text-3xl font-bold text-white">
+                {campusData.name}
+              </h1>
+
+              <div className="flex items-center text-gray-300 mt-1">
+                <MapPin size={16} className="mr-2" />
+                <span className="text-sm">
+                  {campusData.address || "Alamat belum diisi"}
+                </span>
+              </div>
+
+              <p className="text-sm mt-1">
+                {campusData.email || "Email belum diisi"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* ====================== DESKRIPSI ====================== */}
+      <section className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full mt-5">
+        <div className="flex justify-between items-start">
+          <h2 className="text-2xl font-bold text-[#013B35]">
+            Deskripsi Kampus
+          </h2>
+
+          <button
+            onClick={() => setIsDescEditOpen(true)}
+            className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
+          >
+            <Pencil size={16} /> Edit
+          </button>
+        </div>
+
+        <p className="text-gray-700 mt-4 leading-relaxed">
+          {campusData.desc || "Belum ada deskripsi."}
+        </p>
+
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg">Visi</h3>
+          <p className="text-gray-700 mt-2">
+            {campusData.visi || "Belum diisi."}
           </p>
+        </div>
 
-          <div className="mt-6">
-            <h3 className="font-semibold text-lg">Visi</h3>
-            <p className="text-gray-700 mt-2">
-              {campusData.visi || "Belum diisi."}
-            </p>
-          </div>
-
-          <div className="mt-6">
-            <h3 className="font-semibold text-lg">Misi</h3>
-            <p className="text-gray-700 mt-2 whitespace-pre-line">
-              {campusData.misi || "Belum diisi."}
-            </p>
-          </div>
-        </section>
-      </SidebarCampus>
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg">Misi</h3>
+          <p className="text-gray-700 mt-2 whitespace-pre-line">
+            {campusData.misi || "Belum diisi."}
+          </p>
+        </div>
+      </section>
 
       {/* ====================== POPUP EDIT INFO ====================== */}
       {isInfoEditOpen && (
@@ -154,6 +165,61 @@ export default function DetailCampus() {
           />
         </EditPopup>
       )}
+
+      {/* ====================== KONTEN: JURUSAN ====================== */}
+      <section className="mt-6 mx-auto  mb-20 w-full">
+        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
+            <button
+              onClick={() => setIsEditOpen(true)}
+              className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
+            >
+              <Pencil size={18} /> Tambah Jurusan
+            </button>
+          </div>
+
+          {/* Bubble list */}
+          <div className="flex flex-wrap gap-3">
+            {jurusanList.length === 0 && (
+              <span className="text-gray-500">
+                Belum ada jurusan yang ditambahkan.
+              </span>
+            )}
+
+            {jurusanList.map((j) => (
+              <button
+                key={j.id}
+                onClick={() => setSelectedJurusan(j)}
+                className={`px-4 py-2 rounded-full border ${
+                  selectedJurusan?.id === j.id
+                    ? "bg-[#013B35] text-white"
+                    : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                {j.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Detail jurusan */}
+          {selectedJurusan && (
+            <div className="mt-6 space-y-4">
+              <h3 className="text-xl font-bold text-[#013B35]">
+                {selectedJurusan.name}
+              </h3>
+              {selectedJurusan.logo && (
+                <img
+                  src={selectedJurusan.logo}
+                  alt="Logo Jurusan"
+                  className="w-32 h-32 object-cover rounded-full border"
+                />
+              )}
+              <p className="text-gray-700">{selectedJurusan.desc}</p>
+            </div>
+          )}
+        </div>
+      </section>
     </>
   );
 }

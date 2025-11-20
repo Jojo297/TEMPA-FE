@@ -29,7 +29,7 @@ export default function Program() {
   };
 
   return (
-    <SidebarCampus>
+    <>
       {/* ====================== HEADER BANNER ====================== */}
       <header className="bg-[#F8FAFB] mb-10">
         <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
@@ -139,7 +139,7 @@ export default function Program() {
           onSave={handleSave}
         />
       )}
-    </SidebarCampus>
+    </>
   );
 }
 
