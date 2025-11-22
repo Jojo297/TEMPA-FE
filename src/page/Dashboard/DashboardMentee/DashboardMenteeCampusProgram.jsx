@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock, Map, Home } from "lucide-react";
 
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import Footer from "@/components/Footer";
 import { kampusList } from "@/lib/kampusList";
 import kuliah from "@/assets/kuliah.png";

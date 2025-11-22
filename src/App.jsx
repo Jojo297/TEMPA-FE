@@ -3,7 +3,6 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
-import Program from "./page/Dashboard/DashboardCampus/program";
 import ProtectedMenteeRoute from "./components/ProtectedRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -36,40 +35,40 @@ const DashboardMenteePage = lazy(() =>
   import("./page/Dashboard/DashboardMentee/dashboardMentee")
 );
 const DashboardMenteeBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardBeranda")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeBeranda")
 );
 const DashboardProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardProgram")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeProgram")
 );
 const DashboardMenteeCampus = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardCampus")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampus")
 );
 const DashboardCampusDetail = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashbordCampusDetail")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusDetail")
 );
-const DetailProgramMentee = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardProgram")
+const DashboardMenteeDetailProgram = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeDetailProgram")
 );
 const DashboardCampusPrestasi = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardCampusPrestasi")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusPrestasi")
 );
 const DashboardCampusJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardCampusJurusan")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusJurusan")
 );
 const DashboardMenteeProgramDaftar = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
 );
-const DashboardCampusProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardCampusProgram")
+const DashboardMenteeCampusProgram = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusProgram")
 );
 const DashboardJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardJurusan")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusan")
 );
 const DashboardJurusanDetail = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardJurusanDetail")
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusanDetail")
 );
 const DashboardTestJurusanForm = lazy(() =>
-  import("@/page/Dashboard/DashboardMentee/DashboardTestJurusanForm")
+  import("@/page/Dashboard/DashboardMentee/DashboardMenteeTestJurusanForm")
 );
 const TestJurusan = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Testjurusan")
@@ -108,9 +107,20 @@ const DashboardCampusBeranda = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
 );
 
-const Jurusan = lazy(() => import("./page/Dashboard/DashboardCampus/Jurusan"));
+const Jurusan = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusJurusan")
+);
+
 const DetailCampus = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DetailCampus")
+  import("./page/Dashboard/DashboardCampus/DashboardCampusDetailCampus")
+);
+
+const DetailProgram = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusDetailProgram")
+);
+
+const DashboardCampusProgram = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusProgram")
 );
 
 // ✅ Perbaikan: import PRESTASI YANG BENAR
@@ -214,7 +224,7 @@ const router = createBrowserRouter([
 
       {
         path: "program",
-        element: <SuspenseWrapper Component={Program} />,
+        element: <SuspenseWrapper Component={DetailProgram} />,
       },
     ],
   },
@@ -257,7 +267,7 @@ const router = createBrowserRouter([
       },
       {
         path: "program/:id",
-        element: <SuspenseWrapper Component={DetailProgramMentee} />,
+        element: <SuspenseWrapper Component={DashboardMenteeDetailProgram} />,
       },
       {
         path: "program/daftar",
@@ -295,7 +305,9 @@ const router = createBrowserRouter([
           },
           {
             path: "program",
-            element: <SuspenseWrapper Component={DashboardCampusProgram} />,
+            element: (
+              <SuspenseWrapper Component={DashboardMenteeCampusProgram} />
+            ),
           },
         ],
       },

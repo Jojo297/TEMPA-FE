@@ -1,4 +1,4 @@
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { jurusanList } from "@/lib/JurusanList";

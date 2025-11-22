@@ -1,4 +1,4 @@
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 
 export default function Materi() {
   return (

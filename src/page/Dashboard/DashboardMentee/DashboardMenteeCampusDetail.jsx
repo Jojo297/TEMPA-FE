@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "@/components/campusHeaderProfile";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CampusPrestasiPage from "./DashboardCampusPrestasi";
+import CampusPrestasiPage from "./DashboardMenteeCampusPrestasi";
 import CampusDescription from "@/components/CampusDescription";
-import DashboardCampusJurusan from "./DashboardCampusJurusan";
-import DashboardCampusProgram from "./DashboardCampusProgram";
+import DashboardCampusJurusan from "./DashboardMenteeCampusJurusan";
+import DashboardCampusProgram from "./DashboardMenteeCampusProgram";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, Pencil } from "lucide-react";
 import SidebarCampus from "@/components/SideBarCampus";
 
-export default function Program() {
+export default function DetailProgram() {
   const [program, setProgram] = useState({
     title: "KULIAH BERSERTIFIKAT 1 HARI",
     date: "10 Oktober 2025",

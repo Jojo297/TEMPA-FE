@@ -1,6 +1,6 @@
 import React from "react";
 import { Check, X, GraduationCap } from "lucide-react";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 import { Outlet } from "react-router";

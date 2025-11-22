@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import polibatamPrestasi from "@/assets/polibatam-prestasi.png";
 import { kampusList } from "@/lib/kampusList";
 import { CampusHeaderProfile } from "@/components/campusHeaderProfile";

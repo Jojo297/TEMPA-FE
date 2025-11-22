@@ -25,7 +25,7 @@ import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const DetailProgramMentee = () => {
+const DashboardMenteeDetailProgram = () => {
   // get id program from url
   const { id } = useParams();
   const idProgram = parseInt(id);
@@ -360,4 +360,4 @@ const DetailProgramMentee = () => {
   );
 };
 
-export default DetailProgramMentee;
+export default DashboardMenteeDetailProgram;

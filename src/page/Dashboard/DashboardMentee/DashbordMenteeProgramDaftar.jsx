@@ -1,5 +1,5 @@
 import React from "react";
-import SidebarWithNavbar from "@/components/SidebarWithNavbar";
+import SidebarWithNavbar from "@/components/SidebarMentee";
 import Footer from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
