@@ -115,7 +115,7 @@ const DetailCampus = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusDetailCampus")
 );
 
-const DetailProgram = lazy(() =>
+const DashboardCampusDetailProgram = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusDetailProgram")
 );
 
@@ -208,10 +208,8 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
       },
 
-      // Jurusan Dashboard Campus
       { path: "jurusan", element: <SuspenseWrapper Component={Jurusan} /> },
 
-      // ✅ PRESTASI DASHBOARD CAMPUS — SUDAH BENAR
       {
         path: "prestasi",
         element: <SuspenseWrapper Component={CampusPrestasiDashboard} />,
@@ -224,7 +222,12 @@ const router = createBrowserRouter([
 
       {
         path: "program",
-        element: <SuspenseWrapper Component={DetailProgram} />,
+        element: <SuspenseWrapper Component={DashboardCampusProgram} />,
+      },
+
+      {
+        path: "program/:id",
+        element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
       },
     ],
   },

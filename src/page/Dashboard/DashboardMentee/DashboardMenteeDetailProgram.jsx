@@ -1,4 +1,3 @@
-import kuliah from "@/assets/kuliah.png";
 import React, { useEffect, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -22,8 +21,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const DashboardMenteeDetailProgram = () => {
   // get id program from url
