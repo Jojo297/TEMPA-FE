@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Plus, Pencil, MapPin } from "lucide-react";
-import SidebarCampus from "@/components/SideBarCampus";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 
 // Mock images kosong
@@ -112,38 +112,207 @@ export default function DetailCampus() {
         </div>
       </header>
 
-      {/* ====================== DESKRIPSI ====================== */}
-      <section className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full mt-5">
-        <div className="flex justify-between items-start">
-          <h2 className="text-2xl font-bold text-[#013B35]">
-            Deskripsi Kampus
-          </h2>
+      <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
+        <Tabs defaultValue="deskripsi" className="w-full">
+          {/* Navigation button */}
+          <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
+            {/* description */}
+            <TabsTrigger
+              value="deskripsi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Deskripsi
+            </TabsTrigger>
 
-          <button
-            onClick={() => setIsDescEditOpen(true)}
-            className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
-          >
-            <Pencil size={16} /> Edit
-          </button>
-        </div>
+            {/* peserta */}
+            <TabsTrigger
+              value="jurusan"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Jurusan
+            </TabsTrigger>
 
-        <p className="text-gray-700 mt-4 leading-relaxed">
-          {campusData.desc || "Belum ada deskripsi."}
-        </p>
+            {/* mentor */}
+            <TabsTrigger
+              value="prestasi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Prestasi
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="mt-6">
-          <h3 className="font-semibold text-lg">Visi</h3>
-          <p className="text-gray-700 mt-2">
-            {campusData.visi || "Belum diisi."}
-          </p>
-        </div>
+          {/* content Tabs */}
+          <TabsContent value="deskripsi">
+            {/* ====================== DESKRIPSI ====================== */}
+            <section className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full mt-5">
+              <div className="flex justify-between items-start">
+                <h2 className="text-2xl font-bold text-[#013B35]">
+                  Deskripsi Kampus
+                </h2>
 
-        <div className="mt-6">
-          <h3 className="font-semibold text-lg">Misi</h3>
-          <p className="text-gray-700 mt-2 whitespace-pre-line">
-            {campusData.misi || "Belum diisi."}
-          </p>
-        </div>
+                <button
+                  onClick={() => setIsDescEditOpen(true)}
+                  className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
+                >
+                  <Pencil size={16} /> Edit
+                </button>
+              </div>
+
+              <p className="text-gray-700 mt-4 leading-relaxed">
+                {campusData.desc || "Belum ada deskripsi."}
+              </p>
+
+              <div className="mt-6">
+                <h3 className="font-semibold text-lg">Visi</h3>
+                <p className="text-gray-700 mt-2">
+                  {campusData.visi || "Belum diisi."}
+                </p>
+              </div>
+
+              <div className="mt-6">
+                <h3 className="font-semibold text-lg">Misi</h3>
+                <p className="text-gray-700 mt-2 whitespace-pre-line">
+                  {campusData.misi || "Belum diisi."}
+                </p>
+              </div>
+            </section>
+
+            {/* ====================== POPUP EDIT DESKRIPSI ====================== */}
+            {isDescEditOpen && (
+              <EditPopup
+                title="Edit Deskripsi Kampus"
+                onClose={handleCloseEdit}
+              >
+                <EditCampusVisiMisiForm
+                  initialData={campusData}
+                  onSave={(data) => handleSave(data, "desc")}
+                />
+              </EditPopup>
+            )}
+          </TabsContent>
+
+          <TabsContent value="jurusan">
+            {/* ====================== KONTEN: JURUSAN ====================== */}
+            <section className="mt-6 mx-auto  mb-20 w-full">
+              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
+                  <button
+                    onClick={() => setIsEditOpen(true)}
+                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
+                  >
+                    <Pencil size={18} /> Tambah Jurusan
+                  </button>
+                </div>
+
+                {/* Bubble list */}
+                <div className="flex flex-wrap gap-3">
+                  {jurusanList.length === 0 && (
+                    <span className="text-gray-500">
+                      Belum ada jurusan yang ditambahkan.
+                    </span>
+                  )}
+
+                  {jurusanList.map((j) => (
+                    <button
+                      key={j.id}
+                      onClick={() => setSelectedJurusan(j)}
+                      className={`px-4 py-2 rounded-full border ${
+                        selectedJurusan?.id === j.id
+                          ? "bg-[#013B35] text-white"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {j.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Detail jurusan */}
+                {selectedJurusan && (
+                  <div className="mt-6 space-y-4">
+                    <h3 className="text-xl font-bold text-[#013B35]">
+                      {selectedJurusan.name}
+                    </h3>
+                    {selectedJurusan.logo && (
+                      <img
+                        src={selectedJurusan.logo}
+                        alt="Logo Jurusan"
+                        className="w-32 h-32 object-cover rounded-full border"
+                      />
+                    )}
+                    <p className="text-gray-700">{selectedJurusan.desc}</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          </TabsContent>
+
+          <TabsContent value="prestasi">
+            {/* ====================== KONTEN: JURUSAN ====================== */}
+            <section className="mt-6 mx-auto  mb-20 w-full">
+              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-[#013B35]">
+                    Prestasi
+                  </h2>
+                  <button
+                    onClick={() => setIsEditOpen(true)}
+                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
+                  >
+                    <Pencil size={18} /> Tambahkan Prestasi
+                  </button>
+                </div>
+
+                {/* Bubble list */}
+                <div className="flex flex-wrap gap-3">
+                  {jurusanList.length === 0 && (
+                    <span className="text-gray-500">
+                      Belum ada prestasi yang ditambahkan.
+                    </span>
+                  )}
+
+                  {jurusanList.map((j) => (
+                    <button
+                      key={j.id}
+                      onClick={() => setSelectedJurusan(j)}
+                      className={`px-4 py-2 rounded-full border ${
+                        selectedJurusan?.id === j.id
+                          ? "bg-[#013B35] text-white"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {j.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Detail jurusan */}
+                {selectedJurusan && (
+                  <div className="mt-6 space-y-4">
+                    <h3 className="text-xl font-bold text-[#013B35]">
+                      {selectedJurusan.name}
+                    </h3>
+                    {selectedJurusan.logo && (
+                      <img
+                        src={selectedJurusan.logo}
+                        alt="Logo Jurusan"
+                        className="w-32 h-32 object-cover rounded-full border"
+                      />
+                    )}
+                    <p className="text-gray-700">{selectedJurusan.desc}</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          </TabsContent>
+        </Tabs>
       </section>
 
       {/* ====================== POPUP EDIT INFO ====================== */}
@@ -155,71 +324,6 @@ export default function DetailCampus() {
           />
         </EditPopup>
       )}
-
-      {/* ====================== POPUP EDIT DESKRIPSI ====================== */}
-      {isDescEditOpen && (
-        <EditPopup title="Edit Deskripsi Kampus" onClose={handleCloseEdit}>
-          <EditCampusVisiMisiForm
-            initialData={campusData}
-            onSave={(data) => handleSave(data, "desc")}
-          />
-        </EditPopup>
-      )}
-
-      {/* ====================== KONTEN: JURUSAN ====================== */}
-      <section className="mt-6 mx-auto  mb-20 w-full">
-        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
-            <button
-              onClick={() => setIsEditOpen(true)}
-              className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-            >
-              <Pencil size={18} /> Tambah Jurusan
-            </button>
-          </div>
-
-          {/* Bubble list */}
-          <div className="flex flex-wrap gap-3">
-            {jurusanList.length === 0 && (
-              <span className="text-gray-500">
-                Belum ada jurusan yang ditambahkan.
-              </span>
-            )}
-
-            {jurusanList.map((j) => (
-              <button
-                key={j.id}
-                onClick={() => setSelectedJurusan(j)}
-                className={`px-4 py-2 rounded-full border ${
-                  selectedJurusan?.id === j.id
-                    ? "bg-[#013B35] text-white"
-                    : "bg-gray-100 text-gray-700"
-                }`}
-              >
-                {j.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Detail jurusan */}
-          {selectedJurusan && (
-            <div className="mt-6 space-y-4">
-              <h3 className="text-xl font-bold text-[#013B35]">
-                {selectedJurusan.name}
-              </h3>
-              {selectedJurusan.logo && (
-                <img
-                  src={selectedJurusan.logo}
-                  alt="Logo Jurusan"
-                  className="w-32 h-32 object-cover rounded-full border"
-                />
-              )}
-              <p className="text-gray-700">{selectedJurusan.desc}</p>
-            </div>
-          )}
-        </div>
-      </section>
     </>
   );
 }

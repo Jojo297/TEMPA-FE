@@ -9,6 +9,8 @@ import {
   LogOut,
   Menu,
   X,
+  CreditCardIcon,
+  CreditCard,
 } from "lucide-react";
 
 import {
@@ -67,15 +69,22 @@ const Sidebarcampus = ({ children }) => {
     //   icon: <GraduationCap size={18} />,
     //   path: "/dashboard-campus/jurusan",
     // },
-    {
-      name: "PRESTASI",
-      icon: <Trophy size={18} />,
-      path: "/dashboard-campus/prestasi",
-    },
+    // {
+    //   name: "PRESTASI",
+    //   icon: <Trophy size={18} />,
+    //   path: "/dashboard-campus/prestasi",
+    // },
     {
       name: "PROGRAM",
       icon: <ListChecks size={18} />,
       path: "/dashboard-campus/program",
+    },
+
+    { separator: true },
+    {
+      name: "BERLANGGANAN",
+      icon: <CreditCard size={18} />,
+      path: "/dashboard-campus/subscription",
     },
   ];
 
@@ -104,22 +113,29 @@ const Sidebarcampus = ({ children }) => {
         } transition-transform duration-300 ease-in-out z-40`}
       >
         <ul className="flex flex-col mt-4 w-full flex-1">
-          {menu.map((item, index) => (
-            <li key={index}>
-              <Link
-                to={item.path}
-                className={`flex items-center gap-3 px-6 py-3 transition 
-                  ${
+          {menu.map((item, index) =>
+            item.separator ? (
+              <hr
+                key={`sep-${index}`}
+                className="my-3 mx-auto w-[70%] border-t border-white/50"
+              />
+            ) : (
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  onClick={item.action}
+                  className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                     location.pathname === item.path
                       ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
-                      : "text-white hover:bg-[#014840]"
+                      : "hover:bg-white/10 text-white/80"
                   }`}
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </Link>
-            </li>
-          ))}
+                >
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              </li>
+            )
+          )}
 
           {/* LOGOUT */}
           <li>
