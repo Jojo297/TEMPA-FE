@@ -117,7 +117,7 @@ export default function DashboardBeranda() {
   return (
     <>
       {/* Hero Section */}
-      <div className="bg-primary max-w-7xl rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
+      <div className="bg-primary w-full rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
         {/* Left Side */}
         <div className="flex-1 pr-4">
           <p className="text-sm tracking-widest text-white/80 mb-2">
