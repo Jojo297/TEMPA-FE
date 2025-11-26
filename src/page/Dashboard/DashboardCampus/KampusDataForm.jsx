@@ -1,5 +1,5 @@
 import { ManageMapsCampusLocation } from "@/components/ManageMapsCampusLocation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Command,
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import useAdressCampus from "@/hooks/hooksCampus/useAdressCampus";
 
 const frameworks = [
   {
@@ -65,6 +66,52 @@ export default function KampusDataForm() {
     lng: null,
   });
   const [selectedAddress, setSelectedAddress] = useState("");
+  const {
+    province,
+    fetchProvince,
+    fetchCity,
+    city,
+    subdistrict,
+    fetchSubdistrict,
+    ward,
+    fetchWard,
+    error,
+  } = useAdressCampus();
+
+  const displayProvince = province ?? [];
+  const displayCity = city ?? [];
+  const displaySubdistrict = subdistrict ?? [];
+  const displayWard = ward ?? [];
+  console.log(valueSubdistrict);
+  console.log(displayWard);
+
+  // fetch province
+  useEffect(() => {
+    fetchProvince();
+  }, [fetchProvince]);
+
+  // take city based on province
+  useEffect(() => {
+    // Pastikan valueProvince ada (tidak kosong) sebelum memanggil API kota
+    if (valueProvince) {
+      // Panggil action fetchCity Anda, berikan code provinsi sebagai parameter
+      fetchCity(valueProvince);
+    }
+  }, [valueProvince, fetchCity]); // Triggered whenever valueProvince changes
+
+  // fetch Subdistrict base on city
+  useEffect(() => {
+    if (valueCity) {
+      fetchSubdistrict(valueCity);
+    }
+  }, [valueCity, fetchSubdistrict]); // Triggered whenever valueCity changes
+
+  // fetch ward base on Subdistrict
+  useEffect(() => {
+    if (valueSubdistrict) {
+      fetchWard(valueSubdistrict);
+    }
+  }, [valueSubdistrict, fetchWard]); // Triggered whenever valueProvince changes
 
   const handleLocationChange = async (location) => {
     setSelectedLocation(location);
@@ -161,12 +208,12 @@ export default function KampusDataForm() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={openCity}
-                    className="w-full justify-between text-gray-400"
+                    className="w-full justify-between text-black"
                   >
                     {valueProvince
-                      ? frameworks.find(
-                          (framework) => framework.value === valueProvince
-                        )?.label
+                      ? displayProvince.find(
+                          (framework) => framework.code === valueProvince
+                        )?.name
                       : "Pilih Provinsi..."}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
@@ -174,30 +221,26 @@ export default function KampusDataForm() {
                 <PopoverContent className="w-full p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Search framework..."
+                      placeholder="Cari Provinsi..."
                       className="h-9 w-full"
                     />
                     <CommandList>
                       <CommandEmpty>Provonsi tidak ditemukan.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {displayProvince.map((framework) => (
                           <CommandItem
-                            key={framework.value}
-                            value={framework.value}
+                            key={framework.code}
+                            value={framework.name}
                             onSelect={(currentValue) => {
-                              setvalueProvince(
-                                currentValue === valueProvince
-                                  ? ""
-                                  : currentValue
-                              );
+                              setvalueProvince(framework.code);
                               setOpenProvince(false);
                             }}
                           >
-                            {framework.label}
+                            {framework.name}
                             <Check
                               className={cn(
                                 "ml-auto",
-                                valueProvince === framework.value
+                                valueProvince === framework.name
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -220,12 +263,12 @@ export default function KampusDataForm() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={openCity}
-                    className="w-full justify-between text-gray-400"
+                    className="w-full justify-between text-black"
                   >
                     {valueCity
-                      ? frameworks.find(
-                          (framework) => framework.value === valueCity
-                        )?.label
+                      ? displayCity.find(
+                          (framework) => framework.code === valueCity
+                        )?.name
                       : "Kota/Kabupaten"}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
@@ -241,22 +284,22 @@ export default function KampusDataForm() {
                         Kota/Kabupaten tidak ditemukan.
                       </CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {displayCity.map((framework) => (
                           <CommandItem
-                            key={framework.value}
-                            value={framework.value}
-                            onSelect={(currentValue) => {
-                              setvalueCity(
-                                currentValue === valueCity ? "" : currentValue
-                              );
+                            key={framework.code}
+                            // Ganti value-nya menjadi framework.code agar lebih mudah dicari
+                            value={framework.name}
+                            onSelect={(currentCode) => {
+                              setvalueCity(framework.code);
                               setOpenCity(false);
                             }}
                           >
-                            {framework.label}
+                            {framework.name}
                             <Check
                               className={cn(
                                 "ml-auto",
-                                valueCity === framework.value
+                                // Bandingkan dengan code, bukan name
+                                framework.code === valueCity
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -279,12 +322,12 @@ export default function KampusDataForm() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={openSubdistrict}
-                    className="w-full justify-between text-gray-400"
+                    className="w-full justify-between text-black"
                   >
                     {valueSubdistrict
-                      ? frameworks.find(
-                          (framework) => framework.value === valueSubdistrict
-                        )?.label
+                      ? displaySubdistrict.find(
+                          (framework) => framework.code === valueSubdistrict
+                        )?.name
                       : "Pilih Kecamatan..."}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
@@ -292,30 +335,26 @@ export default function KampusDataForm() {
                 <PopoverContent className="w-full p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Search framework..."
+                      placeholder="Search kecamatan..."
                       className="h-9 w-full"
                     />
                     <CommandList>
                       <CommandEmpty>Kecamatan tidak ditemukan.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {displaySubdistrict.map((framework) => (
                           <CommandItem
-                            key={framework.value}
-                            value={framework.value}
+                            key={framework.code}
+                            value={framework.name}
                             onSelect={(currentValue) => {
-                              setValueSubdistrict(
-                                currentValue === valueSubdistrict
-                                  ? ""
-                                  : currentValue
-                              );
+                              setValueSubdistrict(framework.code);
                               setOpenSubdistrict(false);
                             }}
                           >
-                            {framework.label}
+                            {framework.name}
                             <Check
                               className={cn(
                                 "ml-auto",
-                                valueSubdistrict === framework.value
+                                framework.code === valueSubdistrict
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -337,44 +376,40 @@ export default function KampusDataForm() {
                   <Button
                     variant="outline"
                     role="combobox"
-                    aria-expanded={openWard}
-                    className="w-full justify-between text-gray-400"
+                    aria-expanded={openSubdistrict}
+                    className="w-full justify-between text-black"
                   >
                     {valueWard
-                      ? frameworks.find(
-                          (framework) => framework.value === valueWard
-                        )?.label
-                      : "Pilih Desa/Kelurahan..."}
+                      ? displayWard.find(
+                          (framework) => framework.code === valueWard
+                        )?.name
+                      : "Pilih Kecamatan..."}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Search framework..."
+                      placeholder="Search kecamatan..."
                       className="h-9 w-full"
                     />
                     <CommandList>
-                      <CommandEmpty>
-                        Desa/Kelurahan tidak ditemukan.
-                      </CommandEmpty>
+                      <CommandEmpty>Kecamatan tidak ditemukan.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {displayWard.map((framework) => (
                           <CommandItem
-                            key={framework.value}
-                            value={framework.value}
+                            key={framework.code}
+                            value={framework.name}
                             onSelect={(currentValue) => {
-                              setValueWard(
-                                currentValue === valueWard ? "" : currentValue
-                              );
+                              setValueWard(framework.code);
                               setOpenWard(false);
                             }}
                           >
-                            {framework.label}
+                            {framework.name}
                             <Check
                               className={cn(
                                 "ml-auto",
-                                valueWard === framework.value
+                                framework.code === valueWard
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -392,12 +427,7 @@ export default function KampusDataForm() {
           {/* maps */}
           <div className="mt-5">
             <label className="block text-sm mb-1">Masukkan Titik Lokasi</label>
-            <ManageMapsCampusLocation
-              onLocationSelect={handleLocationChange}
-              // Tambahkan props initialLat dan initialLng jika Anda perlu memuat data lama
-              // initialLat={initialLat}
-              // initialLng={initialLng}
-            />
+            <ManageMapsCampusLocation onLocationSelect={handleLocationChange} />
           </div>
 
           {/* button submit */}

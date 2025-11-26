@@ -11,9 +11,16 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: [
-      "pegasus-accepted-surely.ngrok-free.app",
-      "*.ngrok-free.app",
-    ],
+    proxy: {
+      "/api/wilayah": {
+        target: "https://wilayah.id/api",
+        changeOrigin: true, // Wajib untuk melewati CORS
+        rewrite: (path) => path.replace(/^\/api\/wilayah/, ""),
+      },
+      allowedHosts: [
+        "pegasus-accepted-surely.ngrok-free.app",
+        "*.ngrok-free.app",
+      ],
+    },
   },
 });

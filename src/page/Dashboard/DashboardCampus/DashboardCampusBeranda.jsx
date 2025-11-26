@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import KampusDataForm from "./KampusDataForm";
 import CampusFirst from "./CampusFirst";
+import { jwtDecode } from "jwt-decode";
 
 const chartData = [
   { jurusan: "Informatika", Laki_laki: 25, Perempuan: 50 },
@@ -28,6 +29,9 @@ const mentorListDummy = [
 
 export default function DashboardCampusBeranda() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  console.log(decode);
   const [jurusanDipilih, setJurusanDipilih] = useState("");
   const [isCampusValid, setCampusValid] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,7 +83,7 @@ export default function DashboardCampusBeranda() {
     </div>
   );
 
-  if (isCampusValid) {
+  if (!decode.verif) {
     return <CampusFirst />;
   }
 
