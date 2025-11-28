@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function CampusFirst() {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ export default function CampusFirst() {
           sama dengan platform TEMPA.
         </p>
         <Button
-          onClick={() => navigate("/dashboard-campus/form-data")}
+          onClick={() => navigate("/campus-verification/form-data")}
           className="bg-[#013D3A] hover:bg-[#024E4B] text-white px-6 py-2 rounded-lg font-semibold mt-2"
         >
           Isi Data Kampus

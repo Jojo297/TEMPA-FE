@@ -5,6 +5,7 @@ import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
 import ProtectedMenteeRoute from "./components/ProtectedRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CampusFirst from "./page/Dashboard/DashboardCampus/CampusFirst";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
@@ -94,8 +95,8 @@ const DashboardMentor = lazy(() =>
 const KampusDataForm = lazy(() =>
   import("./page/Dashboard/DashboardCampus/KampusDataForm")
 );
-const KampusVerifikasi = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/KampusVerifikasi")
+const DashboardCampusVerivication = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication")
 );
 const KampusVerifikasiBerhasil = lazy(() =>
   import("./page/Dashboard/DashboardCampus/KampusVerifikasiBerhasil")
@@ -181,7 +182,10 @@ const router = createBrowserRouter([
   // ======================= DASHBOARD CAMPUS =======================
   {
     path: "/dashboard-campus",
-    element: <SuspenseWrapper Component={DashboardCampus} />,
+    element: (
+      <ProtectedRoute Component={DashboardCampus} allowedRoles={["campus"]} />
+    ),
+    // <SuspenseWrapper Component={DashboardCampus} />,
     children: [
       {
         index: true,
@@ -191,17 +195,10 @@ const router = createBrowserRouter([
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
       },
-      {
-        path: "form-data",
-        element: <SuspenseWrapper Component={KampusDataForm} />,
-      },
-      {
-        path: "kampus-verifikasi",
-        element: <SuspenseWrapper Component={KampusVerifikasi} />,
-      },
+
       {
         path: "kampus-verifikasi-berhasil",
-        element: <SuspenseWrapper Component={KampusVerifikasiBerhasil} />,
+        element: <SuspenseWrapper Component={DashboardCampusVerivication} />,
       },
       {
         path: "kampus-verifikasi-gagal",
@@ -228,6 +225,28 @@ const router = createBrowserRouter([
       {
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
+      },
+    ],
+  },
+
+  // if the campus has not verified
+  {
+    path: "campus-verification",
+    element: (
+      <ProtectedRoute
+        Component={DashboardCampusVerivication}
+        allowedRoles={["campus"]}
+      />
+    ),
+    children: [
+      {
+        index: true,
+        path: "welcome",
+        element: <SuspenseWrapper Component={CampusFirst} />,
+      },
+      {
+        path: "form-data",
+        element: <SuspenseWrapper Component={KampusDataForm} />,
       },
     ],
   },

@@ -29,9 +29,8 @@ const mentorListDummy = [
 
 export default function DashboardCampusBeranda() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("userJwt");
-  const decode = jwtDecode(token);
-  console.log(decode);
+
+  // console.log(decode);
   const [jurusanDipilih, setJurusanDipilih] = useState("");
   const [isCampusValid, setCampusValid] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,10 +81,6 @@ export default function DashboardCampusBeranda() {
       </div>
     </div>
   );
-
-  if (!decode.verif) {
-    return <CampusFirst />;
-  }
 
   return (
     <>
