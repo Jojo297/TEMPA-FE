@@ -9,7 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import KampusDataForm from "./KampusDataForm";
+import KampusDataForm from "./DashboardCampusRegisterMitra";
 import CampusFirst from "./CampusFirst";
 import { jwtDecode } from "jwt-decode";
 

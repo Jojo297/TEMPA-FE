@@ -55,27 +55,12 @@ const SidebarCampusVerivication = ({ children }) => {
       path: "/campus-verification/welcome",
       disable: false,
     },
-    // {
-    //   name: "DATA KAMPUS",
-    //   icon: <FileEdit size={18} />,
-    //   path: "/dashboard-campus/form-data",
-    // },
     {
       name: "DESKRIPSI",
       icon: <Notebook size={18} />,
       path: "",
       disable: true,
     },
-    // {
-    //   name: "JURUSAN",
-    //   icon: <GraduationCap size={18} />,
-    //   path: "/dashboard-campus/jurusan",
-    // },
-    // {
-    //   name: "PRESTASI",
-    //   icon: <Trophy size={18} />,
-    //   path: "/dashboard-campus/prestasi",
-    // },
     {
       name: "PROGRAM",
       icon: <ListChecks size={18} />,

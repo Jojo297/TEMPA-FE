@@ -3,9 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoadingRedirect from "./components/loadingRedirect";
 import CampusDescription from "./components/CampusDescription";
 import ScrollToTop from "./components/ScrollToTop";
-import ProtectedMenteeRoute from "./components/ProtectedRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CampusFirst from "./page/Dashboard/DashboardCampus/CampusFirst";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
@@ -92,8 +90,8 @@ const DashboardMentor = lazy(() =>
   import("@/page/Dashboard/DashboardMentor/DashboardMentor")
 );
 
-const KampusDataForm = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/KampusDataForm")
+const DashboardCampusRegisterMitra = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
 );
 const DashboardCampusVerivication = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication")
@@ -124,9 +122,12 @@ const DashboardCampusProgram = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusProgram")
 );
 
-// ✅ Perbaikan: import PRESTASI YANG BENAR
 const CampusPrestasiDashboard = lazy(() =>
   import("./page/Dashboard/DashboardCampus/prestasi")
+);
+
+const CampusFirst = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/CampusFirst")
 );
 
 // ================= ROUTER =================
@@ -185,7 +186,6 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute Component={DashboardCampus} allowedRoles={["campus"]} />
     ),
-    // <SuspenseWrapper Component={DashboardCampus} />,
     children: [
       {
         index: true,
@@ -246,7 +246,7 @@ const router = createBrowserRouter([
       },
       {
         path: "form-data",
-        element: <SuspenseWrapper Component={KampusDataForm} />,
+        element: <SuspenseWrapper Component={DashboardCampusRegisterMitra} />,
       },
     ],
   },
