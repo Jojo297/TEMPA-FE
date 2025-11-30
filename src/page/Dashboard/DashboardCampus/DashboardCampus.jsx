@@ -13,7 +13,11 @@ export default function DashboardBerandaCampus() {
 
   // if verif redirect component CampusFirst
   useEffect(() => {
-    if (decode.verif == false) {
+    if (
+      decode.verif.verification_status == "null" ||
+      decode.verif.verification_status == "pending" ||
+      decode.verif.verification_status == "rejected"
+    ) {
       navigate("/campus-verification/welcome");
     }
   }, [token]);

@@ -32,6 +32,9 @@ import { Input } from "@/components/ui/input";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useRegisterMitraCampus from "@/hooks/hooksCampus/useRegisterMitraCampus";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 // Skema untuk validasi data lokasi (lat/lng)
 const LocationSchema = z
@@ -56,28 +59,28 @@ const LocationSchema = z
 // Skema utama untuk form registrasi kampus
 const RegisterMitraSchema = z.object({
   // 1. Nama Kampus (Input Teks)
-  namaKampus: z
+  campusName: z
     .string()
     .trim()
     .min(1, "Nama Kampus wajib diisi.")
     .max(225, "Nama Kampus maksimal 225 karakter."),
 
   // 2. Email Kampus (Input Email)
-  emailKampus: z
+  emailCampus: z
     .string()
     .trim()
     .min(1, "Email Kampus wajib diisi.")
     .email("Format Email tidak valid."),
 
   // 3. Deskripsi Kampus (Textarea)
-  deskripsiKampus: z
+  description: z
     .string()
     .trim()
     .min(10, "Deskripsi Kampus minimal 10 karakter.")
     .max(500, "Deskripsi Kampus maksimal 500 karakter."),
 
   // 4. Website Kampus (Input Teks - diasumsikan URL)
-  website: z
+  websiteCampus: z
     .string()
     .trim()
     .url("Website harus berupa URL yang valid (misal: https://kampus.ac.id).")
@@ -103,6 +106,7 @@ const RegisterMitraSchema = z.object({
 
 export default function DashboardCampusRegisterMitra() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
   const [openProvince, setOpenProvince] = React.useState(false);
   const [openCity, setOpenCity] = React.useState(false);
   const [openSubdistrict, setOpenSubdistrict] = React.useState(false);
@@ -127,14 +131,16 @@ export default function DashboardCampusRegisterMitra() {
     fetchWard,
     error,
   } = useAdressCampus();
+  const { isLoadingRegister, errorRegisterMitraCampus, registerMitraCampus } =
+    useRegisterMitraCampus();
 
   const form = useForm({
     resolver: zodResolver(RegisterMitraSchema),
     defaultValues: {
-      namaKampus: "",
-      emailKampus: "",
-      deskripsiKampus: "",
-      website: "",
+      campusName: "",
+      emailCampus: "",
+      description: "",
+      websiteCampus: "",
       valueProvince: "",
       valueCity: "",
       valueSubdistrict: "",
@@ -161,10 +167,13 @@ export default function DashboardCampusRegisterMitra() {
   const displayCity = city ?? [];
   const displaySubdistrict = subdistrict ?? [];
   const displayWard = ward ?? [];
+  // console.log(displayProvince);
 
   // fetch province
   useEffect(() => {
-    fetchProvince();
+    if (displayProvince.length <= 0) {
+      fetchProvince();
+    }
   }, [fetchProvince]);
 
   // take city based on province
@@ -202,8 +211,17 @@ export default function DashboardCampusRegisterMitra() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (data) => {
-    console.log("Data kampus dikirim:", data);
+  const onSubmit = async (data) => {
+    // console.log("Data kampus dikirim:", data);
+
+    const saveDataRegister = await registerMitraCampus(token, data);
+    if (saveDataRegister) {
+      toast.success("Data Berhasil disimpan!");
+      form.reset();
+      navigate("/campus-verification/welcome");
+    }
+
+    console.error(errorRegisterMitraCampus);
   };
 
   return (
@@ -235,7 +253,7 @@ export default function DashboardCampusRegisterMitra() {
               {/* 1. Nama Kampus */}
               <FormField
                 control={form.control}
-                name="namaKampus"
+                name="campusName"
                 render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Nama Kampus</FormLabel>
@@ -256,7 +274,7 @@ export default function DashboardCampusRegisterMitra() {
               {/* 2. Email Kampus */}
               <FormField
                 control={form.control}
-                name="emailKampus"
+                name="emailCampus"
                 render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Email Kampus</FormLabel>
@@ -268,7 +286,7 @@ export default function DashboardCampusRegisterMitra() {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription className="text-gray-100">
                       Gunakan email resmi kampus.
                     </FormDescription>
                     {fieldState.error && (
@@ -281,7 +299,7 @@ export default function DashboardCampusRegisterMitra() {
               {/* 3. Deskripsi Kampus */}
               <FormField
                 control={form.control}
-                name="deskripsiKampus"
+                name="description"
                 render={({ field, fieldState }) => (
                   <FormItem className="">
                     <FormLabel>Deskripsi Kampus</FormLabel>
@@ -302,7 +320,7 @@ export default function DashboardCampusRegisterMitra() {
               {/* 4. Website Kampus */}
               <FormField
                 control={form.control}
-                name="website"
+                name="websiteCampus"
                 render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Website Kampus</FormLabel>
@@ -314,7 +332,7 @@ export default function DashboardCampusRegisterMitra() {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription className="text-gray-100">
                       Contoh: https://kampusku.ac.id
                     </FormDescription>
                     {fieldState.error && (
@@ -341,7 +359,11 @@ export default function DashboardCampusRegisterMitra() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={openCity}
-                            className="w-full justify-between text-black"
+                            className={`w-full justify-between ${
+                              valueProvince
+                                ? "text-black"
+                                : "text-gray-500 hover:text-gray-500"
+                            }`}
                           >
                             {valueProvince
                               ? displayProvince.find(
@@ -412,7 +434,11 @@ export default function DashboardCampusRegisterMitra() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={openCity}
-                            className="w-full justify-between text-black"
+                            className={`w-full justify-between ${
+                              valueCity
+                                ? "text-black"
+                                : "text-gray-500 hover:text-gray-500"
+                            }`}
                           >
                             {valueCity
                               ? displayCity.find(
@@ -462,9 +488,6 @@ export default function DashboardCampusRegisterMitra() {
                         </PopoverContent>
                       </Popover>
                     </FormControl>
-                    <FormDescription>
-                      Gunakan email resmi kampus.
-                    </FormDescription>
                     {fieldState.error && (
                       <FormMessage>{fieldState.error.message}</FormMessage>
                     )}
@@ -489,7 +512,11 @@ export default function DashboardCampusRegisterMitra() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={openSubdistrict}
-                            className="w-full justify-between text-black"
+                            className={`w-full justify-between ${
+                              valueSubdistrict
+                                ? "text-black"
+                                : "text-gray-500 hover:text-gray-500"
+                            }`}
                           >
                             {valueSubdistrict
                               ? displaySubdistrict.find(
@@ -560,7 +587,11 @@ export default function DashboardCampusRegisterMitra() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={openSubdistrict}
-                            className="w-full justify-between text-black"
+                            className={`w-full justify-between ${
+                              valueWard
+                                ? "text-black"
+                                : "text-gray-500 hover:text-gray-500"
+                            }`}
                           >
                             {valueWard
                               ? displayWard.find(
@@ -618,22 +649,50 @@ export default function DashboardCampusRegisterMitra() {
             </div>
 
             {/* maps */}
-            <div className="mt-5">
-              <label className="block text-sm mb-1">
-                Masukkan Titik Lokasi
-              </label>
-              <ManageMapsCampusLocation
-                onLocationSelect={handleLocationChange}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="selectedLocation"
+              render={({ field, fieldState }) => (
+                <FormItem className="mt-5">
+                  <FormLabel>Masukkan Titik Lokasi</FormLabel>
+                  {/* Komponen Peta Anda */}
+                  <ManageMapsCampusLocation
+                    onLocationSelect={handleLocationChange}
+                  />
+
+                  {/* Tampilkan Pesan Error Validasi */}
+                  {fieldState.error && (
+                    <FormMessage className="mt-5">
+                      {fieldState.error.message}
+                    </FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
 
             {/* button submit */}
-            <button
-              type="submit"
-              className="flex justify-center mt-8 bg-[#5CC6BA] text-[#013D3A] font-semibold px-12 py-2 rounded-md hover:bg-[#4bb2a8] transition-all"
-            >
-              Kirim
-            </button>
+            <div className="flex justify-center ">
+              <Button
+                type="submit"
+                disabled={isLoadingRegister}
+                className={`
+                mt-8 bg-[#5CC6BA] text-[#013D3A] font-semibold px-12 py-2 rounded-md transition duration-300
+                ${
+                  isLoadingRegister
+                    ? "cursor-not-allowed" // Style saat loading/disabled
+                    : "hover:bg-[#4bb2a8]" // Style saat aktif
+                }`}
+              >
+                {isLoadingRegister ? (
+                  <>
+                    <Spinner />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  "Kirim"
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </main>

@@ -97,7 +97,7 @@ const DashboardCampusVerivication = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication")
 );
 const KampusVerifikasiBerhasil = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/KampusVerifikasiBerhasil")
+  import("./page/Dashboard/DashboardCampus/CampusVerificationAccept")
 );
 const KampusVerifikasiGagal = lazy(() =>
   import("./page/Dashboard/DashboardCampus/KampusVerifikasiGagal")
@@ -128,6 +128,10 @@ const CampusPrestasiDashboard = lazy(() =>
 
 const CampusFirst = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusFirst")
+);
+
+const DashboardCampusWaitingRegisterMitra = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
 // ================= ROUTER =================
@@ -247,6 +251,12 @@ const router = createBrowserRouter([
       {
         path: "form-data",
         element: <SuspenseWrapper Component={DashboardCampusRegisterMitra} />,
+      },
+      {
+        path: "waiting-register-mitra",
+        element: (
+          <SuspenseWrapper Component={DashboardCampusWaitingRegisterMitra} />
+        ),
       },
     ],
   },

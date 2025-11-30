@@ -38,6 +38,7 @@ export default function DashboardBeranda() {
   const completedPrograms = displayPrograms.filter((item) => {
     return item.completion_status === "completed";
   });
+
   const completedCount = completedPrograms.length;
   // console.log(completedCount);
 
