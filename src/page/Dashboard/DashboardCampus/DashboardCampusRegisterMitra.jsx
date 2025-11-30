@@ -35,6 +35,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useRegisterMitraCampus from "@/hooks/hooksCampus/useRegisterMitraCampus";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import useDebounce from "@/hooks/hooksCampus/useDebounce";
+import axios from "axios";
 
 // Skema untuk validasi data lokasi (lat/lng)
 const LocationSchema = z
@@ -102,7 +104,10 @@ const RegisterMitraSchema = z.object({
   // 9. Titik Lokasi (Maps - ini harus berupa objek {lat, lng})
   // Kami mengasumsikan formData memiliki properti selectedLocation
   selectedLocation: LocationSchema,
+  isCampusVerifiedByApi: z.boolean(),
 });
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function DashboardCampusRegisterMitra() {
   const navigate = useNavigate();
@@ -149,6 +154,7 @@ export default function DashboardCampusRegisterMitra() {
         lat: null,
         lng: null,
       },
+      isCampusVerifiedByApi: false,
     },
 
     mode: "onBlur",
@@ -161,13 +167,55 @@ export default function DashboardCampusRegisterMitra() {
     formState: { errors, isSubmitting, isDirty, isValid },
   } = form;
 
-  const answers = watch();
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  // get real-time value from field campusName
+  const campusNameValue = form.watch("campusName");
+
+  // Value that will trigger the API after 500ms
+  const debouncedSearchTerm = useDebounce(campusNameValue, 500);
+
+  // fetch campus search from api
+  const fetchCampusSuggestions = async (keyword) => {
+    // Jangan panggil API jika keyword kurang dari 3 karakter
+    if (!keyword || keyword.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      // Panggil endpoint Express.js Anda
+      const response = await axios.get(
+        `${API_BASE_URL}/validate-campus/${keyword}`
+      );
+
+      if (response.data.status === "success") {
+        // Asumsikan respons.data.data adalah array kampus
+        setSuggestions(response.data.data);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching campus suggestions:", error);
+      setSuggestions([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const displayProvince = province ?? [];
   const displayCity = city ?? [];
   const displaySubdistrict = subdistrict ?? [];
   const displayWard = ward ?? [];
   // console.log(displayProvince);
+
+  // trigger after debouncedSearchTerm changes
+  useEffect(() => {
+    fetchCampusSuggestions(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   // fetch province
   useEffect(() => {
@@ -250,20 +298,95 @@ export default function DashboardCampusRegisterMitra() {
             className="bg-[#013B36] text-white w-full rounded-lg p-8 shadow-lg"
           >
             <div className="grid grid-cols-2 gap-5">
-              {/* 1. Nama Kampus */}
+              <input
+                type="hidden"
+                {...form.register("isCampusVerifiedByApi")}
+                value={form.watch("isCampusVerifiedByApi").toString()} // Pastikan dikirim sebagai string 'true'/'false'
+              />
+
+              {/* 1. Campus Name */}
               <FormField
                 control={form.control}
                 name="campusName"
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Nama Kampus</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="bg-white text-black"
-                        placeholder="Masukkan nama kampus"
-                        {...field}
-                      />
-                    </FormControl>
+                    <FormLabel>Nama Kampus (Cari)</FormLabel>
+
+                    <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          {/* PENTING: Gunakan Button sebagai Trigger untuk menghindari konflik input. */}
+
+                          {/* Nilai yang ditampilkan adalah nilai yang sudah dipilih di RHF. */}
+
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className="w-full justify-between bg-white text-black hover:bg-white/90"
+                          >
+                            {field.value
+                              ? field.value // Menampilkan nilai RHF yang sudah dipilih
+                              : "Cari & Pilih nama kampus..."}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+
+                      {/* Dropdown/Suggestions */}
+                      <PopoverContent
+                        className="w-[--radix-popover-trigger-width] p-0"
+                        align="start"
+                      >
+                        <Command>
+                          <CommandInput
+                            placeholder="Ketik nama kampus untuk mencari..."
+                            onValueChange={(value) => {
+                              form.setValue("campusName", value);
+                              form.setValue("isCampusVerifiedByApi", false);
+                            }}
+                            value={campusNameValue}
+                          />
+
+                          {isSearching ? (
+                            <div className="p-2 text-center text-sm">
+                              Mencari data kampus...
+                            </div>
+                          ) : suggestions.length > 0 ? (
+                            <CommandGroup>
+                              {suggestions.map((campus) => (
+                                <CommandItem
+                                  key={campus.id}
+                                  onSelect={() => {
+                                    // Set nilai ke RHF dan tutup popover
+                                    form.setValue("campusName", campus.nama, {
+                                      shouldValidate: true,
+                                    });
+                                    form.setValue(
+                                      "isCampusVerifiedByApi",
+                                      true
+                                    );
+                                    setPopoverOpen(false);
+                                  }}
+                                  value={campus.nama}
+                                >
+                                  {campus.nama} ({campus.kode})
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          ) : debouncedSearchTerm.length >= 3 &&
+                            !isSearching ? (
+                            <CommandEmpty>
+                              Tidak ada hasil. Anda dapat melanjutkan dengan
+                              nama manual.
+                            </CommandEmpty>
+                          ) : (
+                            <div className="p-2 text-sm text-gray-500">
+                              Ketik minimal 3 karakter untuk mencari.
+                            </div>
+                          )}
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+
                     {fieldState.error && (
                       <FormMessage>{fieldState.error.message}</FormMessage>
                     )}

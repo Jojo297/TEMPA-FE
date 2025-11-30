@@ -31,6 +31,7 @@ const useRegisterMitraCampus = create((set) => ({
           ward: data.valueWard,
           lat: data.selectedLocation.lat,
           lng: data.selectedLocation.lng,
+          isCampusVerifiedByApi: data.isCampusVerifiedByApi,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
