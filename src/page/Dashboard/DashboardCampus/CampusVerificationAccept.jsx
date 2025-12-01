@@ -1,8 +1,8 @@
 import React from "react";
 import logo from "@/assets/logo-text.png";
-import robot from "@/assets/robot-sad.png"; // pastikan gambar ada di folder assets
+import robot from "@/assets/robot-happy.png"; // pakai gambar robot yang sama
 
-export default function KampusVerifikasiGagal() {
+export default function CampusVerificationAccept({ campusName }) {
   return (
     <main className="flex-grow flex flex-col items-center justify-center">
       {" "}
@@ -10,14 +10,15 @@ export default function KampusVerifikasiGagal() {
         {/* Judul Utama */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mt-4 uppercase">
           {" "}
-          Verifikasi Gagal
+          Verifikasi Berhasil
         </h2>
 
         {/* Teks Deskriptif */}
         <p className="text-base md:text-lg text-center leading-relaxed max-w-2xl px-2">
           {" "}
-          Maaf, data yang anda masukkan belum dapat diverifikasi. Admin akan
-          segera melakukan tindakan, mohon tunggu 1x24 jam.
+          Halo <span className="font-bold text-teal-300">{campusName}</span>,
+          terima kasih sudah bergabung dalam mewujudkan ekosistem pendidikan
+          yang adaptif, inovatif, dan berdampak nyata bagi masa depan.
         </p>
 
         {/* Gambar Robot */}
