@@ -141,7 +141,7 @@ export default function DashboardCampusProgram() {
             {/* Card Program */}
             <div className="flex flex-col gap-8">
               {/* Card Program */}
-              {ProgramDummy.length >= 0 ? (
+              {ProgramDummy.length <= 0 ? (
                 <AddProgram />
               ) : (
                 ProgramDummy.map((item) => (
