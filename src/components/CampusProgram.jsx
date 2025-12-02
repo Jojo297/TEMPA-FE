@@ -187,8 +187,7 @@ const ProgramCard = ({ program }) => (
         backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)), url(${program.Image})`,
         backgroundColor: "#013B35",
         minHeight: "200px",
-      }}
-    >
+      }}>
       <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
         {program.Program}
       </h3>
@@ -273,27 +272,24 @@ export default function CampusProgram() {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Deskripsi
           </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
-            Prestasi
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
+            {/* Prestasi
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+          > */}
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
             // Kelas aktif sesuai dengan tampilan gambar (warna biru/hijau tua)
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Program
           </Link>
         </div>
@@ -311,7 +307,7 @@ export default function CampusProgram() {
           </p>
 
           <div className="space-y-6">
-            {currentProgramData.length > 0 ? (
+            {currentProgramData.length < 0 ? (
               currentProgramData.map((program, index) => (
                 <ProgramCard key={index} program={program} />
               ))

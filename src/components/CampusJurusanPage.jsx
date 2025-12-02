@@ -61,26 +61,23 @@ const CampusJurusanPage = () => {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Deskripsi
-          </Link>
+            {/* </Link>
           <Link
             to={`/campus/${kampus.id}/prestasi`}
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
           >
-            Prestasi
+            Prestasi */}
           </Link>
           <Link
             to={`/campus/${kampus.id}/jurusan`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
           </Link>
         </div>
@@ -101,13 +98,11 @@ const CampusJurusanPage = () => {
               filteredJurusanDetails.map((item) => (
                 <div
                   key={item.slug} // Menggunakan slug sebagai key unik
-                  className="border rounded-2xl overflow-hidden shadow-sm"
-                >
+                  className="border rounded-2xl overflow-hidden shadow-sm">
                   <button
                     // MENGGUNAKAN item.nama
                     onClick={() => toggleJurusan(item.nama)}
-                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition"
-                  >
+                    className="w-full text-left bg-[#013B35] text-white font-semibold px-6 py-4 flex justify-between items-center hover:bg-[#015f53] transition">
                     <span>{item.nama}</span> {/* MENGGUNAKAN item.nama */}
                     <span>{openJurusan === item.nama ? "−" : "+"}</span>
                   </button>

@@ -79,7 +79,7 @@ const RegisterMitraSchema = z.object({
     .string()
     .trim()
     .min(10, "Deskripsi Kampus minimal 10 karakter.")
-    .max(500, "Deskripsi Kampus maksimal 500 karakter."),
+    .max(1000, "Deskripsi Kampus maksimal 200 karakter."),
 
   // 4. Website Kampus (Input Teks - diasumsikan URL)
   websiteCampus: z
@@ -295,8 +295,7 @@ export default function DashboardCampusRegisterMitra() {
                 console.log("Status Form:", { isValid, isDirty, isSubmitting });
               }
             )}
-            className="bg-[#013B36] text-white w-full rounded-lg p-8 shadow-lg"
-          >
+            className="bg-[#013B36] text-white w-full rounded-lg p-8 shadow-lg">
             <div className="grid grid-cols-2 gap-5">
               <input
                 type="hidden"
@@ -322,8 +321,7 @@ export default function DashboardCampusRegisterMitra() {
                           <Button
                             variant="outline"
                             role="combobox"
-                            className="w-full justify-between bg-white text-black hover:bg-white/90"
-                          >
+                            className="w-full justify-between bg-white text-black hover:bg-white/90">
                             {field.value
                               ? field.value // Menampilkan nilai RHF yang sudah dipilih
                               : "Cari & Pilih nama kampus..."}
@@ -334,8 +332,7 @@ export default function DashboardCampusRegisterMitra() {
                       {/* Dropdown/Suggestions */}
                       <PopoverContent
                         className="w-[--radix-popover-trigger-width] p-0"
-                        align="start"
-                      >
+                        align="start">
                         <Command>
                           <CommandInput
                             placeholder="Ketik nama kampus untuk mencari..."
@@ -366,8 +363,7 @@ export default function DashboardCampusRegisterMitra() {
                                     );
                                     setPopoverOpen(false);
                                   }}
-                                  value={campus.nama}
-                                >
+                                  value={campus.nama}>
                                   {campus.nama} ({campus.kode})
                                 </CommandItem>
                               ))}
@@ -475,8 +471,7 @@ export default function DashboardCampusRegisterMitra() {
                     <FormControl>
                       <Popover
                         open={openProvince}
-                        onOpenChange={setOpenProvince}
-                      >
+                        onOpenChange={setOpenProvince}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -486,8 +481,7 @@ export default function DashboardCampusRegisterMitra() {
                               valueProvince
                                 ? "text-black"
                                 : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
+                            }`}>
                             {valueProvince
                               ? displayProvince.find(
                                   (framework) =>
@@ -516,8 +510,7 @@ export default function DashboardCampusRegisterMitra() {
                                       field.onChange(framework.name);
                                       setvalueProvince(framework.code);
                                       setOpenProvince(false);
-                                    }}
-                                  >
+                                    }}>
                                     {framework.name}
                                     <Check
                                       className={cn(
@@ -561,8 +554,7 @@ export default function DashboardCampusRegisterMitra() {
                               valueCity
                                 ? "text-black"
                                 : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
+                            }`}>
                             {valueCity
                               ? displayCity.find(
                                   (framework) => framework.code === valueCity
@@ -591,8 +583,7 @@ export default function DashboardCampusRegisterMitra() {
                                       setvalueCity(framework.code);
                                       field.onChange(framework.name);
                                       setOpenCity(false);
-                                    }}
-                                  >
+                                    }}>
                                     {framework.name}
                                     <Check
                                       className={cn(
@@ -628,8 +619,7 @@ export default function DashboardCampusRegisterMitra() {
                     <FormControl>
                       <Popover
                         open={openSubdistrict}
-                        onOpenChange={setOpenSubdistrict}
-                      >
+                        onOpenChange={setOpenSubdistrict}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -639,8 +629,7 @@ export default function DashboardCampusRegisterMitra() {
                               valueSubdistrict
                                 ? "text-black"
                                 : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
+                            }`}>
                             {valueSubdistrict
                               ? displaySubdistrict.find(
                                   (framework) =>
@@ -669,8 +658,7 @@ export default function DashboardCampusRegisterMitra() {
                                       setValueSubdistrict(framework.code);
                                       field.onChange(framework.name);
                                       setOpenSubdistrict(false);
-                                    }}
-                                  >
+                                    }}>
                                     {framework.name}
                                     <Check
                                       className={cn(
@@ -714,8 +702,7 @@ export default function DashboardCampusRegisterMitra() {
                               valueWard
                                 ? "text-black"
                                 : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
+                            }`}>
                             {valueWard
                               ? displayWard.find(
                                   (framework) => framework.code === valueWard
@@ -743,8 +730,7 @@ export default function DashboardCampusRegisterMitra() {
                                       setValueWard(framework.code);
                                       field.onChange(framework.name);
                                       setOpenWard(false);
-                                    }}
-                                  >
+                                    }}>
                                     {framework.name}
                                     <Check
                                       className={cn(
@@ -804,8 +790,7 @@ export default function DashboardCampusRegisterMitra() {
                   isLoadingRegister
                     ? "cursor-not-allowed" // Style saat loading/disabled
                     : "hover:bg-[#4bb2a8]" // Style saat aktif
-                }`}
-              >
+                }`}>
                 {isLoadingRegister ? (
                   <>
                     <Spinner />
