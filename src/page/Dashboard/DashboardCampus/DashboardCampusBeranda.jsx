@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BarChart,
@@ -8,16 +8,20 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  LabelList,
 } from "recharts";
 import KampusDataForm from "./DashboardCampusRegisterMitra";
 import CampusFirst from "./CampusFirst";
 import { jwtDecode } from "jwt-decode";
+import useGetProgramChart from "@/hooks/hooksCampus/useGetProgramChart";
+import { Button } from "@/components/ui/button";
 
-const chartData = [
-  { jurusan: "Informatika", Laki_laki: 25, Perempuan: 50 },
-  { jurusan: "Manajemen Bisnis", Laki_laki: 40, Perempuan: 90 },
-  { jurusan: "Mesin", Laki_laki: 35, Perempuan: 80 },
-  { jurusan: "Elektronika", Laki_laki: 15, Perempuan: 35 },
+const rawData = [
+  { program: "Web Development Dasar", total_mentee: 50 },
+  { program: "Data Science Lanjut", total_mentee: 35 },
+  { program: "UI/UX Design Bootcamp", total_mentee: 78 },
+  { program: "Jaringan Komputer", total_mentee: 20 },
+  { program: "Manajemen Proyek Digital", total_mentee: 65 },
 ];
 
 const mentorListDummy = [
@@ -27,15 +31,42 @@ const mentorListDummy = [
   { id: 4, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
 ];
 
+// --- Custom Tooltip (Untuk menampilkan detail saat hover) ---
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/90 p-3 rounded-lg shadow-lg border border-gray-200">
+        <p className="text-sm font-semibold text-[#013D3A]">{label}</p>
+        <p className="text-xs text-gray-600">
+          Total Mentee:{" "}
+          <span className="font-bold text-base text-teal-600">
+            {payload[0].value}
+          </span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function DashboardCampusBeranda() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  const campusName = decode.verif.campus_name;
 
   // console.log(decode);
   const [jurusanDipilih, setJurusanDipilih] = useState("");
   const [isCampusValid, setCampusValid] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [emailMentor, setEmailMentor] = useState("");
   const [mentorList, setMentorList] = useState(mentorListDummy);
+  const { programs, isLoading, error, fetchPrograms } = useGetProgramChart();
+
+  useEffect(() => {
+    if (token) {
+      fetchPrograms(token);
+    }
+  }, [token]);
 
   const handleTambahMentor = () => {
     if (!emailMentor.trim())
@@ -82,79 +113,113 @@ export default function DashboardCampusBeranda() {
     </div>
   );
 
+  // Dalam kasus ini, kita tidak memerlukan state 'jurusanDipilih' karena sudah dihapus
+  const chartData = programs ?? [];
+
+  // Render Label di atas Bar (meniru Label shadcn)
+  const renderCustomBarLabel = ({ x, y, width, value }) => {
+    return (
+      <text
+        // MENGUBAH 'x' agar berada di tengah bar: x + width / 2
+        x={x + width / 2}
+        y={y}
+        fill="#FFFFFF"
+        textAnchor="middle"
+        dy={-6} // Menempatkan label di atas bar
+        style={{ fontSize: "10px", fontWeight: 600 }}
+      >
+        {value}
+      </text>
+    );
+  };
+
   return (
     <>
       {/* HEADER */}
       <div className="px-10 pt-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-[#013D3A]">
-            SELAMAT DATANG,
-            <br /> MITRA TEMPA
+            SELAMAT DATANG, <br />
+            {campusName}
           </h1>
         </div>
       </div>
 
       <main className="flex-1 p-6 md:p-10 overflow-y-auto">
         {/* === CHART SECTION (TIDAK DIUBAH SESUAI PERMINTAAN) === */}
-        <section className="bg-[#013D3A] rounded-xl p-6 text-white shadow-lg mb-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-            <h3 className="text-lg font-semibold">
-              Jumlah Pendaftaran Program per Jurusan
+        <section className="bg-[#013D3A] w-full rounded-xl p-6 text-white shadow-2xl mb-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <h3 className="text-xl font-bold">
+              Jumlah Pendaftaran Mentee per Program
             </h3>
+            {/* Dropdown sudah dihapus sesuai permintaan */}
+          </div>
 
-            {/* === DROPDOWN PILIH JURUSAN (SUDAH AKTIF) === */}
-            <div className="relative w-full md:w-auto">
-              <select
-                className="bg-transparent text-white rounded-md px-3 py-1 text-xs border border-white/30 focus:outline-none pr-6 cursor-pointer"
-                value={jurusanDipilih}
-                onChange={(e) => setJurusanDipilih(e.target.value)}
-              >
-                <option value="" className="bg-[#013D3A]">
-                  Pilih Jurusan
-                </option>
-                {chartData.map((item, index) => (
-                  <option
-                    key={index}
-                    value={item.jurusan}
-                    className="bg-[#013D3A]"
+          <div className="h-80 w-full">
+            {/* === START: Conditional Rendering === */}
+            {chartData && chartData.length > 0 ? (
+              // Jika ada data program, tampilkan BarChart
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 20, right: 20, left: 0, bottom: 50 }}
+                >
+                  <XAxis
+                    dataKey="program_name"
+                    stroke="#FFFFFF"
+                    tickLine={false}
+                    tick={{
+                      angle: -25,
+                      textAnchor: "middle",
+                      dy: 15,
+                    }}
+                    interval={0}
+                    height={50}
+                    style={{ fontSize: "10px" }}
+                  />
+
+                  <YAxis
+                    stroke="#FFFFFF"
+                    tickLine={false}
+                    axisLine={false}
+                    style={{ fontSize: "10px" }}
+                    tickFormatter={(value) => `${value} Mentee`}
+                  />
+
+                  <Tooltip cursor={false} content={<CustomTooltip />} />
+
+                  <Bar
+                    dataKey="total_mentee"
+                    fill="#5CC6BA"
+                    radius={[4, 4, 0, 0]}
+                    minPointSize={5}
                   >
-                    {item.jurusan}
-                  </option>
-                ))}
-              </select>
-            </div>
+                    <LabelList
+                      dataKey="total_mentee" // Pastikan ini sesuai dengan key di data Anda
+                      content={renderCustomBarLabel}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              // Jika tidak ada data program, tampilkan pesan
+              <div className="flex flex-col gap-4 justify-center items-center h-full text-center p-4">
+                <p className="text-white text-lg font-medium">
+                  Belum ada program yang dibuat oleh kampus ini. Klik tombol
+                  dibawah untuk membuat program.
+                </p>
+                <Button
+                  onClick={() => navigate("/dashboard-campus/program")}
+                  className="bg-secondary text-primary hover:bg-secondary hover:opacity-50 transition"
+                >
+                  Buat Program
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div className="flex justify-end text-sm mb-4">
-            <CustomLegend />
-          </div>
-
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chartData}
-                margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
-              >
-                <XAxis
-                  dataKey="jurusan"
-                  stroke="#FFFFFF"
-                  tickLine={false}
-                  style={{ fontSize: "10px" }}
-                />
-                <YAxis
-                  stroke="#FFFFFF"
-                  tickLine={false}
-                  style={{ fontSize: "10px" }}
-                  domain={[0, 100]}
-                />
-                <Tooltip
-                  cursor={{ fill: "rgba(255,255,255,0.1)" }}
-                  content={<CustomTooltip />}
-                />
-                <Bar dataKey="Laki_laki" fill="#A0D9D0" stackId="a" />
-                <Bar dataKey="Perempuan" fill="#5CC6BA" stackId="a" />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="text-center mt-4 text-xs text-white/70">
+            Data Pendaftaran Mentee Total (Per Program)
           </div>
         </section>
 

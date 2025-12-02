@@ -199,7 +199,6 @@ const router = createBrowserRouter([
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
       },
-
       {
         path: "kampus-verifikasi-berhasil",
         element: <SuspenseWrapper Component={DashboardCampusVerivication} />,

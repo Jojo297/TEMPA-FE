@@ -14,14 +14,25 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Calendar, Home, Map, Search, Users } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ProgramDummy } from "@/lib/ProgramDummy";
 import AddProgram from "@/components/AddProgram";
+import useGetAllProgram from "@/hooks/hooksMentee/useGetAllProgram";
 
 export default function DashboardCampusProgram() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
   const [searchTerm, setSearchTerm] = useState("");
+  const { programs, isLoading, error, fetchPrograms } = useGetAllProgram();
+
+  const displayProgram = programs ?? [];
+
+  useEffect(() => {
+    if (token) {
+      fetchPrograms(token);
+    }
+  }, []);
 
   // badge for status program
   const getBadgeClass = (status) => {
@@ -141,7 +152,7 @@ export default function DashboardCampusProgram() {
             {/* Card Program */}
             <div className="flex flex-col gap-8">
               {/* Card Program */}
-              {ProgramDummy.length >= 0 ? (
+              {ProgramDummy.length <= 0 ? (
                 <AddProgram />
               ) : (
                 ProgramDummy.map((item) => (
