@@ -16,14 +16,6 @@ import { jwtDecode } from "jwt-decode";
 import useGetProgramChart from "@/hooks/hooksCampus/useGetProgramChart";
 import { Button } from "@/components/ui/button";
 
-const rawData = [
-  { program: "Web Development Dasar", total_mentee: 50 },
-  { program: "Data Science Lanjut", total_mentee: 35 },
-  { program: "UI/UX Design Bootcamp", total_mentee: 78 },
-  { program: "Jaringan Komputer", total_mentee: 20 },
-  { program: "Manajemen Proyek Digital", total_mentee: 65 },
-];
-
 const mentorListDummy = [
   { id: 1, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
   { id: 2, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },

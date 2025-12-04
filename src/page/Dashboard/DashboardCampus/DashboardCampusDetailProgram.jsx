@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X, Pencil, Calendar } from "lucide-react";
 import { ProgramDummy } from "@/lib/ProgramDummy";
 import { Link, useParams } from "react-router";
@@ -11,14 +11,38 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useGetDetailProgram from "@/hooks/hooksCampus/useGetDetailProgram";
+import DescriptionProgramCampus from "@/components/DescriptionProgramCampus";
+import ParticipantProgramCampus from "@/components/ParticipantProgramCampus";
+import MentorProgramCampus from "@/components/MentorProgramCampus";
+import MateriProgramCampus from "@/components/MateriProgramCampus";
+
+/* ========================== COMPONENT INFO ========================== */
+function Info({ label, value }) {
+  return (
+    <div>
+      <p className="font-medium text-gray-600">{label}</p>
+      <p className="text-gray-900">{value || "-"}</p>
+    </div>
+  );
+}
 
 export default function DashboardCampusDetailProgram() {
   // get id program from url
   const { id } = useParams();
   const idProgram = parseInt(id);
+  const token = localStorage.getItem("userJwt");
+  const { detailProgram, isLoading, error, fetchDetailProgram } =
+    useGetDetailProgram();
 
-  const program = ProgramDummy.find((item) => item.id == idProgram);
+  const program = detailProgram ?? {};
   console.log(program);
+
+  useEffect(() => {
+    if (token) {
+      fetchDetailProgram(token, idProgram);
+    }
+  }, [token, idProgram]);
 
   const [editType, setEditType] = useState(null);
 
@@ -54,7 +78,11 @@ export default function DashboardCampusDetailProgram() {
       {/* ====================== HEADER BANNER ====================== */}
       <div className="relative rounded-xl overflow-hidden shadow-md mb-10">
         <div className="relative">
-          <img src="" alt="Program" className="w-full h-72 object-cover" />
+          <img
+            src={program.image_url}
+            alt="Program"
+            className="w-full h-72 object-cover"
+          />
           {/* EDIT BUTTON */}
           <button
             onClick=""
@@ -74,6 +102,14 @@ export default function DashboardCampusDetailProgram() {
               <Calendar size={16} />
               <span>
                 {new Date(program.start_date).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              <span>-</span>
+              <span>
+                {new Date(program.end_date).toLocaleDateString("id-ID", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -117,93 +153,33 @@ export default function DashboardCampusDetailProgram() {
             >
               Mentor
             </TabsTrigger>
+
+            {/* materi */}
+            <TabsTrigger
+              value="materi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Materi
+            </TabsTrigger>
           </TabsList>
 
           {/* content Tabs */}
           <TabsContent value="deskripsi">
-            {/* ====================== CARD PROGRAM ====================== */}
-            <div className="max-w-6xl mx-auto mb-10">
-              <div className="bg-white shadow-md rounded-xl p-6 border">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-[#013B35]">
-                    Detail Program
-                  </h2>
-                  <button
-                    onClick={() => setEditType("program")}
-                    className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full text-sm"
-                  >
-                    <Pencil size={14} /> Edit Program
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Info label="Jenis Kegiatan" value={program.jenisKegiatan} />
-                  <Info
-                    label="Buka Pendaftaran"
-                    value={program.bukaPendaftaran}
-                  />
-                  <Info
-                    label="Tanggal Pelaksanaan"
-                    value={program.tanggalPelaksanaan}
-                  />
-                  <Info label="Lokasi" value={program.lokasi} />
-                  <Info label="Waktu Mulai" value={program.waktuMulai} />
-                  <Info label="Waktu Selesai" value={program.waktuSelesai} />
-                  <Info label="Kuota" value={program.kuota} />
-
-                  <div className="col-span-2">
-                    <p className="font-medium text-gray-600 mb-1">
-                      Detail Kegiatan
-                    </p>
-                    <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
-                      {program.detailKegiatan || "-"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DescriptionProgramCampus program={program} />
           </TabsContent>
 
           <TabsContent value="peserta">
-            {/* ====================== CARD peserta ====================== */}
-            <div className="max-w-6xl mx-auto mb-10">
-              <div className="bg-white shadow-md rounded-xl p-6 border">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-[#013B35]">
-                    Peserta yang mendaftar
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Info label="Nama Peserta" value={program.mentorName} />
-                  <Info label="Email Peserta" value={program.mentorEmail} />
-                </div>
-              </div>
-            </div>
+            <ParticipantProgramCampus menteeList={program.mentee_list} />
           </TabsContent>
 
           <TabsContent value="mentor">
-            {/* ====================== CARD MENTOR ====================== */}
-            <div className="max-w-6xl mx-auto mb-10">
-              <div className="bg-white shadow-md rounded-xl p-6 border">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-[#013B35]">
-                    Informasi Mentor
-                  </h2>
-                  <button
-                    onClick={() => setEditType("mentor")}
-                    className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full text-sm"
-                  >
-                    <Pencil size={14} /> Edit Mentor
-                  </button>
-                </div>
+            <MentorProgramCampus mentorList={program.mentor} />
+          </TabsContent>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <Info label="Nama Peseta" value={program.mentorName} />
-                  <Info label="Email Mentor" value={program.mentorEmail} />
-                </div>
-              </div>
-            </div>
+          <TabsContent value="materi">
+            <MateriProgramCampus materiList={program.materi_list} />
           </TabsContent>
         </Tabs>
       </section>
@@ -226,16 +202,6 @@ export default function DashboardCampusDetailProgram() {
         />
       )}
     </>
-  );
-}
-
-/* ========================== COMPONENT INFO ========================== */
-function Info({ label, value }) {
-  return (
-    <div>
-      <p className="font-medium text-gray-600">{label}</p>
-      <p className="text-gray-900">{value || "-"}</p>
-    </div>
   );
 }
 

@@ -4,10 +4,12 @@ import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const useRegisterMitraCampus = create((set) => ({
+const useRegisterMitraCampus = create((set, get) => ({
   // State
   isVerify: null,
   isLoadingRegister: false,
+  abortController: null,
+  isLoading: false,
   errorRegisterMitraCampus: null,
   errorVerificationCampus: null,
 
@@ -58,14 +60,25 @@ const useRegisterMitraCampus = create((set) => ({
 
   // check verification status campus
   checkVeirificationCampus: async (token) => {
-    set({ isLoading: true, error: null });
+    // 1. Batalkan request sebelumnya jika masih berjalan
+    const currentController = get().abortController;
+    if (currentController) {
+      currentController.abort();
+    }
+
+    // 2. Buat controller baru
+    const controller = new AbortController();
+    set({
+      isLoading: true,
+      errorVerificationCampus: null,
+      abortController: controller, // Simpan controller baru
+    });
 
     try {
       const API_URL = `${API_BASE_URL}/check-verification-status`;
 
       const response = await axios.get(API_URL, {
         headers: {
-          // Mengirim JWT dalam header Authorizationb
           Authorization: `Bearer ${token}`,
         },
       });
@@ -75,13 +88,20 @@ const useRegisterMitraCampus = create((set) => ({
       set({
         isVerify: getVerificationStatus,
         isLoading: false,
-        error: null,
+        errorVerificationCampus: null,
+        abortController: null, // Hapus controller setelah selesai
       });
     } catch (error) {
-      console.error("Failed to fetch province:", error);
+      console.error("Failed to fetch verification status:", error); // Ubah log
+
+      if (axios.isCancel(error) || error.name === "AbortError") {
+        console.log("Request dibatalkan saat render ulang.");
+        set({ isLoading: false, abortController: null });
+        return;
+      }
 
       const errorMessage =
-        error.response?.data?.message || "Gagal mengambil data province.";
+        error.response?.data?.message || "Gagal mengambil data verifikasi.";
 
       set({
         isLoading: false,
@@ -91,13 +111,21 @@ const useRegisterMitraCampus = create((set) => ({
   },
 
   // function for clear state
-  clearResponseAi: () =>
+  cleanup: () => {
+    const controller = get().abortController;
+    if (controller) {
+      controller.abort();
+    }
+    // Reset semua state
     set({
       isVerify: null,
+      isLoadingRegister: false,
+      abortController: null,
       isLoading: false,
       errorRegisterMitraCampus: null,
       errorVerificationCampus: null,
-    }),
+    });
+  },
 }));
 
 export default useRegisterMitraCampus;
