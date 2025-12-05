@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import {
-  FileEdit,
   LayoutGrid,
-  Notebook,
-  GraduationCap,
-  ListChecks,
-  Trophy,
+  FolderKanban,
   LogOut,
   Menu,
   X,
-  CreditCardIcon,
-  CreditCard,
+  Landmark,
+  GraduationCap,
 } from "lucide-react";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "@/assets/logo-text.png";
+import Footer from "@/components/Footer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,25 +22,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "@/assets/logo-text.png";
-import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
-const Sidebarcampus = ({ children }) => {
+export default function SidebarAdmin({ children }) {
   const [isOpen, setIsOpen] = useState(true);
+  const [openDropdown, setOpenDropdown] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
-    const token = localStorage.getItem("userJwt");
-
-    if (!token) {
-      navigate("/");
-      toast.success("Anda Berhasil Keluar!");
-    }
-
     localStorage.removeItem("userJwt");
     navigate("/");
     toast.success("Anda Berhasil Keluar!");
@@ -52,39 +41,25 @@ const Sidebarcampus = ({ children }) => {
     {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
-      path: "/dashboard-campus/beranda",
+      path: "/dashboard-admin",
     },
-    // {
-    //   name: "DATA KAMPUS",
-    //   icon: <FileEdit size={18} />,
-    //   path: "/dashboard-campus/form-data",
-    // },
     {
-      name: "DESKRIPSI",
-      icon: <Notebook size={18} />,
-      path: "/dashboard-campus/detailcampus",
-    },
-    // {
-    //   name: "JURUSAN",
-    //   icon: <GraduationCap size={18} />,
-    //   path: "/dashboard-campus/jurusan",
-    // },
-    // {
-    //   name: "PRESTASI",
-    //   icon: <Trophy size={18} />,
-    //   path: "/dashboard-campus/prestasi",
-    // },
-    {
-      name: "PROGRAM",
-      icon: <ListChecks size={18} />,
-      path: "/dashboard-campus/program",
-    },
-
-    { separator: true },
-    {
-      name: "BERLANGGANAN",
-      icon: <CreditCard size={18} />,
-      path: "/dashboard-campus/berlangganan", // <-- Ini adalah perubahannya
+      name: "MANAJEMEN",
+      icon: <FolderKanban size={18} />,
+      path: "/dashboard-admin/manajemen",
+      isDropdown: true,
+      submenu: [
+        {
+          name: "KAMPUS",
+          icon: <Landmark size={18} />,
+          path: "/dashboard-admin/manajemen/kampus",
+        },
+        {
+          name: "SISWA",
+          icon: <GraduationCap size={18} />,
+          path: "/dashboard-admin/manajemen/siswa",
+        },
+      ],
     },
   ];
 
@@ -101,7 +76,7 @@ const Sidebarcampus = ({ children }) => {
 
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold">P</span>
+            <span className="text-sm font-semibold">A</span>
           </div>
         </div>
       </div>
@@ -112,17 +87,62 @@ const Sidebarcampus = ({ children }) => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}>
         <ul className="flex flex-col mt-4 w-full flex-1">
-          {menu.map((item, index) =>
-            item.separator ? (
-              <hr
-                key={`sep-${index}`}
-                className="my-3 mx-auto w-[70%] border-t border-white/50"
-              />
-            ) : (
-              <li key={index}>
+          {menu.map((item, index) => (
+            <li key={index} className="w-full">
+              {/* MENU DROPDOWN */}
+              {item.isDropdown ? (
+                <>
+                  <button
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === index ? null : index)
+                    }
+                    className={`flex items-center gap-3 px-6 py-3 w-full text-sm font-medium transition-all ${
+                      location.pathname.includes(item.path)
+                        ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
+                        : "hover:bg-white/10 text-white/80"
+                    }`}>
+                    {item.icon}
+                    <span>{item.name}</span>
+
+                    <span
+                      className={`transition-transform ${
+                        openDropdown === index ? "rotate-180" : ""
+                      }`}>
+                      <svg width="8" height="8" viewBox="0 0 10 10">
+                        <path
+                          d="M2 3 L5 6 L8 3"
+                          stroke="currentColor"
+                          strokeWidth="1.2"
+                          fill="none"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+
+                  {/* SUBMENU */}
+                  <div
+                    className={`flex flex-col ml-10 overflow-hidden transition-all duration-300 ${
+                      openDropdown === index ? "max-h-40" : "max-h-0"
+                    }`}>
+                    {item.submenu.map((sub, sIndex) => (
+                      <Link
+                        key={sIndex}
+                        to={sub.path}
+                        className={`px-4 py-2 text-sm flex items-center gap-3 rounded-md ${
+                          location.pathname === sub.path
+                            ? "bg-white text-[#003C3C] font-semibold"
+                            : "text-white/70 hover:bg-white/10"
+                        }`}>
+                        {sub.icon}
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                /* MENU BIASA */
                 <Link
                   to={item.path}
-                  onClick={item.action}
                   className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                     location.pathname === item.path
                       ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
@@ -131,26 +151,25 @@ const Sidebarcampus = ({ children }) => {
                   {item.icon}
                   <span>{item.name}</span>
                 </Link>
-              </li>
-            )
-          )}
+              )}
+            </li>
+          ))}
 
           {/* LOGOUT */}
           <li>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Link className="flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80">
+                <button className="flex w-full items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80">
                   <LogOut size={18} />
                   <span>KELUAR</span>
-                </Link>
+                </button>
               </AlertDialogTrigger>
 
               <AlertDialogContent className="bg-primary text-white">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Yakin ingin keluar?</AlertDialogTitle>
                   <AlertDialogDescription className="text-white">
-                    Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
-                    kembali kapan saja dengan alamat email Anda.
+                    Anda akan keluar dari sesi Anda saat ini.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 
@@ -188,6 +207,4 @@ const Sidebarcampus = ({ children }) => {
       </div>
     </div>
   );
-};
-
-export default Sidebarcampus;
+}

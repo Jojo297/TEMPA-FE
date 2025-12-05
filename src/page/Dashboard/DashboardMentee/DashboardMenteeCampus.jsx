@@ -30,9 +30,16 @@ export default function DashboardCampus() {
   }, [token, fetchCampus]);
 
   // Filter kampus sesuai input search
-  const filteredKampus = displayCampus.filter((kampus) =>
-    kampus.campus_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredKampus = displayCampus.filter((kampus) => {
+    // Check if campus_name is not null, not undefined, and is a string
+    if (typeof kampus.campus_name === "string") {
+      return kampus.campus_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    }
+    // Exclude items where campus_name is invalid
+    return false;
+  });
 
   // handle loading
   if (isLoading) {
@@ -83,8 +90,7 @@ export default function DashboardCampus() {
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
-              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
-            >
+              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
               <img
                 src={kampus.banner_url}
                 alt={kampus.campus_name}
@@ -132,8 +138,7 @@ export default function DashboardCampus() {
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
-              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
-            >
+              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
               <img
                 src={kampus.banner_url}
                 alt={kampus.campus_name}

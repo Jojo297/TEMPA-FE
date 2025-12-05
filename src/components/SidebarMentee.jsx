@@ -5,12 +5,11 @@ import {
   Building2,
   Share2,
   FileQuestion,
-  BookOpen,
-  Star,
   LogOut,
   Menu,
   X,
 } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,8 +21,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import { Button } from "@/components/ui/button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // FIXED
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
@@ -36,10 +36,10 @@ const SidebarWithNavbar = ({ children }) => {
   const handleLogout = () => {
     const token = localStorage.getItem("userJwt");
 
-    // logout if user Don't have have token
     if (!token) {
       navigate("/");
       toast.success("Anda Berhasil Keluar!");
+      return;
     }
 
     localStorage.removeItem("userJwt");
@@ -70,6 +70,7 @@ const SidebarWithNavbar = ({ children }) => {
     },
 
     { separator: true },
+
     {
       name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
@@ -90,9 +91,11 @@ const SidebarWithNavbar = ({ children }) => {
 
         {/* Profil / Avatar */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold">P</span>
-          </div>
+          <Link to="/dashboard-mentee/profil">
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center cursor-pointer">
+              <span className="text-sm font-semibold">P</span>
+            </div>
+          </Link>
         </div>
       </div>
 
@@ -100,8 +103,7 @@ const SidebarWithNavbar = ({ children }) => {
       <div
         className={`fixed top-16 left-0 h-full bg-[#013B36] text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}
-      >
+        } transition-transform duration-300 ease-in-out z-40`}>
         <ul className="flex flex-col mt-4 w-full flex-1">
           {menuItems.map((item, index) =>
             item.separator ? (
@@ -113,51 +115,48 @@ const SidebarWithNavbar = ({ children }) => {
               <li key={index}>
                 <Link
                   to={item.path}
-                  onClick={item.action}
                   className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                     location.pathname === item.path
                       ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
                       : "hover:bg-white/10 text-white/80"
-                  }`}
-                >
+                  }`}>
                   {item.icon}
                   <span>{item.name}</span>
                 </Link>
               </li>
             )
           )}
-          <li>
-            {/* logout */}
 
+          {/* LOGOUT */}
+          <li>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                {/* <Button variant="outline">Show Dialog</Button> */}
                 <Link
-                  className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80`}
-                >
+                  to="#"
+                  className="flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80">
                   <LogOut size={18} />
                   <span>KELUAR</span>
                 </Link>
               </AlertDialogTrigger>
+
               <AlertDialogContent className="bg-primary text-white">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="">
-                    Yakin ingin keluar?
-                  </AlertDialogTitle>
+                  <AlertDialogTitle>Yakin ingin keluar?</AlertDialogTitle>
                   <AlertDialogDescription className="text-white">
-                    Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
-                    kembali kapan saja dengan alamat email Anda.
+                    Anda akan keluar dari sesi saat ini. Anda dapat masuk
+                    kembali kapan saja menggunakan email Anda.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter className="flex justify-end">
-                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70 hover:duration-100">
-                    Cancel
+                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600">
+                    Batal
                   </AlertDialogCancel>
+
                   <AlertDialogAction
                     onClick={handleLogout}
-                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70 hover:duration-100"
-                  >
-                    Continue
+                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7]">
+                    Keluar
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -166,20 +165,20 @@ const SidebarWithNavbar = ({ children }) => {
         </ul>
       </div>
 
-      {/* MAIN CONTENT + FOOTER */}
+      {/* MAIN CONTENT */}
       <div className="flex flex-col pt-16 min-h-screen">
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"
-          } p-6`}
-        >
+          } p-6`}>
           {children}
         </main>
 
-        {/* ✅ Ganti footer lama dengan komponen Footer */}
+        {/* FOOTER */}
         <div
-          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
-        >
+          className={`${
+            isOpen ? "ml-64" : "ml-0"
+          } transition-all duration-300`}>
           <Footer />
         </div>
       </div>
