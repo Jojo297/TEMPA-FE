@@ -26,23 +26,17 @@ import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMajor, setFilterMajor] = useState(null);
   const [filterType, setFilterType] = useState(null);
-  const token = localStorage.getItem("userJwt");
   // Hooks Program
   const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
     useGetAllProgram();
 
-  // Prevent infinite loop
-  const fetchedProgramsRef = useRef(false);
-  const fetchedMajorsRef = useRef(false);
-
   useEffect(() => {
     if (!token) return;
-    if (fetchedProgramsRef.current) return;
 
-    fetchedProgramsRef.current = true;
     getAllPrograms(token);
   }, [token]);
 
@@ -130,6 +124,10 @@ export default function DashboardCampusProgram() {
     return programNameMatch && majorMatch && typeMatch;
   });
 
+  if (isLoadingPrograms) {
+    return <>Loading nih</>;
+  }
+
   // RENDER
   return (
     <div className="flex-1 flex flex-col">
@@ -172,19 +170,22 @@ export default function DashboardCampusProgram() {
             </h2>
 
             <div className="flex gap-2">
-              <SelectTypeProgram onSelectType={setFilterType} />
-
-              <div className="relative w-full md:w-60">
-                <Search
-                  size={16}
-                  className="absolute top-2.5 left-3 text-gray-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Cari program..."
-                  className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+              <div className="flex gap-2">
+                <SelectTypeProgram />
+                <SearchMajors />
+                <div className="relative w-full md:w-60">
+                  <Search
+                    size={16}
+                    className="absolute top-2.5 left-3 text-gray-400"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Cari program..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -200,22 +201,49 @@ export default function DashboardCampusProgram() {
                   onClick={() =>
                     navigate(`/dashboard-campus/program/${item.id}`)
                   }
-                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition cursor-pointer">
+                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition cursor-pointer"
+                >
                   {/* LEFT IMAGE */}
                   <div
                     className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
                     style={{
                       backgroundImage: `linear-gradient(rgba(1,59,53,0.4), rgba(1,59,53,0.7)), url(${item.image_url})`,
                       minHeight: "200px",
-                    }}>
+                    }}
+                  >
+                    {/* Container baru untuk badges, ditempatkan secara absolute di kiri atas */}
                     <div className="absolute top-4 left-4 z-10 flex gap-2">
+                      {/* Completion Status */}
                       {(() => {
+                        // get badge status
                         const statusData = getBadgeClass(item.program_status);
                         return (
                           <div
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${statusData.bgColor} ${statusData.textColor}`}>
+                            className={`px-3 py-1 rounded-full text-sm font-medium ${statusData.bgColor} ${statusData.textColor}`}
+                          >
                             {statusData.text}
                           </div>
+                        );
+                      })()}
+
+                      {/* visibility */}
+                      {(() => {
+                        const getVisibility = getBadgeVisibility(
+                          item.visibility
+                        );
+                        return (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div
+                                className={`px-3 py-1 rounded-full text-sm font-medium ${getVisibility.bgColor} ${getVisibility.textColor}`}
+                              >
+                                {getVisibility.text}
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent className="bg-white text-black border-black">
+                              <p>{getVisibility.description}</p>
+                            </TooltipContent>
+                          </Tooltip>
                         );
                       })()}
                     </div>
@@ -282,7 +310,8 @@ export default function DashboardCampusProgram() {
                             e.stopPropagation();
                             navigate(`/dashboard-campus/program/${item.id}`);
                           }}
-                          className="w-full py-3 bg-secondary text-white rounded-xl font-bold hover:bg-[#015f53] transition">
+                          className="w-full py-3 bg-secondary text-white rounded-xl font-bold hover:bg-secondary hover:opacity-60 transition"
+                        >
                           Lihat Detail Program
                         </button>
 
@@ -291,7 +320,8 @@ export default function DashboardCampusProgram() {
                             e.stopPropagation();
                             alert(`Fungsi Hapus program ID: ${item.id}`);
                           }}
-                          className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition">
+                          className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:hover:opacity-60 transition"
+                        >
                           Hapus Program
                         </button>
                       </div>

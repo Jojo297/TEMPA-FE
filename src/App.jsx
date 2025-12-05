@@ -220,12 +220,7 @@ const router = createBrowserRouter([
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
       },
-      // --- NEW ROUTE ---
-      {
-        path: "berlangganan",
-        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
-      },
-      // -----------------
+
       {
         path: "kampus-verifikasi-berhasil",
         element: <SuspenseWrapper Component={DashboardCampusVerivication} />,
