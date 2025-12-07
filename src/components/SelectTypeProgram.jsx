@@ -29,7 +29,7 @@ export function SelectTypeProgram() {
       // Panggil handler saat ada perubahan
       onValueChange={handleValueChange}
     >
-      <SelectTrigger className="w-[180px] bg-white text-gray-400">
+      <SelectTrigger className="w-36 bg-white text-gray-400">
         <SelectValue placeholder="Pilih Tipe Program" />
       </SelectTrigger>
       <SelectContent>

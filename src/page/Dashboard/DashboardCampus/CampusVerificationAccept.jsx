@@ -1,8 +1,11 @@
 import React from "react";
 import logo from "@/assets/logo-text.png";
-import robot from "@/assets/robot-happy.png"; // pakai gambar robot yang sama
+import robot from "@/assets/robot-happy.png";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 export default function CampusVerificationAccept({ campusName }) {
+  const navigate = useNavigate();
   return (
     <main className="flex-grow flex flex-col items-center justify-center">
       {" "}
@@ -27,6 +30,12 @@ export default function CampusVerificationAccept({ campusName }) {
           alt="Robot Senang"
           className="w-32 md:w-40 object-contain mt-4"
         />
+        <Button
+          onClick={() => navigate("/dashboard-campus/beranda")}
+          className="bg-secondary w-full h-10 text-md text-primary hover:bg-secondary hover:opacity-50 transition"
+        >
+          Lanjutkan
+        </Button>
       </div>
     </main>
   );

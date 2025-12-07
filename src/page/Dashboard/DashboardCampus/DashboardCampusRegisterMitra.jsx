@@ -79,7 +79,7 @@ const RegisterMitraSchema = z.object({
     .string()
     .trim()
     .min(10, "Deskripsi Kampus minimal 10 karakter.")
-    .max(500, "Deskripsi Kampus maksimal 500 karakter."),
+    .max(1000, "Deskripsi Kampus maksimal 200 karakter."),
 
   // 4. Website Kampus (Input Teks - diasumsikan URL)
   websiteCampus: z

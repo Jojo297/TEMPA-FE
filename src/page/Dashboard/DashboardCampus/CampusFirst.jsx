@@ -13,7 +13,6 @@ export default function CampusFirst() {
   const location = useLocation();
   const token = localStorage.getItem("userJwt");
   const decode = jwtDecode(token);
-  console.log(decode);
   const { isLoading, checkVeirificationCampus, isVerify } =
     useRegisterMitraCampus();
 

@@ -10,8 +10,10 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { useNavigate } from "react-router";
 
 export default function AddProgram() {
+  const navigate = useNavigate();
   return (
     <Empty>
       <EmptyHeader>
@@ -25,7 +27,9 @@ export default function AddProgram() {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button>Buat Program</Button>
+          <Button onClick={() => navigate("/dashboard-campus/add-program")}>
+            Buat Program
+          </Button>
         </div>
       </EmptyContent>
     </Empty>

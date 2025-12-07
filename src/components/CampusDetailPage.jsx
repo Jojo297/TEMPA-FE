@@ -31,28 +31,25 @@ const CampusDetailPage = () => {
         <div className="flex flex-wrap gap-4 mb-10 justify-start">
           <Link
             to={`/campus-detail/${kampus.id}`}
-            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold"
-          >
+            className="px-6 py-2 border bg-[#013B35] text-white rounded-full font-semibold">
             Deskripsi
           </Link>
-          <Link
+          {/* <Link
             to={`/campus/${kampus.id}/prestasi`}
             className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
           >
             Prestasi
-          </Link>
+          </Link> */}
           <Link
             to={`/campus/${kampus.id}/jurusan`}
             // Active state class applied
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Jurusan
           </Link>
           <Link
             to={`/campus/${kampus.id}/program`}
             // Active state class applied
-            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition"
-          >
+            className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">
             Program
           </Link>
           {/* <button className="px-6 py-2 border border-[#013B35] text-[#013B35] rounded-full font-semibold hover:bg-[#013B35] hover:text-white transition">

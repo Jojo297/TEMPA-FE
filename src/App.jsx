@@ -7,8 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
-    <ScrollToTop />
-    <Component />
+        <ScrollToTop />
+        <Component /> {" "}
   </Suspense>
 );
 
@@ -20,6 +20,7 @@ const LoginAdmin = lazy(() => import("./page/loginAdmin"));
 const LoginMentor = lazy(() => import("./page/loginMentor"));
 const CampusPage = lazy(() => import("./page/CampusPage"));
 const JurusanPage = lazy(() => import("./page/JurusanPage"));
+const Kontak = lazy(() => import("./page/Kontak"));
 const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
 const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
@@ -78,6 +79,9 @@ const Penilaian = lazy(() =>
 const DashboardMenteeMateri = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardMenteeMateri")
 );
+const DashboardMenteeProfil = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeProfil")
+);
 
 // Dashboard Kampus
 const DashboardCampus = lazy(() =>
@@ -105,6 +109,21 @@ const KampusVerifikasiGagal = lazy(() =>
 const DashboardCampusBeranda = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
 );
+// --- NEW IMPORT ---
+const DashboardCampusBerlangganan = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan")
+);
+
+//Dashboard Admin
+const AdminVerifikasi = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/Verifikasi")
+);
+const AdminKampus = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/Kampus")
+);
+const AdminSiswa = lazy(() => import("./page/Dashboard/DashboardAdmin/Siswa"));
+
+// ------------------
 
 const Jurusan = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusJurusan")
@@ -134,6 +153,10 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
+const DashboardCampusAddProgram = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
+);
+
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
@@ -155,9 +178,8 @@ const router = createBrowserRouter([
   {
     path: "/JurusanPage",
     element: <SuspenseWrapper Component={JurusanPage} />,
-  },
+  }, // Campus detail publik
 
-  // Campus detail publik
   {
     path: "/campus-detail/:id",
     element: <SuspenseWrapper Component={CampusDetailPage} />,
@@ -182,9 +204,12 @@ const router = createBrowserRouter([
     path: "/campus/:id/program",
     element: <SuspenseWrapper Component={CampusProgram} />,
   },
-  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
+  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> }, // ======================= DASHBOARD CAMPUS =======================
+  {
+    path: "/kontak",
+    element: <SuspenseWrapper Component={Kontak} />,
+  },
 
-  // ======================= DASHBOARD CAMPUS =======================
   {
     path: "/dashboard-campus",
     element: (
@@ -230,10 +255,13 @@ const router = createBrowserRouter([
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
       },
+      {
+        path: "add-program",
+        element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
+      },
     ],
-  },
+  }, // if the campus has not verified
 
-  // if the campus has not verified
   {
     path: "campus-verification",
     element: (
@@ -259,19 +287,30 @@ const router = createBrowserRouter([
         ),
       },
     ],
-  },
+  }, // ===================== Dashboard lainnya =====================
 
-  // ===================== Dashboard lainnya =====================
   {
     path: "/dashboard-admin",
     element: <SuspenseWrapper Component={DashboardAdmin} />,
   },
   {
-    path: "/dashboard-mentor",
-    element: <SuspenseWrapper Component={DashboardMentor} />,
+    path: "/dashboard-admin/verifikasi",
+    element: <SuspenseWrapper Component={AdminVerifikasi} />,
+  },
+  {
+    path: "/dashboard-admin/manajemen/kampus",
+    element: <SuspenseWrapper Component={AdminKampus} />,
+  },
+  {
+    path: "/dashboard-admin/manajemen/Siswa",
+    element: <SuspenseWrapper Component={AdminSiswa} />,
   },
 
-  // ===================== Dashboard Mentee =====================
+  {
+    path: "/dashboard-mentor",
+    element: <SuspenseWrapper Component={DashboardMentor} />,
+  }, // ===================== Dashboard Mentee =====================
+
   {
     path: "dashboard-mentee",
     element: (
@@ -310,6 +349,10 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
       },
       {
+        path: "penilaian",
+        element: <SuspenseWrapper Component={Penilaian} />,
+      },
+      {
         path: "jurusan",
         element: <SuspenseWrapper Component={DashboardJurusan} />,
       },
@@ -320,6 +363,10 @@ const router = createBrowserRouter([
       {
         path: "materi/:id",
         element: <SuspenseWrapper Component={DashboardMenteeMateri} />,
+      },
+      {
+        path: "profil",
+        element: <SuspenseWrapper Component={DashboardMenteeProfil} />,
       },
 
       {
