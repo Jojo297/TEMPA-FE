@@ -134,6 +134,10 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
+const DashboardCampusAddProgram = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
+);
+
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
@@ -228,6 +232,10 @@ const router = createBrowserRouter([
       {
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
+      },
+      {
+        path: "add-program",
+        element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
     ],
   },

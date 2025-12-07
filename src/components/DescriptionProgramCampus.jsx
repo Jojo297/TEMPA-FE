@@ -11,6 +11,15 @@ function Info({ label, value }) {
 }
 
 export default function DescriptionProgramCampus({ program }) {
+  const benefits =
+    typeof program.benefit === "string"
+      ? program.benefit.split(",").map((item) => item.trim())
+      : program.benefit || [];
+  const termsAndConditions =
+    typeof program.terms_and_conditions === "string"
+      ? program.terms_and_conditions.split(",").map((item) => item.trim())
+      : program.terms_and_conditions || [];
+
   const getTypeSesi = (sesi) => {
     switch (sesi) {
       case "online":
@@ -68,12 +77,6 @@ export default function DescriptionProgramCampus({ program }) {
             <h2 className="text-xl font-semibold text-[#013B35]">
               Detail Program
             </h2>
-            <button
-              onClick={() => setEditType("program")}
-              className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full text-sm"
-            >
-              <Pencil size={14} /> Edit Program
-            </button>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -81,34 +84,39 @@ export default function DescriptionProgramCampus({ program }) {
               label="Jenis Kegiatan"
               value={getTypeSesi(program.type_sesi)}
             />
+            <Info label="Jurusan" value={program.major_name} />
 
             <Info
               label="Buka Pendaftaran"
-              value={`${formatDate(program.start_date)} - ${formatDate(
-                program.end_date
+              value={`${formatDate(program.start_regis_date)} - ${formatDate(
+                program.end_regis_date
               )}`}
             />
             <Info
               label="Tanggal Pelaksanaan"
-              value={formatDate(program.end_date)}
+              value={`${formatDate(program.start_program_date)} - ${formatDate(
+                program.end_program_date
+              )}`}
             />
-            <Info
-              label="Lokasi"
-              value={
-                <a
-                  href={getMapsUrl(program.lat, program.lng)}
-                  target="_blank" // Penting: Membuka di tab baru
-                  rel="noopener noreferrer" // Praktik keamanan yang baik
-                  style={{
-                    cursor: "pointer",
-                    color: "blue",
-                    textDecoration: "underline",
-                  }}
-                >
-                  Lihat Lokasi di Google Maps
-                </a>
-              }
-            />
+            {program.type_sesi !== "online" && (
+              <Info
+                label="Lokasi"
+                value={
+                  <a
+                    href={getMapsUrl(program.lat, program.lng)}
+                    target="_blank" // Penting: Membuka di tab baru
+                    rel="noopener noreferrer" // Praktik keamanan yang baik
+                    style={{
+                      cursor: "pointer",
+                      color: "blue",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    Lihat Lokasi di Google Maps
+                  </a>
+                }
+              />
+            )}
             <Info label="Waktu Mulai" value={formatTime(program.sesi_start)} />
             <Info label="Waktu Selesai" value={formatTime(program.sesi_end)} />
             <Info label="Kuota" value={program.capacity} />
@@ -124,10 +132,9 @@ export default function DescriptionProgramCampus({ program }) {
               <p className="font-medium text-gray-600 mb-1">Benefit</p>
               <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
                 <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm sm:text-base">
-                  {program.benefit &&
-                    program.benefit.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
+                  {benefits.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </p>
             </div>
@@ -138,10 +145,9 @@ export default function DescriptionProgramCampus({ program }) {
               </p>
               <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
                 <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm sm:text-base">
-                  {program.terms_and_conditions &&
-                    program.terms_and_conditions.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
+                  {termsAndConditions.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </p>
             </div>

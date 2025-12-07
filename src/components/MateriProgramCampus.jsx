@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ChevronDown, Pencil, FileText } from "lucide-react";
+import NotFounPages from "./NotFoundPages";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {

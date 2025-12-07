@@ -15,20 +15,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
-import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
+import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajors";
 
-export function SearchMajors({ className }) {
+export function SearchMajorsProgramForm({
+  className,
+  value,
+  onChange,
+  initialMajorName,
+}) {
   const token = localStorage.getItem("userJwt");
-  const { majors, isLoading, error, fetchMajor } = useGetAllMajors();
+  const { majors, isLoading, error, fetchMajor } = useGetAllMajorsCampus();
 
   const displayMajors = majors ?? [];
   // console.log(displayMajors);
-
-  // get state and action from hooks
-  const selectedMajor = useFilterStore((state) => state.selectedMajor);
-  const setSelectedMajor = useFilterStore((state) => state.setSelectedMajor);
 
   useEffect(() => {
     if (token) {
@@ -36,19 +37,15 @@ export function SearchMajors({ className }) {
     }
   }, [token, fetchMajor]);
 
-  // console.log(displayMajors);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
-  const handleSelectMajor = useCallback(
-    (currentValue) => {
-      // update State Global
-      const newValue = currentValue === selectedMajor ? "" : currentValue;
-      setSelectedMajor(newValue);
-      setOpen(false);
-    },
-    [selectedMajor, setSelectedMajor]
-  );
+  const handleSelectMajor = (selectedId) => {
+    // `selectedId` adalah ID dari CommandItem, yang sudah berupa angka.
+    // Kita langsung memanggil onChange dengan ID tersebut.
+    // Jika nilai yang sama dipilih lagi, kita bisa atur untuk mengosongkan pilihan (opsional).
+    onChange(value === selectedId ? undefined : selectedId);
+    setOpen(false);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen} className="">
@@ -57,13 +54,13 @@ export function SearchMajors({ className }) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={` ${
-            className || ""
-          } justify-between text-gray-400 text-sm overflow-hidden whitespace-nowrap text-ellipsis`}
+          className={` ${className || ""} justify-between ${
+            value ? "text-black" : "text-gray-400"
+          } text-sm overflow-hidden whitespace-nowrap text-ellipsis`}
         >
-          {selectedMajor
-            ? displayMajors.find((item) => item.major_name === selectedMajor)
-                ?.major_name
+          {value
+            ? displayMajors.find((item) => item.id === value)?.standard_major
+                ?.major_name || initialMajorName
             : "Pilih Jurusan"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -77,16 +74,14 @@ export function SearchMajors({ className }) {
               {displayMajors.map((item) => (
                 <CommandItem
                   key={item.id}
-                  value={item.major_name}
-                  onSelect={handleSelectMajor}
+                  value={item.id} // Gunakan ID sebagai value unik
+                  onSelect={() => handleSelectMajor(item.id)} // Kirim ID ke handler
                 >
-                  {item.major_name}
+                  {item.standard_major?.major_name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      selectedMajor === item.major_name
-                        ? "opacity-100"
-                        : "opacity-0"
+                      value === item.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

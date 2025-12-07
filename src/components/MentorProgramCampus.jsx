@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil } from "lucide-react";
+import NotFounPages from "./NotFoundPages";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -37,28 +38,28 @@ export default function MentorProgramCampus({ mentorList }) {
         </div>
 
         <div className="w-full gap-4">
-          <Table>
-            {mentorList.length <= 0 ? (
-              <TableCaption>Belum Ada Mentor yang Ditambahkan</TableCaption>
-            ) : (
+          {mentorList?.length <= 0 || mentorList === undefined ? (
+            <NotFounPages message="Mentor Belum Ditambahkan" />
+          ) : (
+            <Table>
               <TableCaption>Daftar Mentor diprogram ini</TableCaption>
-            )}
 
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">No</TableHead>
-                <TableHead>Nama Mentor</TableHead>
-                <TableHead>NIK</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">{1}</TableCell>
-                <TableCell>{mentorList.name}</TableCell>
-                <TableCell>{mentorList.nik}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">No</TableHead>
+                  <TableHead>Nama Mentor</TableHead>
+                  <TableHead>NIK</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">{1}</TableCell>
+                  <TableCell>{mentorList?.name}</TableCell>
+                  <TableCell>{mentorList?.nik}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
     </div>

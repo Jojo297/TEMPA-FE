@@ -13,16 +13,26 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Calendar, Home, Map, Search, Users, Loader2 } from "lucide-react";
+import {
+  Calendar,
+  Home,
+  Map,
+  Search,
+  Users,
+  Loader2,
+  CirclePlus,
+} from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 import AddProgram from "@/components/AddProgram";
 import { ProgramDummy } from "@/lib/ProgramDummy";
 
 import useGetAllProgram from "@/hooks/hooksCampus/useGetAllProgram";
 import { useAuthStore } from "@/hooks/hooksCampus/useAuthStore";
-import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
+import DeleteProgram from "@/components/DeleteProgram";
+// import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
   const navigate = useNavigate();
@@ -42,7 +52,7 @@ export default function DashboardCampusProgram() {
 
   // Data program
   const programs = allPrograms || [];
-  console.log(programs);
+  // console.log(programs);
 
   // Badge status
   const getBadgeClass = (status) => {
@@ -101,7 +111,7 @@ export default function DashboardCampusProgram() {
       case "online":
         return "Zoom/Gmeet";
       case "onsite":
-        return item.description;
+        return item.onsiteLocationName;
       default:
         return "Tempat belum ditentukan";
     }
@@ -123,6 +133,18 @@ export default function DashboardCampusProgram() {
 
     return programNameMatch && majorMatch && typeMatch;
   });
+
+  console.log(filteredPrograms);
+
+  // format date
+  const formatDate = (start_data) => {
+    return new Date(start_data).toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    });
+  };
 
   if (isLoadingPrograms) {
     return <>Loading nih</>;
@@ -170,23 +192,27 @@ export default function DashboardCampusProgram() {
             </h2>
 
             <div className="flex gap-2">
-              <div className="flex gap-2">
-                <SelectTypeProgram />
-                <SearchMajors />
-                <div className="relative w-full md:w-60">
-                  <Search
-                    size={16}
-                    className="absolute top-2.5 left-3 text-gray-400"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Cari program..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
-                  />
-                </div>
+              <SelectTypeProgram />
+              {/* <SearchMajors className="w-36" /> */}
+              <div className="relative">
+                <Search
+                  size={16}
+                  className="absolute top-2.5 left-3 text-gray-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Cari program..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 pr-3 py-2 w-36 border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
+                />
               </div>
+              <Button
+                className=""
+                onClick={() => navigate("/dashboard-campus/add-program")}
+              >
+                <CirclePlus /> Tambah Program
+              </Button>
             </div>
           </div>
 
@@ -198,10 +224,7 @@ export default function DashboardCampusProgram() {
               filteredPrograms.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() =>
-                    navigate(`/dashboard-campus/program/${item.id}`)
-                  }
-                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition cursor-pointer"
+                  className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition "
                 >
                   {/* LEFT IMAGE */}
                   <div
@@ -275,14 +298,9 @@ export default function DashboardCampusProgram() {
                         <div className="flex items-center">
                           <Calendar size={16} className="mr-2 text-[#013B35]" />
                           <span>
-                            {new Date(item.start_date).toLocaleDateString(
-                              "id-ID",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
+                            {`${formatDate(item.start_date)} - ${formatDate(
+                              item.end_date
+                            )}`}
                           </span>
                         </div>
 
@@ -299,12 +317,13 @@ export default function DashboardCampusProgram() {
                         <div className="flex items-center">
                           <Map size={16} className="mr-2 text-[#013B35]" />
                           <span>
-                            Tempat: {getLocation(item.type_sesi, item)}
+                            Tempat: {getLocation(item.sesi_program, item)}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex gap-2">
+                        {/* detail button */}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -315,15 +334,13 @@ export default function DashboardCampusProgram() {
                           Lihat Detail Program
                         </button>
 
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            alert(`Fungsi Hapus program ID: ${item.id}`);
-                          }}
-                          className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:hover:opacity-60 transition"
-                        >
-                          Hapus Program
-                        </button>
+                        {/* delete button */}
+                        <DeleteProgram
+                          idProgram={item.id}
+                          programName={item.program_name}
+                          token={token}
+                          className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
+                        />
                       </div>
                     </div>
                   </div>

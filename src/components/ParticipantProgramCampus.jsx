@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import NotFounPages from "./NotFoundPages";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -32,30 +33,30 @@ export default function ParticipantProgramCampus({ menteeList }) {
         </div>
 
         <div className="w-full gap-4">
-          <Table>
-            {menteeList.count <= 0 ? (
-              <TableCaption>Belum Ada Mentee yang Mendaftar</TableCaption>
-            ) : (
+          {menteeList.length <= 0 ? (
+            <NotFounPages message="Belum Ada Mentee yang Mendaftar" />
+          ) : (
+            <Table>
               <TableCaption>Daftar Mentee yang Terdaftar</TableCaption>
-            )}
 
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">No</TableHead>
-                <TableHead>Nama Mentee</TableHead>
-                <TableHead>Email</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {menteeList.map((item, index) => (
-                <TableRow key="">
-                  <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell>{item.username}</TableCell>
-                  <TableCell>{item.email}</TableCell>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">No</TableHead>
+                  <TableHead>Nama Mentee</TableHead>
+                  <TableHead>Email</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {menteeList.map((item, index) => (
+                  <TableRow key="">
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell>{item.username}</TableCell>
+                    <TableCell>{item.email}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
     </div>

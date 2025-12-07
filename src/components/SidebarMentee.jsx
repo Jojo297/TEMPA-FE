@@ -132,12 +132,12 @@ const SidebarWithNavbar = ({ children }) => {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 {/* <Button variant="outline">Show Dialog</Button> */}
-                <Link
+                <p
                   className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80`}
                 >
                   <LogOut size={18} />
                   <span>KELUAR</span>
-                </Link>
+                </p>
               </AlertDialogTrigger>
               <AlertDialogContent className="bg-primary text-white">
                 <AlertDialogHeader>
