@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Plus, Pencil, MapPin } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
+import useGetDetailCampus from "@/hooks/hooksCampus/useGetDetailCampus";
 
 // Mock images kosong
 const mockImages = [{ id: 1, url: "" }];
@@ -23,10 +24,22 @@ const initialCampusData = {
 const initialJurusanList = [];
 
 export default function DetailCampus() {
+  const token = localStorage.getItem("userJwt");
   const [campusData, setCampusData] = useState(initialCampusData);
   const [jurusanList, setJurusanList] = useState(initialJurusanList);
   const [isInfoEditOpen, setIsInfoEditOpen] = useState(false);
   const [isDescEditOpen, setIsDescEditOpen] = useState(false);
+  const { detailCampus, isLoading, error, fetchDetailCampus } =
+    useGetDetailCampus();
+
+  const displayDetailCampus = detailCampus ?? [];
+  console.log(displayDetailCampus);
+
+  useEffect(() => {
+    if (token) {
+      fetchDetailCampus(token);
+    }
+  }, [token, fetchDetailCampus]);
 
   const handleSave = (updatedData, type) => {
     if (type === "info") {
@@ -54,6 +67,10 @@ export default function DetailCampus() {
     setIsEditOpen(false);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const mainImage = campusData.images[0]?.url || "";
 
   return (
@@ -65,7 +82,8 @@ export default function DetailCampus() {
           <div className="h-[400px] relative">
             <img
               src={
-                mainImage || "https://placehold.co/1200x400?text=Banner+Kampus"
+                displayDetailCampus.path_banner ||
+                "https://placehold.co/1200x400?text=Banner+Kampus"
               }
               alt="Banner Kampus"
               className="w-full h-full object-cover"
@@ -74,8 +92,7 @@ export default function DetailCampus() {
             {/* EDIT BUTTON */}
             <button
               onClick={() => setIsInfoEditOpen(true)}
-              className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2"
-            >
+              className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2">
               <Pencil size={16} /> Edit Info
             </button>
           </div>
@@ -85,7 +102,7 @@ export default function DetailCampus() {
             {/* LOGO */}
             <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
               <img
-                src={campusData.logo || "https://placehold.co/200?text=Logo"}
+                src={displayDetailCampus.path_logo || "https://placehold.co/200?text=Logo"}
                 alt="Logo Kampus"
                 className="w-20 h-20 object-contain"
               />
@@ -94,13 +111,13 @@ export default function DetailCampus() {
             {/* TEXT INFO */}
             <div>
               <h1 className="text-3xl font-bold text-white">
-                {campusData.name}
+                {displayDetailCampus.campus_name || "Nama Kampus"}
               </h1>
 
               <div className="flex items-center text-gray-300 mt-1">
                 <MapPin size={16} className="mr-2" />
                 <span className="text-sm">
-                  {campusData.address || "Alamat belum diisi"}
+                  {displayDetailCampus.address || "Alamat belum diisi"}
                 </span>
               </div>
 
@@ -121,8 +138,7 @@ export default function DetailCampus() {
               value="deskripsi"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
               Deskripsi
             </TabsTrigger>
 
@@ -131,20 +147,11 @@ export default function DetailCampus() {
               value="jurusan"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
               Jurusan
             </TabsTrigger>
 
             {/* mentor */}
-            <TabsTrigger
-              value="prestasi"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                               hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
-              Prestasi
-            </TabsTrigger>
           </TabsList>
 
           {/* content Tabs */}
@@ -158,14 +165,13 @@ export default function DetailCampus() {
 
                 <button
                   onClick={() => setIsDescEditOpen(true)}
-                  className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
-                >
+                  className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full">
                   <Pencil size={16} /> Edit
                 </button>
               </div>
 
               <p className="text-gray-700 mt-4 leading-relaxed">
-                {campusData.desc || "Belum ada deskripsi."}
+                {displayDetailCampus.description || "Belum ada deskripsi."}
               </p>
 
               <div className="mt-6">
@@ -187,8 +193,7 @@ export default function DetailCampus() {
             {isDescEditOpen && (
               <EditPopup
                 title="Edit Deskripsi Kampus"
-                onClose={handleCloseEdit}
-              >
+                onClose={handleCloseEdit}>
                 <EditCampusVisiMisiForm
                   initialData={campusData}
                   onSave={(data) => handleSave(data, "desc")}
@@ -205,8 +210,7 @@ export default function DetailCampus() {
                   <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
                   <button
                     onClick={() => setIsEditOpen(true)}
-                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-                  >
+                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors">
                     <Pencil size={18} /> Tambah Jurusan
                   </button>
                 </div>
@@ -227,67 +231,7 @@ export default function DetailCampus() {
                         selectedJurusan?.id === j.id
                           ? "bg-[#013B35] text-white"
                           : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {j.name}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Detail jurusan */}
-                {selectedJurusan && (
-                  <div className="mt-6 space-y-4">
-                    <h3 className="text-xl font-bold text-[#013B35]">
-                      {selectedJurusan.name}
-                    </h3>
-                    {selectedJurusan.logo && (
-                      <img
-                        src={selectedJurusan.logo}
-                        alt="Logo Jurusan"
-                        className="w-32 h-32 object-cover rounded-full border"
-                      />
-                    )}
-                    <p className="text-gray-700">{selectedJurusan.desc}</p>
-                  </div>
-                )}
-              </div>
-            </section>
-          </TabsContent>
-
-          <TabsContent value="prestasi">
-            {/* ====================== KONTEN: JURUSAN ====================== */}
-            <section className="mt-6 mx-auto  mb-20 w-full">
-              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold text-[#013B35]">
-                    Prestasi
-                  </h2>
-                  <button
-                    onClick={() => setIsEditOpen(true)}
-                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors"
-                  >
-                    <Pencil size={18} /> Tambahkan Prestasi
-                  </button>
-                </div>
-
-                {/* Bubble list */}
-                <div className="flex flex-wrap gap-3">
-                  {jurusanList.length === 0 && (
-                    <span className="text-gray-500">
-                      Belum ada prestasi yang ditambahkan.
-                    </span>
-                  )}
-
-                  {jurusanList.map((j) => (
-                    <button
-                      key={j.id}
-                      onClick={() => setSelectedJurusan(j)}
-                      className={`px-4 py-2 rounded-full border ${
-                        selectedJurusan?.id === j.id
-                          ? "bg-[#013B35] text-white"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
+                      }`}>
                       {j.name}
                     </button>
                   ))}
@@ -338,8 +282,7 @@ function EditPopup({ title, children, onClose }) {
       <div className="bg-[#F7F9F7] w-full max-w-xl rounded-2xl p-8 relative shadow-xl max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-600 hover:text-black"
-        >
+          className="absolute top-6 right-6 text-gray-600 hover:text-black">
           <X size={24} />
         </button>
 
@@ -404,8 +347,7 @@ function EditCampusInfoForm({ initialData, onSave }) {
         <label className="block font-medium mb-2">Logo Kampus</label>
         <button
           onClick={handleLogoUpload}
-          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2"
-        >
+          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
           <Plus size={16} /> Upload Logo
         </button>
       </div>
@@ -415,8 +357,7 @@ function EditCampusInfoForm({ initialData, onSave }) {
         <label className="block font-medium mb-2">Banner / Foto Kampus</label>
         <button
           onClick={handleBannerUpload}
-          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2"
-        >
+          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
           <Plus size={16} /> Upload Banner
         </button>
       </div>
@@ -424,8 +365,7 @@ function EditCampusInfoForm({ initialData, onSave }) {
       <div className="flex justify-end">
         <button
           onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold"
-        >
+          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
           Simpan
         </button>
       </div>
@@ -467,8 +407,7 @@ function EditCampusVisiMisiForm({ initialData, onSave }) {
       <div className="flex justify-end">
         <button
           onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold"
-        >
+          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
           Simpan
         </button>
       </div>

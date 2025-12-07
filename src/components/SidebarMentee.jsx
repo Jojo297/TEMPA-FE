@@ -27,6 +27,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { icon } from "leaflet";
+import path from "path";
 
 const SidebarWithNavbar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -74,6 +76,11 @@ const SidebarWithNavbar = ({ children }) => {
       name: "TES JURUSAN",
       icon: <FileQuestion size={18} />,
       path: "/dashboard-mentee/test-jurusan",
+    },
+    {
+      name: "PENILAIAN",
+      icon: <Star size={18} />,
+      path: "/dashboard-mentee/Penilaian",
     },
   ];
 
