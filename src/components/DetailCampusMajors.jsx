@@ -47,6 +47,7 @@ import * as z from "zod";
 import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajors";
 import { toast } from "sonner";
 import useEditCampusMajors from "@/hooks/hooksCampus/useEditCampusMajors";
+import roboterror from "@/assets/robot-error.png";
 const addMajorsFormSchema = z.object({
   majorsToAdd: z
     .array(
@@ -81,7 +82,10 @@ export default function DetailCampusMajors({
   const form = useForm({
     resolver: zodResolver(addMajorsFormSchema),
     defaultValues: {
-      majorsToAdd: [],
+      majorsToAdd: majors.map((m) => ({
+        id: m.standard_major.id,
+        name: m.standard_major.major_name,
+      })),
     },
     mode: "onChange",
   });
@@ -150,24 +154,22 @@ export default function DetailCampusMajors({
   };
 
   useEffect(() => {
-    // Alih-alih mereset form, kita akan menginisialisasi daftar yang sudah ada dari props
-    // Ini tidak akan menjadi bagian dari form state yang akan disubmit,
-    // tapi akan ditampilkan di UI. Form `majorsToAdd` tetap untuk item baru.
-    // Namun, berdasarkan permintaan Anda, kita akan memulai dengan daftar kosong.
-    // Jika Anda ingin menampilkan yang sudah ada dan menambahkan yang baru, logikanya perlu diubah.
-    // Untuk saat ini, kita akan membiarkan `majorsToAdd` kosong pada awalnya.
-    // Jika Anda ingin mengedit daftar yang ada, baris di bawah ini bisa diaktifkan kembali.
-    // reset({ majorsToAdd: majors.map(m => ({ id: m.standard_major.id, name: m.standard_major.major_name })) });
-    reset({ majorsToAdd: [] }); // Memastikan form selalu dimulai dengan array kosong
-  }, [majors, reset]);
+    // Saat dialog dibuka atau data majors berubah, reset form dengan data jurusan yang sudah ada.
+    if (isDialogOpen) {
+      const initialMajors = majors.map((major) => ({
+        id: major.standard_major.id,
+        name: major.standard_major.major_name,
+      }));
+      reset({ majorsToAdd: initialMajors });
+    }
+  }, [isDialogOpen, majors, reset]);
 
   // Filter jurusan yang akan ditampilkan di combobox
   const availableMajorsForAdding = majorsForForm.filter((availableMajor) => {
-    // Cek apakah availableMajor.id ada di dalam daftar majors yang sudah dimiliki kampus
-    const isAlreadyOnCampus = majors.some(
-      (campusMajor) => campusMajor.standard_major.id === availableMajor.id
+    // Hanya tampilkan jurusan yang belum ada di daftar 'majorsToAdd'
+    return !majorsToAdd.some(
+      (addedMajor) => addedMajor.id === availableMajor.id
     );
-    return !isAlreadyOnCampus;
   });
 
   return (
@@ -177,18 +179,29 @@ export default function DetailCampusMajors({
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
 
+            {/* popup */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="flex items-center gap-2 bg-[#013B35] text-white disabled:opacity-50">
-                  <Pencil size={18} /> Tambah Jurusan
+                  <Pencil size={18} />{" "}
+                  {majors && majors.length > 0
+                    ? "Edit Jurusan"
+                    : "Tambahkan Jurusan"}
                 </Button>
               </DialogTrigger>
+              {/* popup content */}
               <DialogContent className="sm:max-w-[425px]">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <DialogHeader>
-                    <DialogTitle>Tambah Jurusan Baru</DialogTitle>
+                    <DialogTitle>
+                      {majors && majors.length > 0
+                        ? "Edit Jurusan Kampus"
+                        : "Tambah Jurusan Baru"}
+                    </DialogTitle>
                     <DialogDescription>
-                      Pilih jurusan yang ingin ditambahkan ke kampus ini.
+                      {majors && majors.length > 0
+                        ? "Tambah atau hapus jurusan yang ada di kampus ini."
+                        : "Pilih jurusan yang ingin ditambahkan ke kampus ini."}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
@@ -359,9 +372,11 @@ export default function DetailCampusMajors({
 
                     {/* description */}
                     <AccordionContent className="p-6 bg-gray-50 border-t border-gray-200">
-                      <h3 className="text-xl font-bold text-[#013B35] mb-3">
-                        Deskripsi
-                      </h3>
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-xl items-center font-bold text-[#013B35] mb-3">
+                          Deskripsi
+                        </h3>
+                      </div>
                       <p className="text-gray-800 mb-6 leading-relaxed">
                         {item.standard_major?.description}
                       </p>
