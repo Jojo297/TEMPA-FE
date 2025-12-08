@@ -18,6 +18,7 @@ import {
 import { Link } from "react-router";
 import { Input } from "@/components/ui/input";
 import useEditImageCampus from "@/hooks/hooksCampus/useEditImageCampus";
+import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -91,6 +92,10 @@ export default function DetailCampus() {
   useEffect(() => {
     setCampusData(displayDetailCampus);
   }, [detailCampus]);
+
+  if (isLoading) {
+    return <DashboardCampusDetailSkeleton />;
+  }
 
   return (
     <>

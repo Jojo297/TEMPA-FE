@@ -32,6 +32,7 @@ import { ProgramDummy } from "@/lib/ProgramDummy";
 import useGetAllProgram from "@/hooks/hooksCampus/useGetAllProgram";
 import { useAuthStore } from "@/hooks/hooksCampus/useAuthStore";
 import DeleteProgram from "@/components/DeleteProgram";
+import DashboardCampusProgramSkeleton from "@/components/DashboardCampusProgramSkeleton";
 // import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
@@ -147,7 +148,7 @@ export default function DashboardCampusProgram() {
   };
 
   if (isLoadingPrograms) {
-    return <>Loading nih</>;
+    return <DashboardCampusProgramSkeleton />;
   }
 
   // RENDER
