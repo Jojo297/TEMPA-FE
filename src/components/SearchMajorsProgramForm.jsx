@@ -49,7 +49,7 @@ export function SearchMajorsProgramForm({
 
   return (
     <Popover open={open} onOpenChange={setOpen} className="">
-      <PopoverTrigger asChild>
+  <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"

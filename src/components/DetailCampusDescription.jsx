@@ -121,9 +121,9 @@ export default function DetailCampusDescription({
         ) : (
           <Button
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full"
+            className="flex items-center gap-2 bg-[#013B35] text-white disabled:opacity-50"
           >
-            <Pencil size={16} /> Edit
+            <Pencil size={16} /> Edit Deskripsi
           </Button>
         )}
       </div>

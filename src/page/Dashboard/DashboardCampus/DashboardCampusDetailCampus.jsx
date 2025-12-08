@@ -74,7 +74,7 @@ export default function DetailCampus() {
 
   // Fallback ke objek kosong jika detailCampus null/undefined
   const displayDetailCampus = detailCampus || {};
-
+  console.log(displayDetailCampus);
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
 
@@ -82,6 +82,8 @@ export default function DetailCampus() {
     desc: displayDetailCampus.description,
     visi: displayDetailCampus.vision_mission,
   };
+
+  const majors = displayDetailCampus.major;
 
   useEffect(() => {
     if (token) {
@@ -200,7 +202,10 @@ export default function DetailCampus() {
           </TabsContent>
 
           <TabsContent value="jurusan">
-            <DetailCampusMajors />
+            <DetailCampusMajors
+              majors={majors}
+              refetchCampusData={() => fetchDetailCampus(token)}
+            />
           </TabsContent>
         </Tabs>
       </section>
@@ -208,6 +213,7 @@ export default function DetailCampus() {
   );
 }
 
+// component edit header detail campus
 function EditHeader({
   displayDetailCampus,
   setIsInfoEditOpen,
