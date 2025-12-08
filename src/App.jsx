@@ -7,8 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
-        <ScrollToTop />
-        <Component /> {" "}
+    <ScrollToTop />
+    <Component />
   </Suspense>
 );
 
