@@ -263,12 +263,16 @@ const router = createBrowserRouter([
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
+      {
+        path: "berlangganan",
+        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
+      },
     ],
   },
 
   // Dashboard campus verification routes
   {
-    path: "campus-verification",
+    path: "/campus-verification",
     element: (
       <ProtectedRoute
         Component={DashboardCampusVerivication}
