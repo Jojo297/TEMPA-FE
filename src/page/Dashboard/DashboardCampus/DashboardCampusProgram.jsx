@@ -214,15 +214,6 @@ export default function DashboardCampusProgram() {
                 <CirclePlus /> Tambah Program
               </Button>
             </div>
-<<<<<<< HEAD
-            {/* Card Program */}
-            <div className="flex flex-col gap-8">
-              {/* Card Program */}
-              {ProgramDummy.length <= 0 ? (
-                <AddProgram />
-              ) : (
-                ProgramDummy.map((item) => (
-=======
           </div>
 
           {/* LIST PROGRAM */}
@@ -236,7 +227,6 @@ export default function DashboardCampusProgram() {
                   className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition "
                 >
                   {/* LEFT IMAGE */}
->>>>>>> 825d2cfedd8c98f23bd2d1f4cadb8ba99124f4b3
                   <div
                     className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
                     style={{
