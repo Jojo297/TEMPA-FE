@@ -204,16 +204,24 @@ const router = createBrowserRouter([
     path: "/campus/:id/program",
     element: <SuspenseWrapper Component={CampusProgram} />,
   },
-  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> }, // ======================= DASHBOARD CAMPUS =======================
+  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
   {
     path: "/kontak",
     element: <SuspenseWrapper Component={Kontak} />,
   },
 
+  // ======================= DASHBOARD CAMPUS =======================
   {
     path: "/dashboard-campus",
     element: (
-      <ProtectedRoute Component={DashboardCampus} allowedRoles={["campus"]} />
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={DashboardCampus}
+            allowedRoles={["campus"]}
+          />
+        )}
+      />
     ),
     children: [
       {
@@ -223,15 +231,6 @@ const router = createBrowserRouter([
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
-      },
-
-      {
-        path: "kampus-verifikasi-berhasil",
-        element: <SuspenseWrapper Component={DashboardCampusVerivication} />,
-      },
-      {
-        path: "kampus-verifikasi-gagal",
-        element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
       },
 
       { path: "jurusan", element: <SuspenseWrapper Component={Jurusan} /> },
@@ -260,8 +259,9 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
     ],
-  }, // if the campus has not verified
+  },
 
+  // if the campus has not verified
   {
     path: "campus-verification",
     element: (
@@ -287,8 +287,9 @@ const router = createBrowserRouter([
         ),
       },
     ],
-  }, // ===================== Dashboard lainnya =====================
+  },
 
+  // ===================== Dashboard lainnya =====================
   {
     path: "/dashboard-admin",
     element: <SuspenseWrapper Component={DashboardAdmin} />,
@@ -309,14 +310,23 @@ const router = createBrowserRouter([
   {
     path: "/dashboard-mentor",
     element: <SuspenseWrapper Component={DashboardMentor} />,
-  }, // ===================== Dashboard Mentee =====================
+  },
 
+  // ===================== Dashboard Mentee =====================
   {
     path: "dashboard-mentee",
     element: (
-      <ProtectedRoute
-        Component={DashboardMenteePage}
-        allowedRoles={["mentee"]}
+      // <ProtectedRoute
+      //   Component={DashboardMenteePage}
+      //   allowedRoles={["mentee"]}
+      // />
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={DashboardMenteePage}
+            allowedRoles={["mentee"]}
+          />
+        )}
       />
     ),
     children: [
