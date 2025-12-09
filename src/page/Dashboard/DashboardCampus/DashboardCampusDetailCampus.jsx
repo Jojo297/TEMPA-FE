@@ -1,39 +1,89 @@
-import { useEffect, useState } from "react";
-import { X, Plus, Pencil, MapPin } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
+import { X, Plus, Pencil, MapPin, Upload, Loader2, Save } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
-import useGetDetailCampus from "@/hooks/hooksCampus/useGetDetailCampus";
+import DetailCampusDescription from "@/components/DetailCampusDescription";
+import DetailCampusMajors from "@/components/DetailCampusMajors";
+import useDetailCampus from "@/hooks/hooksCampus/useDetailCampus";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Link } from "react-router";
+import { Input } from "@/components/ui/input";
+import useEditImageCampus from "@/hooks/hooksCampus/useEditImageCampus";
+import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
+import { z } from "zod";
 
-// Mock images kosong
-const mockImages = [{ id: 1, url: "" }];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
-const initialCampusData = {
-  id: 0,
-  name: "",
-  website: "",
-  email: "",
-  address: "",
-  desc: "",
-  visi: "",
-  misi: "",
-  logo: "",
-  images: mockImages, // banner utama
-};
-
-// Mock jurusan awal kosong
-const initialJurusanList = [];
+const editHeaderSchema = z.object({
+  campus_name: z
+    .string()
+    .min(3, "Nama Kampus harus memiliki minimal 3 karakter."),
+  banner: z
+    .any()
+    .optional()
+    .refine(
+      (files) =>
+        !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
+      `Ukuran file maksimal adalah 5MB.`
+    )
+    .refine(
+      (files) =>
+        !files ||
+        files.length === 0 ||
+        ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+    ),
+  logo: z
+    .any()
+    .optional()
+    .refine(
+      (files) =>
+        !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
+      `Ukuran file maksimal adalah 5MB.`
+    )
+    .refine(
+      (files) =>
+        !files ||
+        files.length === 0 ||
+        ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+    ),
+});
 
 export default function DetailCampus() {
   const token = localStorage.getItem("userJwt");
-  const [campusData, setCampusData] = useState(initialCampusData);
-  const [jurusanList, setJurusanList] = useState(initialJurusanList);
   const [isInfoEditOpen, setIsInfoEditOpen] = useState(false);
-  const [isDescEditOpen, setIsDescEditOpen] = useState(false);
-  const { detailCampus, isLoading, error, fetchDetailCampus } =
-    useGetDetailCampus();
 
-  const displayDetailCampus = detailCampus ?? [];
+  const { detailCampus, isLoading, error, fetchDetailCampus } =
+    useDetailCampus();
+
+  // Fallback ke objek kosong jika detailCampus null/undefined
+  const displayDetailCampus = detailCampus || {};
   console.log(displayDetailCampus);
+  // State untuk form edit, diinisialisasi saat data tersedia
+  const [campusData, setCampusData] = useState(displayDetailCampus);
+
+  const DescriptionSection = {
+    desc: displayDetailCampus.description,
+    visi: displayDetailCampus.vision_mission,
+  };
+
+  const majors = displayDetailCampus.major;
 
   useEffect(() => {
     if (token) {
@@ -41,93 +91,82 @@ export default function DetailCampus() {
     }
   }, [token, fetchDetailCampus]);
 
-  const handleSave = (updatedData, type) => {
-    if (type === "info") {
-      updatedData.images = updatedData.images.slice(0, 1);
-      setIsInfoEditOpen(false);
-    }
-    if (type === "desc") {
-      setIsDescEditOpen(false);
-    }
-    setCampusData(updatedData);
-  };
-
-  const handleCloseEdit = () => {
-    setIsInfoEditOpen(false);
-    setIsDescEditOpen(false);
-  };
-
-  const [selectedJurusan, setSelectedJurusan] = useState(null);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
-  const handleAddJurusan = (newJurusan) => {
-    const jurusanWithId = { ...newJurusan, id: Date.now() };
-    setJurusanList([...jurusanList, jurusanWithId]);
-    setSelectedJurusan(jurusanWithId);
-    setIsEditOpen(false);
-  };
+  useEffect(() => {
+    setCampusData(displayDetailCampus);
+  }, [detailCampus]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <DashboardCampusDetailSkeleton />;
   }
-
-  const mainImage = campusData.images[0]?.url || "";
 
   return (
     <>
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-campus">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <span className="text-primary">Profil Kampus</span>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {/* ====================== HEADER BANNER ====================== */}
-      <header className="bg-[#F8FAFB]">
-        <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden relative">
-          {/* Banner Kampus */}
-          <div className="h-[400px] relative">
-            <img
-              src={
-                displayDetailCampus.path_banner ||
-                "https://placehold.co/1200x400?text=Banner+Kampus"
-              }
-              alt="Banner Kampus"
-              className="w-full h-full object-cover"
-            />
-
-            {/* EDIT BUTTON */}
-            <button
-              onClick={() => setIsInfoEditOpen(true)}
-              className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2">
-              <Pencil size={16} /> Edit Info
-            </button>
-          </div>
-
-          {/* ====================== INFO KAMPUS ====================== */}
-          <div className="bg-[#013B35] text-white px-12 py-6 flex items-center gap-6 rounded-b-xl -mt-16 relative z-10">
-            {/* LOGO */}
-            <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+      {isInfoEditOpen ? (
+        <EditHeader
+          displayDetailCampus={displayDetailCampus}
+          setIsInfoEditOpen={setIsInfoEditOpen}
+          refetchCampusData={() => fetchDetailCampus(token)}
+        />
+      ) : (
+        <header className="bg-[#F8FAFB]">
+          <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden">
+            <div className="h-[400px] relative">
+              {/* banner */}
               <img
-                src={displayDetailCampus.path_logo || "https://placehold.co/200?text=Logo"}
-                alt="Logo Kampus"
-                className="w-20 h-20 object-contain"
+                src={
+                  displayDetailCampus.banner_url ||
+                  "https://placehold.co/1200x400?text=Tambahkan+Banner+Kampus"
+                }
+                alt={`Banner Kampus`}
+                className="w-full h-full object-cover"
               />
+
+              {/* EDIT BUTTON */}
+              <button
+                onClick={() => setIsInfoEditOpen(true)}
+                className="absolute top-4 right-4 bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2"
+              >
+                <Pencil size={16} /> Edit Info
+              </button>
             </div>
 
-            {/* TEXT INFO */}
-            <div>
-              <h1 className="text-3xl font-bold text-white">
-                {displayDetailCampus.campus_name || "Nama Kampus"}
-              </h1>
-
-              <div className="flex items-center text-gray-300 mt-1">
-                <MapPin size={16} className="mr-2" />
-                <span className="text-sm">
-                  {displayDetailCampus.address || "Alamat belum diisi"}
-                </span>
+            {/* info campus */}
+            <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
+              <div className="flex items-center space-x-4">
+                <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+                  <img
+                    src={
+                      displayDetailCampus.logo_url ||
+                      "https://placehold.co/200?text=Logo+Kampus"
+                    }
+                    alt={`Logo Kampus`}
+                    className="w-20 h-20 object-contain"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    {displayDetailCampus.campus_name}
+                  </h1>
+                </div>
               </div>
-
-              <p className="text-sm mt-1">
-                {campusData.email || "Email belum diisi"}
-              </p>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
         <Tabs defaultValue="deskripsi" className="w-full">
@@ -142,7 +181,7 @@ export default function DetailCampus() {
               Deskripsi
             </TabsTrigger>
 
-            {/* peserta */}
+            {/* jurusan */}
             <TabsTrigger
               value="jurusan"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
@@ -150,297 +189,198 @@ export default function DetailCampus() {
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
               Jurusan
             </TabsTrigger>
-
-            {/* mentor */}
           </TabsList>
 
           {/* content Tabs */}
           <TabsContent value="deskripsi">
-            {/* ====================== DESKRIPSI ====================== */}
-            <section className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full mt-5">
-              <div className="flex justify-between items-start">
-                <h2 className="text-2xl font-bold text-[#013B35]">
-                  Deskripsi Kampus
-                </h2>
-
-                <button
-                  onClick={() => setIsDescEditOpen(true)}
-                  className="flex items-center gap-2 bg-[#013B35] text-white px-4 py-2 rounded-full">
-                  <Pencil size={16} /> Edit
-                </button>
-              </div>
-
-              <p className="text-gray-700 mt-4 leading-relaxed">
-                {displayDetailCampus.description || "Belum ada deskripsi."}
-              </p>
-
-              <div className="mt-6">
-                <h3 className="font-semibold text-lg">Visi</h3>
-                <p className="text-gray-700 mt-2">
-                  {campusData.visi || "Belum diisi."}
-                </p>
-              </div>
-
-              <div className="mt-6">
-                <h3 className="font-semibold text-lg">Misi</h3>
-                <p className="text-gray-700 mt-2 whitespace-pre-line">
-                  {campusData.misi || "Belum diisi."}
-                </p>
-              </div>
-            </section>
-
-            {/* ====================== POPUP EDIT DESKRIPSI ====================== */}
-            {isDescEditOpen && (
-              <EditPopup
-                title="Edit Deskripsi Kampus"
-                onClose={handleCloseEdit}>
-                <EditCampusVisiMisiForm
-                  initialData={campusData}
-                  onSave={(data) => handleSave(data, "desc")}
-                />
-              </EditPopup>
-            )}
+            <DetailCampusDescription
+              DescriptionSection={DescriptionSection}
+              refetchCampusData={() => fetchDetailCampus(token)}
+            />
           </TabsContent>
 
           <TabsContent value="jurusan">
-            {/* ====================== KONTEN: JURUSAN ====================== */}
-            <section className="mt-6 mx-auto  mb-20 w-full">
-              <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold text-[#013B35]">Jurusan</h2>
-                  <button
-                    onClick={() => setIsEditOpen(true)}
-                    className="px-6 py-2 bg-[#4BA8FF] text-white rounded-full flex items-center gap-2 hover:bg-blue-600 transition-colors">
-                    <Pencil size={18} /> Tambah Jurusan
-                  </button>
-                </div>
-
-                {/* Bubble list */}
-                <div className="flex flex-wrap gap-3">
-                  {jurusanList.length === 0 && (
-                    <span className="text-gray-500">
-                      Belum ada jurusan yang ditambahkan.
-                    </span>
-                  )}
-
-                  {jurusanList.map((j) => (
-                    <button
-                      key={j.id}
-                      onClick={() => setSelectedJurusan(j)}
-                      className={`px-4 py-2 rounded-full border ${
-                        selectedJurusan?.id === j.id
-                          ? "bg-[#013B35] text-white"
-                          : "bg-gray-100 text-gray-700"
-                      }`}>
-                      {j.name}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Detail jurusan */}
-                {selectedJurusan && (
-                  <div className="mt-6 space-y-4">
-                    <h3 className="text-xl font-bold text-[#013B35]">
-                      {selectedJurusan.name}
-                    </h3>
-                    {selectedJurusan.logo && (
-                      <img
-                        src={selectedJurusan.logo}
-                        alt="Logo Jurusan"
-                        className="w-32 h-32 object-cover rounded-full border"
-                      />
-                    )}
-                    <p className="text-gray-700">{selectedJurusan.desc}</p>
-                  </div>
-                )}
-              </div>
-            </section>
+            <DetailCampusMajors
+              majors={majors}
+              refetchCampusData={() => fetchDetailCampus(token)}
+            />
           </TabsContent>
         </Tabs>
       </section>
-
-      {/* ====================== POPUP EDIT INFO ====================== */}
-      {isInfoEditOpen && (
-        <EditPopup title="Edit Informasi Kampus" onClose={handleCloseEdit}>
-          <EditCampusInfoForm
-            initialData={campusData}
-            onSave={(data) => handleSave(data, "info")}
-          />
-        </EditPopup>
-      )}
     </>
   );
 }
 
-/* ======================================================
-                    POPUP COMPONENTS
-====================================================== */
+// component edit header detail campus
+function EditHeader({
+  displayDetailCampus,
+  setIsInfoEditOpen,
+  refetchCampusData,
+}) {
+  const token = localStorage.getItem("userJwt");
+  const {
+    editImageCampus,
+    isLoading,
+    error: submissionError,
+    clearState,
+  } = useEditImageCampus();
 
-function EditPopup({ title, children, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999] p-4">
-      <div className="bg-[#F7F9F7] w-full max-w-xl rounded-2xl p-8 relative shadow-xl max-h-[90vh] overflow-y-auto">
-        <button
-          onClick={onClose}
-          className="absolute top-6 right-6 text-gray-600 hover:text-black">
-          <X size={24} />
-        </button>
-
-        <h2 className="text-2xl font-bold mb-8">{title}</h2>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/* ==================== FORM EDIT INFO ==================== */
-
-function EditCampusInfoForm({ initialData, onSave }) {
-  const [form, setForm] = useState({
-    ...initialData,
-    images: initialData.images.slice(0, 1),
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(editHeaderSchema),
+    defaultValues: {
+      campus_name: displayDetailCampus.campus_name || "",
+    },
   });
 
-  const handleInput = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const bannerFile = watch("banner");
+  const logoFile = watch("logo");
 
-  const handleBannerUpload = () => {
-    setForm({
-      ...form,
-      images: [{ id: Date.now(), url: "" }],
-    });
+  const bannerPreview = bannerFile?.[0]
+    ? URL.createObjectURL(bannerFile[0])
+    : null;
+  const logoPreview = logoFile?.[0] ? URL.createObjectURL(logoFile[0]) : null;
+
+  useEffect(() => {
+    // Membersihkan state hook (error, success message) saat komponen unmount
+    return () => {
+      clearState();
+    };
+  }, [clearState]);
+
+  const onSubmit = async (data) => {
+    try {
+      // console.log(data);
+      const result = await editImageCampus({
+        token,
+        logo: data.logo?.[0],
+        banner: data.banner?.[0],
+        campus_name: data.campus_name,
+        // TODO: Tambahkan juga logic untuk update campus_name jika ada endpointnya
+      });
+
+      // Jika berhasil, muat ulang data dan tutup mode edit
+      await refetchCampusData();
+      setIsInfoEditOpen(false);
+    } catch (error) {
+      // Error sudah ditangani di dalam hook, bisa ditambahkan notifikasi (toast) di sini jika perlu
+      console.error("Gagal mengirim form:", error);
+    }
   };
 
-  const handleLogoUpload = () => {
-    setForm({ ...form, logo: "uploaded-logo-url" });
-  };
-
   return (
-    <div className="space-y-6">
-      <InputField
-        label="Nama Kampus"
-        name="name"
-        value={form.name}
-        onChange={handleInput}
-      />
-      <InputField
-        label="Website"
-        name="website"
-        value={form.website}
-        onChange={handleInput}
-      />
-      <InputField
-        label="Email"
-        name="email"
-        value={form.email}
-        onChange={handleInput}
-      />
-      <InputField
-        label="Alamat"
-        name="address"
-        value={form.address}
-        onChange={handleInput}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-[#F8FAFB]">
+      <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden">
+        <div className="h-[400px] relative">
+          {/* banner */}
+          <img
+            src={
+              bannerPreview ||
+              displayDetailCampus.banner_url ||
+              "https://placehold.co/1200x400?text=Tambahkan+Banner+Kampus"
+            }
+            alt={`Banner Kampus`}
+            className="w-full h-full object-cover"
+          />
 
-      {/* Upload Logo */}
-      <div>
-        <label className="block font-medium mb-2">Logo Kampus</label>
-        <button
-          onClick={handleLogoUpload}
-          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
-          <Plus size={16} /> Upload Logo
-        </button>
+          {/* Tombol Ganti Banner */}
+          <label
+            htmlFor="banner-upload"
+            className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-100 transition-opacity cursor-pointer"
+          >
+            <div className="bg-white/80 backdrop-blur-sm text-[#013B35] px-6 py-3 rounded-full shadow-lg flex items-center gap-3">
+              <Upload size={20} />
+              <span className="font-semibold text-lg">Ganti Banner</span>
+            </div>
+            <input
+              id="banner-upload"
+              type="file"
+              className="hidden"
+              accept="image/*"
+              {...register("banner")}
+            />
+          </label>
+          {/* Grup Tombol Aksi */}
+          <div className="absolute top-4 right-4 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setIsInfoEditOpen(false)}
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow-md flex items-center gap-2 hover:bg-gray-300 transition-colors"
+            >
+              <X size={16} />
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="bg-white text-[#013B35] px-4 py-2 rounded-full shadow-md flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Save size={16} />
+              )}
+              {isLoading ? "Menyimpan..." : "Simpan"}
+            </button>
+          </div>
+        </div>
+
+        {/* info campus */}
+        <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
+          <div className="flex items-center space-x-4">
+            {/* Logo dengan tombol edit */}
+            <div className="relative bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+              {/* logo image */}
+              <img
+                src={
+                  logoPreview ||
+                  displayDetailCampus.logo_url ||
+                  "https://placehold.co/200?text=Logo+Kampus"
+                }
+                alt={`Logo Kampus`}
+                className="w-20 h-20 object-contain"
+              />
+              <label
+                htmlFor="logo-upload"
+                className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full opacity-100 transition-opacity cursor-pointer"
+              >
+                <Pencil size={20} className="text-white" />
+                <input
+                  id="logo-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  {...register("logo")}
+                />
+              </label>
+            </div>
+            <div>
+              <Input
+                type="text"
+                placeholder="Nama Kampus"
+                className="text-3xl md:text-4xl font-bold text-white mb-1 bg-transparent border-0 border-b-2 focus-visible:ring-0 focus-visible:border-b-white rounded-none p-0 h-auto"
+                {...register("campus_name")}
+              />
+              {errors.campus_name && (
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.campus_name.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+        {(errors.banner || errors.logo || submissionError) && (
+          <div className="max-w-6xl mx-auto text-red-500 text-sm mt-2 px-4">
+            {errors.banner && <p>{errors.banner.message}</p>}
+            {errors.logo && <p>{errors.logo.message}</p>}
+            {submissionError && <p>{submissionError}</p>}
+          </div>
+        )}
       </div>
-
-      {/* Upload Banner */}
-      <div>
-        <label className="block font-medium mb-2">Banner / Foto Kampus</label>
-        <button
-          onClick={handleBannerUpload}
-          className="border border-[#8CBCAF] text-[#0A5C50] font-semibold px-6 py-2 rounded-full flex items-center gap-2">
-          <Plus size={16} /> Upload Banner
-        </button>
-      </div>
-
-      <div className="flex justify-end">
-        <button
-          onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
-          Simpan
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ==================== FORM TEXTAREA ==================== */
-
-function EditCampusVisiMisiForm({ initialData, onSave }) {
-  const [form, setForm] = useState(initialData);
-  const handleInput = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  return (
-    <div className="space-y-6">
-      <TextAreaField
-        label="Deskripsi"
-        name="desc"
-        height="h-32"
-        value={form.desc}
-        onChange={handleInput}
-      />
-      <TextAreaField
-        label="Visi"
-        name="visi"
-        height="h-24"
-        value={form.visi}
-        onChange={handleInput}
-      />
-      <TextAreaField
-        label="Misi"
-        name="misi"
-        height="h-24"
-        value={form.misi}
-        onChange={handleInput}
-      />
-
-      <div className="flex justify-end">
-        <button
-          onClick={() => onSave(form)}
-          className="bg-[#4BA8FF] text-white px-10 py-3 rounded-full font-semibold">
-          Simpan
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ====================== INPUT FIELDS ====================== */
-
-function InputField({ label, name, value, onChange }) {
-  return (
-    <div>
-      <label className="block font-medium mb-1">{label}</label>
-      <input
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full border border-[#8CBCAF] rounded-full p-3 px-5 bg-white text-gray-800 focus:ring-2 focus:ring-[#4BA8FF]"
-      />
-    </div>
-  );
-}
-
-function TextAreaField({ label, name, value, onChange, height }) {
-  return (
-    <div>
-      <label className="block font-medium mb-1">{label}</label>
-      <textarea
-        name={name}
-        value={value}
-        onChange={onChange}
-        className={`w-full border border-[#8CBCAF] rounded-xl p-4 bg-white text-gray-800 resize-none focus:ring-2 focus:ring-[#4BA8FF] ${height}`}
-      />
-    </div>
+    </form>
   );
 }

@@ -1,5 +1,13 @@
-import { Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  Plus,
+  Trash2,
+  Loader2,
+  ListChecks,
+  Users,
+  GraduationCap,
+  UserCheck,
+} from "lucide-react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BarChart,
@@ -10,26 +18,78 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import KampusDataForm from "./DashboardCampusRegisterMitra";
-import CampusFirst from "./CampusFirst";
+
 import { jwtDecode } from "jwt-decode";
 import useGetProgramChart from "@/hooks/hooksCampus/useGetProgramChart";
+import useAddMentor from "@/hooks/hooksCampus/useAddMentor"; // Impor hook baru
+import useDeleteMentor from "@/hooks/hooksCampus/useDeleteMentor";
+import useGetAllMentors from "@/hooks/hooksCampus/useGetAllMentors"; // Impor hook get all mentors
+import useDetailCampus from "@/hooks/hooksCampus/useDetailCampus"; // Impor hook untuk detail kampus
 import { Button } from "@/components/ui/button";
+import { getColumns } from "@/components/columns";
+import { DataTable } from "@/components/data-table";
 
-const mentorListDummy = [
-  { id: 1, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
-  { id: 2, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
-  { id: 3, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
-  { id: 4, nama: "Lorem ipsum", detail: "lorem ipsum | lorem ipsum" },
-];
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import DashboardCampusBerandaSkeleton from "@/components/DashboardCampusBerandaSkeleton";
+
+// Skema validasi untuk form tambah mentor
+const addMentorSchema = z
+  .object({
+    name: z.string().min(3, "Nama mentor minimal 3 karakter."),
+    nik: z
+      .string()
+      .min(1, "NIK wajib diisi.")
+      .max(20, "NIK terlalu panjang.")
+      .regex(/^\d+$/, "NIK hanya boleh berisi angka."),
+    password: z.string().min(8, "Password minimal 8 karakter."),
+    confirmPassword: z
+      .string()
+      .min(8, "Konfirmasi password minimal 8 karakter."),
+    mentor_type: z.string().min(1, "Tipe mentor wajib dipilih."), // Pastikan ini ada
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password dan konfirmasi password tidak cocok.",
+    path: ["confirmPassword"],
+  });
 
 // --- Custom Tooltip (Untuk menampilkan detail saat hover) ---
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/90 p-3 rounded-lg shadow-lg border border-gray-200">
-        <p className="text-sm font-semibold text-[#013D3A]">{label}</p>
-        <p className="text-xs text-gray-600">
+      <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+        <p className="text-sm font-semibold text-gray-800">{label}</p>
+        <p className="text-xs text-gray-700">
           Total Mentee:{" "}
           <span className="font-bold text-base text-teal-600">
             {payload[0].value}
@@ -50,28 +110,83 @@ export default function DashboardCampusBeranda() {
   // console.log(decode);
   const [jurusanDipilih, setJurusanDipilih] = useState("");
   const [isCampusValid, setCampusValid] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [mentorList, setMentorList] = useState(mentorListDummy);
   const { programs, isLoading, error, fetchPrograms } = useGetProgramChart();
+  const { detailCampus, fetchDetailCampus } = useDetailCampus(); // Gunakan hook untuk mendapatkan detail kampus
+  const { addMentor, isLoading: isAddingMentor } = useAddMentor();
+  const {
+    // Pastikan ini ada
+    mentors,
+    isLoading: isLoadingMentors,
+    fetchMentors,
+  } = useGetAllMentors(); // Gunakan hook untuk data mentor
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { deleteMentor, isLoading: isDeletingMentor } = useDeleteMentor();
+
+  // Setup React Hook Form
+  const form = useForm({
+    resolver: zodResolver(addMentorSchema),
+    defaultValues: {
+      name: "",
+      nik: "",
+      password: "",
+      confirmPassword: "",
+      mentor_type: "default", // Nilai default untuk tipe mentor
+    },
+  });
+
+  const onSubmit = async (values) => {
+    const payload = {
+      name: values.name,
+      nik: values.nik,
+      password: values.password,
+      mentor_type: values.mentor_type,
+    };
+
+    // console.log(payload);
+    const result = await addMentor(token, payload);
+
+    if (result.success) {
+      toast.success(result.message || "Mentor berhasil ditambahkan!");
+      fetchMentors(token); // Panggil ulang fetchMentors untuk refresh data
+      form.reset();
+      setIsModalOpen(false); // Tutup modal setelah berhasil
+    } else {
+      toast.error(result.error || "Gagal menambahkan mentor.");
+    }
+  };
+
+  const handleDeleteMentor = useCallback(
+    async (mentor) => {
+      const result = await deleteMentor(token, mentor.id);
+      if (result.success) {
+        toast.success(result.message);
+        fetchMentors(token); // Muat ulang data tabel setelah berhasil
+      } else {
+        toast.error(result.error);
+      }
+    },
+    [token, deleteMentor, fetchMentors]
+  );
 
   useEffect(() => {
     if (token) {
       fetchPrograms(token);
+      fetchDetailCampus(token); // Panggil fetch untuk detail kampus
+      fetchMentors(token); // Panggil fetch untuk data mentor
     }
-  }, [token]);
+  }, [token, fetchPrograms, fetchDetailCampus, fetchMentors]);
 
-  const handleTambahMentor = () => {
-    if (!emailMentor.trim())
-      return alert("Masukkan email mentor terlebih dahulu!");
-    const newMentor = {
-      id: mentorList.length + 1,
-      nama: "Mentor Baru",
-      detail: emailMentor + " | Baru ditambahkan",
-    };
-    setMentorList([...mentorList, newMentor]);
-    setEmailMentor("");
-    setIsModalOpen(false);
-  };
+  const totalPrograms = programs?.length || 0;
+  const totalMentors = mentors.length;
+  const totalMajors = detailCampus?.major?.length || 0;
+  const totalMentees =
+    programs?.reduce((acc, program) => acc + (program.total_mentee || 0), 0) ||
+    0;
+
+  const columns = useMemo(
+    () => getColumns(handleDeleteMentor, () => fetchMentors(token)),
+    [handleDeleteMentor, fetchMentors, token]
+  );
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -91,6 +206,10 @@ export default function DashboardCampusBeranda() {
     }
     return null;
   };
+
+  if (isLoading) {
+    return <DashboardCampusBerandaSkeleton />;
+  }
 
   const CustomLegend = () => (
     <div className="flex justify-end items-center gap-6 text-sm">
@@ -128,23 +247,68 @@ export default function DashboardCampusBeranda() {
   return (
     <>
       {/* HEADER */}
-      <div className="px-10 pt-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-[#013D3A]">
-            SELAMAT DATANG, <br />
-            {campusName}
-          </h1>
-        </div>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-[#013D3A]">
+          SELAMAT DATANG, <br />
+          {campusName}
+        </h1>
       </div>
 
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto">
-        {/* === CHART SECTION (TIDAK DIUBAH SESUAI PERMINTAAN) === */}
-        <section className="bg-[#013D3A] w-full rounded-xl p-6 text-white shadow-2xl mb-6">
+      {/* === STATS CARDS === */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+        {/* Card Total Program */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+          <div className="bg-blue-100 text-blue-600 rounded-full p-3">
+            <ListChecks size={28} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">Total Program</p>
+            <p className="text-2xl font-bold text-gray-800">{totalPrograms}</p>
+          </div>
+        </div>
+
+        {/* Card Total Jurusan */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+          <div className="bg-orange-100 text-orange-600 rounded-full p-3">
+            <GraduationCap size={28} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">Total Jurusan</p>
+            <p className="text-2xl font-bold text-gray-800">{totalMajors}</p>
+          </div>
+        </div>
+
+        {/* Card Total Mentor */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+          <div className="bg-green-100 text-green-600 rounded-full p-3">
+            <Users size={28} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">Total Mentor</p>
+            <p className="text-2xl font-bold text-gray-800">{totalMentors}</p>
+          </div>
+        </div>
+
+        {/* Card Total Mentee */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+          <div className="bg-purple-100 text-purple-600 rounded-full p-3">
+            <UserCheck size={28} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">Total Mentee</p>
+            <p className="text-2xl font-bold text-gray-800">{totalMentees}</p>
+          </div>
+        </div>
+      </div>
+      {/* === END STATS CARDS === */}
+
+      <main className="flex-1 pt-6 overflow-y-auto">
+        {/* === CHART SECTION === */}
+        <section className="bg-white w-full rounded-xl p-6 text-gray-800 shadow-2xl mb-6 border border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <h3 className="text-xl font-bold">
               Jumlah Pendaftaran Mentee per Program
             </h3>
-            {/* Dropdown sudah dihapus sesuai permintaan */}
           </div>
 
           <div className="h-80 w-full">
@@ -158,7 +322,7 @@ export default function DashboardCampusBeranda() {
                 >
                   <XAxis
                     dataKey="program_name"
-                    stroke="#FFFFFF"
+                    stroke="#013D3A"
                     tickLine={false}
                     tick={{
                       angle: -25,
@@ -171,10 +335,11 @@ export default function DashboardCampusBeranda() {
                   />
 
                   <YAxis
-                    stroke="#FFFFFF"
+                    stroke="#013D3A"
                     tickLine={false}
                     axisLine={false}
                     style={{ fontSize: "10px" }}
+                    allowDecimals={false}
                     tickFormatter={(value) => `${value} Mentee`}
                   />
 
@@ -188,7 +353,7 @@ export default function DashboardCampusBeranda() {
                   >
                     <LabelList
                       dataKey="total_mentee" // Pastikan ini sesuai dengan key di data Anda
-                      content={renderCustomBarLabel}
+                      content={(props) => <text {...props} fill="#013D3A" />} // Mengubah warna label menjadi gelap
                     />
                   </Bar>
                 </BarChart>
@@ -196,7 +361,7 @@ export default function DashboardCampusBeranda() {
             ) : (
               // Jika tidak ada data program, tampilkan pesan
               <div className="flex flex-col gap-4 justify-center items-center h-full text-center p-4">
-                <p className="text-white text-lg font-medium">
+                <p className="text-gray-700 text-lg font-medium">
                   Belum ada program yang dibuat oleh kampus ini. Klik tombol
                   dibawah untuk membuat program.
                 </p>
@@ -210,88 +375,146 @@ export default function DashboardCampusBeranda() {
             )}
           </div>
 
-          <div className="text-center mt-4 text-xs text-white/70">
+          <div className="text-center mt-4 text-xs text-gray-600">
             Data Pendaftaran Mentee Total (Per Program)
           </div>
         </section>
 
-        {/* === KELOLA MENTOR (TIDAK DIUBAH!) === */}
-        <section className="bg-[#013D3A] rounded-xl p-6 text-white shadow-lg">
+        {/* === KELOLA MENTOR (DIUBAH MENJADI TEMA TERANG) === */}
+        <section className="bg-white rounded-xl p-6 pt-6 text-gray-800 shadow-lg border">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-            <h3 className="text-lg font-semibold">Kelola Mentor</h3>
+            <h3 className="text-lg font-semibold text-[#013D3A]">
+              Kelola Mentor
+            </h3>
 
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-[#5CC6BA] text-[#013D3A] hover:bg-[#4ab6a9] flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-semibold"
-            >
-              <Plus size={16} /> Tambah Mentor
-            </button>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <Form {...form}>
+                <DialogTrigger asChild>
+                  <button className="bg-[#013D3A] text-white hover:bg-[#015f53] flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors">
+                    <Plus size={16} /> Tambah Mentor
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px] bg-white">
+                  <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <DialogHeader>
+                      <DialogTitle>Tambah Mentor Baru</DialogTitle>
+                      <DialogDescription>
+                        Masukkan data mentor untuk mendaftarkannya ke dalam
+                        sistem.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nama Mentor</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Masukkan nama lengkap"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="mentor_type"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Tipe Mentor</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Pilih tipe mentor" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="default">Default</SelectItem>
+                                <SelectItem value="super_mentor">
+                                  Super Mentor
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="nik"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>NIK</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Masukkan NIK" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="Minimal 8 karakter"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Konfirmasi Password</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="Ulangi password"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" disabled={isAddingMentor}>
+                        {isAddingMentor && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {isAddingMentor ? "Menyimpan..." : "Simpan"}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Form>
+            </Dialog>
           </div>
 
-          <div className="divide-y divide-white/10">
-            {mentorList.map((mentor) => (
-              <div
-                key={mentor.id}
-                className="flex justify-between items-center py-3"
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded text-[#5CC6BA] bg-transparent border-white/50 focus:ring-[#5CC6BA]"
-                  />
-                  <div>
-                    <p className="font-semibold text-base">{mentor.nama}</p>
-                    <p className="text-sm text-gray-300">{mentor.detail}</p>
-                  </div>
-                </div>
-                <Trash2
-                  size={18}
-                  className="text-white/70 cursor-pointer hover:text-red-400 transition"
-                />
-              </div>
-            ))}
-          </div>
+          <DataTable
+            columns={columns}
+            data={mentors}
+            isLoading={isLoadingMentors}
+          />
         </section>
       </main>
-
-      {/* === MODAL TAMBAH MENTOR (TIDAK DIUBAH) === */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-[#F8FCFA] rounded-xl shadow-lg p-6 w-[600px]">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-[#013B35]">
-                Tambahkan Mentor
-              </h2>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-600 hover:text-black"
-              >
-                ✕
-              </button>
-            </div>
-
-            <label className="block text-sm mb-2 text-gray-700">
-              Masukkan email untuk menambahkan mentor
-            </label>
-            <input
-              type="email"
-              placeholder="contoh: mentor@email.com"
-              value={emailMentor}
-              onChange={(e) => setEmailMentor(e.target.value)}
-              className="w-full border rounded-full px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-[#013B35]"
-            />
-
-            <div className="flex justify-end">
-              <button
-                onClick={handleTambahMentor}
-                className="bg-[#A0DCE5] text-[#013B35] font-semibold px-6 py-2 rounded-full hover:bg-[#8AD0D9] transition"
-              >
-                Tambahkan
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

@@ -18,6 +18,7 @@ import ProgramEditForm from "@/components/ProgramEditForm"; // Import the new ed
 import MentorProgramCampus from "@/components/MentorProgramCampus";
 import MateriProgramCampus from "@/components/MateriProgramCampus";
 import DeleteProgram from "@/components/DeleteProgram";
+import DashboardCampusDetailProgramSkeleton from "@/components/DashboardCampusDetailProgramSkeleton";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -53,6 +54,10 @@ export default function DashboardCampusDetailProgram() {
     setEditMode(false); // Keluar dari mode edit
     window.scrollTo(0, 0); // Scroll ke atas halaman
   };
+
+  if (isLoading) {
+    return <DashboardCampusDetailProgramSkeleton />;
+  }
 
   return (
     <>

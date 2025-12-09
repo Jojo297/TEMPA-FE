@@ -7,8 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const SuspenseWrapper = ({ Component }) => (
   <Suspense fallback={<LoadingRedirect />}>
-        <ScrollToTop />
-        <Component /> {" "}
+    <ScrollToTop />
+    <Component />
   </Suspense>
 );
 
@@ -90,9 +90,6 @@ const DashboardCampus = lazy(() =>
 const DashboardAdmin = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
 );
-const DashboardMentor = lazy(() =>
-  import("@/page/Dashboard/DashboardMentor/DashboardMentor")
-);
 
 const DashboardCampusRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
@@ -157,6 +154,14 @@ const DashboardCampusAddProgram = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
 );
 
+// dashboard mentor
+const DashboardMentorBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
+);
+const DashboardMentor = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentor")
+);
+
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
@@ -204,16 +209,24 @@ const router = createBrowserRouter([
     path: "/campus/:id/program",
     element: <SuspenseWrapper Component={CampusProgram} />,
   },
-  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> }, // ======================= DASHBOARD CAMPUS =======================
+  { path: "/panduan", element: <SuspenseWrapper Component={PanduanPage} /> },
   {
     path: "/kontak",
     element: <SuspenseWrapper Component={Kontak} />,
   },
 
+  // ======================= DASHBOARD CAMPUS =======================
   {
     path: "/dashboard-campus",
     element: (
-      <ProtectedRoute Component={DashboardCampus} allowedRoles={["campus"]} />
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={DashboardCampus}
+            allowedRoles={["campus"]}
+          />
+        )}
+      />
     ),
     children: [
       {
@@ -223,15 +236,6 @@ const router = createBrowserRouter([
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
-      },
-
-      {
-        path: "kampus-verifikasi-berhasil",
-        element: <SuspenseWrapper Component={DashboardCampusVerivication} />,
-      },
-      {
-        path: "kampus-verifikasi-gagal",
-        element: <SuspenseWrapper Component={KampusVerifikasiGagal} />,
       },
 
       { path: "jurusan", element: <SuspenseWrapper Component={Jurusan} /> },
@@ -260,8 +264,9 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
     ],
-  }, // if the campus has not verified
+  },
 
+  // Dashboard campus verification routes
   {
     path: "campus-verification",
     element: (
@@ -287,8 +292,9 @@ const router = createBrowserRouter([
         ),
       },
     ],
-  }, // ===================== Dashboard lainnya =====================
+  },
 
+  // ===================== Dashboard lainnya =====================
   {
     path: "/dashboard-admin",
     element: <SuspenseWrapper Component={DashboardAdmin} />,
@@ -309,14 +315,23 @@ const router = createBrowserRouter([
   {
     path: "/dashboard-mentor",
     element: <SuspenseWrapper Component={DashboardMentor} />,
-  }, // ===================== Dashboard Mentee =====================
+  },
 
+  // dashboard mentee routes
   {
     path: "dashboard-mentee",
     element: (
-      <ProtectedRoute
-        Component={DashboardMenteePage}
-        allowedRoles={["mentee"]}
+      // <ProtectedRoute
+      //   Component={DashboardMenteePage}
+      //   allowedRoles={["mentee"]}
+      // />
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={DashboardMenteePage}
+            allowedRoles={["mentee"]}
+          />
+        )}
       />
     ),
     children: [
@@ -389,6 +404,28 @@ const router = createBrowserRouter([
             ),
           },
         ],
+      },
+    ],
+  },
+
+  // dashboard mentor
+  {
+    path: "dashboard-mentor",
+    // element:
+    //  (
+    // <ProtectedRoute
+    element: <SuspenseWrapper Component={DashboardMentor} />,
+    // allowedRoles={["mentor"]}
+    // />
+    // )
+    children: [
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
       },
     ],
   },
