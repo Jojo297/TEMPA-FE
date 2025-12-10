@@ -239,17 +239,14 @@ const router = createBrowserRouter([
         path: "prestasi",
         element: <SuspenseWrapper Component={CampusPrestasiDashboard} />,
       },
-
       {
         path: "detailcampus",
         element: <SuspenseWrapper Component={DetailCampus} />,
       },
-
       {
         path: "program",
         element: <SuspenseWrapper Component={DashboardCampusProgram} />,
       },
-
       {
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
