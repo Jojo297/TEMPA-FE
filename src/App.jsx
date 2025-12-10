@@ -90,9 +90,6 @@ const DashboardCampus = lazy(() =>
 const DashboardAdmin = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
 );
-const DashboardMentor = lazy(() =>
-  import("@/page/Dashboard/DashboardMentor/DashboardMentor")
-);
 
 const DashboardCampusRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
@@ -155,6 +152,14 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
 
 const DashboardCampusAddProgram = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
+);
+
+// dashboard mentor
+const DashboardMentorBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
+);
+const DashboardMentor = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentor")
 );
 
 // ================= ROUTER =================
@@ -255,12 +260,16 @@ const router = createBrowserRouter([
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
+      {
+        path: "berlangganan",
+        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
+      },
     ],
   },
 
-  // if the campus has not verified
+  // Dashboard campus verification routes
   {
-    path: "campus-verification",
+    path: "/campus-verification",
     element: (
       <ProtectedRoute
         Component={DashboardCampusVerivication}
@@ -309,7 +318,7 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={DashboardMentor} />,
   },
 
-  // ===================== Dashboard Mentee =====================
+  // dashboard mentee routes
   {
     path: "dashboard-mentee",
     element: (
@@ -356,6 +365,10 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
       },
       {
+        path: "penilaian",
+        element: <SuspenseWrapper Component={Penilaian} />,
+      },
+      {
         path: "jurusan",
         element: <SuspenseWrapper Component={DashboardJurusan} />,
       },
@@ -392,6 +405,28 @@ const router = createBrowserRouter([
             ),
           },
         ],
+      },
+    ],
+  },
+
+  // dashboard mentor
+  {
+    path: "dashboard-mentor",
+    // element:
+    //  (
+    // <ProtectedRoute
+    element: <SuspenseWrapper Component={DashboardMentor} />,
+    // allowedRoles={["mentor"]}
+    // />
+    // )
+    children: [
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
       },
     ],
   },

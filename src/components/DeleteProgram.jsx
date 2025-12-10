@@ -10,7 +10,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
-import { id } from "date-fns/locale";
 import { AlertTriangle, AlertTriangleIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -52,8 +51,7 @@ export default function DeleteProgram({
             className
               ? className
               : "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
-          }
-        >
+          }>
           {isClassNameEmpty && <Trash2 size={16} />}
           Hapus Program
         </button>
@@ -101,8 +99,7 @@ export default function DeleteProgram({
           <AlertDialogAction
             onClick={() => handleDeleteProgram(idProgram)}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1"
-          >
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1">
             {isLoading ? "Loading..." : ((<Trash2 size={16} />), "Hapus")}
           </AlertDialogAction>
         </AlertDialogFooter>
