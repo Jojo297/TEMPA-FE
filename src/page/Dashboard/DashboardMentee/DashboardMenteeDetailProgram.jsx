@@ -21,6 +21,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
+import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 
 const DashboardMenteeDetailProgram = () => {
   // get id program from url
@@ -86,7 +87,7 @@ const DashboardMenteeDetailProgram = () => {
       case "online":
         return "Online";
       case "onsite":
-        return sesi.sesi_description;
+        return sesi.onsiteLocationName;
     }
   };
 
@@ -238,15 +239,14 @@ const DashboardMenteeDetailProgram = () => {
 
           <ul className="text-gray-700 space-y-2 text-sm sm:text-base">
             <li>
-              <strong>Tanggal Pelaksanaan:</strong>{" "}
-              {new Date(displayDetailProgram.start_date).toLocaleDateString(
-                "id-ID",
-                {
-                  day: "numeric",
-                }
-              )}
+              <strong>Tanggal Pendaftaran:</strong>{" "}
+              {new Date(
+                displayDetailProgram.start_regis_date
+              ).toLocaleDateString("id-ID", {
+                day: "numeric",
+              })}
               {" - "}
-              {new Date(displayDetailProgram.end_date).toLocaleDateString(
+              {new Date(displayDetailProgram.end_regis_date).toLocaleDateString(
                 "id-ID",
                 {
                   year: "numeric",
@@ -254,6 +254,22 @@ const DashboardMenteeDetailProgram = () => {
                   day: "numeric",
                 }
               )}
+            </li>
+            <li>
+              <strong>Tanggal Pelaksanaan:</strong>{" "}
+              {new Date(
+                displayDetailProgram.start_program_date
+              ).toLocaleDateString("id-ID", {
+                day: "numeric",
+              })}
+              {" - "}
+              {new Date(
+                displayDetailProgram.end_program_date
+              ).toLocaleDateString("id-ID", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </li>
             <li>
               <strong>Waktu Pelaksanaan :</strong>{" "}
@@ -336,21 +352,25 @@ const DashboardMenteeDetailProgram = () => {
             </div>
           </Link>
 
-          {/* Informasi Mentor */}
-
-          <div className="bg-white shadow-md rounded-xl p-6 h-fit">
-            <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
-              Informasi Mentor
-            </h2>
-            <div className="space-y-2 text-gray-700 text-sm sm:text-base">
-              <p>
-                <strong>Nama:</strong> {displayDetailProgram.mentor?.name}
-              </p>
-              <p>
-                <strong>Email:</strong> PKProgram@gmail.com
-              </p>
-            </div>
-          </div>
+          {/* Card Lokasi (Hanya tampil jika sesi 'onsite') */}
+          {displayDetailProgram.type_sesi === "onsite" && (
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${displayDetailProgram.lat},${displayDetailProgram.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white shadow-md rounded-xl p-6 h-fit block transition hover:shadow-lg"
+            >
+              <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
+                Titik Lokasi
+              </h2>
+              <div className="w-full h-auto text-gray-700 text-sm sm:text-base">
+                <DisplayMapsLocation
+                  lat={displayDetailProgram.lat}
+                  lng={displayDetailProgram.lng}
+                />
+              </div>
+            </a>
+          )}
         </div>
       </div>
     </>

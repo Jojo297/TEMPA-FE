@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { X, Pencil, Calendar, Trash2 } from "lucide-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { X, Pencil, Calendar } from "lucide-react";
 import { ProgramDummy } from "@/lib/ProgramDummy";
 import { Link, useParams } from "react-router";
 import {
@@ -19,6 +19,8 @@ import MentorProgramCampus from "@/components/MentorProgramCampus";
 import MateriProgramCampus from "@/components/MateriProgramCampus";
 import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusDetailProgramSkeleton from "@/components/DashboardCampusDetailProgramSkeleton";
+import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMentorFromProgram";
+import { toast } from "sonner";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -37,6 +39,7 @@ export default function DashboardCampusDetailProgram() {
   const token = localStorage.getItem("userJwt");
   const { detailProgram, isLoading, error, fetchDetailProgram } =
     useGetDetailProgram();
+  const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
 
   const program = detailProgram ?? {};
   // console.log(program);
@@ -54,6 +57,24 @@ export default function DashboardCampusDetailProgram() {
     setEditMode(false); // Keluar dari mode edit
     window.scrollTo(0, 0); // Scroll ke atas halaman
   };
+
+  // Fungsi untuk menghapus mentor dari program
+  const handleRemoveMentorFromProgram = useCallback(
+    async (mentor) => {
+      // Menggunakan hook baru untuk menghapus mentor
+      const result = await deleteMentorFromProgram(token, mentor.id);
+
+      if (result.success) {
+        toast.success(
+          result.message || "Mentor berhasil dihapus dari program."
+        );
+        fetchDetailProgram(token, idProgram); // Muat ulang data program
+      } else {
+        toast.error(result.error || "Gagal menghapus mentor.");
+      }
+    },
+    [token, idProgram, fetchDetailProgram, deleteMentorFromProgram]
+  );
 
   if (isLoading) {
     return <DashboardCampusDetailProgramSkeleton />;
@@ -208,7 +229,11 @@ export default function DashboardCampusDetailProgram() {
               </TabsContent>
 
               <TabsContent value="mentor">
-                <MentorProgramCampus mentorList={program.mentor} />
+                <MentorProgramCampus
+                  mentorList={program.mentor_list}
+                  onRemoveMentor={handleRemoveMentorFromProgram}
+                  onUpdateSuccess={() => fetchDetailProgram(token, idProgram)}
+                />
               </TabsContent>
 
               <TabsContent value="materi">
@@ -219,54 +244,6 @@ export default function DashboardCampusDetailProgram() {
         </div>
       )}
     </>
-  );
-}
-
-/* ========================== POPUP EDIT MENTOR ========================== */
-
-function MentorEditPopup({ initialData, onClose, onSave }) {
-  const [form, setForm] = useState(initialData);
-
-  const handleInput = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999] p-4">
-      <div className="bg-white w-full max-w-lg rounded-2xl p-8 relative shadow-xl">
-        <button
-          onClick={onClose}
-          className="absolute top-6 right-6 text-gray-600 hover:text-black"
-        >
-          <X size={24} />
-        </button>
-
-        <h2 className="text-2xl font-bold mb-6">Edit Informasi Mentor</h2>
-
-        <div className="grid grid-cols-1 gap-4">
-          <Field
-            label="Nama Mentor"
-            name="mentorName"
-            value={form.mentorName}
-            onChange={handleInput}
-          />
-          <Field
-            label="Email Mentor"
-            name="mentorEmail"
-            value={form.mentorEmail}
-            onChange={handleInput}
-          />
-        </div>
-
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={() => onSave(form)}
-            className="bg-[#013B35] text-white px-10 py-3 rounded-full font-semibold"
-          >
-            Simpan
-          </button>
-        </div>
-      </div>
-    </div>
   );
 }
 

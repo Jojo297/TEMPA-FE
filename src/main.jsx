@@ -9,7 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <TooltipProvider>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors closeButton icons />
       <RouterProvider router={router} />
     </TooltipProvider>
   </StrictMode>

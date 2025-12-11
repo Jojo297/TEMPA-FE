@@ -299,9 +299,21 @@ export default function DashboardCampusProgram() {
                         <div className="flex items-center">
                           <Calendar size={16} className="mr-2 text-[#013B35]" />
                           <span>
-                            {`${formatDate(item.start_date)} - ${formatDate(
-                              item.end_date
-                            )}`}
+                            {new Date(item.start_date).toLocaleDateString(
+                              "id-ID",
+                              {
+                                day: "numeric",
+                              }
+                            )}
+                            {" - "}
+                            {new Date(item.end_date).toLocaleDateString(
+                              "id-ID",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
                           </span>
                         </div>
 

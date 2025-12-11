@@ -50,7 +50,8 @@ export default function DashboardBeranda() {
   // badge for status program
   const getBadgeClass = (status, start_date, end_date) => {
     const startDate = new Date(start_date);
-    console.log(start_date);
+    const endDate = new Date(end_date);
+    // console.log(start_date);
 
     const today = new Date();
 
@@ -61,6 +62,12 @@ export default function DashboardBeranda() {
         text: "Program Belum Dimulai",
         bgColor: "bg-blue-100",
         textColor: "text-blue-800",
+      };
+    } else if (endDate.getTime() <= today.getTime()) {
+      return {
+        text: "Program Sudah Selesai",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
       };
     }
 
