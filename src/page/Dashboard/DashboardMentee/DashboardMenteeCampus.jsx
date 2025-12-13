@@ -82,37 +82,6 @@ export default function DashboardCampus() {
         </div>
       </div>
 
-      {/* Rekomendasi Section */}
-      <section className="mb-10">
-        <h2 className="text-xl font-bold mb-4">Rekomendasi</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayCampus.map((kampus) => (
-            <Link
-              to={`/dashboard-mentee/kampus/${kampus.id}`}
-              key={kampus.id}
-              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
-              <img
-                src={kampus.banner_url}
-                alt={kampus.campus_name}
-                className="rounded-lg w-full h-40 object-cover mb-3"
-              />
-              <div className="flex items-center gap-2 mb-2">
-                <img
-                  src={kampus.logo_url}
-                  alt="Logo"
-                  className="w-8 h-8 object-contain"
-                />
-                <p className="font-semibold text-sm">{kampus.campus_name}</p>
-              </div>
-              <div className="flex items-center gap-1 text-gray-500 text-xs">
-                <MapPin size={14} />
-                <span>{kampus.address}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* Seluruh Kampus Section */}
       <section>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
@@ -138,7 +107,8 @@ export default function DashboardCampus() {
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
-              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200">
+              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
+            >
               <img
                 src={kampus.banner_url}
                 alt={kampus.campus_name}
