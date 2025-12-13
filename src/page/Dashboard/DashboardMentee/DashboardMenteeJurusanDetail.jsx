@@ -19,7 +19,8 @@ const ChevronRightIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     className="h-5 w-5"
     viewBox="0 0 20 20"
-    fill="currentColor">
+    fill="currentColor"
+  >
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -35,7 +36,8 @@ const CalendarIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -51,7 +53,8 @@ const ClockIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -67,7 +70,8 @@ const LocationIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -88,7 +92,8 @@ const UserIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    strokeWidth={2}>
+    strokeWidth={2}
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -97,6 +102,7 @@ const UserIcon = () => (
   </svg>
 );
 
+// card program
 const ProgramItem = ({ program, jurusan, kampus }) => {
   const shortCampusName = program.lokasi.split(" - ")[0].trim();
   const matchedCampus = kampus.find((k) => k.name.includes(shortCampusName));
@@ -163,7 +169,7 @@ export default function DashboardJurusanDetail() {
     useGetDetailMajor();
   const navigate = useNavigate();
   const jurusan = jurusanList.find((j) => j.slug === slug);
-  console.log(jurusan);
+  // console.log(jurusan);
 
   // get location if status program online
   const getLocation = (status, item) => {
@@ -171,8 +177,8 @@ export default function DashboardJurusanDetail() {
       case "online":
         return "Zoom/Gmeet";
       case "onsite":
-        return item.sesi_description;
-      default: // 🏆 Tambahkan ini
+        return item.onsiteLocationName;
+      default:
         return "Tempat belum ditentukan";
     }
   };
@@ -197,9 +203,10 @@ export default function DashboardJurusanDetail() {
 
   // store result fetch to displayMajor
   const displayDetailMajor = detailMajor ?? {};
+  console.log(displayDetailMajor);
 
   // get campus
-  const getCampus = displayDetailMajor.major ?? [];
+  const getCampus = displayDetailMajor.campus ?? [];
 
   // get program
   const getProgram = getCampus.flatMap(
@@ -224,8 +231,32 @@ export default function DashboardJurusanDetail() {
   }
 
   return (
-    <div className="bg-white min-h-screen pb-16">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen pb-16">
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee/jurusan">Jurusan</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">
+              {displayDetailMajor.major_name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      {/* header  */}
+      <div className=" mx-auto">
         <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
           <div className="relative w-full h-[320px]">
             <img
@@ -245,6 +276,7 @@ export default function DashboardJurusanDetail() {
         </div>
       </div>
 
+      {/* description */}
       <div className="max-w-6xl mx-auto px-6 mt-10">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-3">
           Tentang Jurusan
@@ -255,6 +287,7 @@ export default function DashboardJurusanDetail() {
         </p>
       </div>
 
+      {/* job prospects */}
       <div className="max-w-6xl mx-auto px-6 mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Prospek Kerja
@@ -263,13 +296,15 @@ export default function DashboardJurusanDetail() {
           {displayDetailMajor.prospek_kerja?.map((item, i) => (
             <span
               key={i}
-              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition">
+              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
+            >
               {item}
             </span>
           ))}
         </div>
       </div>
 
+      {/* get campus all campus */}
       <div className="max-w-6xl mx-auto px-6 mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Kampus Terkait
@@ -281,13 +316,14 @@ export default function DashboardJurusanDetail() {
             {displayDetailMajor.major_name}
           </div>
         ) : (
-          // Jika getCampus.length > 0:
+          // if campus not found
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {getCampus.map((kampus, index) => (
               <Link
                 key={index}
                 to={`/dashboard-mentee/kampus/${kampus.campus?.id}`}
-                className="relative rounded-xl overflow-hidden shadow-lg group">
+                className="relative rounded-xl overflow-hidden shadow-lg group"
+              >
                 {/* banner */}
                 <img
                   src={kampus.campus?.banner_url}
@@ -313,6 +349,7 @@ export default function DashboardJurusanDetail() {
         )}
       </div>
 
+      {/* get program */}
       <div className="max-w-6xl mx-auto px-6 mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Program Terkait
@@ -329,7 +366,8 @@ export default function DashboardJurusanDetail() {
             getProgram.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
+                className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
+              >
                 {/* left side */}
                 <div
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -338,14 +376,16 @@ export default function DashboardJurusanDetail() {
                     backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_image_url})`,
                     backgroundColor: "#013B35",
                     minHeight: "200px",
-                  }}>
+                  }}
+                >
                   {/* Completion Status */}
                   {(() => {
                     // get badge status
                     const statusData = getBadgeClass(item.program_status);
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                      >
                         {statusData.text}
                       </div>
                     );
@@ -379,20 +419,31 @@ export default function DashboardJurusanDetail() {
                       <div className="flex items-center">
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>
-                          {new Date(item.start_date).toLocaleDateString(
-                            "id-ID",
-                            {
-                              year: "numeric",
-                              month: "long",
+                          <span>
+                            {new Date(
+                              item.start_program_date
+                            ).toLocaleDateString("id-ID", {
                               day: "numeric",
-                            }
-                          )}
+                            })}
+                            {" - "}
+                            {new Date(item.end_program_date).toLocaleDateString(
+                              "id-ID",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
+                          </span>
                         </span>
                       </div>
                       <div className="flex items-center">
                         <Home size={16} className="mr-2 text-[#013B35]" />
                         <span>
-                          {item.campus_program_id_campusTocampus?.campus_name}
+                          {
+                            item.campus_program_id_majorTocampus?.campus
+                              ?.campus_name
+                          }
                         </span>
                       </div>
                       <div className="flex items-center">
@@ -410,7 +461,8 @@ export default function DashboardJurusanDetail() {
                       onClick={() =>
                         navigate(`/dashboard-mentee/program/${item.id}`)
                       }
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                    >
                       Lihat Detail Program
                     </button>
                   </div>
