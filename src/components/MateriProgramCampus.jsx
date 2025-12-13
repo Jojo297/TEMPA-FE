@@ -18,40 +18,13 @@ import {
   Check,
   X,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import NotFounPages from "./NotFoundPages";
 import { Button } from "@/components/ui/button";
 import AddMateri from "./AddMateri";
 import useEditMateri from "@/hooks/hooksCampus/useEditMateri";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import {
   Tooltip,
   TooltipContent,
@@ -60,15 +33,10 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
+import { Spinner } from "./ui/spinner";
+import DeleteMateriDialog from "./DeleteMateriDialog";
+import AddResourceDialog from "./AddResourceDialog";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -85,295 +53,12 @@ const editSchema = z.object({
   description: z.string().min(1, "Deskripsi harus diisi"),
 });
 
-const resourceSchema = z
-  .object({
-    type: z.enum(["file", "kuis", "video"]),
-    url: z.string().optional(),
-    file: z.any().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.type === "file") {
-      if (!data.file || data.file.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "File harus diunggah",
-          path: ["file"],
-        });
-      } else {
-        const file = data.file[0];
-        const extension = file.name.split(".").pop().toLowerCase();
-        const allowedExtensions = ["pdf", "docx", "xlsx", "xls", "pptx", "ppt"];
-        const maxFileSize = 30 * 1024 * 1024; // 30MB
-
-        if (!allowedExtensions.includes(extension)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message:
-              "Hanya file .pdf, .docx, .xlsx, .xls, .pptx, dan .ppt yang diperbolehkan",
-            path: ["file"],
-          });
-        }
-
-        if (file.size > maxFileSize) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Ukuran file maksimal 30MB",
-            path: ["file"],
-          });
-        }
-      }
-    } else if (["kuis", "video"].includes(data.type)) {
-      if (!data.url) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Link harus diisi",
-          path: ["url"],
-        });
-      } else if (!z.string().url().safeParse(data.url).success) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Format link tidak valid",
-          path: ["url"],
-        });
-      }
-    }
-  });
-
-function AddResourceDialog({ onAddResource }) {
-  const [open, setOpen] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const form = useForm({
-    resolver: zodResolver(resourceSchema),
-    defaultValues: {
-      type: "file",
-      url: "",
-    },
-  });
-
-  const { control, handleSubmit, watch, resetField, reset } = form;
-  const selectedType = watch("type");
-  const selectedFile = watch("file");
-
-  useEffect(() => {
-    if (selectedFile && selectedFile.length > 0) {
-      const file = selectedFile[0];
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [selectedFile]);
-
-  const onSubmit = (data) => {
-    let processedFile = null;
-
-    if (data.type === "file" && data.file && data.file.length > 0) {
-      const originalFile = data.file[0];
-      // Ganti spasi dengan tanda hubung (-) pada nama file
-      const newFileName = originalFile.name.replace(/\s+/g, "-");
-      processedFile = new File([originalFile], newFileName, {
-        type: originalFile.type,
-        lastModified: originalFile.lastModified,
-      });
-    }
-
-    const newResource = {
-      id: `temp-${Date.now()}`,
-      type: data.type,
-      resource_url: data.type === "file" ? previewUrl || "" : data.url,
-      file: processedFile,
-      isNew: true,
-    };
-    onAddResource(newResource);
-    setOpen(false);
-    reset();
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="mt-3 flex items-center gap-2 text-[#013B35] border-[#013B35] hover:bg-[#013B35]/10"
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(true);
-          }}
-        >
-          <Plus size={16} />
-          Tambah Resource
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Tambah Resource</DialogTitle>
-          <DialogDescription>
-            Tambahkan file, kuis, atau video baru.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-            <FormField
-              control={control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipe Materi</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      if (value === "file") {
-                        resetField("url");
-                      } else {
-                        resetField("file");
-                      }
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="max-w-96">
-                        <SelectValue
-                          placeholder="Pilih tipe materi"
-                          className="max-w-96"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-w-96">
-                      <SelectItem value="file">File</SelectItem>
-                      <SelectItem value="kuis">Kuis</SelectItem>
-                      <SelectItem value="video">Video</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {selectedType === "file" ? (
-              <FormField
-                control={control}
-                name="file"
-                render={({ field: { value, onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>Upload File</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...fieldProps}
-                        value={undefined}
-                        type="file"
-                        accept=".pdf,.docx,.xlsx,.xls,.pptx,.ppt"
-                        className="w-full min-w-0 max-w-96"
-                        onChange={(event) => {
-                          onChange(event.target.files); // ✅ INI SUDAH BENAR!
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    {selectedFile && selectedFile.length > 0 && previewUrl && (
-                      <div className="mt-2 border max-w-96 rounded-md p-3 bg-gray-50 relative overflow-hidden">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-2 right-2 h-6 w-6 text-gray-400 hover:text-red-500"
-                          onClick={() => resetField("file")}
-                        >
-                          <X size={16} />
-                        </Button>
-                        <p className="text-sm font-medium text-gray-700 mb-2">
-                          Preview File:
-                        </p>
-                        <div className="flex items-center gap-3">
-                          {selectedFile[0].type.startsWith("image/") ? (
-                            <img
-                              src={previewUrl}
-                              alt="Preview"
-                              className="h-16 w-16 object-cover rounded-md border"
-                            />
-                          ) : (
-                            <div className="h-16 w-16 flex items-center justify-center bg-gray-200 rounded-md border text-gray-500 text-xs font-bold uppercase">
-                              {selectedFile[0].name.split(".").pop()}
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0 overflow-hidden">
-                            <p
-                              className="text-sm font-medium w-full truncate"
-                              title={selectedFile[0].name}
-                            >
-                              {selectedFile[0].name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {(selectedFile[0].size / 1024 / 1024).toFixed(2)}{" "}
-                              MB
-                            </p>
-                            <a
-                              href={previewUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-xs text-blue-600 hover:underline"
-                            >
-                              Lihat File
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <FormField
-                control={control}
-                name="url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Link {selectedType === "kuis" ? "Kuis" : "Video"}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={`Masukkan link ${selectedType}`}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {selectedType === "kuis"
-                        ? "Anda dapat memasukkan link dari Google Form, Quizizz, dll."
-                        : "Anda dapat memasukkan link dari YouTube, Cloud Storage, dll."}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-              >
-                Batal
-              </Button>
-              <Button type="submit">Simpan</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 export default function MateriProgramCampus({
   materiList,
   idProgram,
   onUpdateSuccess,
 }) {
-  console.log(materiList);
-  // Fungsi utilitas untuk mendapatkan nama file dari URL
+  // get name file
   const getFileNameFromUrl = (url) => {
     if (!url) return "File tidak tersedia";
 
@@ -388,11 +73,11 @@ export default function MateriProgramCampus({
     // 3. Ambil elemen terakhir dari array (nama file)
     return parts[parts.length - 1];
   };
-
+  const token = localStorage.getItem("userJwt");
   const [isAddingMateri, setIsAddingMateri] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [tempResources, setTempResources] = useState([]);
-  const { editMateri, isLoading: isEditing } = useEditMateri();
+  const { editMateri, isLoading } = useEditMateri();
 
   const form = useForm({
     resolver: zodResolver(editSchema),
@@ -402,21 +87,18 @@ export default function MateriProgramCampus({
     },
   });
 
+  // handle edit materi
   const handleSaveEdit = async (data, item) => {
     try {
-      const token = localStorage.getItem("userJwt");
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("visibility", item.visibility || "public");
       formData.append("_method", "PUT");
 
-      // Mengirim SEMUA resource (baik lama maupun baru) ke dalam array 'new_resources'
-      // Ini memastikan resource lama (URL) dan resource baru (File) terkirim semua.
       tempResources.forEach((resource, index) => {
         formData.append(`new_resources[${index}][type]`, resource.type);
 
-        // Hanya kirim sebagai 'file' jika tipe-nya file DAN benar-benar ada file baru (instance of File)
         if (resource.type === "file" && resource.file instanceof File) {
           formData.append(`new_resources[${index}][file]`, resource.file);
         } else {
@@ -427,13 +109,13 @@ export default function MateriProgramCampus({
         }
       });
 
-      // --- LOGGING UNTUK DEBUGGING ---
-      console.group("Submit Edit Materi");
-      console.log("Data Form:", data);
-      console.log("Item Asli:", item);
-      console.log("Semua Resource (State):", tempResources);
-      console.log(">> Isi FormData Lengkap:", [...formData.entries()]);
-      console.groupEnd();
+      // --- DEBUGGING ---
+      // console.group("Submit Edit Materi");
+      // console.log("Data Form:", data);
+      // console.log("Item Asli:", item);
+      // console.log("Semua Resource (State):", tempResources);
+      // console.log(">> Isi FormData Lengkap:", [...formData.entries()]);
+      // console.groupEnd();
 
       await editMateri(token, item.id, formData);
 
@@ -533,30 +215,8 @@ export default function MateriProgramCampus({
                           )}
                         </div>
                         {isEditing ? (
+                          // Button Close edit
                           <div className="flex items-center gap-2 mr-2">
-                            {/* Button edit */}
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button
-                                  disabled={!hasChanges}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    form.handleSubmit((data) =>
-                                      handleSaveEdit(data, item)
-                                    )(e);
-                                  }}
-                                  alt="Simpan"
-                                  className="text-green-600 bg-green-50 hover:bg-green-100 h-8 w-8 p-0 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                  <Check size={16} />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent className="bg-secondary text-white">
-                                <p>Simpan Perubahan</p>
-                              </TooltipContent>
-                            </Tooltip>
-
-                            {/* Button Close edit */}
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <Button
@@ -577,6 +237,7 @@ export default function MateriProgramCampus({
                             </Tooltip>
                           </div>
                         ) : (
+                          // button change component to edit
                           <Button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -595,12 +256,15 @@ export default function MateriProgramCampus({
 
                         {!isEditing && (
                           <div
-                            className="flex justify-end mr-4"
                             onClick={(e) => e.stopPropagation()}
+                            className="mr-4"
                           >
-                            <Button className="text-red-500 bg-transparent shadow-none hover:bg-red-100 hover:text-red-600">
-                              <Trash2 />
-                            </Button>
+                            <DeleteMateriDialog
+                              idMateri={item.id}
+                              materiName={item.title}
+                              onDeleteSuccess={onUpdateSuccess}
+                              token={token}
+                            />
                           </div>
                         )}
                       </AccordionTrigger>
@@ -626,7 +290,7 @@ export default function MateriProgramCampus({
                         <hr />
                         {/* end deskripsi */}
 
-                        {/* Tautan File/Resource (Nested Mapping) */}
+                        {/* materi */}
                         {resourcesToRender && resourcesToRender.length > 0 ? (
                           resourcesToRender.map((resource, index) => {
                             // --- 1. Definisikan Ikon dan Warna secara Kondisional ---
@@ -709,6 +373,7 @@ export default function MateriProgramCampus({
                                   </>
                                 )}
                                 {isEditing && (
+                                  // delete materi (file/video/kuis)
                                   <Button
                                     variant="ghost"
                                     size="icon"
@@ -728,18 +393,46 @@ export default function MateriProgramCampus({
                           })
                         ) : (
                           <div className="text-gray-500 mt-3 italic">
-                            Tidak ada sumber daya yang tersedia.
+                            Materi belum ditambahkan.
                           </div>
                         )}
                         {isEditing && (
-                          <AddResourceDialog
-                            onAddResource={(newResource) => {
-                              setTempResources((prev) => [
-                                ...prev,
-                                newResource,
-                              ]);
-                            }}
-                          />
+                          // button add resource dialog
+                          <div className="flex justify-between">
+                            <AddResourceDialog
+                              onAddResource={(newResource) => {
+                                setTempResources((prev) => [
+                                  ...prev,
+                                  newResource,
+                                ]);
+                              }}
+                            />
+                            {/* Button submit edit */}
+
+                            <Button
+                              disabled={!hasChanges}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                form.handleSubmit((data) =>
+                                  handleSaveEdit(data, item)
+                                )(e);
+                              }}
+                              alt="Simpan"
+                              className="text-green-600 bg-green-50 mr-4 hover:bg-green-100 px-3 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              {isLoading ? (
+                                <div className="flex items-center gap-2">
+                                  <Spinner />
+                                  Menyimpan...
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <Check size={16} />
+                                  Simpan
+                                </div>
+                              )}
+                            </Button>
+                          </div>
                         )}
                       </AccordionContent>
                     </AccordionItem>
