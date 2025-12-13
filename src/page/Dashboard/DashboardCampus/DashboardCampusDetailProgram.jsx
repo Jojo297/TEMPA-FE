@@ -237,7 +237,11 @@ export default function DashboardCampusDetailProgram() {
               </TabsContent>
 
               <TabsContent value="materi">
-                <MateriProgramCampus materiList={program.materi_list} />
+                <MateriProgramCampus
+                  materiList={program.materi_list}
+                  idProgram={program.id}
+                  onUpdateSuccess={() => fetchDetailProgram(token, idProgram)}
+                />
               </TabsContent>
             </Tabs>
           </section>
