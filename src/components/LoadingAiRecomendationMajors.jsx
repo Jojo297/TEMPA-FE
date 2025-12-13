@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import robotLoading from "@/assets/robotLoading.png";
 
 export default function LoadingAiRecomendationMajors() {
   // State untuk teks loading yang dinamis
   const [loadingText, setLoadingText] = useState("Menganalisis minat Anda");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 bg-gray-50">
       {/* Kontainer Animasi Robot/AI */}

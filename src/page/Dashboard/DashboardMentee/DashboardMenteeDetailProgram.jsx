@@ -91,6 +91,14 @@ const DashboardMenteeDetailProgram = () => {
     }
   };
 
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
+    }
+  };
+
   // error handling
   if (error) {
     return (
@@ -143,29 +151,51 @@ const DashboardMenteeDetailProgram = () => {
               {displayDetailProgram.program_name}
             </h1>
             {/* start date */}
-            <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
+            {/* <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
               <Calendar size={16} />
               <span>
-                {new Date(displayDetailProgram.start_date).toLocaleDateString(
-                  "id-ID",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }
-                )}
+                {new Date(
+                  displayDetailProgram.start_regis_date
+                ).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </span>
-            </div>
+              <span>-</span>
+              <span>
+                {new Date(
+                  displayDetailProgram.end_regis_date
+                ).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </div> */}
           </div>
           {/* start Popup register program */}
           <Dialog>
             <form>
               <DialogTrigger asChild>
                 <button
-                  // onClick={() => navigate("/dashboard-mentee/program/daftar")}
-                  className="mt-4 sm:mt-0 bg-[#B4D0E7] text-[#0E3B3D] font-semibold px-6 py-2 rounded-md hover:bg-[#A3C5E0] transition flex-shrink-0"
+                  disabled={
+                    displayDetailProgram.capacity <= 0 ||
+                    displayDetailProgram.program_status === "closed"
+                  }
+                  className={`mt-4 sm:mt-0 font-semibold px-6 py-2 rounded-md transition flex-shrink-0 ${
+                    displayDetailProgram.program_status === "closed"
+                      ? "bg-red-500 text-white cursor-not-allowed"
+                      : displayDetailProgram.capacity <= 0
+                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                      : "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
+                  }`}
                 >
-                  Daftar Sekarang
+                  {displayDetailProgram.program_status === "closed"
+                    ? "Program Sudah Tutup"
+                    : displayDetailProgram.capacity <= 0
+                    ? "Program Sudah Penuh"
+                    : "Daftar Sekarang"}
                 </button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] bg-[#0E3B3D] border-[#B4D0E7]">
@@ -293,6 +323,10 @@ const DashboardMenteeDetailProgram = () => {
             </li>
             <li>
               <strong>Tempat:</strong> {getLocation(displayDetailProgram)}
+            </li>
+            <li>
+              <strong>Kapasitas:</strong>{" "}
+              {getCapacity(displayDetailProgram.capacity)}
             </li>
           </ul>
 

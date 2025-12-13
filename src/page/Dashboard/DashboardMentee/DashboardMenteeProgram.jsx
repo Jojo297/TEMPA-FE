@@ -90,6 +90,14 @@ export default function DashboardMenteeProgram() {
     }
   };
 
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
+    }
+  };
+
   // get all programs and majors
   useEffect(() => {
     if (token) {
@@ -268,7 +276,7 @@ export default function DashboardMenteeProgram() {
                           </div>
                           <div className="flex items-center">
                             <Users size={16} className="mr-2 text-[#013B35]" />
-                            <span>{item.capacity} Orang</span>
+                            <span>{getCapacity(item.capacity)} </span>
                           </div>
                           <div className="flex items-center">
                             <Map size={16} className="mr-2 text-[#013B35]" />

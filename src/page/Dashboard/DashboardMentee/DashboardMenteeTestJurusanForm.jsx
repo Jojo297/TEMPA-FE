@@ -11,6 +11,7 @@ import useRecomendationMajors from "@/hooks/hooksMentee/useRecomendationMajors";
 import RecomendationMajors from "@/components/RecomendationMajors";
 import LoadingAiRecomendationMajors from "@/components/LoadingAiRecomendationMajors";
 import LoadingSkeletonFetchRecomendationMajors from "@/components/LoadingSkeletonFetchRecomendationMajors";
+import LoadingRedirect from "@/components/loadingRedirect";
 
 // validation
 const formSchema = z.object({
@@ -495,7 +496,7 @@ export default function DashboardTestJurusanForm() {
       {/* Header */}
       <section className="bg-primary text-center text-white rounded-2xl py-10 px-6 shadow-md">
         <h1 className="text-2xl font-semibold mb-2">Tes Jurusan</h1>
-        <p className="text-gray-200 max-w-2xl mx-auto mb-6">
+        <p className="text-sm max-w-2xl mx-auto">
           Tes ini dirancang untuk{" "}
           <span className="font-semibold">
             menganalisis minat, motivasi, dan kecenderungan akademik

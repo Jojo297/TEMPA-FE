@@ -146,7 +146,7 @@ export default function DashboardCampusDetailProgram() {
                   {program.program_name}
                 </h1>
                 {/* start date */}
-                <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
+                {/* <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
                   <Calendar size={16} />
                   <span>
                     {new Date(program.start_regis_date).toLocaleDateString(
@@ -169,7 +169,7 @@ export default function DashboardCampusDetailProgram() {
                       }
                     )}
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

@@ -201,6 +201,14 @@ export default function DashboardJurusanDetail() {
     }
   };
 
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
+    }
+  };
+
   // store result fetch to displayMajor
   const displayDetailMajor = detailMajor ?? {};
   console.log(displayDetailMajor);
@@ -448,7 +456,7 @@ export default function DashboardJurusanDetail() {
                       </div>
                       <div className="flex items-center">
                         <Users size={16} className="mr-2 text-[#013B35]" />
-                        <span>{item.capacity}</span>
+                        <span>{getCapacity(item.capacity)}</span>
                       </div>
                       <div className="flex items-center">
                         <Map size={16} className="mr-2 text-[#013B35]" />
