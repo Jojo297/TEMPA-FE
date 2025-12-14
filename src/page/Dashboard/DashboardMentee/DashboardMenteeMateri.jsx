@@ -23,8 +23,9 @@ import {
   Video,
 } from "lucide-react";
 import useGetProgramMateri from "@/hooks/hooksMentee/useGetProgramMateri";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NotFounPages from "@/components/NotFoundPages";
+import FeedbackProgram from "@/components/FeedbackProgram";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -34,6 +35,8 @@ export default function DashboardMenteeMateri() {
     useGetProgramMateri();
   let program_name = "Nama Program Tidak Ditemukan";
   let program_description = "Deskripsi Program Tidak Ditemukan";
+  let endProgramDate = null;
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -51,6 +54,7 @@ export default function DashboardMenteeMateri() {
     // 2. Assign nilai ke variabel yang sudah dideklarasikan (tanpa 'const' atau 'let')
     program_name = firstMateriItem.program_name;
     program_description = firstMateriItem.program_description;
+    endProgramDate = firstMateriItem.end_program_date;
   }
 
   // Fungsi utilitas untuk mendapatkan nama file dari URL
@@ -74,6 +78,17 @@ export default function DashboardMenteeMateri() {
   if (statusCode == 404) {
     return <NotFounPages message={"Materi Program Tidak ditemukan"} />;
   }
+
+  // console.log(endProgramDate);
+  useEffect(() => {
+    if (
+      endProgramDate &&
+      new Date(endProgramDate).getTime() <= new Date().setHours(0, 0, 0, 0)
+    ) {
+      setIsOpenDialog(true);
+    }
+  }, [endProgramDate]);
+
   return (
     <>
       {/* breadcum */}
@@ -98,7 +113,6 @@ export default function DashboardMenteeMateri() {
           <h1 className="text-2xl font-semibold mb-2">{program_name}</h1>
           <p className="text-sm">{program_description}</p>
         </div>
-
         <div className="container">
           {/* Accordion Materi, Quiz, Link Meeting */}
           <Accordion type="single" collapsible className="w-full">
@@ -185,6 +199,8 @@ export default function DashboardMenteeMateri() {
             {/* end Accordion Materi */}
           </Accordion>
         </div>
+        {/* Feedback Program */}
+        <FeedbackProgram isDialogOpen={isOpenDialog} idProgram={idProgram} />
       </div>
     </>
   );

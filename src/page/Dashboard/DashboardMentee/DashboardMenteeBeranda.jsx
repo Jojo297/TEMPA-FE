@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Check,
   X,
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
 import useProgramStoreMentee from "@/hooks/hooksMentee/useProgramMentee";
+import FeedbackProgram from "@/components/FeedbackProgram";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ export default function DashboardBeranda() {
   const unCompleted = displayPrograms.filter(
     (item) => item.completion_status === "uncompleted"
   );
+
   const countUnCompleted = unCompleted.length;
 
   // badge for status program
@@ -98,6 +100,19 @@ export default function DashboardBeranda() {
           bgColor: "bg-gray-100",
           textColor: "text-gray-800",
         };
+    }
+  };
+
+  // get location if onsite
+  const getLocation = (status, item) => {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    switch (normalizedStatus) {
+      case "online":
+        return "Zoom/Gmeet";
+      case "onsite":
+        return item;
+      default:
+        return "Tempat belum ditentukan";
     }
   };
 
@@ -291,14 +306,26 @@ export default function DashboardBeranda() {
                         <Map size={16} className="mr-2 text-[#013B35]" />
                         <span>
                           Tempat:{" "}
-                          {item.program_details?.sesi_program.map(
-                            (sesi) => sesi.type_sesi
+                          {getLocation(
+                            item.program_details?.type_sesi,
+                            item.program_details.onsiteLocationName
                           )}
                         </span>
                       </div>
                     </div>
 
                     {/* Button */}
+                    {/* {new Date(item.program_details?.end_date).getTime() <=
+                    new Date().setHours(0, 0, 0, 0) ? ( */}
+                    {/* // <FeedbackProgram /> */}
+                    {/* <button
+                      disabled={true}
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold cursor-not-allowed opacity-60"
+                    >
+                      Program Sudah Selesai
+                    </button> */}
+                    {/* ) */}
+                    {/* : ( */}
                     <button
                       onClick={() => {
                         navigate(`materi/${item.program_details?.id}`);
@@ -307,6 +334,7 @@ export default function DashboardBeranda() {
                     >
                       Lihat Materi
                     </button>
+                    {/* )} */}
                   </div>
                 </div>
               </div>

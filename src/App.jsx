@@ -70,9 +70,7 @@ const DashboardJurusanDetail = lazy(() =>
 const DashboardTestJurusanForm = lazy(() =>
   import("@/page/Dashboard/DashboardMentee/DashboardMenteeTestJurusanForm")
 );
-const TestJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Testjurusan")
-);
+
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
