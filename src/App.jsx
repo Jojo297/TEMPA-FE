@@ -150,17 +150,25 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
-<<<<<<< Updated upstream
-const DashboardCampusAddProgram = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
-=======
-// dashboard mentor
+const DashboardCampusAddProgram = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
+  // dashboard mentor
+);
 const DashboardMentorBeranda = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
 );
+const DashboardMentorDeskripsi = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorDeskripsi")
+);
+const DashboardMentorPeserta = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorPeserta")
+);
+
 const DashboardMentor = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentor")
->>>>>>> Stashed changes
+);
+const DashboardMentorProgram = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorProgram")
 );
 
 // ================= ROUTER =================
@@ -264,14 +272,13 @@ const router = createBrowserRouter([
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
+      {
+        path: "/dashboard-campus/berlangganan",
+        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
+      },
     ],
   },
 
-<<<<<<< Updated upstream
-  // if the campus has not verified
-=======
-  // Dashboard campus verification routes
->>>>>>> Stashed changes
   {
     path: "campus-verification",
     element: (
@@ -322,11 +329,6 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={DashboardMentor} />,
   },
 
-<<<<<<< Updated upstream
-  // ===================== Dashboard Mentee =====================
-=======
-  // dashboard mentee routes
->>>>>>> Stashed changes
   {
     path: "dashboard-mentee",
     element: (
@@ -431,6 +433,18 @@ const router = createBrowserRouter([
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
+      },
+      {
+        path: "mentor/deskripsi/:id",
+        element: <SuspenseWrapper Component={DashboardMentorDeskripsi} />,
+      },
+      {
+        path: "mentor/deskripsi/:id/peserta",
+        element: <SuspenseWrapper Component={DashboardMentorPeserta} />,
+      },
+      {
+        path: "mentor/program/:id",
+        element: <SuspenseWrapper Component={DashboardMentorProgram} />,
       },
     ],
   },

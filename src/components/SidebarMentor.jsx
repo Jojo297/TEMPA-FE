@@ -11,6 +11,8 @@ import {
   X,
   CreditCardIcon,
   CreditCard,
+  University,
+  BookOpen,
 } from "lucide-react";
 
 import {
@@ -52,7 +54,7 @@ const SidebarMentor = ({ children }) => {
     {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
-      path: "/dashboard-campus/beranda",
+      path: "/dashboard-mentor/beranda",
     },
     // {
     //   name: "DATA KAMPUS",
@@ -61,9 +63,10 @@ const SidebarMentor = ({ children }) => {
     // },
     {
       name: "DESKRIPSI",
-      icon: <Notebook size={18} />,
-      path: "/dashboard-campus/detailcampus",
+      icon: <University size={18} />,
+      path: "/dashboard-mentor/mentor/program/1",
     },
+
     // {
     //   name: "JURUSAN",
     //   icon: <GraduationCap size={18} />,

@@ -39,6 +39,7 @@ const Footer = () => {
             <li>Politeknik Negeri Batam</li>
             <li>Institut Teknologi Batam (ITEBA)</li>
             <li>Universitas Internasional Batam (UIB)</li>
+            <li> Institut Teknologi & Bisnis Indobaru Nasional (IIBN)</li>
           </ul>
         </div>
 

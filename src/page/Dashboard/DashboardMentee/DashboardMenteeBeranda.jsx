@@ -199,8 +199,7 @@ export default function DashboardBeranda() {
                 </p>
                 <Button
                   className="mt-4 px-24 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  onClick={() => navigate("program")}
-                >
+                  onClick={() => navigate("program")}>
                   Cari Program <Search />
                 </Button>
               </div>
@@ -212,8 +211,7 @@ export default function DashboardBeranda() {
             {displayPrograms.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden bg-white transition hover:shadow-xl"
-              >
+                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden bg-white transition hover:shadow-xl">
                 {/* left side */}
                 <div
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -221,8 +219,7 @@ export default function DashboardBeranda() {
                     backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_details.image_url})`,
                     backgroundColor: "#013B35",
                     minHeight: "200px",
-                  }}
-                >
+                  }}>
                   {/* Completion Status */}
                   {(() => {
                     // get badge status
@@ -233,8 +230,7 @@ export default function DashboardBeranda() {
                     );
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
-                      >
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
                         {statusData.text}
                       </div>
                     );
@@ -296,8 +292,7 @@ export default function DashboardBeranda() {
                       onClick={() => {
                         navigate(`materi/${item.program_details?.id}`);
                       }}
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
-                    >
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
                       Lihat Materi
                     </button>
                   </div>
