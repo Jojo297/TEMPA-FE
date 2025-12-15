@@ -105,6 +105,8 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL;
+
 export default function DashboardCampusBeranda() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
@@ -528,7 +530,7 @@ export default function DashboardCampusBeranda() {
                   rel="noopener noreferrer"
                   className="underline font-medium hover:text-blue-900 break-all"
                 >
-                  {`${window.location.origin}/login-mentor`}
+                  {`${DOMAIN_URL}/login-mentor`}
                 </a>
               </span>
               {/* button save link */}
@@ -537,9 +539,7 @@ export default function DashboardCampusBeranda() {
                 variant="outline"
                 className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
                 onClick={() => {
-                  navigator.clipboard.writeText(
-                    `${window.location.origin}/login-mentor`
-                  );
+                  navigator.clipboard.writeText(`${DOMAIN_URL}/login-mentor`);
                   toast.success("Link berhasil disalin!");
                 }}
               >

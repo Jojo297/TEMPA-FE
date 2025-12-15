@@ -21,6 +21,8 @@ import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusDetailProgramSkeleton from "@/components/DashboardCampusDetailProgramSkeleton";
 import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMentorFromProgram";
 import { toast } from "sonner";
+import FeedbackProgram from "@/components/FeedbackProgram";
+import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -145,31 +147,6 @@ export default function DashboardCampusDetailProgram() {
                 <h1 className="text-xl sm:text-2xl font-bold">
                   {program.program_name}
                 </h1>
-                {/* start date */}
-                {/* <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
-                  <Calendar size={16} />
-                  <span>
-                    {new Date(program.start_regis_date).toLocaleDateString(
-                      "id-ID",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )}
-                  </span>
-                  <span>-</span>
-                  <span>
-                    {new Date(program.end_regis_date).toLocaleDateString(
-                      "id-ID",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )}
-                  </span>
-                </div> */}
               </div>
             </div>
           </div>
@@ -217,6 +194,16 @@ export default function DashboardCampusDetailProgram() {
                 >
                   Materi
                 </TabsTrigger>
+
+                {/* feedback */}
+                <TabsTrigger
+                  value="feedback"
+                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                                 hover:bg-[#013B35] hover:text-white transition 
+                                 data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+                >
+                  Feedback
+                </TabsTrigger>
               </TabsList>
 
               {/* content Tabs */}
@@ -242,6 +229,10 @@ export default function DashboardCampusDetailProgram() {
                   idProgram={program.id}
                   onUpdateSuccess={() => fetchDetailProgram(token, idProgram)}
                 />
+              </TabsContent>
+
+              <TabsContent value="feedback">
+                <FeedbackProgramCampus idProgram={idProgram} token={token} />
               </TabsContent>
             </Tabs>
           </section>
