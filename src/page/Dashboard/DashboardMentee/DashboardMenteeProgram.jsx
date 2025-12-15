@@ -222,8 +222,8 @@ export default function DashboardMenteeProgram() {
                       {(() => {
                         // get badge status
                         const statusData = getBadgeClass(
-                          item.start_program_date,
-                          item.end_program_date
+                          item.start_regis_date,
+                          item.end_regis_date
                         );
                         return (
                           <div

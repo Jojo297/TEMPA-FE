@@ -150,29 +150,6 @@ const DashboardMenteeDetailProgram = () => {
             <h1 className="text-xl sm:text-2xl font-bold">
               {displayDetailProgram.program_name}
             </h1>
-            {/* start date */}
-            {/* <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
-              <Calendar size={16} />
-              <span>
-                {new Date(
-                  displayDetailProgram.start_regis_date
-                ).toLocaleDateString("id-ID", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-              <span>-</span>
-              <span>
-                {new Date(
-                  displayDetailProgram.end_regis_date
-                ).toLocaleDateString("id-ID", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-            </div> */}
           </div>
           {/* start Popup register program */}
           <Dialog>
@@ -181,18 +158,18 @@ const DashboardMenteeDetailProgram = () => {
                 <button
                   disabled={
                     displayDetailProgram.capacity <= 0 ||
-                    displayDetailProgram.program_status === "closed"
+                    new Date(displayDetailProgram.end_regis_date) < new Date()
                   }
                   className={`mt-4 sm:mt-0 font-semibold px-6 py-2 rounded-md transition flex-shrink-0 ${
-                    displayDetailProgram.program_status === "closed"
+                    new Date(displayDetailProgram.end_regis_date) < new Date()
                       ? "bg-red-500 text-white cursor-not-allowed"
                       : displayDetailProgram.capacity <= 0
                       ? "bg-gray-400 text-gray-700 cursor-not-allowed"
                       : "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
                   }`}
                 >
-                  {displayDetailProgram.program_status === "closed"
-                    ? "Program Sudah Tutup"
+                  {new Date(displayDetailProgram.end_regis_date) < new Date()
+                    ? "Pendaftaran Sudah Tutup"
                     : displayDetailProgram.capacity <= 0
                     ? "Program Sudah Penuh"
                     : "Daftar Sekarang"}
