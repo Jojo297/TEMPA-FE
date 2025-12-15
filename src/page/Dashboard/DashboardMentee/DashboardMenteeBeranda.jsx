@@ -51,6 +51,14 @@ export default function DashboardBeranda() {
 
   // badge for status program
   const getBadgeClass = (status, start_date, end_date) => {
+    if (status === "completed") {
+      return {
+        text: "Lulus",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    }
+
     const startDate = new Date(start_date);
     const endDate = new Date(end_date);
     // console.log(start_date);
@@ -75,12 +83,6 @@ export default function DashboardBeranda() {
 
     // 4. Masuk ke switch statement jika program sudah dimulai atau selesai
     switch (status) {
-      case "completed":
-        return {
-          text: "Lulus",
-          bgColor: "bg-green-200",
-          textColor: "text-green-800",
-        };
       case "uncompleted":
         return {
           text: "Tidak Lulus",
@@ -315,26 +317,25 @@ export default function DashboardBeranda() {
                     </div>
 
                     {/* Button */}
-                    {/* {new Date(item.program_details?.end_date).getTime() <=
-                    new Date().setHours(0, 0, 0, 0) ? ( */}
-                    {/* // <FeedbackProgram /> */}
-                    {/* <button
-                      disabled={true}
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold cursor-not-allowed opacity-60"
-                    >
-                      Program Sudah Selesai
-                    </button> */}
-                    {/* ) */}
-                    {/* : ( */}
-                    <button
-                      onClick={() => {
-                        navigate(`materi/${item.program_details?.id}`);
-                      }}
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
-                    >
-                      Lihat Materi
-                    </button>
-                    {/* )} */}
+                    {item.completion_status === "completed" ? (
+                      <button
+                        disabled={true}
+                        className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold cursor-not-allowed opacity-60"
+                      >
+                        Program Sudah Selesai
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          navigate(
+                            `/dashboard-mentee/materi/${item.program_details?.id}`
+                          );
+                        }}
+                        className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                      >
+                        Lihat Materi
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

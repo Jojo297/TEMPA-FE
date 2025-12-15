@@ -29,7 +29,7 @@ export default function DashboardMenteeProgram() {
 
   // store all program
   const displayAllProgram = programs ?? [];
-  // console.log(displayAllProgram);
+  console.log(displayAllProgram);
 
   // get selected major from SelectTypeProgram
   const selectedMajor = useFilterStore((state) => state.selectedMajor);
@@ -61,20 +61,29 @@ export default function DashboardMenteeProgram() {
   );
 
   // badge for status program
-  const getBadgeClass = (status) => {
-    switch (status) {
-      case "open":
-        return {
-          text: "Buka",
-          bgColor: "bg-green-200",
-          textColor: "text-green-800",
-        };
-      case "closed":
-        return {
-          text: "Tutup",
-          bgColor: "bg-red-100",
-          textColor: "text-red-800",
-        };
+  const getBadgeClass = (start_date, end_date) => {
+    const today = new Date();
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+
+    if (endDate.getTime() < today.getTime()) {
+      return {
+        text: "Tutup",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
+      };
+    } else if (startDate.getTime() > today.getTime()) {
+      return {
+        text: "Buka",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    } else {
+      return {
+        text: "Sedang Berjalan",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
+      };
     }
   };
 
@@ -212,7 +221,10 @@ export default function DashboardMenteeProgram() {
                       {/* Completion Status */}
                       {(() => {
                         // get badge status
-                        const statusData = getBadgeClass(item.program_status);
+                        const statusData = getBadgeClass(
+                          item.start_program_date,
+                          item.end_program_date
+                        );
                         return (
                           <div
                             className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
