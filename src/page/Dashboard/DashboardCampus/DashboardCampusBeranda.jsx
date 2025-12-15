@@ -6,6 +6,9 @@ import {
   Users,
   GraduationCap,
   UserCheck,
+  CheckCircle2Icon,
+  AlertCircleIcon,
+  Copy,
 } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -62,6 +65,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DashboardCampusBerandaSkeleton from "@/components/DashboardCampusBerandaSkeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Skema validasi untuk form tambah mentor
 const addMentorSchema = z
@@ -507,6 +511,43 @@ export default function DashboardCampusBeranda() {
               </Form>
             </Dialog>
           </div>
+
+          {/* informasi login mentor */}
+          <Alert className="mb-2 bg-blue-50 border-blue-200">
+            <AlertCircleIcon className="h-5 w-5 text-blue-600" />
+            <AlertTitle className="ml-2 text-blue-800 font-semibold">
+              Informasi Login Mentor
+            </AlertTitle>
+            <AlertDescription className="ml-2 text-blue-700 mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span>
+                Silakan bagikan tautan ini kepada mentor Anda untuk masuk ke
+                dalam sistem:{" "}
+                <a
+                  href={`${window.location.origin}/login-mentor`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline font-medium hover:text-blue-900 break-all"
+                >
+                  {`${window.location.origin}/login-mentor`}
+                </a>
+              </span>
+              {/* button save link */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/login-mentor`
+                  );
+                  toast.success("Link berhasil disalin!");
+                }}
+              >
+                <Copy size={14} className="mr-2" />
+                Salin Link
+              </Button>
+            </AlertDescription>
+          </Alert>
 
           <DataTable
             columns={columns}

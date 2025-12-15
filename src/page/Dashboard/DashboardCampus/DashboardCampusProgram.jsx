@@ -56,27 +56,30 @@ export default function DashboardCampusProgram() {
   // console.log(programs);
 
   // Badge status
-  const getBadgeClass = (status) => {
-    const lowerStatus = status ? status.toLowerCase() : "unknown";
-    switch (lowerStatus) {
-      case "open":
-        return {
-          text: "Buka",
-          bgColor: "bg-green-200",
-          textColor: "text-green-800",
-        };
-      case "closed":
-        return {
-          text: "Tutup",
-          bgColor: "bg-red-100",
-          textColor: "text-red-800",
-        };
-      default:
-        return {
-          text: status,
-          bgColor: "bg-gray-100",
-          textColor: "text-gray-700",
-        };
+  // badge for status program
+  const getBadgeClass = (start_date, end_date) => {
+    const today = new Date();
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+
+    if (endDate.getTime() < today.getTime()) {
+      return {
+        text: "Tutup",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
+      };
+    } else if (startDate.getTime() > today.getTime()) {
+      return {
+        text: "Buka",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    } else {
+      return {
+        text: "Sedang Berjalan",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
+      };
     }
   };
 
@@ -240,10 +243,13 @@ export default function DashboardCampusProgram() {
                       {/* Completion Status */}
                       {(() => {
                         // get badge status
-                        const statusData = getBadgeClass(item.program_status);
+                        const statusData = getBadgeClass(
+                          item.start_date,
+                          item.end_date
+                        );
                         return (
                           <div
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${statusData.bgColor} ${statusData.textColor}`}
+                            className={` top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
                           >
                             {statusData.text}
                           </div>
