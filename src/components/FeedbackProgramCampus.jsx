@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import LoadingSkeletonCardFeedback, {
   LoadingSkeletonRatingProgram,
 } from "./LoadingSkeletonCardFeedback";
+import NotFounPages from "./NotFoundPages";
 
 export default function FeedbackProgramCampus({ token, idProgram }) {
   const { feedbackData, isLoading, error, getFeedbackByProgramId } =
@@ -29,13 +30,19 @@ export default function FeedbackProgramCampus({ token, idProgram }) {
     }
   }, [token, idProgram]);
 
+  if (!isLoading && displayFeedback.length === 0) {
+    return (
+      <NotFounPages message={"Belum Ada yang Mengisi Feedback diprogram ini"} />
+    );
+  }
+
   return (
     <>
       <h2 className="mb-4 text-xl font-semibold text-[#013B35]">
         Rating Program Anda
       </h2>
       {/* // average rating card */}
-      {!isLoading && displayFeedback.length > 0 ? (
+      {!isLoading ? (
         <Card className="p-6 mb-6 w-full flex items-center gap-6">
           <div className="text-center">
             <span className="text-4xl font-bold text-[#013B35]">
