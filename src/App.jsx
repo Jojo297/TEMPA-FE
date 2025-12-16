@@ -14,7 +14,7 @@ const SuspenseWrapper = ({ Component }) => (
 
 // --- Lazy Imports ---
 const LandingPage = lazy(() => import("./page/Landingpage"));
-const LoginMentee = lazy(() => import("./page/loginMentee"));
+// const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
 const LoginMentor = lazy(() => import("./page/loginMentor"));
@@ -70,9 +70,7 @@ const DashboardJurusanDetail = lazy(() =>
 const DashboardTestJurusanForm = lazy(() =>
   import("@/page/Dashboard/DashboardMentee/DashboardMenteeTestJurusanForm")
 );
-const TestJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Testjurusan")
-);
+
 const Penilaian = lazy(() =>
   import("./page/Dashboard/DashboardMentee/Penilaian")
 );
@@ -150,10 +148,11 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
-const DashboardCampusAddProgram = lazy(
-  () => import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
-  // dashboard mentor
-);
+<<<<<<< Updated upstream
+const DashboardCampusAddProgram = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
+=======
+// dashboard mentor
 const DashboardMentorBeranda = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
 );
@@ -166,19 +165,19 @@ const DashboardMentorPeserta = lazy(() =>
 
 const DashboardMentor = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentor")
+>>>>>>> Stashed changes
 );
-const DashboardMentorProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorProgram")
-);
+
+const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
 
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
   { path: "/", element: <SuspenseWrapper Component={LandingPage} /> },
-  {
-    path: "/login-mentee",
-    element: <SuspenseWrapper Component={LoginMentee} />,
-  },
+  // {
+  //   path: "/login-mentee",
+  //   element: <SuspenseWrapper Component={LoginMentee} />,
+  // },
   {
     path: "/login-campus",
     element: <SuspenseWrapper Component={LoginCampus} />,
@@ -253,17 +252,14 @@ const router = createBrowserRouter([
         path: "prestasi",
         element: <SuspenseWrapper Component={CampusPrestasiDashboard} />,
       },
-
       {
         path: "detailcampus",
         element: <SuspenseWrapper Component={DetailCampus} />,
       },
-
       {
         path: "program",
         element: <SuspenseWrapper Component={DashboardCampusProgram} />,
       },
-
       {
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetailProgram} />,
@@ -272,15 +268,16 @@ const router = createBrowserRouter([
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
       },
-      {
-        path: "/dashboard-campus/berlangganan",
-        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
-      },
     ],
   },
 
+<<<<<<< Updated upstream
+  // if the campus has not verified
+=======
+  // Dashboard campus verification routes
+>>>>>>> Stashed changes
   {
-    path: "campus-verification",
+    path: "/campus-verification",
     element: (
       <ProtectedRoute
         Component={DashboardCampusVerivication}
@@ -329,6 +326,11 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={DashboardMentor} />,
   },
 
+<<<<<<< Updated upstream
+  // ===================== Dashboard Mentee =====================
+=======
+  // dashboard mentee routes
+>>>>>>> Stashed changes
   {
     path: "dashboard-mentee",
     element: (
@@ -373,6 +375,10 @@ const router = createBrowserRouter([
       {
         path: "test-jurusan",
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
+      },
+      {
+        path: "penilaian",
+        element: <SuspenseWrapper Component={Penilaian} />,
       },
       {
         path: "jurusan",
@@ -447,6 +453,10 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMentorProgram} />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <SuspenseWrapper Component={NotFounPages} />,
   },
 ]);
 

@@ -21,6 +21,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
+import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 
 const DashboardMenteeDetailProgram = () => {
   // get id program from url
@@ -86,7 +87,15 @@ const DashboardMenteeDetailProgram = () => {
       case "online":
         return "Online";
       case "onsite":
-        return sesi.sesi_description;
+        return sesi.onsiteLocationName;
+    }
+  };
+
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
     }
   };
 
@@ -141,30 +150,29 @@ const DashboardMenteeDetailProgram = () => {
             <h1 className="text-xl sm:text-2xl font-bold">
               {displayDetailProgram.program_name}
             </h1>
-            {/* start date */}
-            <div className="flex items-center gap-2 text-gray-300 text-sm mt-2">
-              <Calendar size={16} />
-              <span>
-                {new Date(displayDetailProgram.start_date).toLocaleDateString(
-                  "id-ID",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }
-                )}
-              </span>
-            </div>
           </div>
           {/* start Popup register program */}
           <Dialog>
             <form>
               <DialogTrigger asChild>
                 <button
-                  // onClick={() => navigate("/dashboard-mentee/program/daftar")}
-                  className="mt-4 sm:mt-0 bg-[#B4D0E7] text-[#0E3B3D] font-semibold px-6 py-2 rounded-md hover:bg-[#A3C5E0] transition flex-shrink-0"
+                  disabled={
+                    displayDetailProgram.capacity <= 0 ||
+                    new Date(displayDetailProgram.end_regis_date) < new Date()
+                  }
+                  className={`mt-4 sm:mt-0 font-semibold px-6 py-2 rounded-md transition flex-shrink-0 ${
+                    new Date(displayDetailProgram.end_regis_date) < new Date()
+                      ? "bg-red-500 text-white cursor-not-allowed"
+                      : displayDetailProgram.capacity <= 0
+                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                      : "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
+                  }`}
                 >
-                  Daftar Sekarang
+                  {new Date(displayDetailProgram.end_regis_date) < new Date()
+                    ? "Pendaftaran Sudah Tutup"
+                    : displayDetailProgram.capacity <= 0
+                    ? "Program Sudah Penuh"
+                    : "Daftar Sekarang"}
                 </button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] bg-[#0E3B3D] border-[#B4D0E7]">
@@ -238,15 +246,14 @@ const DashboardMenteeDetailProgram = () => {
 
           <ul className="text-gray-700 space-y-2 text-sm sm:text-base">
             <li>
-              <strong>Tanggal Pelaksanaan:</strong>{" "}
-              {new Date(displayDetailProgram.start_date).toLocaleDateString(
-                "id-ID",
-                {
-                  day: "numeric",
-                }
-              )}
+              <strong>Tanggal Pendaftaran:</strong>{" "}
+              {new Date(
+                displayDetailProgram.start_regis_date
+              ).toLocaleDateString("id-ID", {
+                day: "numeric",
+              })}
               {" - "}
-              {new Date(displayDetailProgram.end_date).toLocaleDateString(
+              {new Date(displayDetailProgram.end_regis_date).toLocaleDateString(
                 "id-ID",
                 {
                   year: "numeric",
@@ -254,6 +261,22 @@ const DashboardMenteeDetailProgram = () => {
                   day: "numeric",
                 }
               )}
+            </li>
+            <li>
+              <strong>Tanggal Pelaksanaan:</strong>{" "}
+              {new Date(
+                displayDetailProgram.start_program_date
+              ).toLocaleDateString("id-ID", {
+                day: "numeric",
+              })}
+              {" - "}
+              {new Date(
+                displayDetailProgram.end_program_date
+              ).toLocaleDateString("id-ID", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </li>
             <li>
               <strong>Waktu Pelaksanaan :</strong>{" "}
@@ -277,6 +300,10 @@ const DashboardMenteeDetailProgram = () => {
             </li>
             <li>
               <strong>Tempat:</strong> {getLocation(displayDetailProgram)}
+            </li>
+            <li>
+              <strong>Kapasitas:</strong>{" "}
+              {getCapacity(displayDetailProgram.capacity)}
             </li>
           </ul>
 
@@ -336,21 +363,25 @@ const DashboardMenteeDetailProgram = () => {
             </div>
           </Link>
 
-          {/* Informasi Mentor */}
-
-          <div className="bg-white shadow-md rounded-xl p-6 h-fit">
-            <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
-              Informasi Mentor
-            </h2>
-            <div className="space-y-2 text-gray-700 text-sm sm:text-base">
-              <p>
-                <strong>Nama:</strong> {displayDetailProgram.mentor?.name}
-              </p>
-              <p>
-                <strong>Email:</strong> PKProgram@gmail.com
-              </p>
-            </div>
-          </div>
+          {/* Card Lokasi (Hanya tampil jika sesi 'onsite') */}
+          {displayDetailProgram.type_sesi === "onsite" && (
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${displayDetailProgram.lat},${displayDetailProgram.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white shadow-md rounded-xl p-6 h-fit block transition hover:shadow-lg"
+            >
+              <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
+                Titik Lokasi
+              </h2>
+              <div className="w-full h-auto text-gray-700 text-sm sm:text-base">
+                <DisplayMapsLocation
+                  lat={displayDetailProgram.lat}
+                  lng={displayDetailProgram.lng}
+                />
+              </div>
+            </a>
+          )}
         </div>
       </div>
     </>

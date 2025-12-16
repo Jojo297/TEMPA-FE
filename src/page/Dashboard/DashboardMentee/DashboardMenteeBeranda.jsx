@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Check,
   X,
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
 import useProgramStoreMentee from "@/hooks/hooksMentee/useProgramMentee";
+import FeedbackProgram from "@/components/FeedbackProgram";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
@@ -45,12 +46,22 @@ export default function DashboardBeranda() {
   const unCompleted = displayPrograms.filter(
     (item) => item.completion_status === "uncompleted"
   );
+
   const countUnCompleted = unCompleted.length;
 
   // badge for status program
   const getBadgeClass = (status, start_date, end_date) => {
+    if (status === "completed") {
+      return {
+        text: "Lulus",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    }
+
     const startDate = new Date(start_date);
-    console.log(start_date);
+    const endDate = new Date(end_date);
+    // console.log(start_date);
 
     const today = new Date();
 
@@ -62,16 +73,16 @@ export default function DashboardBeranda() {
         bgColor: "bg-blue-100",
         textColor: "text-blue-800",
       };
+    } else if (endDate.getTime() <= today.getTime()) {
+      return {
+        text: "Program Sudah Selesai",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
+      };
     }
 
     // 4. Masuk ke switch statement jika program sudah dimulai atau selesai
     switch (status) {
-      case "completed":
-        return {
-          text: "Lulus",
-          bgColor: "bg-green-200",
-          textColor: "text-green-800",
-        };
       case "uncompleted":
         return {
           text: "Tidak Lulus",
@@ -91,6 +102,19 @@ export default function DashboardBeranda() {
           bgColor: "bg-gray-100",
           textColor: "text-gray-800",
         };
+    }
+  };
+
+  // get location if onsite
+  const getLocation = (status, item) => {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    switch (normalizedStatus) {
+      case "online":
+        return "Zoom/Gmeet";
+      case "onsite":
+        return item;
+      default:
+        return "Tempat belum ditentukan";
     }
   };
 
@@ -280,8 +304,9 @@ export default function DashboardBeranda() {
                         <Map size={16} className="mr-2 text-[#013B35]" />
                         <span>
                           Tempat:{" "}
-                          {item.program_details?.sesi_program.map(
-                            (sesi) => sesi.type_sesi
+                          {getLocation(
+                            item.program_details?.type_sesi,
+                            item.program_details.onsiteLocationName
                           )}
                         </span>
                       </div>

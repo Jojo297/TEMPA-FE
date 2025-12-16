@@ -177,8 +177,7 @@ export default function DetailCampus() {
               value="deskripsi"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
               Deskripsi
             </TabsTrigger>
 
@@ -187,8 +186,7 @@ export default function DetailCampus() {
               value="jurusan"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
               Jurusan
             </TabsTrigger>
           </TabsList>

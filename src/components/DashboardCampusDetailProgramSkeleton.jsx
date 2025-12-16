@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 const DescriptionSkeleton = () => (
-  <div className="max-w-6xl mx-auto mb-10">
+  <div className="w-full mt-2 mx-auto mb-10">
     <div className="bg-white shadow-md rounded-xl p-6 border animate-pulse">
       {/* Header */}
       <div className="h-7 w-1/4 bg-gray-300 rounded mb-6"></div>

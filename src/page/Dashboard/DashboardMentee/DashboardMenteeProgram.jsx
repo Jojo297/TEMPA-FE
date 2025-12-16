@@ -29,7 +29,7 @@ export default function DashboardMenteeProgram() {
 
   // store all program
   const displayAllProgram = programs ?? [];
-  // console.log(displayAllProgram);
+  console.log(displayAllProgram);
 
   // get selected major from SelectTypeProgram
   const selectedMajor = useFilterStore((state) => state.selectedMajor);
@@ -61,20 +61,29 @@ export default function DashboardMenteeProgram() {
   );
 
   // badge for status program
-  const getBadgeClass = (status) => {
-    switch (status) {
-      case "open":
-        return {
-          text: "Buka",
-          bgColor: "bg-green-200",
-          textColor: "text-green-800",
-        };
-      case "closed":
-        return {
-          text: "Tutup",
-          bgColor: "bg-red-100",
-          textColor: "text-red-800",
-        };
+  const getBadgeClass = (start_date, end_date) => {
+    const today = new Date();
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+
+    if (endDate.getTime() < today.getTime()) {
+      return {
+        text: "Tutup",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
+      };
+    } else if (startDate.getTime() > today.getTime()) {
+      return {
+        text: "Buka",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    } else {
+      return {
+        text: "Sedang Berjalan",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
+      };
     }
   };
 
@@ -84,9 +93,17 @@ export default function DashboardMenteeProgram() {
       case "online":
         return "Zoom/Gmeet";
       case "onsite":
-        return item.sesi_description;
-      default: // 🏆 Tambahkan ini
+        return item.onsiteLocationName;
+      default:
         return "Tempat belum ditentukan";
+    }
+  };
+
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
     }
   };
 
@@ -189,7 +206,8 @@ export default function DashboardMenteeProgram() {
                 filteredPrograms.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl">
+                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
+                  >
                     {/* left side */}
                     <div
                       className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -198,14 +216,19 @@ export default function DashboardMenteeProgram() {
                         backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
                         backgroundColor: "#013B35",
                         minHeight: "200px",
-                      }}>
+                      }}
+                    >
                       {/* Completion Status */}
                       {(() => {
                         // get badge status
-                        const statusData = getBadgeClass(item.program_status);
+                        const statusData = getBadgeClass(
+                          item.start_regis_date,
+                          item.end_regis_date
+                        );
                         return (
                           <div
-                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
+                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                          >
                             {statusData.text}
                           </div>
                         );
@@ -244,14 +267,19 @@ export default function DashboardMenteeProgram() {
                               className="mr-2 text-[#013B35]"
                             />
                             <span>
-                              {new Date(item.start_date).toLocaleDateString(
-                                "id-ID",
-                                {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                }
-                              )}
+                              {new Date(
+                                item.start_program_date
+                              ).toLocaleDateString("id-ID", {
+                                day: "numeric",
+                              })}
+                              {" - "}
+                              {new Date(
+                                item.end_program_date
+                              ).toLocaleDateString("id-ID", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
                             </span>
                           </div>
                           <div className="flex items-center">
@@ -260,7 +288,7 @@ export default function DashboardMenteeProgram() {
                           </div>
                           <div className="flex items-center">
                             <Users size={16} className="mr-2 text-[#013B35]" />
-                            <span>{item.capacity} Orang</span>
+                            <span>{getCapacity(item.capacity)} </span>
                           </div>
                           <div className="flex items-center">
                             <Map size={16} className="mr-2 text-[#013B35]" />
@@ -275,7 +303,8 @@ export default function DashboardMenteeProgram() {
                           onClick={() =>
                             navigate(`/dashboard-mentee/program/${item.id}`)
                           }
-                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                        >
                           Lihat Detail Program
                         </button>
                       </div>

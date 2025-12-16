@@ -69,7 +69,8 @@ export default function DashboardCampusBerlangganan() {
       <div className="p-6">
         <div
           className="w-full max-w-4xl mx-auto text-white rounded-xl shadow-2xl p-10 mt-10"
-          style={{ backgroundColor: mainColor }}>
+          style={{ backgroundColor: mainColor }}
+        >
           <h2 className="text-2xl font-bold text-center mb-10">Pembayaran</h2>
 
           <p className="mb-2 font-semibold">Metode Pembayaran</p>
@@ -97,7 +98,8 @@ export default function DashboardCampusBerlangganan() {
           <button
             onClick={() => setShowQR(true)}
             className="w-full mt-8 py-3 rounded-lg text-black font-bold shadow-md hover:opacity-90"
-            style={{ backgroundColor: secondaryColor }}>
+            style={{ backgroundColor: secondaryColor }}
+          >
             Bayar
           </button>
 
@@ -106,7 +108,8 @@ export default function DashboardCampusBerlangganan() {
               setSelectedPackage(null);
               setPage("list");
             }}
-            className="w-full mt-3 py-3 rounded-lg border border-white text-white font-bold">
+            className="w-full mt-3 py-3 rounded-lg border border-white text-white font-bold"
+          >
             Kembali
           </button>
         </div>
@@ -116,13 +119,15 @@ export default function DashboardCampusBerlangganan() {
             <div className="bg-white w-[420px] rounded-xl p-8 text-center relative">
               <button
                 onClick={() => setShowQR(false)}
-                className="absolute right-4 top-4 text-xl">
+                className="absolute right-4 top-4 text-xl"
+              >
                 ✕
               </button>
 
               <h1
                 className="text-3xl font-extrabold mb-6"
-                style={{ color: mainColor }}>
+                style={{ color: mainColor }}
+              >
                 TEMPA
               </h1>
 
@@ -196,7 +201,8 @@ export default function DashboardCampusBerlangganan() {
         {rows.map((row, i) => (
           <div
             key={i}
-            className="bg-[#003631] text-white text-sm p-4 grid grid-cols-5 border-b border-white/10">
+            className="bg-[#003631] text-white text-sm p-4 grid grid-cols-5 border-b border-white/10"
+          >
             <p>{row.date}</p>
             <p>{row.type}</p>
             <p>{row.total}</p>
@@ -207,7 +213,8 @@ export default function DashboardCampusBerlangganan() {
                   row.status === "Berlangsung"
                     ? "bg-yellow-400"
                     : "bg-green-400"
-                }`}>
+                }`}
+              >
                 {row.status}
               </span>
             </p>
@@ -226,22 +233,23 @@ export default function DashboardCampusBerlangganan() {
   if (page === "history") return <HistoryPage />;
 
   return (
-    <div className="min-h-screen bg-white font-sans">
-      <div
-        className="text-white px-6 py-10 text-center"
-        style={{ backgroundColor: mainColor }}>
-        <h2 className="text-2xl font-bold mb-3">Berlangganan</h2>
-        <p className="text-sm opacity-80">
-          Pilih paket sesuai kebutuhan kampus Anda.
-        </p>
+    <div className="min-h-scree font-sans">
+      {/* Header */}
+      <div className="mb-8 text-center">
+        <div className="bg-primary text-white rounded-xl p-6 shadow">
+          <h1 className="text-2xl font-bold mb-2">Berlangganan</h1>
+          <p className="text-sm max-w-2xl mx-auto">
+            Pilih paket sesuai kebutuhan kampus Anda.
+          </p>
+        </div>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 max-w-5xl mx-auto mt-4">
         {packages.map((pkg, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-md border border-gray-200 p-8 flex flex-col hover:shadow-lg transition duration-200"
-            style={{ borderTop: `5px solid ${mainColor}` }}>
+            style={{ borderTop: `5px solid ${mainColor}` }}
+          >
             <div className="flex justify-center items-center mb-4">
               {pkg.icon}
             </div>
@@ -266,7 +274,8 @@ export default function DashboardCampusBerlangganan() {
                   setPage("payment");
                 }}
                 className="w-full font-bold py-3 rounded-lg text-white hover:opacity-90 transition"
-                style={{ backgroundColor: secondaryColor }}>
+                style={{ backgroundColor: secondaryColor }}
+              >
                 BERLANGGANAN
               </button>
             </div>
@@ -278,7 +287,8 @@ export default function DashboardCampusBerlangganan() {
         <button
           onClick={() => setPage("history")}
           className="w-full text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow-md"
-          style={{ backgroundColor: secondaryColor }}>
+          style={{ backgroundColor: secondaryColor }}
+        >
           RIWAYAT BERLANGGANAN
         </button>
       </div>

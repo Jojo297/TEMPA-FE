@@ -831,7 +831,7 @@ export default function DashboardCampusAddProgram() {
                 {/* Tombol Upload */}
                 <div className="col-span-1 md:col-span-2 flex justify-end mt-4">
                   <Button type="submit" size="lg" disabled={isLoading}>
-                    {isSubmitting ? "Mengunggah..." : "Unggah Program"}
+                    {isSubmitting ? "Membuat Program..." : "Buat Program"}
                   </Button>
                 </div>
               </div>

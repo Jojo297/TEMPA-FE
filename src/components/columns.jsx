@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import EditMentorForm from "./EditMentorForm";
 
-export const getColumns = (handleDelete, onMentorUpdate) => [
+export const getColumns = (handleDelete, onMentorUpdate, showEdit = true) => [
   {
     id: "select",
     header: ({ table }) => (
@@ -75,40 +75,77 @@ export const getColumns = (handleDelete, onMentorUpdate) => [
       return (
         <div className="flex justify-end gap-2">
           {/* delete button */}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 text-red-500 hover:bg-red-100 hover:text-red-600"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Apakah Anda yakin ingin menghapus mentor ini?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
-                  mentor <span className="font-bold">{mentor.name}</span> secara
-                  permanen.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter>
-                <AlertDialogCancel>Batal</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => handleDelete(mentor)}
-                  className="bg-red-600 hover:bg-red-700"
+          {showEdit ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-red-500 hover:bg-red-100 hover:text-red-600"
                 >
-                  Hapus
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Apakah Anda yakin ingin menghapus mentor ini?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
+                    mentor <span className="font-bold">{mentor.name}</span>{" "}
+                    secara permanen.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
 
-          <EditMentorForm mentor={mentor} onUpdated={onMentorUpdate} />
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => handleDelete(mentor)}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Hapus
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-red-500 hover:bg-red-100 hover:text-red-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Apakah Anda yakin ingin menghapus mentor dari program ini?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
+                    mentor <span className="font-bold">{mentor.name}</span>{" "}
+                    secara permanen.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => handleDelete(mentor)}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Hapus
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+
+          {showEdit && (
+            <EditMentorForm mentor={mentor} onUpdated={onMentorUpdate} />
+          )}
         </div>
       );
     },
