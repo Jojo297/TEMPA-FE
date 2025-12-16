@@ -14,7 +14,7 @@ const SuspenseWrapper = ({ Component }) => (
 
 // --- Lazy Imports ---
 const LandingPage = lazy(() => import("./page/Landingpage"));
-const LoginMentee = lazy(() => import("./page/loginMentee"));
+// const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
 const LoginAdmin = lazy(() => import("./page/loginAdmin"));
 const LoginMentor = lazy(() => import("./page/loginMentor"));
@@ -160,14 +160,16 @@ const DashboardMentor = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentor")
 );
 
+const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
+
 // ================= ROUTER =================
 
 const router = createBrowserRouter([
   { path: "/", element: <SuspenseWrapper Component={LandingPage} /> },
-  {
-    path: "/login-mentee",
-    element: <SuspenseWrapper Component={LoginMentee} />,
-  },
+  // {
+  //   path: "/login-mentee",
+  //   element: <SuspenseWrapper Component={LoginMentee} />,
+  // },
   {
     path: "/login-campus",
     element: <SuspenseWrapper Component={LoginCampus} />,
@@ -427,6 +429,10 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <SuspenseWrapper Component={NotFounPages} />,
   },
 ]);
 

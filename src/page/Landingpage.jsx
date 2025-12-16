@@ -289,7 +289,10 @@ const LandingPage = () => {
                 Gabung Kampus
               </button>
             </Link>
-            <button className="bg-white text-[#013B35] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-100 transition">
+            <button
+              disabled={true}
+              className="bg-white hover:cursor-not-allowed opacity-55 text-[#013B35] font-semibold px-6 py-3 rounded-lg shadow-md "
+            >
               Gabung Perusahaan
             </button>
           </div>
