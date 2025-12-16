@@ -82,3 +82,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes scroll-train {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-280px * 3 - 24px * 3));
+  }
+}
+
+.animate-scroll-train {
+  animation: scroll-train 20s linear infinite;
+}
+
+@keyframes scroll-train-reverse {
+  0% {
+    transform: translateX(calc(-280px * 3 - 24px * 3));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-train-reverse {
+  animation: scroll-train-reverse 20s linear infinite;
+}

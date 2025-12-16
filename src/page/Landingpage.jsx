@@ -25,66 +25,14 @@ import {
 import logo2 from "@/assets/logo-text.png";
 import img2 from "@/assets/img2.png";
 import img1 from "@/assets/img1.png";
-import polibatam from "../assets/polibatam.jpeg";
-import iteba from "../assets/iteba.jpg";
-import uib from "../assets/uib.jpeg";
+import { Card, CardContent } from "@/components/ui/card";
 import peta from "../assets/Peta.png";
 import { NavbarLandingPage } from "@/components/NavbarLandingPage";
-// import { kampusList } from "@/lib/kampusList";
+import { kampusList } from "@/lib/kampusList";
 
 const LandingPage = () => {
   const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const kampusList = [
-    {
-      id: 1,
-      name: "Politeknik Negeri Batam",
-      image: polibatam,
-      location: "Kota Batam",
-      jurusan: [
-        "Teknik Mesin",
-        "Teknik Informatika",
-        "Manajemen Bisnis",
-        "Teknik Elektro",
-      ],
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: "Institut Teknologi Batam",
-      image: iteba,
-      location: "Kota Batam",
-      jurusan: [
-        "Manajemen",
-        "Akuntansi",
-        "Teknik Industri",
-        "Teknik Informatika",
-        "Sistem Informasi",
-        "Teknik Perkapalan",
-        "K3",
-        "Kesehatan Lingkungan",
-      ],
-      rating: 5,
-    },
-    {
-      id: 3,
-      name: "Universitas Internasional Batam",
-      image: uib,
-      location: "Kota Batam",
-      jurusan: [
-        "Akuntansi",
-        "Ilmu Hukum",
-        "Manajemen",
-        "Pariwisata",
-        "Pendidikan Bahasa Inggris",
-        "Teknologi Informasi",
-        "Sistem Informasi",
-        "Arsitektur",
-      ],
-      rating: 5,
-    },
-  ];
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? kampusList.length - 1 : prev - 1));
@@ -93,6 +41,8 @@ const LandingPage = () => {
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === kampusList.length - 1 ? 0 : prev + 1));
   };
+
+  const duplicatedList = Array(8).fill(kampusList).flat();
 
   // 🎯 Autoplay carousel tiap 2 detik
   useEffect(() => {
@@ -170,87 +120,63 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Partner Kampus */}
-      <section className="bg-[#013B35] text-white py-16 px-10 text-center">
-        <h2 className="text-2xl font-bold mb-2 text-left">Partner Kampus</h2>
-        <div className="w-24 h-[2px] bg-white mb-4 text-left"></div>
-        <p className="text-gray-300 mb-10 text-left">
-          Dari ruang kelas hingga dunia kerja, TEMPA hadir sebagai jembatan
-          antara mahasiswa dan kampus untuk menyiapkan generasi siap masa depan.
-        </p>
-
-        <div className="relative flex items-center justify-center w-full">
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <div className="overflow-hidden w-[80%] max-w-5xl">
-            <div
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * 100}%)`,
-              }}
-            >
-              {kampusList.map((kampus) => (
-                <div key={kampus.id} className="min-w-full flex justify-center">
-                  <div className="bg-white text-black rounded-3xl overflow-hidden w-[1000px] shadow-lg">
-                    <img
-                      src={kampus.image}
-                      alt={kampus.name}
-                      className="h-[300px] w-full object-cover"
-                    />
-                    <div className="p-4 text-left">
-                      <h3 className="font-semibold text-base mb-1">
-                        {kampus.name}
-                      </h3>
-                      <div className="flex items-center space-x-1 mb-2 text-[#FFD700]">
-                        {[...Array(kampus.rating)].map((_, i) => (
-                          <Star
-                            key={i}
-                            size={14}
-                            fill="#FFD700"
-                            stroke="none"
-                          />
-                        ))}
-                      </div>
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {kampus.jurusan.slice(0, 4).map((jrs, i) => (
-                          <span
-                            key={i}
-                            className="bg-gray-100 text-gray-800 px-2 py-[2px] text-xs rounded-full"
-                          >
-                            {jrs}
-                          </span>
-                        ))}
-                      </div>
-                      <p className="text-xs text-gray-500">{kampus.location}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 bg-white/20 hover:bg-white/40 rounded-full p-2 transition z-10"
-          >
-            <ChevronRight size={20} />
-          </button>
+      <section className="w-full bg-[#013B35] text-white py-16">
+        <div className="px-10">
+          <h2 className="text-2xl font-bold mb-2 text-left">Partner Kampus</h2>
+          <div className="w-24 h-[2px] bg-white mb-4"></div>
+          <p className="text-gray-300 mb-10 text-left">
+            Dari ruang kelas hingga dunia kerja, TEMPA hadir sebagai jembatan
+            antara mahasiswa dan kampus untuk menyiapkan generasi siap masa
+            depan.
+          </p>
         </div>
 
-        <div className="flex justify-center items-center mt-8 space-x-2">
-          {kampusList.map((_, i) => (
-            <span
-              key={i}
-              className={`w-3 h-3 rounded-full transition-all ${
-                i === currentIndex ? "bg-white scale-110" : "bg-white/40"
-              }`}
-            ></span>
-          ))}
+        <div className="w-full overflow-hidden relative">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#013B35] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#013B35] to-transparent z-10 pointer-events-none" />
+
+          <div
+            className="flex gap-6 animate-scroll-train"
+            style={{
+              width: "max-content",
+            }}
+          >
+            {duplicatedList.map((item, index) => (
+              <Card
+                key={`${item.id}-${index}`}
+                className="flex-shrink-0 w-64 h-44 border-2 border-gray-700 bg-white hover:border-gray-500 transition-colors duration-300"
+              >
+                <CardContent className="flex items-center justify-center h-full p-6">
+                  <img
+                    src={item.logo || "/placeholder.svg"}
+                    alt={item.name}
+                    className="max-w-full max-h-full object-contain "
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div
+            className="flex gap-6 mt-4 animate-scroll-train-reverse"
+            style={{
+              width: "max-content",
+            }}
+          >
+            {duplicatedList.map((item, index) => (
+              <Card
+                key={`${item.id}-${index}`}
+                className="flex-shrink-0 w-64 h-44 border-2 border-gray-700 bg-white hover:border-gray-500 transition-colors duration-300"
+              >
+                <CardContent className="flex items-center justify-center h-full p-6">
+                  <img
+                    src={item.logo || "/placeholder.svg"}
+                    alt={item.name}
+                    className="max-w-full max-h-full object-contain "
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
