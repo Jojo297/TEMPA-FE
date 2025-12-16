@@ -148,24 +148,22 @@ const DashboardCampusWaitingRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
 );
 
-<<<<<<< Updated upstream
 const DashboardCampusAddProgram = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
-=======
+);
 // dashboard mentor
 const DashboardMentorBeranda = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
 );
 const DashboardMentorDeskripsi = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorDeskripsi")
+  import("./page/Dashboard/DashboardMentor/ProgramDeskripsi")
 );
 const DashboardMentorPeserta = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorPeserta")
+  import("./page/Dashboard/DashboardMentor/ProgramPeserta")
 );
 
 const DashboardMentor = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentor")
->>>>>>> Stashed changes
 );
 
 const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
@@ -271,11 +269,7 @@ const router = createBrowserRouter([
     ],
   },
 
-<<<<<<< Updated upstream
-  // if the campus has not verified
-=======
   // Dashboard campus verification routes
->>>>>>> Stashed changes
   {
     path: "/campus-verification",
     element: (
@@ -326,11 +320,7 @@ const router = createBrowserRouter([
     element: <SuspenseWrapper Component={DashboardMentor} />,
   },
 
-<<<<<<< Updated upstream
-  // ===================== Dashboard Mentee =====================
-=======
   // dashboard mentee routes
->>>>>>> Stashed changes
   {
     path: "dashboard-mentee",
     element: (
@@ -448,10 +438,10 @@ const router = createBrowserRouter([
         path: "mentor/deskripsi/:id/peserta",
         element: <SuspenseWrapper Component={DashboardMentorPeserta} />,
       },
-      {
-        path: "mentor/program/:id",
-        element: <SuspenseWrapper Component={DashboardMentorProgram} />,
-      },
+      // {
+      //   path: "mentor/program/:id",
+      //   element: <SuspenseWrapper Component={DashboardMentorProgram} />,
+      // },
     ],
   },
   {

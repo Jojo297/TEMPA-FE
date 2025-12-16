@@ -174,6 +174,7 @@ export default function DashboardCampusBeranda() {
     [token, deleteMentor, fetchMentors]
   );
 
+  // fetch program for chart
   useEffect(() => {
     if (token) {
       fetchPrograms(token);
@@ -253,11 +254,9 @@ export default function DashboardCampusBeranda() {
   return (
     <>
       {/* HEADER */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#013D3A]">
-          SELAMAT DATANG, <br />
-          {campusName}
-        </h1>
+      <div className="">
+        <p className="text-sm text-gray-700">SELAMAT DATANG,</p>
+        <h1 className="text-3xl font-bold text-[#003631]">{campusName}</h1>
       </div>
 
       {/* === STATS CARDS === */}
@@ -308,9 +307,9 @@ export default function DashboardCampusBeranda() {
       </div>
       {/* === END STATS CARDS === */}
 
-      <main className="flex-1 pt-6 overflow-y-auto">
+      <main className="flex-1 pt-6 ">
         {/* === CHART SECTION === */}
-        <section className="bg-white w-full rounded-xl p-6 text-gray-800 shadow-2xl mb-6 border border-gray-200">
+        <section className="bg-white w-full rounded-xl p-6 text-gray-800 shadow-md mb-6 border border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <h3 className="text-xl font-bold">
               Jumlah Pendaftaran Mentee per Program
@@ -386,8 +385,8 @@ export default function DashboardCampusBeranda() {
           </div>
         </section>
 
-        {/* === KELOLA MENTOR (DIUBAH MENJADI TEMA TERANG) === */}
-        <section className="bg-white rounded-xl p-6 pt-6 text-gray-800 shadow-lg border">
+        {/* Mentor Section */}
+        <section className="bg-white rounded-xl p-6 pt-6 text-gray-800 shadow-md border">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
             <h3 className="text-lg font-semibold text-[#013D3A]">
               Kelola Mentor

@@ -69,8 +69,8 @@ export default function LoginMentor() {
       });
       if (response.status == 200) {
         // const token = response.data.data.token;
-        const token = response.data.data;
-        // localStorage.setItem("token", token);
+        const token = response.data.token;
+        localStorage.setItem("userJwt", token);
         toast.success("Anda berhasil Masuk!");
         // redirect to dashboard
         navigate("/dashboard-mentor");
