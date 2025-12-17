@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import FeedbackProgram from "@/components/FeedbackProgram";
 import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 import MentorProgramEditForm from "@/components/MentorProgramEditForm";
+import MentorDeleteProgram from "@/components/MentorDeleteProgram";
 
 export default function DashboardMentorProgramDetail() {
   const { id } = useParams();
@@ -111,7 +112,7 @@ export default function DashboardMentorProgramDetail() {
 
             {/* Grup Tombol */}
             <div className="flex gap-3">
-              <DeleteProgram
+              <MentorDeleteProgram
                 idProgram={program.id}
                 programName={program.program_name}
                 token={token}
