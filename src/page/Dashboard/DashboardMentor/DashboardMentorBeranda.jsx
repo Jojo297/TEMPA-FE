@@ -48,13 +48,6 @@ export default function DashboardMentorBeranda() {
     }
   }, [token, fetchPrograms]);
 
-  const data = [
-    { jurusan: "Informatika", total_mentee: 105 },
-    { jurusan: "Manajemen Bisnis", total_mentee: 150 },
-    { jurusan: "Mesin", total_mentee: 70 },
-    { jurusan: "Elektronika", total_mentee: 35 },
-  ];
-
   const displayProgram = [
     {
       id: 44,
@@ -285,142 +278,141 @@ export default function DashboardMentorBeranda() {
           </div>
         </section>
       </main>
-
-      <div className="flex flex-col gap-4 ">
-        <h3 className="text-xl font-bold text-primary mt-4">
-          Daftar Program yang Diampuh
-        </h3>
-        {displayProgram.map((item) => (
-          <div
-            key={item.id}
-            className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition "
-          >
-            {/* LEFT IMAGE */}
-            <div
-              className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
-              style={{
-                backgroundImage: `linear-gradient(rgba(1,59,53,0.4), rgba(1,59,53,0.7)), url(${item.image_url})`,
-                minHeight: "200px",
-              }}
-            >
-              {/* Container baru untuk badges, ditempatkan secara absolute di kiri atas */}
-              <div className="absolute top-4 left-4 z-10 flex gap-2">
-                {/* Completion Status */}
-                {(() => {
-                  // get badge status
-                  const statusData = getBadgeClass(
-                    item.start_date,
-                    item.end_date
-                  );
-                  return (
-                    <div
-                      className={` top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
-                    >
-                      {statusData.text}
-                    </div>
-                  );
-                })()}
-
-                {/* visibility */}
-                {(() => {
-                  const getVisibility = getBadgeVisibility(item.visibility);
-                  return (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${getVisibility.bgColor} ${getVisibility.textColor}`}
-                        >
-                          {getVisibility.text}
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent className="bg-white text-black border-black">
-                        <p>{getVisibility.description}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  );
-                })()}
-              </div>
-
-              <h3 className="text-3xl font-extrabold drop-shadow-lg relative z-20">
-                {item.program_name}
-              </h3>
-            </div>
-
-            {/* RIGHT SIDE */}
-            <div className="lg:w-2/3 p-6 flex flex-col justify-between">
-              <div>
-                <div className="flex flex-wrap items-center space-x-4 mb-4">
-                  <div className="flex items-center text-[#013B35] font-semibold text-lg">
-                    <span>{item.program_name}</span>
-                  </div>
-                  <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium">
-                    {item.major_name || "Tidak Ada Jurusan"}
-                  </div>
-                  <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                    {item.sesi_program}
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                  {item.description}
-                </p>
-
-                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
-                  <div className="flex items-center">
-                    <Calendar size={16} className="mr-2 text-[#013B35]" />
-                    <span>
-                      {new Date(item.start_date).toLocaleDateString("id-ID", {
-                        day: "numeric",
-                      })}
-                      {" - "}
-                      {new Date(item.end_date).toLocaleDateString("id-ID", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Home size={16} className="mr-2 text-[#013B35]" />
-                    <span>Kampus Anda</span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Users size={16} className="mr-2 text-[#013B35]" />
-                    <span>{item.capacity} Orang</span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Map size={16} className="mr-2 text-[#013B35]" />
-                    <span>Tempat: {getLocation(item.sesi_program, item)}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  {/* detail button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/dashboard-campus/program/${item.id}`);
-                    }}
-                    className="w-full py-3 bg-secondary text-white rounded-xl font-bold hover:bg-secondary hover:opacity-60 transition"
-                  >
-                    Lihat Detail Program
-                  </button>
-
-                  {/* delete button */}
-                  <DeleteProgram
-                    idProgram={item.id}
-                    programName={item.program_name}
-                    token={token}
-                    className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
+// <div className="flex flex-col gap-4 ">
+//   <h3 className="text-xl font-bold text-primary mt-4">
+//     Daftar Program yang Diampuh
+//   </h3>
+//   {displayProgram.map((item) => (
+//     <div
+//       key={item.id}
+//       className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden hover:shadow-xl transition "
+//     >
+//       {/* LEFT IMAGE */}
+//       <div
+//         className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+//         style={{
+//           backgroundImage: `linear-gradient(rgba(1,59,53,0.4), rgba(1,59,53,0.7)), url(${item.image_url})`,
+//           minHeight: "200px",
+//         }}
+//       >
+//         {/* Container baru untuk badges, ditempatkan secara absolute di kiri atas */}
+//         <div className="absolute top-4 left-4 z-10 flex gap-2">
+//           {/* Completion Status */}
+//           {(() => {
+//             // get badge status
+//             const statusData = getBadgeClass(
+//               item.start_date,
+//               item.end_date
+//             );
+//             return (
+//               <div
+//                 className={` top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+//               >
+//                 {statusData.text}
+//               </div>
+//             );
+//           })()}
+
+//           {/* visibility */}
+//           {(() => {
+//             const getVisibility = getBadgeVisibility(item.visibility);
+//             return (
+//               <Tooltip>
+//                 <TooltipTrigger asChild>
+//                   <div
+//                     className={`px-3 py-1 rounded-full text-sm font-medium ${getVisibility.bgColor} ${getVisibility.textColor}`}
+//                   >
+//                     {getVisibility.text}
+//                   </div>
+//                 </TooltipTrigger>
+//                 <TooltipContent className="bg-white text-black border-black">
+//                   <p>{getVisibility.description}</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             );
+//           })()}
+//         </div>
+
+//         <h3 className="text-3xl font-extrabold drop-shadow-lg relative z-20">
+//           {item.program_name}
+//         </h3>
+//       </div>
+
+//       {/* RIGHT SIDE */}
+//       <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+//         <div>
+//           <div className="flex flex-wrap items-center space-x-4 mb-4">
+//             <div className="flex items-center text-[#013B35] font-semibold text-lg">
+//               <span>{item.program_name}</span>
+//             </div>
+//             <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium">
+//               {item.major_name || "Tidak Ada Jurusan"}
+//             </div>
+//             <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+//               {item.sesi_program}
+//             </div>
+//           </div>
+//           <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+//             {item.description}
+//           </p>
+
+//           <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+//             <div className="flex items-center">
+//               <Calendar size={16} className="mr-2 text-[#013B35]" />
+//               <span>
+//                 {new Date(item.start_date).toLocaleDateString("id-ID", {
+//                   day: "numeric",
+//                 })}
+//                 {" - "}
+//                 {new Date(item.end_date).toLocaleDateString("id-ID", {
+//                   year: "numeric",
+//                   month: "long",
+//                   day: "numeric",
+//                 })}
+//               </span>
+//             </div>
+
+//             <div className="flex items-center">
+//               <Home size={16} className="mr-2 text-[#013B35]" />
+//               <span>Kampus Anda</span>
+//             </div>
+
+//             <div className="flex items-center">
+//               <Users size={16} className="mr-2 text-[#013B35]" />
+//               <span>{item.capacity} Orang</span>
+//             </div>
+
+//             <div className="flex items-center">
+//               <Map size={16} className="mr-2 text-[#013B35]" />
+//               <span>Tempat: {getLocation(item.sesi_program, item)}</span>
+//             </div>
+//           </div>
+
+//           <div className="flex gap-2">
+//             {/* detail button */}
+//             <button
+//               onClick={(e) => {
+//                 e.stopPropagation();
+//                 navigate(`/dashboard-campus/program/${item.id}`);
+//               }}
+//               className="w-full py-3 bg-secondary text-white rounded-xl font-bold hover:bg-secondary hover:opacity-60 transition"
+//             >
+//               Lihat Detail Program
+//             </button>
+
+//             {/* delete button */}
+//             <DeleteProgram
+//               idProgram={item.id}
+//               programName={item.program_name}
+//               token={token}
+//               className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   ))}
+// </div>

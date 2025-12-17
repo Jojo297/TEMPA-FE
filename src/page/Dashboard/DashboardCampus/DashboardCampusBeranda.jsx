@@ -88,22 +88,6 @@ const addMentorSchema = z
   });
 
 // --- Custom Tooltip (Untuk menampilkan detail saat hover) ---
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
-        <p className="text-sm font-semibold text-gray-800">{label}</p>
-        <p className="text-xs text-gray-700">
-          Total Mentee:{" "}
-          <span className="font-bold text-base text-teal-600">
-            {payload[0].value}
-          </span>
-        </p>
-      </div>
-    );
-  }
-  return null;
-};
 
 const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL;
 
@@ -197,17 +181,15 @@ export default function DashboardCampusBeranda() {
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-      const sortedPayload = [...payload].sort((a, b) =>
-        a.value > b.value ? 1 : -1
-      );
       return (
-        <div className="bg-[#013D3A] p-2 rounded-md border border-[#5CC6BA] text-white text-xs shadow-lg opacity-95">
-          <p className="font-bold mb-1">{label}</p>
-          {sortedPayload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }}>
-              {entry.name}: {entry.value}
-            </p>
-          ))}
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+          <p className="text-sm font-semibold text-gray-800">{label}</p>
+          <p className="text-xs text-gray-700">
+            Total Pendaftar:{" "}
+            <span className="font-bold text-base text-teal-600">
+              {payload[0].value}
+            </span>
+          </p>
         </div>
       );
     }

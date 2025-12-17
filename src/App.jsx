@@ -166,6 +166,13 @@ const DashboardMentor = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentor")
 );
 
+const DashboardMentorProgramDetail = lazy(() =>
+  import("@/page/Dashboard/DashboardMentor/DashboardMentorProgramDetail")
+);
+const DashboardMentorProgram = lazy(() =>
+  import("@/page/Dashboard/DashboardMentor/DashboardMentorProgram")
+);
+
 const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
 
 // ================= ROUTER =================
@@ -431,17 +438,21 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMentorBeranda} />,
       },
       {
-        path: "mentor/deskripsi/:id",
+        path: "deskripsi/:id",
         element: <SuspenseWrapper Component={DashboardMentorDeskripsi} />,
       },
       {
-        path: "mentor/deskripsi/:id/peserta",
+        path: "deskripsi/:id/peserta",
         element: <SuspenseWrapper Component={DashboardMentorPeserta} />,
       },
-      // {
-      //   path: "mentor/program/:id",
-      //   element: <SuspenseWrapper Component={DashboardMentorProgram} />,
-      // },
+      {
+        path: "program/",
+        element: <SuspenseWrapper Component={DashboardMentorProgram} />,
+      },
+      {
+        path: "program/:id",
+        element: <SuspenseWrapper Component={DashboardMentorProgramDetail} />,
+      },
     ],
   },
   {

@@ -63,7 +63,7 @@ export default function LoginMentor() {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL}/login-mentor`, {
+      const response = await axios.post(`${BASE_URL}/mentor/login-mentor`, {
         nik: data.nik,
         password: data.password,
       });
