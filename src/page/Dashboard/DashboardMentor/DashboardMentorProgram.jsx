@@ -30,6 +30,7 @@ import AddProgram from "@/components/AddProgram";
 import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusProgramSkeleton from "@/components/DashboardCampusProgramSkeleton";
 import useGetAllProgram from "@/hooks/hooksMentor/useGetAllProgram";
+import MentorDeleteProgram from "@/components/MentorDeleteProgram";
 
 export default function DashboardMentorProgram() {
   const navigate = useNavigate();
@@ -207,7 +208,7 @@ export default function DashboardMentorProgram() {
               </div>
               <Button
                 className=""
-                onClick={() => navigate("/dashboard-campus/add-program")}
+                onClick={() => navigate("/dashboard-mentor/add-program")}
               >
                 <CirclePlus /> Tambah Program
               </Button>
@@ -348,7 +349,7 @@ export default function DashboardMentorProgram() {
                         </button>
 
                         {/* delete button */}
-                        <DeleteProgram
+                        <MentorDeleteProgram
                           idProgram={item.id}
                           programName={item.program_name}
                           token={token}
