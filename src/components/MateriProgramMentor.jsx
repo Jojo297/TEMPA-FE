@@ -22,7 +22,7 @@ import {
 import NotFounPages from "./NotFoundPages";
 import { Button } from "@/components/ui/button";
 import AddMateri from "./AddMateri";
-import useEditMateri from "@/hooks/hooksCampus/useEditMateri";
+import useEditMateri from "@/hooks/hooksMentor/useEditMateri";
 import { toast } from "sonner";
 
 import {
