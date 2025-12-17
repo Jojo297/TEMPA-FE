@@ -36,7 +36,7 @@ export default function LoginCampus() {
       localStorage.setItem("userJwt", token);
 
       // redirect
-      navigate("/dashboard-campus");
+      navigate("/dashboard-campus/beranda");
 
       toast.success("Anda Berhasil Masuk!");
     } catch (error) {

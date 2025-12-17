@@ -14,17 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useGetDetailProgram from "@/hooks/hooksMentor/useGetDetailProgram";
 import DescriptionProgramCampus from "@/components/DescriptionProgramCampus";
 import ParticipantProgramCampus from "@/components/ParticipantProgramCampus";
-import ProgramEditForm from "@/components/ProgramEditForm"; // Import the new edit form
-import MentorProgramCampus from "@/components/MentorProgramCampus";
-import MateriProgramCampus from "@/components/MateriProgramCampus";
-import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusDetailProgramSkeleton from "@/components/DashboardCampusDetailProgramSkeleton";
 import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMentorFromProgram";
 import { toast } from "sonner";
-import FeedbackProgram from "@/components/FeedbackProgram";
 import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 import MentorProgramEditForm from "@/components/MentorProgramEditForm";
 import MentorDeleteProgram from "@/components/MentorDeleteProgram";
+import MateriProgramMentor from "@/components/MateriProgramMentor";
 
 export default function DashboardMentorProgramDetail() {
   const { id } = useParams();
@@ -198,7 +194,7 @@ export default function DashboardMentorProgramDetail() {
               </TabsContent>
 
               <TabsContent value="materi">
-                <MateriProgramCampus
+                <MateriProgramMentor
                   materiList={program.materi_list}
                   idProgram={program.id}
                   onUpdateSuccess={() => fetchDetailProgram(token, idProgram)}
