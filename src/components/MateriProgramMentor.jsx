@@ -38,6 +38,7 @@ import { Spinner } from "./ui/spinner";
 import DeleteMateriDialog from "./DeleteMateriDialog";
 import AddResourceDialog from "./AddResourceDialog";
 import MentorAddMateriProgram from "./MentorAddMateriProgram";
+import MentorDeleteMateriDialog from "./MentorDeleteMateriDialog";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -254,13 +255,13 @@ export default function MateriProgramMentor({
                             <Pencil />
                           </Button>
                         )}
-
+                        {/* button delete materi */}
                         {!isEditing && (
                           <div
                             onClick={(e) => e.stopPropagation()}
                             className="mr-4"
                           >
-                            <DeleteMateriDialog
+                            <MentorDeleteMateriDialog
                               idMateri={item.id}
                               materiName={item.title}
                               onDeleteSuccess={onUpdateSuccess}
