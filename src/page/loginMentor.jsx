@@ -187,9 +187,19 @@ export default function LoginMentor() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full p-3 ${DARK_GREEN} text-white font-semibold text-center flex justify-center rounded-lg mt-4 hover:bg-opacity-90 transition duration-300`}
+                className={`w-full p-3 ${DARK_GREEN} ${
+                  isLoading
+                    ? "cursor-not-allowed opacity-65"
+                    : "hover:opacity-65 cursor-pointer"
+                }  text-white font-semibold text-center flex justify-center rounded-lg mt-4 transition duration-300`}
               >
-                {isLoading ? <Spinner /> : "Masuk"}
+                {isLoading ? (
+                  <div className="flex gap-2 items-center">
+                    <Spinner /> Loading
+                  </div>
+                ) : (
+                  "Masuk"
+                )}
               </button>
             </form>
             <button

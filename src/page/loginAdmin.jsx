@@ -47,16 +47,17 @@ export default function LoginAdmin() {
     // console.table(data);
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL}/admin-login`, {
+      const response = await axios.post(`${BASE_URL}/admin/admin-login`, {
         username: data.username,
         password: data.password,
       });
       if (response.status == 200) {
         // const token = response.data.data.token;
-        const token = response.data.data;
-        // localStorage.setItem("token", token);
+        const token = response.data.token;
+
+        localStorage.setItem("userJwt", token);
         // redirect to dashboard
-        navigate("/dashboard-admin");
+        navigate("/dashboard-admin/beranda");
         toast.success("Anda berhasil Masuk!");
       }
     } catch (error) {
@@ -116,7 +117,7 @@ export default function LoginAdmin() {
               <div className="mb-10">
                 <h2 className="text-2xl font-semibold mb-2">Login</h2>
                 <p className="text-sm text-gray-500 mb-2">
-                  Enter the name and password you used to sign up before
+                  Masukkan Username dan Password untuk masuk
                 </p>
                 <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                   <div
@@ -172,9 +173,19 @@ export default function LoginAdmin() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full p-3 ${DARK_GREEN} text-white font-semibold text-center flex justify-center rounded-lg mt-4 hover:bg-opacity-90 transition duration-300`}
+                className={`w-full p-3 ${DARK_GREEN} text-white font-semibold text-center flex justify-center ${
+                  isLoading
+                    ? "cursor-not-allowed opacity-65"
+                    : "hover:opacity-65 cursor-pointer"
+                } rounded-lg mt-4 transition  duration-300`}
               >
-                {isLoading ? <Spinner /> : "Masuk"}
+                {isLoading ? (
+                  <div className="flex gap-2 items-center">
+                    <Spinner /> Loading
+                  </div>
+                ) : (
+                  "Masuk"
+                )}
               </button>
             </form>
             <button

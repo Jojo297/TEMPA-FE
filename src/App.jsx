@@ -85,9 +85,6 @@ const DashboardMenteeProfil = lazy(() =>
 const DashboardCampus = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampus")
 );
-const DashboardAdmin = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
-);
 
 const DashboardCampusRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
@@ -110,6 +107,12 @@ const DashboardCampusBerlangganan = lazy(() =>
 );
 
 //Dashboard Admin
+const DashboardAdmin = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
+);
+const DashboardAdminBeranda = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminBeranda")
+);
 const AdminVerifikasi = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/Verifikasi")
 );
@@ -310,29 +313,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  // ===================== Dashboard lainnya =====================
-  {
-    path: "/dashboard-admin",
-    element: <SuspenseWrapper Component={DashboardAdmin} />,
-  },
-  {
-    path: "/dashboard-admin/verifikasi",
-    element: <SuspenseWrapper Component={AdminVerifikasi} />,
-  },
-  {
-    path: "/dashboard-admin/manajemen/kampus",
-    element: <SuspenseWrapper Component={AdminKampus} />,
-  },
-  {
-    path: "/dashboard-admin/manajemen/Siswa",
-    element: <SuspenseWrapper Component={AdminSiswa} />,
-  },
-
-  {
-    path: "/dashboard-mentor",
-    element: <SuspenseWrapper Component={DashboardMentor} />,
-  },
-
   // dashboard mentee routes
   {
     path: "dashboard-mentee",
@@ -427,10 +407,20 @@ const router = createBrowserRouter([
   // dashboard mentor
   {
     path: "dashboard-mentor",
+    element: (
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={DashboardMentor}
+            allowedRoles={["mentor"]}
+          />
+        )}
+      />
+    ),
     // element:
     //  (
     // <ProtectedRoute
-    element: <SuspenseWrapper Component={DashboardMentor} />,
+    // element: <SuspenseWrapper Component={DashboardMentor} />,
     // allowedRoles={["mentor"]}
     // />
     // )
@@ -468,6 +458,46 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMentorDetailCampus} />,
       },
     ],
+  },
+
+  // dashboard admin
+  {
+    path: "dashboard-admin",
+    element: (
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute Component={DashboardAdmin} allowedRoles={["admin"]} />
+        )}
+      />
+    ),
+    children: [
+      {
+        index: true,
+        element: <SuspenseWrapper Component={DashboardAdminBeranda} />,
+      },
+      {
+        path: "beranda",
+        element: <SuspenseWrapper Component={DashboardAdminBeranda} />,
+      },
+    ],
+  },
+  // ===================== Dashboard lainnya =====================
+  {
+    path: "/dashboard-admin/verifikasi",
+    element: <SuspenseWrapper Component={AdminVerifikasi} />,
+  },
+  {
+    path: "/dashboard-admin/manajemen/kampus",
+    element: <SuspenseWrapper Component={AdminKampus} />,
+  },
+  {
+    path: "/dashboard-admin/manajemen/Siswa",
+    element: <SuspenseWrapper Component={AdminSiswa} />,
+  },
+
+  {
+    path: "/dashboard-mentor",
+    element: <SuspenseWrapper Component={DashboardMentor} />,
   },
   {
     path: "*",
