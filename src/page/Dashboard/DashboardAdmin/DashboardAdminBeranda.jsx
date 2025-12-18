@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
 import useGetDashboardData from "@/hooks/hooksAdmin/useGetDashboardData";
 import {
   GraduationCap,
@@ -30,6 +31,8 @@ import {
 export default function DashboardAdminBeranda() {
   const { dashboardData, isLoading, error, fetchDashboardData } =
     useGetDashboardData();
+  const { campusData, isLoadingCampus, errorCampus, fetchAllCampus } =
+    useGetAllCampus();
   const token = localStorage.getItem("userJwt");
   const navigate = useNavigate();
 
@@ -65,11 +68,18 @@ export default function DashboardAdminBeranda() {
   ];
 
   const chartData = dashboardData?.program_per_campus ?? [];
-  console.log(chartData);
+  const displayCampus = campusData ?? [];
+  // console.log(displayCampus);
 
   useEffect(() => {
     if (token) {
       fetchDashboardData(token);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchAllCampus(token);
     }
   }, [token]);
 
@@ -88,6 +98,19 @@ export default function DashboardAdminBeranda() {
       );
     }
     return null;
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "accepted":
+        return "text-green-600 border-green-200 bg-green-50";
+      case "pending":
+        return "text-amber-600 border-amber-200 bg-amber-50";
+      case "rejected":
+        return "text-red-600 border-red-200 bg-red-50";
+      default:
+        return "text-gray-600 border-gray-200 bg-gray-50";
+    }
   };
 
   return (
@@ -230,7 +253,7 @@ export default function DashboardAdminBeranda() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item, index) => (
+              {displayCampus.map((item, index) => (
                 <TableRow
                   key={item.id}
                   className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
@@ -240,22 +263,25 @@ export default function DashboardAdminBeranda() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0" />
+                      <img
+                        src={item.logo_url}
+                        alt=""
+                        className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0"
+                      />
                       <div className="min-w-0">
                         <p className="font-semibold text-base truncate text-gray-900">
-                          {item.name}
-                        </p>
-                        <p className="text-gray-500 text-xs truncate">
-                          {item.desc}
+                          {item.campus_name}
                         </p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <span
-                      className={`px-3 py-1 text-xs rounded-md border ${item.statusClasses} font-semibold whitespace-nowrap`}
+                      className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
+                        item.verification_status
+                      )} font-semibold whitespace-nowrap`}
                     >
-                      {item.status}
+                      {item.verification_status}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
