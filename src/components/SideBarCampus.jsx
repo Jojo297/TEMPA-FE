@@ -14,6 +14,7 @@ import {
   User,
   BellIcon,
   LogOutIcon,
+  University,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -76,7 +77,7 @@ const Sidebarcampus = ({ children }) => {
     // },
     {
       name: "DESKRIPSI",
-      icon: <Notebook size={18} />,
+      icon: <University size={18} />,
       path: "/dashboard-campus/detailcampus",
     },
     // {

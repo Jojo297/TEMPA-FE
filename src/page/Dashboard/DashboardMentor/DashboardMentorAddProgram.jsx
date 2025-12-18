@@ -342,13 +342,13 @@ export default function DashboardMentorAddProgram() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild className="hover:text-primary">
-                <Link to="/dashboard-campus">Beranda</Link>
+                <Link to="/dashboard-mentor/beranda">Beranda</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild className="hover:text-primary">
-                <Link to="/dashboard-campus/program">Program</Link>
+                <Link to="/dashboard-mentor/program">Program</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />

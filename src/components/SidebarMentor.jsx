@@ -48,6 +48,7 @@ import { jwtDecode } from "jwt-decode";
 const SidebarMentor = ({ children }) => {
   const token = localStorage.getItem("userJwt");
   const decode = jwtDecode(token);
+  const superMentor = decode.mentorType === "super_mentor";
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,11 +76,15 @@ const SidebarMentor = ({ children }) => {
     //   icon: <FileEdit size={18} />,
     //   path: "/dashboard-campus/form-data",
     // },
-    {
-      name: "DESKRIPSI",
-      icon: <University size={18} />,
-      path: "/dashboard-mentor/program/",
-    },
+    ...(superMentor
+      ? [
+          {
+            name: "DESKRIPSI",
+            icon: <University size={18} />,
+            path: "/dashboard-mentor/detail-campus/",
+          },
+        ]
+      : []),
 
     // {
     //   name: "JURUSAN",

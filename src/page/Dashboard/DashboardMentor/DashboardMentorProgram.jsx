@@ -31,13 +31,20 @@ import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusProgramSkeleton from "@/components/DashboardCampusProgramSkeleton";
 import useGetAllProgram from "@/hooks/hooksMentor/useGetAllProgram";
 import MentorDeleteProgram from "@/components/MentorDeleteProgram";
+import { jwtDecode } from "jwt-decode";
+import { set } from "zod";
+import NotFounPages from "@/components/NotFoundPages";
 
 export default function DashboardMentorProgram() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  // console.log(decode.mentorType);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMajor, setFilterMajor] = useState(null);
   const [filterType, setFilterType] = useState(null);
+  const superMentor = decode.mentorType === "super_mentor";
+
   // Hooks Program
   const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
     useGetAllProgram();
@@ -134,7 +141,7 @@ export default function DashboardMentorProgram() {
     return programNameMatch && majorMatch && typeMatch;
   });
 
-  console.log(filteredPrograms);
+  // console.log(filteredPrograms);
 
   // format date
   const formatDate = (start_data) => {
@@ -160,7 +167,7 @@ export default function DashboardMentorProgram() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild className="hover:text-primary">
-                  <Link to="/dashboard-campus">Beranda</Link>
+                  <Link to="/dashboard-mentor/beranda">Beranda</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -178,7 +185,10 @@ export default function DashboardMentorProgram() {
           <div className="bg-primary text-white rounded-xl p-6 shadow">
             <h1 className="text-2xl font-bold mb-2">Program</h1>
             <p className="text-sm max-w-2xl mx-auto">
-              Berikut adalah program yang anda handle
+              Daftar program aktif yang berada di bawah bimbingan Anda. Melalui
+              halaman ini, Anda dapat memantau progres peserta, mengelola
+              program, serta memberikan umpan balik strategis untuk memastikan
+              keberhasilan setiap sesi pembelajaran.
             </p>
           </div>
         </div>
@@ -206,19 +216,27 @@ export default function DashboardMentorProgram() {
                   className="pl-8 pr-3 py-2 w-36 border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
                 />
               </div>
-              <Button
-                className=""
-                onClick={() => navigate("/dashboard-mentor/add-program")}
-              >
-                <CirclePlus /> Tambah Program
-              </Button>
+              {superMentor && (
+                <Button
+                  className=""
+                  onClick={() => navigate("/dashboard-mentor/add-program")}
+                >
+                  <CirclePlus /> Tambah Program
+                </Button>
+              )}
             </div>
           </div>
 
           {/* LIST PROGRAM */}
           <div className="flex flex-col gap-8">
             {filteredPrograms.length === 0 ? (
-              <AddProgram />
+              superMentor ? (
+                <AddProgram />
+              ) : (
+                <NotFounPages
+                  message={"Anda belum ditambahkan untuk mengatur program"}
+                />
+              )
             ) : (
               filteredPrograms.map((item) => (
                 <div
