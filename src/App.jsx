@@ -175,6 +175,9 @@ const DashboardMentorProgram = lazy(() =>
 const DashboardMentorAddProgram = lazy(() =>
   import("./page/Dashboard/DashboardMentor/DashboardMentorAddProgram")
 );
+const DashboardMentorDetailCampus = lazy(() =>
+  import("./page/Dashboard/DashboardMentor/DashboardMentorDetailCampus")
+);
 
 const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
 
@@ -459,6 +462,10 @@ const router = createBrowserRouter([
       {
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardMentorAddProgram} />,
+      },
+      {
+        path: "detail-campus",
+        element: <SuspenseWrapper Component={DashboardMentorDetailCampus} />,
       },
     ],
   },
