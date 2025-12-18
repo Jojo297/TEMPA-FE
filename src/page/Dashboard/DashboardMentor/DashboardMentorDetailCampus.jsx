@@ -21,6 +21,7 @@ import useEditImageCampus from "@/hooks/hooksMentor/useEditImageCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 import { z } from "zod";
 import MentorDetailCampusDescription from "@/components/MentorDetailCampusDescription";
+import MentorDetailCampusMajors from "@/components/MentorDetailCampusMajors";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -203,7 +204,7 @@ export default function DashboardMentorDetailCampus() {
           </TabsContent>
 
           <TabsContent value="jurusan">
-            <DetailCampusMajors
+            <MentorDetailCampusMajors
               majors={majors}
               refetchCampusData={() => fetchDetailCampus(token)}
             />

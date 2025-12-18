@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const useGetAllMajorsMentor = create((set) => ({
+const useGetAllMajorsCampus = create((set) => ({
   // State
   majors: [],
   majorsForForm: [],
@@ -83,4 +83,4 @@ const useGetAllMajorsMentor = create((set) => ({
     set({ majors: [], majorsForForm: [], isLoading: false, error: null }),
 }));
 
-export default useGetAllMajorsMentor;
+export default useGetAllMajorsCampus;
