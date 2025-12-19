@@ -40,7 +40,8 @@ export default function DashboardAdminBeranda() {
 
   const chartData = dashboardData?.program_per_campus ?? [];
   const displayCampus = campusData ?? [];
-  // console.log(displayCampus);
+  const displayDashboardData = dashboardData ?? [];
+  // console.log(displayDashboardData);
 
   const filteredCampus = displayCampus.filter((item) =>
     item.campus_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -120,7 +121,9 @@ export default function DashboardAdminBeranda() {
           </div>
           <div>
             <p className="text-sm text-gray-500 font-medium">Total Campus</p>
-            <p className="text-2xl font-bold text-gray-800">{0}</p>
+            <p className="text-2xl font-bold text-gray-800">
+              {displayDashboardData.total_campus_accepted}
+            </p>
           </div>
         </div>
 
@@ -131,7 +134,9 @@ export default function DashboardAdminBeranda() {
           </div>
           <div>
             <p className="text-sm text-gray-500 font-medium">Total Program</p>
-            <p className="text-2xl font-bold text-gray-800">{0}</p>
+            <p className="text-2xl font-bold text-gray-800">
+              {displayDashboardData.total_program}
+            </p>
           </div>
         </div>
 
@@ -142,7 +147,9 @@ export default function DashboardAdminBeranda() {
           </div>
           <div>
             <p className="text-sm text-gray-500 font-medium">Total Mentee</p>
-            <p className="text-2xl font-bold text-gray-800">{0}</p>
+            <p className="text-2xl font-bold text-gray-800">
+              {displayDashboardData.total_mentee}
+            </p>
           </div>
         </div>
       </div>
