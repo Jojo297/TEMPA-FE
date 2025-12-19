@@ -1,14 +1,6 @@
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
 import useGetDashboardData from "@/hooks/hooksAdmin/useGetDashboardData";
+import DashboardAdminBerandaSkeleton from "@/components/DashboardAdminBerandaSkeleton";
+import { jwtDecode } from "jwt-decode";
 import {
   GraduationCap,
   ListCheck,
@@ -18,7 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -32,33 +23,26 @@ import {
 export default function DashboardAdminBeranda() {
   const { dashboardData, isLoading, error, fetchDashboardData } =
     useGetDashboardData();
-  const { campusData, isLoadingCampus, errorCampus, fetchAllCampus } =
-    useGetAllCampus();
   const token = localStorage.getItem("userJwt");
-  const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const decode = jwtDecode(token);
 
   const chartData = dashboardData?.program_per_campus ?? [];
-  const displayCampus = campusData ?? [];
+
   const displayDashboardData = dashboardData ?? [];
   // console.log(displayDashboardData);
 
-  const filteredCampus = displayCampus.filter((item) =>
-    item.campus_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  // fetch dashboard data (total campus, total program, total mentee and data chart)
   useEffect(() => {
     if (token) {
       fetchDashboardData(token);
     }
   }, [token]);
 
-  useEffect(() => {
-    if (token) {
-      fetchAllCampus(token);
-    }
-  }, [token]);
+  if (isLoading) {
+    return <DashboardAdminBerandaSkeleton />;
+  }
 
+  // card hover in chart
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -76,40 +60,12 @@ export default function DashboardAdminBeranda() {
     return null;
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "accepted":
-        return "text-green-600 border-green-200 bg-green-50";
-      case "pending":
-        return "text-amber-600 border-amber-200 bg-amber-50";
-      case "rejected":
-        return "text-red-600 border-red-200 bg-red-50";
-      default:
-        return "text-gray-600 border-gray-200 bg-gray-50";
-    }
-  };
-
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case "accepted":
-        return "Diterima";
-      case "pending":
-        return "Belum dicek";
-      case "null":
-        return "Belum dicek";
-      case "rejected":
-        return "Ditolak";
-      default:
-        return status;
-    }
-  };
-
   return (
     <div className="p-2 w-full">
       {/* HEADER */}
       <div className="mb-6">
         <p className="text-sm text-gray-700">SELAMAT DATANG,</p>
-        <h1 className="text-3xl font-bold text-[#003631]">Admin Tempa</h1>
+        <h1 className="text-3xl font-bold text-[#003631]">{decode.username}</h1>
       </div>
 
       {/* === STATS CARDS === */}
@@ -224,102 +180,6 @@ export default function DashboardAdminBeranda() {
           Data Program (Per Kampus)
         </div>
       </section>
-
-      {/* verivication campus */}
-      <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-primary">Verifikasi Kampus</h2>
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="Cari kampus..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="rounded-md border border-gray-200 overflow-hidden">
-          <Table>
-            <TableHeader className="bg-gray-50">
-              <TableRow className="hover:bg-gray-50 border-b border-gray-200">
-                <TableHead className="text-gray-700  font-bold w-[50px]">
-                  No
-                </TableHead>
-                <TableHead className="text-gray-700  font-bold">
-                  Kampus
-                </TableHead>
-                <TableHead className="text-gray-700  font-bold">
-                  Status
-                </TableHead>
-                <TableHead className="text-gray-700 text-center font-bold">
-                  Aksi
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCampus.length > 0 ? (
-                filteredCampus.map((item, index) => (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
-                  >
-                    <TableCell className="font-medium text-gray-700">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={item.logo_url}
-                          alt=""
-                          className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0"
-                        />
-                        <div className="min-w-0">
-                          <p className="font-semibold text-base truncate text-gray-900">
-                            {item.campus_name}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
-                          item.verification_status
-                        )} font-semibold whitespace-nowrap`}
-                      >
-                        {getStatusLabel(item.verification_status)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        onClick={() =>
-                          navigate(
-                            `/dashboard-admin/verifikasi-campus/${item.id}`
-                          )
-                        }
-                        className="bg-secondary text-white font-semibold px-6 py-1.5 text-sm rounded-md shadow-sm hover:bg-secondary hover:opacity-45 transition"
-                      >
-                        Verifikasi
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center py-8 text-gray-500"
-                  >
-                    Tidak ada data kampus yang ditemukan.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
     </div>
   );
 }

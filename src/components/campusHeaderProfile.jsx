@@ -4,7 +4,7 @@ import { MapPin } from "lucide-react";
 export const CampusHeaderProfile = ({ kampus }) => {
   return (
     <header className="bg-[#F8FAFB]">
-      <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden">
+      <div className="max-w-6xl mx-auto rounded-xl shadow-md overflow-hidden">
         <div className="h-[400px]">
           {/* banner */}
           <img

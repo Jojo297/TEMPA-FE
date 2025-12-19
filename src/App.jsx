@@ -119,8 +119,8 @@ const DashboardAdminBeranda = lazy(() =>
 const DashboardAdminVerivication = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminVerivication")
 );
-const AdminKampus = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/Kampus")
+const DashboardAdminCampus = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminCampus")
 );
 const AdminSiswa = lazy(() => import("./page/Dashboard/DashboardAdmin/Siswa"));
 
@@ -492,14 +492,14 @@ const router = createBrowserRouter([
         path: "verifikasi-campus/:id",
         element: <SuspenseWrapper Component={DashboardAdminVerivication} />,
       },
+      {
+        path: "kampus",
+        element: <SuspenseWrapper Component={DashboardAdminCampus} />,
+      },
     ],
   },
   // ===================== Dashboard lainnya =====================
 
-  {
-    path: "/dashboard-admin/manajemen/kampus",
-    element: <SuspenseWrapper Component={AdminKampus} />,
-  },
   {
     path: "/dashboard-admin/manajemen/Siswa",
     element: <SuspenseWrapper Component={AdminSiswa} />,

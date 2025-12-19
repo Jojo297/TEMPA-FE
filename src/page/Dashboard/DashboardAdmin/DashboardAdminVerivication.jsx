@@ -41,6 +41,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Spinner } from "@/components/ui/spinner";
+import DashboardAdminVerificationSkeleton from "@/components/DashboardAdminVerificationSkeleton";
 
 const RejectSchema = z.object({
   reason: z
@@ -99,6 +100,10 @@ export default function DashboardAdminVerivication() {
       }
     }
   };
+
+  if (isLoading) {
+    return <DashboardAdminVerificationSkeleton />;
+  }
   return (
     <>
       {/* breadcum */}
@@ -106,7 +111,13 @@ export default function DashboardAdminVerivication() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-admin">Beranda</Link>
+              <Link to="/dashboard-admin/beranda">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-admin/kampus">Kampus</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
