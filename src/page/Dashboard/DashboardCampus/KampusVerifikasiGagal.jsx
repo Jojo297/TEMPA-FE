@@ -16,8 +16,8 @@ export default function KampusVerifikasiGagal() {
         {/* Teks Deskriptif */}
         <p className="text-base md:text-lg text-center leading-relaxed max-w-2xl px-2">
           {" "}
-          Maaf, data yang anda masukkan belum dapat diverifikasi. Admin akan
-          segera melakukan tindakan, mohon tunggu 1x24 jam.
+          Maaf, data yang anda masukkan belum dapat diverifikasi. Silahkan cek
+          email anda untuk informasi lebih lanjut.
         </p>
 
         {/* Gambar Robot */}

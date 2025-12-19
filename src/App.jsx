@@ -89,6 +89,9 @@ const DashboardCampus = lazy(() =>
 const DashboardCampusRegisterMitra = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
 );
+const DashboardCampusEditRegisterMitra = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusEditRegisterMitra")
+);
 const DashboardCampusVerivication = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication")
 );
@@ -303,6 +306,12 @@ const router = createBrowserRouter([
       {
         path: "form-data",
         element: <SuspenseWrapper Component={DashboardCampusRegisterMitra} />,
+      },
+      {
+        path: "edit-form-data",
+        element: (
+          <SuspenseWrapper Component={DashboardCampusEditRegisterMitra} />
+        ),
       },
       {
         path: "waiting-register-mitra",
