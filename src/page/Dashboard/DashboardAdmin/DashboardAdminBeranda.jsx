@@ -12,11 +12,12 @@ import useGetDashboardData from "@/hooks/hooksAdmin/useGetDashboardData";
 import {
   GraduationCap,
   ListCheck,
+  Search,
   University,
   UserCheck,
   Users,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BarChart,
@@ -35,41 +36,15 @@ export default function DashboardAdminBeranda() {
     useGetAllCampus();
   const token = localStorage.getItem("userJwt");
   const navigate = useNavigate();
-
-  const data = [
-    {
-      id: 1,
-      name: "Universitas Teknologi Digital",
-      desc: "Jakarta Selatan | Terakreditasi A",
-      status: "Belum Diverifikasi",
-      statusClasses: "text-amber-600 border-amber-200 bg-amber-50",
-    },
-    {
-      id: 2,
-      name: "Institut Sains & Bisnis",
-      desc: "Bandung | Terakreditasi B",
-      status: "Belum Diverifikasi",
-      statusClasses: "text-amber-600 border-amber-200 bg-amber-50",
-    },
-    {
-      id: 3,
-      name: "Politeknik Harapan Bangsa",
-      desc: "Surabaya | Terakreditasi A",
-      status: "Data Diterima",
-      statusClasses: "text-green-600 border-green-200 bg-green-50",
-    },
-    {
-      id: 4,
-      name: "Akademi Kreatif Nusantara",
-      desc: "Yogyakarta | Terakreditasi C",
-      status: "Data Ditolak",
-      statusClasses: "text-red-600 border-red-200 bg-red-50",
-    },
-  ];
+  const [searchQuery, setSearchQuery] = useState("");
 
   const chartData = dashboardData?.program_per_campus ?? [];
   const displayCampus = campusData ?? [];
   // console.log(displayCampus);
+
+  const filteredCampus = displayCampus.filter((item) =>
+    item.campus_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (token) {
@@ -110,6 +85,21 @@ export default function DashboardAdminBeranda() {
         return "text-red-600 border-red-200 bg-red-50";
       default:
         return "text-gray-600 border-gray-200 bg-gray-50";
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "accepted":
+        return "Diterima";
+      case "pending":
+        return "Belum dicek";
+      case "null":
+        return "Belum dicek";
+      case "rejected":
+        return "Ditolak";
+      default:
+        return status;
     }
   };
 
@@ -230,70 +220,95 @@ export default function DashboardAdminBeranda() {
 
       {/* verivication campus */}
       <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
-        <h2 className="text-2xl font-bold mb-8 text-primary">
-          Verifikasi Kampus
-        </h2>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-primary">Verifikasi Kampus</h2>
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="Cari kampus..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
 
         <div className="rounded-md border border-gray-200 overflow-hidden">
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow className="hover:bg-gray-50 border-b border-gray-200">
-                <TableHead className="text-gray-700 font-bold w-[50px]">
+                <TableHead className="text-gray-700  font-bold w-[50px]">
                   No
                 </TableHead>
-                <TableHead className="text-gray-700 font-bold">
+                <TableHead className="text-gray-700  font-bold">
                   Kampus
                 </TableHead>
-                <TableHead className="text-gray-700 font-bold">
+                <TableHead className="text-gray-700  font-bold">
                   Status
                 </TableHead>
-                <TableHead className="text-gray-700 font-bold text-right">
+                <TableHead className="text-gray-700 text-center font-bold">
                   Aksi
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {displayCampus.map((item, index) => (
-                <TableRow
-                  key={item.id}
-                  className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
-                >
-                  <TableCell className="font-medium text-gray-700">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={item.logo_url}
-                        alt=""
-                        className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0"
-                      />
-                      <div className="min-w-0">
-                        <p className="font-semibold text-base truncate text-gray-900">
-                          {item.campus_name}
-                        </p>
+              {filteredCampus.length > 0 ? (
+                filteredCampus.map((item, index) => (
+                  <TableRow
+                    key={item.id}
+                    className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
+                  >
+                    <TableCell className="font-medium text-gray-700">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={item.logo_url}
+                          alt=""
+                          className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0"
+                        />
+                        <div className="min-w-0">
+                          <p className="font-semibold text-base truncate text-gray-900">
+                            {item.campus_name}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
-                        item.verification_status
-                      )} font-semibold whitespace-nowrap`}
-                    >
-                      {item.verification_status}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <button
-                      onClick={() => navigate("/dashboard-admin/verifikasi")}
-                      className="bg-secondary text-white font-semibold px-6 py-1.5 text-sm rounded-md shadow-sm hover:bg-[#003631]/90 transition"
-                    >
-                      Verifikasi
-                    </button>
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
+                          item.verification_status
+                        )} font-semibold whitespace-nowrap`}
+                      >
+                        {getStatusLabel(item.verification_status)}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        onClick={() =>
+                          navigate(
+                            `/dashboard-admin/verifikasi-campus/${item.id}`
+                          )
+                        }
+                        className="bg-secondary text-white font-semibold px-6 py-1.5 text-sm rounded-md shadow-sm hover:bg-secondary hover:opacity-45 transition"
+                      >
+                        Verifikasi
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="text-center py-8 text-gray-500"
+                  >
+                    Tidak ada data kampus yang ditemukan.
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

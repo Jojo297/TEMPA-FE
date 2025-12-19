@@ -41,7 +41,7 @@ export default function SidebarAdmin({ children }) {
     {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
-      path: "/dashboard-admin",
+      path: "/dashboard-admin/beranda",
     },
     {
       name: "MANAJEMEN",
@@ -85,7 +85,8 @@ export default function SidebarAdmin({ children }) {
       <div
         className={`fixed top-16 left-0 h-full bg-[#013B36] text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}>
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
         <ul className="flex flex-col mt-4 w-full flex-1">
           {menu.map((item, index) => (
             <li key={index} className="w-full">
@@ -100,14 +101,16 @@ export default function SidebarAdmin({ children }) {
                       location.pathname.includes(item.path)
                         ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
                         : "hover:bg-white/10 text-white/80"
-                    }`}>
+                    }`}
+                  >
                     {item.icon}
                     <span>{item.name}</span>
 
                     <span
                       className={`transition-transform ${
                         openDropdown === index ? "rotate-180" : ""
-                      }`}>
+                      }`}
+                    >
                       <svg width="8" height="8" viewBox="0 0 10 10">
                         <path
                           d="M2 3 L5 6 L8 3"
@@ -123,7 +126,8 @@ export default function SidebarAdmin({ children }) {
                   <div
                     className={`flex flex-col ml-10 overflow-hidden transition-all duration-300 ${
                       openDropdown === index ? "max-h-40" : "max-h-0"
-                    }`}>
+                    }`}
+                  >
                     {item.submenu.map((sub, sIndex) => (
                       <Link
                         key={sIndex}
@@ -132,7 +136,8 @@ export default function SidebarAdmin({ children }) {
                           location.pathname === sub.path
                             ? "bg-white text-[#003C3C] font-semibold"
                             : "text-white/70 hover:bg-white/10"
-                        }`}>
+                        }`}
+                      >
                         {sub.icon}
                         {sub.name}
                       </Link>
@@ -147,7 +152,8 @@ export default function SidebarAdmin({ children }) {
                     location.pathname === item.path
                       ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
                       : "hover:bg-white/10 text-white/80"
-                  }`}>
+                  }`}
+                >
                   {item.icon}
                   <span>{item.name}</span>
                 </Link>
@@ -179,7 +185,8 @@ export default function SidebarAdmin({ children }) {
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleLogout}
-                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70">
+                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70"
+                  >
                     Continue
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -194,14 +201,14 @@ export default function SidebarAdmin({ children }) {
         <main
           className={`flex-1 transition-all duration-300 ${
             isOpen ? "ml-64" : "ml-0"
-          } p-6`}>
+          } p-6`}
+        >
           {children}
         </main>
 
         <div
-          className={`${
-            isOpen ? "ml-64" : "ml-0"
-          } transition-all duration-300`}>
+          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
+        >
           <Footer />
         </div>
       </div>
