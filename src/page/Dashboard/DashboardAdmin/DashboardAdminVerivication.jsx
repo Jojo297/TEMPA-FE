@@ -1,15 +1,5 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import {
   Breadcrumb,
@@ -20,34 +10,16 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Label } from "@/components/ui/label";
-import { Pencil } from "lucide-react";
-import { ManageMapsCampusLocation } from "@/components/ManageMapsCampusLocation";
 import { Button } from "@/components/ui/button";
 import useGetDetailVerificationCampus from "@/hooks/hooksAdmin/useGetDetailVerificationCampus";
 import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 import useAcceptCampus from "@/hooks/hooksAdmin/useAcceptCampus";
 import useRejectCampus from "@/hooks/hooksAdmin/useRejectCampus";
 import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Spinner } from "@/components/ui/spinner";
 import DashboardAdminVerificationSkeleton from "@/components/DashboardAdminVerificationSkeleton";
-
-const RejectSchema = z.object({
-  reason: z
-    .string()
-    .min(10, "Alasan penolakan wajib diisi minimal 10 karakter."),
-});
+import RejectCampus from "@/components/RejectCampus";
+import { Check } from "lucide-react";
 
 export default function DashboardAdminVerivication() {
   const { id } = useParams();
@@ -58,7 +30,6 @@ export default function DashboardAdminVerivication() {
     useGetDetailVerificationCampus();
   const { isLoadingAccept, errorAccept, successMessage, acceptCampus } =
     useAcceptCampus();
-  const { isLoadingReject, rejectCampus } = useRejectCampus();
 
   const displayCampus = detailCampus ?? [];
   // console.log(displayCampus);
@@ -68,26 +39,6 @@ export default function DashboardAdminVerivication() {
       fetchDetailVerificationCampus(token, idCampus);
     }
   }, [token]);
-
-  const formReject = useForm({
-    resolver: zodResolver(RejectSchema),
-    defaultValues: {
-      reason: "",
-    },
-  });
-
-  const onRejectSubmit = async (data) => {
-    // console.log(data);
-    if (token) {
-      const result = await rejectCampus(token, idCampus, data.reason);
-      if (result.success) {
-        toast.success(result.message || "Kampus berhasil ditolak");
-        navigate("/dashboard-admin");
-      } else {
-        toast.error(result.message || "Gagal menolak kampus");
-      }
-    }
-  };
 
   const onSubmitAccept = async () => {
     if (token) {
@@ -144,7 +95,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Nama Kampus</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.campus_name}
+                  {displayCampus.campus_name || "Data Kosong"}
                 </div>
               </div>
 
@@ -152,7 +103,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Email Kampus</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.email_campus}
+                  {displayCampus.email_campus || "Data Kosong"}
                 </div>
               </div>
 
@@ -160,7 +111,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Deskripsi Kampus</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.description}
+                  {displayCampus.description || "Data Kosong"}
                 </div>
               </div>
 
@@ -168,7 +119,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Website Kampus</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.website_campus}
+                  {displayCampus.website_campus || "Data Kosong"}
                 </div>
               </div>
 
@@ -176,7 +127,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Provinsi</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.province}
+                  {displayCampus.province || "Data Kosong"}
                 </div>
               </div>
 
@@ -184,7 +135,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Kota/Kabupaten</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.city}
+                  {displayCampus.city || "Data Kosong"}
                 </div>
               </div>
 
@@ -192,7 +143,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Kecamatan</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.subdistrict}
+                  {displayCampus.subdistrict || "Data Kosong"}
                 </div>
               </div>
 
@@ -200,7 +151,7 @@ export default function DashboardAdminVerivication() {
               <div className="space-y-2">
                 <Label>Desa/kelurahan</Label>
                 <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.ward}
+                  {displayCampus.ward || "Data Kosong"}
                 </div>
               </div>
 
@@ -208,82 +159,29 @@ export default function DashboardAdminVerivication() {
             </div>
             <div className="w-full mt-6">
               <Label>Titik Lokasi</Label>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${displayCampus.lat},${displayCampus.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white shadow-md rounded-xl h-fit block transition hover:shadow-lg"
-              >
+              {displayCampus.lat && displayCampus.lng ? (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${displayCampus.lat},${displayCampus.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white shadow-md rounded-xl h-fit block transition hover:shadow-lg"
+                >
+                  <div className="p-2 border mt-2 rounded-md bg-gray-50 text-sm text-gray-700">
+                    <DisplayMapsLocation
+                      lat={displayCampus.lat}
+                      lng={displayCampus.lng}
+                    />
+                  </div>
+                </a>
+              ) : (
                 <div className="p-2 border mt-2 rounded-md bg-gray-50 text-sm text-gray-700">
-                  <DisplayMapsLocation
-                    lat={displayCampus.lat}
-                    lng={displayCampus.lng}
-                  />
+                  Data Kosong
                 </div>
-              </a>
+              )}
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-red-500 hover:bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2">
-                    Tolak Kampus
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[500px]">
-                  <DialogHeader>
-                    <DialogTitle>Tolak Verifikasi Kampus</DialogTitle>
-                    <DialogDescription>
-                      Apakah Anda yakin ingin menolak verifikasi kampus ini?
-                      Berikan alasan penolakan di bawah ini.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <Form {...formReject}>
-                    <form
-                      onSubmit={formReject.handleSubmit(onRejectSubmit)}
-                      className="space-y-4"
-                    >
-                      <FormField
-                        control={formReject.control}
-                        name="reason"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Alasan Penolakan</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Contoh: Dokumen legalitas tidak lengkap atau tidak valid..."
-                                className="min-h-[100px]"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <DialogFooter>
-                        <DialogClose asChild>
-                          <Button type="button" variant="outline">
-                            Batal
-                          </Button>
-                        </DialogClose>
-                        <Button
-                          type="submit"
-                          variant="destructive"
-                          disabled={isLoadingReject}
-                        >
-                          {isLoadingReject ? (
-                            <div className="flex items-center gap-2">
-                              <Spinner /> Memproses...
-                            </div>
-                          ) : (
-                            "Tolak Kampus"
-                          )}
-                        </Button>
-                      </DialogFooter>
-                    </form>
-                  </Form>
-                </DialogContent>
-              </Dialog>
+              <RejectCampus token={token} idCampus={idCampus} />
               <Button
                 onClick={onSubmitAccept}
                 disabled={isLoadingAccept}
@@ -294,7 +192,9 @@ export default function DashboardAdminVerivication() {
                     <Spinner /> Memproses...
                   </div>
                 ) : (
-                  "Terima Kampus"
+                  <div className="flex items-center gap-2">
+                    <Check size={16} /> Terima Kampus
+                  </div>
                 )}
               </Button>
             </div>
