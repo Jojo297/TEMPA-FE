@@ -11,6 +11,8 @@ import {
   BellIcon,
   LogOutIcon,
   University,
+  User2,
+  Users,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
@@ -64,6 +66,11 @@ export default function SidebarAdmin({ children }) {
       name: "KAMPUS",
       icon: <University size={18} />,
       path: "/dashboard-admin/kampus",
+    },
+    {
+      name: "MENTEE",
+      icon: <Users size={18} />,
+      path: "/dashboard-admin/mentee",
     },
   ];
 

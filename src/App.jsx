@@ -125,6 +125,9 @@ const DashboardAdminCampus = lazy(() =>
 const DashboardAdminCampusDetail = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminCampusDetail")
 );
+const DashboardAdminMentee = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminMentee")
+);
 
 // ------------------
 
@@ -471,7 +474,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  // dashboard admin
+  // ======================= DASHBOARD ADMIN =======================
   {
     path: "dashboard-admin",
     element: (
@@ -501,6 +504,10 @@ const router = createBrowserRouter([
       {
         path: "detail-kampus/:id",
         element: <SuspenseWrapper Component={DashboardAdminCampusDetail} />,
+      },
+      {
+        path: "mentee",
+        element: <SuspenseWrapper Component={DashboardAdminMentee} />,
       },
     ],
   },
