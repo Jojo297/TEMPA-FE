@@ -128,6 +128,9 @@ const DashboardAdminCampusDetail = lazy(() =>
 const DashboardAdminMentee = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminMentee")
 );
+const DashboardAdminServices = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminServices")
+);
 
 // ------------------
 
@@ -289,6 +292,10 @@ const router = createBrowserRouter([
       {
         path: "add-program",
         element: <SuspenseWrapper Component={DashboardCampusAddProgram} />,
+      },
+      {
+        path: "berlangganan",
+        element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
       },
     ],
   },
@@ -508,6 +515,10 @@ const router = createBrowserRouter([
       {
         path: "mentee",
         element: <SuspenseWrapper Component={DashboardAdminMentee} />,
+      },
+      {
+        path: "services",
+        element: <SuspenseWrapper Component={DashboardAdminServices} />,
       },
     ],
   },

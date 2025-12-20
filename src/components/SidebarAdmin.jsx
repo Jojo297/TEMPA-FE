@@ -13,6 +13,7 @@ import {
   University,
   User2,
   Users,
+  CreditCardIcon,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
@@ -71,6 +72,13 @@ export default function SidebarAdmin({ children }) {
       name: "MENTEE",
       icon: <Users size={18} />,
       path: "/dashboard-admin/mentee",
+    },
+
+    { separator: true, name: "Service" },
+    {
+      name: "LAYANAN",
+      icon: <CreditCardIcon size={18} />,
+      path: "/dashboard-admin/services",
     },
   ];
 
@@ -149,64 +157,22 @@ export default function SidebarAdmin({ children }) {
         } transition-transform duration-300 ease-in-out z-40`}
       >
         <ul className="flex flex-col mt-4 w-full flex-1">
-          {menu.map((item, index) => (
-            <li key={index} className="w-full">
-              {/* MENU DROPDOWN */}
-              {item.isDropdown ? (
-                <>
-                  <button
-                    onClick={() =>
-                      setOpenDropdown(openDropdown === index ? null : index)
-                    }
-                    className={`flex items-center gap-3 px-6 py-3 w-full text-sm font-medium transition-all ${
-                      location.pathname.includes(item.path)
-                        ? "bg-white text-[#003C3C] border-r-4 border-[#32A852] font-semibold"
-                        : "hover:bg-white/10 text-white/80"
-                    }`}
-                  >
-                    {item.icon}
-                    <span>{item.name}</span>
-
-                    <span
-                      className={`transition-transform ${
-                        openDropdown === index ? "rotate-180" : ""
-                      }`}
-                    >
-                      <svg width="8" height="8" viewBox="0 0 10 10">
-                        <path
-                          d="M2 3 L5 6 L8 3"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                          fill="none"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-
-                  {/* SUBMENU */}
-                  <div
-                    className={`flex flex-col ml-10 overflow-hidden transition-all duration-300 ${
-                      openDropdown === index ? "max-h-40" : "max-h-0"
-                    }`}
-                  >
-                    {item.submenu.map((sub, sIndex) => (
-                      <Link
-                        key={sIndex}
-                        to={sub.path}
-                        className={`px-4 py-2 text-sm flex items-center gap-3 rounded-md ${
-                          location.pathname === sub.path
-                            ? "bg-white text-[#003C3C] font-semibold"
-                            : "text-white/70 hover:bg-white/10"
-                        }`}
-                      >
-                        {sub.icon}
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                /* MENU BIASA */
+          {menu.map((item, index) =>
+            item.separator ? (
+              <div>
+                <p
+                  key={index}
+                  className="px-6 py-2 text-xs font-bold text-gray-400 mt-2"
+                >
+                  {item.name}
+                </p>
+                {/* <hr
+                  key={`sep-${index}`}
+                  className="ml-6 mb-[8px] w-[70%] border-t border-gray-400"
+                /> */}
+              </div>
+            ) : (
+              <li key={index} className="w-full">
                 <Link
                   to={item.path}
                   className={`flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
@@ -218,9 +184,9 @@ export default function SidebarAdmin({ children }) {
                   {item.icon}
                   <span>{item.name}</span>
                 </Link>
-              )}
-            </li>
-          ))}
+              </li>
+            )
+          )}
 
           {/* LOGOUT */}
           <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
