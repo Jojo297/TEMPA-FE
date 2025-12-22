@@ -63,6 +63,7 @@ export default function SidebarAdmin({ children }) {
       icon: <LayoutGrid size={18} />,
       path: "/dashboard-admin/beranda",
     },
+    { separator: true, name: "Manajemen" },
     {
       name: "KAMPUS",
       icon: <University size={18} />,
@@ -73,7 +74,11 @@ export default function SidebarAdmin({ children }) {
       icon: <Users size={18} />,
       path: "/dashboard-admin/mentee",
     },
-
+    {
+      name: "PROGRAM",
+      icon: <GraduationCap size={18} />,
+      path: "/dashboard-admin/program",
+    },
     { separator: true, name: "Service" },
     {
       name: "LAYANAN",

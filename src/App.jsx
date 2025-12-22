@@ -131,6 +131,9 @@ const DashboardAdminMentee = lazy(() =>
 const DashboardAdminServices = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminServices")
 );
+const DashboardAdminProgram = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminProgram")
+);
 
 // ------------------
 
@@ -334,14 +337,10 @@ const router = createBrowserRouter([
     ],
   },
 
-  // dashboard mentee routes
+  // ======================= DASHBOARD MENTEE =======================
   {
     path: "dashboard-mentee",
     element: (
-      // <ProtectedRoute
-      //   Component={DashboardMenteePage}
-      //   allowedRoles={["mentee"]}
-      // />
       <SuspenseWrapper
         Component={() => (
           <ProtectedRoute
@@ -379,10 +378,6 @@ const router = createBrowserRouter([
       {
         path: "test-jurusan",
         element: <SuspenseWrapper Component={DashboardTestJurusanForm} />,
-      },
-      {
-        path: "penilaian",
-        element: <SuspenseWrapper Component={Penilaian} />,
       },
       {
         path: "jurusan",
@@ -520,14 +515,14 @@ const router = createBrowserRouter([
         path: "services",
         element: <SuspenseWrapper Component={DashboardAdminServices} />,
       },
+      {
+        path: "program",
+        element: <SuspenseWrapper Component={DashboardAdminProgram} />,
+      },
     ],
   },
   // ===================== Dashboard lainnya =====================
 
-  {
-    path: "/dashboard-mentor",
-    element: <SuspenseWrapper Component={DashboardMentor} />,
-  },
   {
     path: "*",
     element: <SuspenseWrapper Component={NotFounPages} />,

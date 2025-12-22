@@ -93,11 +93,6 @@ const SidebarWithNavbar = ({ children }) => {
       icon: <ClipboardCheck size={22} />,
       path: "/dashboard-mentee/test-jurusan",
     },
-    {
-      name: "PENILAIAN",
-      icon: <Star size={18} />,
-      path: "/dashboard-mentee/penilaian",
-    },
   ];
 
   return (

@@ -16,13 +16,24 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import DashboardBerandaSkeleton from "@/components/DashboardBerandaSkeleton";
 import useProgramStoreMentee from "@/hooks/hooksMentee/useProgramMentee";
-import FeedbackProgram from "@/components/FeedbackProgram";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import NotFounPages from "@/components/NotFoundPages";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
   const { programs, isLoading, error, fetchPrograms } = useProgramStoreMentee();
   const token = localStorage.getItem("userJwt");
   // console.log(token);
+  const [selectedType, setSelectedType] = useState("all"); // for type_sesi
+  const [selectedStatus, setSelectedStatus] = useState("all"); // for completion_status
 
   const decode = jwtDecode(token);
 
@@ -34,6 +45,15 @@ export default function DashboardBeranda() {
   const displayPrograms = programs ?? [];
   const countProgram = displayPrograms.length;
   console.log(displayPrograms);
+  // Filter programs based on selectedType and selectedStatus
+  const filteredPrograms = displayPrograms.filter((program) => {
+    const typeMatch =
+      selectedType === "all" ||
+      program.program_details.type_sesi === selectedType;
+    const statusMatch =
+      selectedStatus === "all" || program.completion_status === selectedStatus;
+    return typeMatch && statusMatch;
+  });
 
   // get completed program
   const completedPrograms = displayPrograms.filter((item) => {
@@ -206,7 +226,52 @@ export default function DashboardBeranda() {
 
       {/* Aktivitas */}
       <section className="mt-8">
-        <h2 className="text-2xl font-bold mb-6">Aktivitas</h2>
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold mb-6">Aktivitas</h2>
+          <div className="flex gap-2">
+            {/* type program */}
+            <div>
+              <Select onValueChange={setSelectedType} defaultValue="all">
+                <SelectTrigger
+                  className={`w-48 bg-white ${
+                    selectedType !== "all" ? "text-black" : "text-gray-400"
+                  }`}
+                >
+                  <SelectValue placeholder="Pilih Tipe Program" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Pilih Tipe Program</SelectLabel>
+                    <SelectItem value="all">Semua Tipe</SelectItem>
+                    <SelectItem value="online">Online</SelectItem>
+                    <SelectItem value="onsite">Onsite</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            {/* status program */}
+            <div>
+              <Select onValueChange={setSelectedStatus} defaultValue="all">
+                <SelectTrigger
+                  className={`w-48 bg-white ${
+                    selectedStatus !== "all" ? "text-black" : "text-gray-400"
+                  }`}
+                >
+                  <SelectValue placeholder="Pilih Status Program" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Pilih Status Program</SelectLabel>
+                    <SelectItem value="all">Semua Status</SelectItem>
+                    <SelectItem value="completed">Lulus</SelectItem>
+                    <SelectItem value="on_going">Sedang Berjalan</SelectItem>
+                    <SelectItem value="uncompleted">Tidak Lulus</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
 
         {/* if programs empty */}
         {displayPrograms.length === 0 ? (
@@ -223,19 +288,25 @@ export default function DashboardBeranda() {
                 </p>
                 <Button
                   className="mt-4 px-24 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  onClick={() => navigate("program")}>
+                  onClick={() => navigate("program")}
+                >
                   Cari Program <Search />
                 </Button>
               </div>
             </div>
           </div>
+        ) : filteredPrograms.length === 0 ? (
+          <NotFounPages
+            message={"Program dengan filter yang dipilih tidak ditemukan"}
+          />
         ) : (
           <div className="flex flex-col gap-8">
             {/* Card Program */}
-            {displayPrograms.map((item) => (
+            {filteredPrograms.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden bg-white transition hover:shadow-xl">
+                className="flex flex-col lg:flex-row border relative rounded-2xl overflow-hidden bg-white transition hover:shadow-xl"
+              >
                 {/* left side */}
                 <div
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
@@ -243,7 +314,8 @@ export default function DashboardBeranda() {
                     backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_details.image_url})`,
                     backgroundColor: "#013B35",
                     minHeight: "200px",
-                  }}>
+                  }}
+                >
                   {/* Completion Status */}
                   {(() => {
                     // get badge status
@@ -254,7 +326,8 @@ export default function DashboardBeranda() {
                     );
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}>
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                      >
                         {statusData.text}
                       </div>
                     );
@@ -317,7 +390,8 @@ export default function DashboardBeranda() {
                       onClick={() => {
                         navigate(`materi/${item.program_details?.id}`);
                       }}
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300">
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                    >
                       Lihat Materi
                     </button>
                   </div>
