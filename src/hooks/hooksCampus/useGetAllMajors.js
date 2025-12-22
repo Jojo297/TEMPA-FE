@@ -15,7 +15,7 @@ const useGetAllMajorsCampus = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `${API_BASE_URL}/all-majors`;
+      const API_URL = `${API_BASE_URL}/all-majors-form`;
 
       const response = await axios.get(API_URL, {
         headers: {

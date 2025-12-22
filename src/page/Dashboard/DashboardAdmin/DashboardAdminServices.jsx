@@ -206,10 +206,8 @@ export default function DashboardAdminServices() {
                           onUpdate={handleUpdateService}
                         />
                       </Dialog>
-                      {/* delete service */}
-                      {/* <Button className="bg-red-500 hover:bg-red-600">
-                        Hapus
-                      </Button> */}
+
+                      {/* delete sevive */}
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <button
@@ -246,11 +244,7 @@ export default function DashboardAdminServices() {
                             </AlertDialogCancel>
 
                             {/* Tombol Hapus (Mengikuti Style Merah di Gambar) */}
-                            <AlertDialogAction
-                              // onClick={() => handleDeleteProgram(idProgram)}
-                              // disabled={isLoading}
-                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1"
-                            >
+                            <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1">
                               <Trash2 size={16} /> Hapus
                             </AlertDialogAction>
                           </AlertDialogFooter>
@@ -284,6 +278,7 @@ const formSchema = z.object({
   benefit: z.array(z.string()).min(1, "Minimal satu benefit harus diisi"),
 });
 
+// detail service component
 function ServiceDialogContent({ item, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newBenefit, setNewBenefit] = useState("");
@@ -413,10 +408,7 @@ function ServiceDialogContent({ item, onUpdate }) {
             )}
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              className="bg-secondary hover:bg-secondary/80"
-            >
+            <Button type="submit" className="bg-primary hover:bg-primary/80">
               Simpan
             </Button>
             <Button

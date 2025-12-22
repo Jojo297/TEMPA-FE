@@ -33,14 +33,16 @@ import useGetAllProgram from "@/hooks/hooksCampus/useGetAllProgram";
 import { useAuthStore } from "@/hooks/hooksCampus/useAuthStore";
 import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusProgramSkeleton from "@/components/DashboardCampusProgramSkeleton";
+import { CampusSearchMajors } from "@/components/CampusSearchMajors";
+import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
+import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
+import NotFounPages from "@/components/NotFoundPages";
 // import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterMajor, setFilterMajor] = useState(null);
-  const [filterType, setFilterType] = useState(null);
   // Hooks Program
   const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
     useGetAllProgram();
@@ -55,7 +57,6 @@ export default function DashboardCampusProgram() {
   const programs = allPrograms || [];
   // console.log(programs);
 
-  // Badge status
   // badge for status program
   const getBadgeClass = (start_date, end_date) => {
     const today = new Date();
@@ -121,23 +122,28 @@ export default function DashboardCampusProgram() {
     }
   };
 
+  // get selected major from SelectTypeProgram
+  const selectedMajor = useFilterStore((state) => state.selectedMajor);
+
+  // get selected major from SearchMajors
+  const selectedType = useFilterProgramType((state) => state.selectedType);
+
   // Filtering
   const filteredPrograms = programs.filter((item) => {
     const programNameMatch = item.program_name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
-    const majorMatch = filterMajor
-      ? item.major_name?.toLowerCase() === filterMajor.toLowerCase()
+    const majorMatch = selectedMajor
+      ? item.major_name?.toLowerCase() === selectedMajor.toLowerCase()
       : true;
 
-    const typeMatch = filterType
-      ? item.type_sesi?.toLowerCase() === filterType.toLowerCase()
+    const typeMatch = selectedType
+      ? item.sesi_program?.toLowerCase() === selectedType.toLowerCase()
       : true;
 
     return programNameMatch && majorMatch && typeMatch;
   });
-
   console.log(filteredPrograms);
 
   // format date
@@ -164,7 +170,7 @@ export default function DashboardCampusProgram() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild className="hover:text-primary">
-                  <Link to="/dashboard-campus">Beranda</Link>
+                  <Link to="/dashboard-campus/beranda">Beranda</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -195,9 +201,10 @@ export default function DashboardCampusProgram() {
               Seluruh Program ({programs.length})
             </h2>
 
+            {/* filter program */}
             <div className="flex gap-2">
               <SelectTypeProgram />
-              {/* <SearchMajors className="w-36" /> */}
+              <CampusSearchMajors className="w-36" />
               <div className="relative">
                 <Search
                   size={16}
@@ -222,8 +229,12 @@ export default function DashboardCampusProgram() {
 
           {/* LIST PROGRAM */}
           <div className="flex flex-col gap-8">
-            {filteredPrograms.length === 0 ? (
+            {programs.length === 0 ? (
               <AddProgram />
+            ) : filteredPrograms.length === 0 ? (
+              <NotFounPages
+                message={"Program yang Anda cari tidak ditemukan."}
+              />
             ) : (
               filteredPrograms.map((item) => (
                 <div
