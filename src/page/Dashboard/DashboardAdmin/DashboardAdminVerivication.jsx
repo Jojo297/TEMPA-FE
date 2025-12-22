@@ -11,6 +11,17 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import useGetDetailVerificationCampus from "@/hooks/hooksAdmin/useGetDetailVerificationCampus";
 import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 import useAcceptCampus from "@/hooks/hooksAdmin/useAcceptCampus";
@@ -45,7 +56,7 @@ export default function DashboardAdminVerivication() {
       const result = await acceptCampus(token, idCampus);
       if (result.success) {
         toast.success(result.message || "Kampus berhasil diterima");
-        navigate("/dashboard-admin");
+        navigate("/dashboard-admin/kampus");
       } else {
         toast.error(result.message || "Gagal menerima kampus");
       }
@@ -182,21 +193,42 @@ export default function DashboardAdminVerivication() {
 
             <div className="flex justify-end gap-2 mt-6">
               <RejectCampus token={token} idCampus={idCampus} />
-              <Button
-                onClick={onSubmitAccept}
-                disabled={isLoadingAccept}
-                className="hover:bg-primary transition hover:opacity-45"
-              >
-                {isLoadingAccept ? (
-                  <div className="flex items-center gap-2">
-                    <Spinner /> Memproses...
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="hover:bg-primary transition hover:opacity-45">
                     <Check size={16} /> Terima Kampus
-                  </div>
-                )}
-              </Button>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Terima Verifikasi Kampus?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Apakah Anda yakin ingin menerima verifikasi kampus ini?
+                      Kampus akan mendapatkan akses penuh ke sistem.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <Button
+                      onClick={onSubmitAccept}
+                      disabled={isLoadingAccept}
+                      className="bg-primary hover:bg-primary/90"
+                    >
+                      {isLoadingAccept ? (
+                        <div className="flex items-center gap-2">
+                          <Spinner /> Memproses...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          Ya, terima
+                        </div>
+                      )}
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>

@@ -24,6 +24,9 @@ import useRejectCampus from "@/hooks/hooksAdmin/useRejectCampus";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 import { X } from "lucide-react";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const RejectSchema = z.object({
   reason: z
@@ -33,7 +36,8 @@ const RejectSchema = z.object({
 
 export default function RejectCampus({ token, idCampus }) {
   const { isLoadingReject, rejectCampus } = useRejectCampus();
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
   const formReject = useForm({
     resolver: zodResolver(RejectSchema),
     defaultValues: {
@@ -47,15 +51,17 @@ export default function RejectCampus({ token, idCampus }) {
       const result = await rejectCampus(token, idCampus, data.reason);
       if (result.success) {
         toast.success(result.message || "Kampus berhasil ditolak");
-        navigate("/dashboard-admin");
+        setIsDialogOpen(false);
+        navigate("/dashboard-admin/kampus");
       } else {
+        setIsDialogOpen(false);
         toast.error(result.message || "Gagal menolak kampus");
       }
     }
   };
   return (
     <>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="bg-red-500 hover:bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2">
             <X size={16} />

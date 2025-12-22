@@ -146,7 +146,7 @@ export default function DashboardAdminProgram() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild className="hover:text-primary">
-                    <Link to="/dashboard-mentee">Beranda</Link>
+                    <Link to="/dashboard-admin/beranda">Beranda</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />

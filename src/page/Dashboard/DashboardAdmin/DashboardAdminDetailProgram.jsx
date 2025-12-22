@@ -121,13 +121,13 @@ const DashboardAdminDetailProgram = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee">Beranda</Link>
+              <Link to="/dashboard-admin/beranda">Beranda</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee/program">Program</Link>
+              <Link to="/dashboard-admin/program">Program</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
