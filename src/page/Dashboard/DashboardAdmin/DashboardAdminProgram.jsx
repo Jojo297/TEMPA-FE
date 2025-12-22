@@ -302,7 +302,7 @@ export default function DashboardAdminProgram() {
                         {/* Button */}
                         <button
                           onClick={() =>
-                            navigate(`/dashboard-mentee/program/${item.id}`)
+                            navigate(`/dashboard-admin/program/${item.id}`)
                           }
                           className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
                         >

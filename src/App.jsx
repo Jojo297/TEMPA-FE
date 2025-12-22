@@ -134,6 +134,9 @@ const DashboardAdminServices = lazy(() =>
 const DashboardAdminProgram = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminProgram")
 );
+const DashboardAdminDetailProgram = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailProgram")
+);
 
 // ------------------
 
@@ -518,6 +521,10 @@ const router = createBrowserRouter([
       {
         path: "program",
         element: <SuspenseWrapper Component={DashboardAdminProgram} />,
+      },
+      {
+        path: "program/:id",
+        element: <SuspenseWrapper Component={DashboardAdminDetailProgram} />,
       },
     ],
   },
