@@ -495,7 +495,9 @@ export default function DashboardTestJurusanForm() {
     <>
       {/* Header */}
       <section className="bg-primary text-center text-white rounded-2xl py-10 px-6 shadow-md">
-        <h1 className="text-2xl font-semibold mb-2">Tes Jurusan</h1>
+        <h1 className="text-2xl font-semibold mb-2">
+          Rekomendasi Jurusan Cerdas
+        </h1>
         <p className="text-sm max-w-2xl mx-auto">
           Tes ini dirancang untuk{" "}
           <span className="font-semibold">

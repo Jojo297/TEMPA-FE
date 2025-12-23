@@ -388,7 +388,9 @@ export default function DashboardBeranda() {
                     {/* Button */}
                     <button
                       onClick={() => {
-                        navigate(`materi/${item.program_details?.id}`);
+                        navigate(
+                          `/dashboard-mentee/materi/${item.program_details?.id}`
+                        );
                       }}
                       className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
                     >

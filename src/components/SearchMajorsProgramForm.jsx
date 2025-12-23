@@ -29,7 +29,7 @@ export function SearchMajorsProgramForm({
   const { majors, isLoading, error, fetchMajor } = useGetAllMajorsCampus();
 
   const displayMajors = majors ?? [];
-  // console.log(displayMajors);
+  console.log(displayMajors);
 
   useEffect(() => {
     if (token) {
@@ -49,7 +49,7 @@ export function SearchMajorsProgramForm({
 
   return (
     <Popover open={open} onOpenChange={setOpen} className="">
-  <PopoverTrigger asChild>
+      <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
@@ -59,8 +59,8 @@ export function SearchMajorsProgramForm({
           } text-sm overflow-hidden whitespace-nowrap text-ellipsis`}
         >
           {value
-            ? displayMajors.find((item) => item.id === value)?.standard_major
-                ?.major_name || initialMajorName
+            ? displayMajors.find((item) => item.id === value)?.major_name ||
+              initialMajorName
             : "Pilih Jurusan"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -74,10 +74,10 @@ export function SearchMajorsProgramForm({
               {displayMajors.map((item) => (
                 <CommandItem
                   key={item.id}
-                  value={item.id} // Gunakan ID sebagai value unik
+                  value={item.major_name}
                   onSelect={() => handleSelectMajor(item.id)} // Kirim ID ke handler
                 >
-                  {item.standard_major?.major_name}
+                  {item.major_name}
                   <Check
                     className={cn(
                       "ml-auto",

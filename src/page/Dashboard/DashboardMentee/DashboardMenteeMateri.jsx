@@ -26,6 +26,7 @@ import useGetProgramMateri from "@/hooks/hooksMentee/useGetProgramMateri";
 import { useEffect, useState } from "react";
 import NotFounPages from "@/components/NotFoundPages";
 import FeedbackProgram from "@/components/FeedbackProgram";
+import ProgramNotStartedDialog from "@/components/ProgramNotStartedDialog";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -36,7 +37,11 @@ export default function DashboardMenteeMateri() {
   let program_name = "Nama Program Tidak Ditemukan";
   let program_description = "Deskripsi Program Tidak Ditemukan";
   let endProgramDate = null;
+  let completion_status = null;
+  let startProgramDate = null;
+
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [isNotStartedDialogOpen, setIsNotStartedDialogOpen] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -46,8 +51,6 @@ export default function DashboardMenteeMateri() {
 
   const displayMateri = materi ?? [];
 
-  console.log(displayMateri);
-
   if (displayMateri && displayMateri.length > 0) {
     const firstMateriItem = displayMateri[0];
 
@@ -55,7 +58,10 @@ export default function DashboardMenteeMateri() {
     program_name = firstMateriItem.program_name;
     program_description = firstMateriItem.program_description;
     endProgramDate = firstMateriItem.end_program_date;
+    completion_status = firstMateriItem.completion_status;
+    startProgramDate = firstMateriItem.start_program_date;
   }
+  // console.log(startProgramDate);
 
   // Fungsi utilitas untuk mendapatkan nama file dari URL
   const getFileNameFromUrl = (url) => {
@@ -85,9 +91,23 @@ export default function DashboardMenteeMateri() {
       endProgramDate &&
       new Date(endProgramDate).getTime() <= new Date().setHours(0, 0, 0, 0)
     ) {
-      setIsOpenDialog(true);
+      if (completion_status === "completed") {
+        setIsOpenDialog(false);
+      } else {
+        setIsOpenDialog(true);
+      }
     }
-  }, [endProgramDate]);
+  }, [endProgramDate, completion_status]);
+
+  // Cek apakah program belum dimulai
+  useEffect(() => {
+    if (
+      startProgramDate &&
+      new Date(startProgramDate).getTime() > new Date().setHours(0, 0, 0, 0)
+    ) {
+      setIsNotStartedDialogOpen(true);
+    }
+  }, [startProgramDate]);
 
   return (
     <>
@@ -201,6 +221,11 @@ export default function DashboardMenteeMateri() {
         </div>
         {/* Feedback Program */}
         <FeedbackProgram isDialogOpen={isOpenDialog} idProgram={idProgram} />
+        {/* Program Not Started Dialog */}
+        <ProgramNotStartedDialog
+          isOpen={isNotStartedDialogOpen}
+          startDate={startProgramDate}
+        />
       </div>
     </>
   );
