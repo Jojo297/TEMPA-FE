@@ -144,7 +144,7 @@ export default function DashboardCampusProgram() {
 
     return programNameMatch && majorMatch && typeMatch;
   });
-  console.log(filteredPrograms);
+  // console.log(filteredPrograms);
 
   // format date
   const formatDate = (start_data) => {

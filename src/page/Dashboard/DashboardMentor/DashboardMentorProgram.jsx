@@ -34,6 +34,9 @@ import MentorDeleteProgram from "@/components/MentorDeleteProgram";
 import { jwtDecode } from "jwt-decode";
 import { set } from "zod";
 import NotFounPages from "@/components/NotFoundPages";
+import { MentorSearchMajors } from "@/components/MentorSearchMajors";
+import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
+import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
 
 export default function DashboardMentorProgram() {
   const navigate = useNavigate();
@@ -59,6 +62,28 @@ export default function DashboardMentorProgram() {
   // Data program
   const programs = allPrograms || [];
   // console.log(programs);
+
+  // get selected major from SelectTypeProgram
+  const selectedMajor = useFilterStore((state) => state.selectedMajor);
+
+  // get selected major from SearchMajors
+  const selectedType = useFilterProgramType((state) => state.selectedType);
+
+  const filteredPrograms = programs.filter((item) => {
+    const programNameMatch = item.program_name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const majorMatch = selectedMajor
+      ? item.major_name?.toLowerCase() === selectedMajor.toLowerCase()
+      : true;
+
+    const typeMatch = selectedType
+      ? item.sesi_program?.toLowerCase() === selectedType.toLowerCase()
+      : true;
+
+    return programNameMatch && majorMatch && typeMatch;
+  });
 
   // badge for status program
   const getBadgeClass = (start_date, end_date) => {
@@ -124,24 +149,6 @@ export default function DashboardMentorProgram() {
         return "Tempat belum ditentukan";
     }
   };
-
-  // Filtering
-  const filteredPrograms = programs.filter((item) => {
-    const programNameMatch = item.program_name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
-    const majorMatch = filterMajor
-      ? item.major_name?.toLowerCase() === filterMajor.toLowerCase()
-      : true;
-
-    const typeMatch = filterType
-      ? item.type_sesi?.toLowerCase() === filterType.toLowerCase()
-      : true;
-
-    return programNameMatch && majorMatch && typeMatch;
-  });
-
   // console.log(filteredPrograms);
 
   // format date
@@ -203,7 +210,7 @@ export default function DashboardMentorProgram() {
 
             <div className="flex gap-2">
               <SelectTypeProgram />
-              <SearchMajors className="w-36" />
+              <MentorSearchMajors className="w-36" />
               <div className="relative">
                 <Search
                   size={16}
@@ -309,6 +316,7 @@ export default function DashboardMentorProgram() {
                         </div>
                         <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
                           {item.sesi_program}
+                          {item.type_sesi}
                         </div>
                       </div>
                       <p className="text-gray-600 mb-4 text-sm line-clamp-2">
