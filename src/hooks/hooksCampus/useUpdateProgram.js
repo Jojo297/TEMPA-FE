@@ -52,7 +52,7 @@ const useUpdateProgram = create((set) => ({
     set({ isLoading: true, error: null, data: null });
 
     try {
-      const API_URL = `${API_BASE_URL}/mentor/delete-program/${programId}`;
+      const API_URL = `${API_BASE_URL}/delete-program/${programId}`;
 
       const response = await axios.delete(API_URL, {
         headers: {

@@ -369,6 +369,7 @@ export default function DashboardCampusProgram() {
                           idProgram={item.id}
                           programName={item.program_name}
                           token={token}
+                          refetch={() => getAllPrograms(token)}
                           className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
                         />
                       </div>

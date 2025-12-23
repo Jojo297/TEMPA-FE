@@ -31,13 +31,48 @@ export default function DescriptionProgramCampus({ program }) {
     }
   };
 
-  const formatDate = (start_data) => {
-    return new Date(start_data).toLocaleDateString("id-ID", {
+  const formatDateRange = (startDate, endDate) => {
+    if (!startDate || !endDate) return "-";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const fullOptions = {
       year: "numeric",
       month: "long",
       day: "numeric",
       timeZone: "UTC",
+    };
+
+    const startYear = start.getUTCFullYear();
+    const endYear = end.getUTCFullYear();
+
+    if (startYear !== endYear) {
+      return `${start.toLocaleDateString(
+        "id-ID",
+        fullOptions
+      )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    }
+
+    const startMonth = start.getUTCMonth();
+    const endMonth = end.getUTCMonth();
+
+    if (startMonth !== endMonth) {
+      const startFormatted = start.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        timeZone: "UTC",
+      });
+      return `${startFormatted} - ${end.toLocaleDateString(
+        "id-ID",
+        fullOptions
+      )}`;
+    }
+
+    const startDay = start.toLocaleDateString("id-ID", {
+      day: "numeric",
+      timeZone: "UTC",
     });
+    return `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
   };
 
   const getMapsUrl = (lat, lng) => {
@@ -88,15 +123,17 @@ export default function DescriptionProgramCampus({ program }) {
 
             <Info
               label="Buka Pendaftaran"
-              value={`${formatDate(program.start_regis_date)} - ${formatDate(
+              value={formatDateRange(
+                program.start_regis_date,
                 program.end_regis_date
-              )}`}
+              )}
             />
             <Info
               label="Tanggal Pelaksanaan"
-              value={`${formatDate(program.start_program_date)} - ${formatDate(
+              value={formatDateRange(
+                program.start_program_date,
                 program.end_program_date
-              )}`}
+              )}
             />
             {program.type_sesi !== "online" && (
               <Info

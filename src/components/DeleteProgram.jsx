@@ -19,6 +19,7 @@ export default function DeleteProgram({
   programName,
   token,
   className,
+  refetch,
 }) {
   const navigate = useNavigate();
   const { deleteProgram, isLoading, error, data } = useUpdateProgram();
@@ -30,13 +31,7 @@ export default function DeleteProgram({
     try {
       await deleteProgram(token, idProgram);
       toast.success("Program berhasil dihapus!");
-      if (isClassNameEmpty) {
-        // Dipanggil dari halaman detail
-        navigate("/dashboard-campus/program");
-      } else {
-        // Dipanggil dari halaman daftar
-        window.location.reload();
-      }
+      refetch();
     } catch (error) {
       toast.error(error.message || "Gagal menghapus program.");
       console.error(error);
@@ -51,7 +46,8 @@ export default function DeleteProgram({
             className
               ? className
               : "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
-          }>
+          }
+        >
           {isClassNameEmpty && <Trash2 size={16} />}
           Hapus Program
         </button>
@@ -99,7 +95,8 @@ export default function DeleteProgram({
           <AlertDialogAction
             onClick={() => handleDeleteProgram(idProgram)}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1">
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1"
+          >
             {isLoading ? "Loading..." : ((<Trash2 size={16} />), "Hapus")}
           </AlertDialogAction>
         </AlertDialogFooter>

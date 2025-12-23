@@ -23,6 +23,16 @@ import {
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
 import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 
+/* ========================== COMPONENT INFO ========================== */
+function Info({ label, value }) {
+  return (
+    <div>
+      <p className="font-medium text-gray-600">{label}</p>
+      <p className="text-gray-900">{value || "-"}</p>
+    </div>
+  );
+}
+
 const DashboardMenteeDetailProgram = () => {
   // get id program from url
   const { id } = useParams();
@@ -97,6 +107,91 @@ const DashboardMenteeDetailProgram = () => {
     } else if (num > 0) {
       return num + " Orang";
     }
+  };
+
+  const getTypeSesi = (sesi) => {
+    switch (sesi) {
+      case "online":
+        return "Online";
+      case "onsite":
+        return "Onsite";
+      default:
+        return "-";
+    }
+  };
+
+  const formatDateRange = (startDate, endDate) => {
+    if (!startDate || !endDate) return "-";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const fullOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    };
+
+    const startYear = start.getUTCFullYear();
+    const endYear = end.getUTCFullYear();
+
+    if (startYear !== endYear) {
+      // Different years: "20 Des 2025 - 10 Jan 2026"
+      return `${start.toLocaleDateString(
+        "id-ID",
+        fullOptions
+      )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    }
+
+    // Same year
+    const startMonth = start.getUTCMonth();
+    const endMonth = end.getUTCMonth();
+
+    if (startMonth !== endMonth) {
+      // Different month, same year: "27 Nov - 28 Des 2025"
+      const startFormatted = start.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        timeZone: "UTC",
+      });
+      return `${startFormatted} - ${end.toLocaleDateString(
+        "id-ID",
+        fullOptions
+      )}`;
+    }
+
+    // Same month, same year: "10 - 12 April 2025"
+    const startDay = start.toLocaleDateString("id-ID", {
+      day: "numeric",
+      timeZone: "UTC",
+    });
+    return `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+  };
+
+  const getMapsUrl = (lat, lng) => {
+    // Format universal untuk Google Maps
+    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+
+    // Opsi lain: Untuk menampilkan pin tunggal (Place mode)
+    // return `https://www.google.com/maps/place/${lat},${lng}`;
+  };
+
+  const formatTime = (isoTimeString) => {
+    // Cek hanya jika string benar-benar null atau kosong
+    if (!isoTimeString) {
+      return "-";
+    }
+
+    const date = new Date(isoTimeString);
+
+    const options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "UTC",
+    };
+
+    return date.toLocaleTimeString("id-ID", options);
   };
 
   // error handling
@@ -236,85 +331,63 @@ const DashboardMenteeDetailProgram = () => {
       {/* Bagian Detail  */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Detail Program */}
-        <div className="md:col-span-2 bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4 text-[#0E3B3D]">
-            Detail Program
-          </h2>
-          <p className="text-gray-700 mb-4 leading-relaxed">
-            {displayDetailProgram.description}
-          </p>
+        <div className="md:col-span-2 bg-white shadow-md rounded-xl p-6 border">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-[#013B35]">
+              Detail Program
+            </h2>
+          </div>
 
-          <ul className="text-gray-700 space-y-2 text-sm sm:text-base">
-            <li>
-              <strong>Tanggal Pendaftaran:</strong>{" "}
-              {new Date(
-                displayDetailProgram.start_regis_date
-              ).toLocaleDateString("id-ID", {
-                day: "numeric",
-              })}
-              {" - "}
-              {new Date(displayDetailProgram.end_regis_date).toLocaleDateString(
-                "id-ID",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
+          <div className="grid grid-cols-2 gap-4">
+            <Info
+              label="Jenis Kegiatan"
+              value={getTypeSesi(displayDetailProgram.type_sesi)}
+            />
+            <Info label="Jurusan" value={displayDetailProgram.major_name} />
+
+            <Info
+              label="Buka Pendaftaran"
+              value={formatDateRange(
+                displayDetailProgram.start_regis_date,
+                displayDetailProgram.end_regis_date
               )}
-            </li>
-            <li>
-              <strong>Tanggal Pelaksanaan:</strong>{" "}
-              {new Date(
-                displayDetailProgram.start_program_date
-              ).toLocaleDateString("id-ID", {
-                day: "numeric",
-              })}
-              {" - "}
-              {new Date(
+            />
+            <Info
+              label="Tanggal Pelaksanaan"
+              value={formatDateRange(
+                displayDetailProgram.start_program_date,
                 displayDetailProgram.end_program_date
-              ).toLocaleDateString("id-ID", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </li>
-            <li>
-              <strong>Waktu Pelaksanaan :</strong>{" "}
-              {new Date(displayDetailProgram.sesi_start).toLocaleTimeString(
-                "id-ID",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                }
               )}
-              {" - "}
-              {new Date(displayDetailProgram.sesi_end).toLocaleTimeString(
-                "id-ID",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                }
-              )}
-            </li>
-            <li>
-              <strong>Tempat:</strong> {getLocation(displayDetailProgram)}
-            </li>
-            <li>
-              <strong>Kapasitas:</strong>{" "}
-              {getCapacity(displayDetailProgram.capacity)}
-            </li>
-          </ul>
+            />
 
-          <div className="mt-6">
-            <h3 className="font-semibold text-[#0E3B3D] mb-2">Fasilitas:</h3>
-            <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm sm:text-base">
-              {displayDetailProgram.benefit &&
-                displayDetailProgram.benefit.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-            </ul>
+            <Info
+              label="Waktu Mulai"
+              value={formatTime(displayDetailProgram.sesi_start)}
+            />
+            <Info
+              label="Waktu Selesai"
+              value={formatTime(displayDetailProgram.sesi_end)}
+            />
+            <Info label="Kuota" value={displayDetailProgram.capacity} />
+
+            <div className="col-span-2">
+              <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
+              <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+                {displayDetailProgram.description || "-"}
+              </p>
+            </div>
+
+            <div className="col-span-2">
+              <p className="font-medium text-gray-600 mb-1">Benefit</p>
+              <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+                <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm sm:text-base">
+                  {displayDetailProgram.benefit &&
+                    displayDetailProgram.benefit.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                </ul>
+              </p>
+            </div>
           </div>
         </div>
 
