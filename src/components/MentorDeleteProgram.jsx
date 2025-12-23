@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
+import useUpdateProgram from "@/hooks/hooksMentor/useUpdateProgram";
 import { AlertTriangle, AlertTriangleIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ export default function MentorDeleteProgram({
   programName,
   token,
   className,
+  refetch,
 }) {
   const navigate = useNavigate();
   const { deleteProgram, isLoading, error, data } = useUpdateProgram();
@@ -35,7 +36,7 @@ export default function MentorDeleteProgram({
         navigate("/dashboard-mentor/program");
       } else {
         // Dipanggil dari halaman daftar
-        window.location.reload();
+        refetch();
       }
     } catch (error) {
       toast.error(error.message || "Gagal menghapus program.");

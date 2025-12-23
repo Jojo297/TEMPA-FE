@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCallback, useEffect, useState } from "react";
-import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
+import useGetAllMajors from "@/hooks/hooksMentor/useGetAllMajors";
 import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 
 export function SearchMajors({ className }) {

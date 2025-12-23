@@ -21,12 +21,16 @@ import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 import MentorProgramEditForm from "@/components/MentorProgramEditForm";
 import MentorDeleteProgram from "@/components/MentorDeleteProgram";
 import MateriProgramMentor from "@/components/MateriProgramMentor";
+import NotFounPages from "@/components/NotFoundPages";
+import { jwtDecode } from "jwt-decode";
 
 export default function DashboardMentorProgramDetail() {
   const { id } = useParams();
   const idProgram = parseInt(id);
-  console.log(idProgram);
   const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  const typeMentor = decode.mentorType;
+  // console.log(typeMentor);
   const { detailProgram, isLoading, error, fetchDetailProgram } =
     useGetDetailProgram();
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
@@ -70,6 +74,10 @@ export default function DashboardMentorProgramDetail() {
     return <DashboardCampusDetailProgramSkeleton />;
   }
 
+  if (program.length <= 0) {
+    return <NotFounPages message={"Program tidak ditemukan"} />;
+  }
+
   return (
     <>
       {/* if edit button klik */}
@@ -108,11 +116,13 @@ export default function DashboardMentorProgramDetail() {
 
             {/* Grup Tombol */}
             <div className="flex gap-3">
-              <MentorDeleteProgram
-                idProgram={program.id}
-                programName={program.program_name}
-                token={token}
-              />
+              {typeMentor !== "default" && (
+                <MentorDeleteProgram
+                  idProgram={program.id}
+                  programName={program.program_name}
+                  token={token}
+                />
+              )}
               <button
                 onClick={() => setEditMode(true)}
                 className="bg-secondary text-white px-4 py-2 text-sm hover:opacity-60 transition rounded-lg shadow-md flex items-center gap-2"

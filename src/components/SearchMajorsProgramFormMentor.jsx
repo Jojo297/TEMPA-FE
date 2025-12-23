@@ -28,7 +28,7 @@ export function SearchMajorsProgramFormMentor({
   const { majors, isLoading, error, fetchMajor } = useGetAllMajorsMentor();
 
   const displayMajors = majors ?? [];
-  // console.log(displayMajors);
+  console.log(displayMajors);
 
   useEffect(() => {
     if (token) {

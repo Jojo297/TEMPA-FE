@@ -39,7 +39,8 @@ export default function DashboardMentorProgram() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const decode = jwtDecode(token);
-  // console.log(decode.mentorType);
+  const typeMentor = decode.mentorType;
+  // console.log(typeMentor);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMajor, setFilterMajor] = useState(null);
   const [filterType, setFilterType] = useState(null);
@@ -202,7 +203,7 @@ export default function DashboardMentorProgram() {
 
             <div className="flex gap-2">
               <SelectTypeProgram />
-              {/* <SearchMajors className="w-36" /> */}
+              <SearchMajors className="w-36" />
               <div className="relative">
                 <Search
                   size={16}
@@ -367,12 +368,15 @@ export default function DashboardMentorProgram() {
                         </button>
 
                         {/* delete button */}
-                        <MentorDeleteProgram
-                          idProgram={item.id}
-                          programName={item.program_name}
-                          token={token}
-                          className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
-                        />
+                        {typeMentor !== "default" && (
+                          <MentorDeleteProgram
+                            idProgram={item.id}
+                            programName={item.program_name}
+                            token={token}
+                            refetch={() => getAllPrograms(token)}
+                            className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
