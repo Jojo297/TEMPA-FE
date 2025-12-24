@@ -7,6 +7,7 @@ import { id } from "date-fns/locale";
 import * as z from "zod";
 import { Pencil, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -41,6 +42,18 @@ import {
 } from "@/components/ui/command";
 import useAdressCampus from "@/hooks/hooksCampus/useAdressCampus";
 import useGetProfileMentee from "@/hooks/hooksMentee/useGetProfileMentee";
+import useUpdateProfileMentee from "@/hooks/hooksMentee/useUpdateProfileMentee";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Link } from "react-router";
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Nama harus diisi minimal 2 karakter."),
@@ -57,6 +70,8 @@ const profileSchema = z.object({
 export default function DashboardMenteeProfil() {
   const token = localStorage.getItem("userJwt");
   const { profile, isLoading, error, fetchProfile } = useGetProfileMentee();
+  const { isLoadingEdit, errorEdit, message, updateProfile } =
+    useUpdateProfileMentee();
   const [isEditing, setIsEditing] = useState(false);
 
   // Location states
@@ -86,7 +101,7 @@ export default function DashboardMenteeProfil() {
   const displaySubdistrict = subdistrict ?? [];
   const displayWard = ward ?? [];
   const displayProfile = profile ?? [];
-  // console.log(displayProfile);
+  console.log(displayProfile);
 
   const form = useForm({
     resolver: zodResolver(profileSchema),
@@ -111,10 +126,10 @@ export default function DashboardMenteeProfil() {
       };
 
       const educationMap = {
-        Siswa_Aktif: "Siswa Aktif (SMA/SMK/Sederajat)",
-        Lulusan_Baru: "Lulusan Baru / Gap Year (Belum Kuliah)",
-        Mahasiswa_Aktif: "Mahasiswa Aktif",
-        Lainnya: "Lainnya",
+        Siswa_Aktif__SMA_SMK_Sederajat_: "0",
+        Lulusan_Baru___Gap_Year__Belum_Kuliah_: "1",
+        Mahasiswa_Aktif: "2",
+        Lainnya: "3",
       };
 
       form.reset({
@@ -187,10 +202,15 @@ export default function DashboardMenteeProfil() {
     if (valueSubdistrict) fetchWard(valueSubdistrict);
   }, [valueSubdistrict, fetchWard]);
 
-  function onSubmit(values) {
-    console.log("Submitted Values:", values);
-    setIsEditing(false);
-    // Implement update logic here
+  async function onSubmit(values) {
+    try {
+      await updateProfile(token, values);
+      toast.success("Profil berhasil diperbarui.");
+      setIsEditing(false);
+      fetchProfile(token);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Gagal memperbarui profil.");
+    }
   }
 
   const handleCancelEdit = () => {
@@ -201,10 +221,10 @@ export default function DashboardMenteeProfil() {
         Female: "Perempuan",
       };
       const educationMap = {
-        Siswa_Aktif: "Siswa Aktif (SMA/SMK/Sederajat)",
-        Lulusan_Baru: "Lulusan Baru / Gap Year (Belum Kuliah)",
-        Mahasiswa_Aktif: "Mahasiswa Aktif",
-        Lainnya: "Lainnya",
+        Siswa_Aktif: "0",
+        Lulusan_Baru: "1",
+        Mahasiswa_Aktif: "2",
+        Lainnya: "3",
       };
       form.reset({
         fullName: profile.username || "",
@@ -227,12 +247,28 @@ export default function DashboardMenteeProfil() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9F6] font-sans p-4">
+    <div className="min-h-screen bg-[#F7F9F6] font-sans">
+      <div className="mb-2">
+        {/* breadcum */}
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild className="hover:text-primary">
+                <Link to="/dashboard-mentee">Beranda</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem className="text-primary">
+              <BreadcrumbPage className="text-primary">Program</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
       <div className="bg-[#003631] text-white rounded-xl p-6 relative w-full mx-auto shadow-md mb-6">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold">Profil</h1>
+          <h1 className="text-2xl font-semibold">Akun Anda</h1>
           <p className="text-sm text-white/80 mt-1 max-w-md mx-auto">
-            Kelola informasi profil Anda di sini.
+            Kelola informasi akun Anda di sini.
           </p>
         </div>
       </div>
@@ -285,7 +321,7 @@ export default function DashboardMenteeProfil() {
                       <Input
                         placeholder="email@contoh.com"
                         type="email"
-                        disabled={!isEditing}
+                        disabled
                         {...field}
                       />
                     </FormControl>
@@ -337,16 +373,14 @@ export default function DashboardMenteeProfil() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Siswa Aktif (SMA/SMK/Sederajat)">
+                        <SelectItem value="0">
                           Siswa Aktif (SMA/SMK/Sederajat)
                         </SelectItem>
-                        <SelectItem value="Lulusan Baru / Gap Year (Belum Kuliah)">
+                        <SelectItem value="1">
                           Lulusan Baru / Gap Year (Belum Kuliah)
                         </SelectItem>
-                        <SelectItem value="Mahasiswa Aktif">
-                          Mahasiswa Aktif
-                        </SelectItem>
-                        <SelectItem value="Lainnya">Lainnya</SelectItem>
+                        <SelectItem value="2">Mahasiswa Aktif</SelectItem>
+                        <SelectItem value="3">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -689,9 +723,17 @@ export default function DashboardMenteeProfil() {
                 <Button
                   type="submit"
                   className="bg-[#003631] hover:bg-[#003631]/90"
-                  disabled={!form.formState.isDirty}
+                  disabled={!form.formState.isDirty || isLoadingEdit}
                 >
-                  <Save className="mr-2 h-4 w-4" /> Simpan Perubahan
+                  {isLoadingEdit ? (
+                    <div className="flex items-center gap-2">
+                      <Spinner /> Menyimpan...
+                    </div>
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" /> Simpan Perubahan
+                    </>
+                  )}
                 </Button>
               </div>
             )}

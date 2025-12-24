@@ -146,7 +146,7 @@ const SidebarWithNavbar = ({ children }) => {
                 >
                   {/* <IconUserCircle /> */}
                   <User />
-                  Profile
+                  Akun
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
