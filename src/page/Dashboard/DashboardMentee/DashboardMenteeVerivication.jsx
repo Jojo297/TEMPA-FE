@@ -10,7 +10,7 @@ export default function DashboardMenteeVerivication() {
     useCheckVerifyStatus();
 
   const verifyMentee = verifyStatus ?? {};
-  console.log(verifyMentee);
+  // console.log(verifyMentee);
 
   // fetch status acc
   useEffect(() => {

@@ -44,6 +44,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { jwtDecode } from "jwt-decode";
 import useVerifyMentee from "@/hooks/hooksMentee/useVerifyMentee";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -144,7 +145,7 @@ export default function DashboardMenteeVerifyAccount() {
     try {
       await verifyMentee(token, values);
       toast.success("Verifikasi akun berhasil!");
-      navigate("/dashboard-mentee/beranda");
+      navigate("/mentee-verification/major-interest");
     } catch (err) {
       toast.error(err.response?.data?.message || "Gagal memverifikasi akun.");
     }
@@ -664,7 +665,13 @@ export default function DashboardMenteeVerifyAccount() {
             />
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Memproses..." : "Verifikasi Akun"}
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Spinner /> Menyimpan...
+                </div>
+              ) : (
+                "Verifikasi Akun"
+              )}
             </Button>
           </form>
         </Form>

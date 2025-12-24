@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { TrendingUp, Handshake } from "lucide-react";
-import QRCode from "react-qr-code";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Link } from "react-router";
 
 export default function DashboardCampusBerlangganan() {
   const mainColor = "#003631";
@@ -87,6 +95,24 @@ export default function DashboardCampusBerlangganan() {
 
   return (
     <div className="min-h-screen font-sans">
+      {/* Breadcrumb */}
+      <div className="mb-2">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild className="hover:text-primary">
+                <Link to="/dashboard-campus/beranda">Beranda</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem className="text-primary">
+              <BreadcrumbPage className="text-primary">
+                Berlangganan
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
       {/* Header */}
       <div className="mb-8 text-center">
         <div className="bg-primary text-white rounded-xl p-6 shadow">

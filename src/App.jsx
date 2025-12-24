@@ -83,6 +83,9 @@ const DashboardMenteeProfil = lazy(() =>
 const DashboardMenteeVerifyAccount = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardMenteeVerifyAccount")
 );
+const DashboardMenteeMajorInterest = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeMajorInterest")
+);
 const DashboardMenteeVerivication = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardMenteeVerivication")
 );
@@ -442,6 +445,11 @@ const router = createBrowserRouter([
         index: true,
         path: "verify-account",
         element: <SuspenseWrapper Component={DashboardMenteeVerifyAccount} />,
+      },
+      {
+        index: true,
+        path: "major-interest",
+        element: <SuspenseWrapper Component={DashboardMenteeMajorInterest} />,
       },
     ],
   },
