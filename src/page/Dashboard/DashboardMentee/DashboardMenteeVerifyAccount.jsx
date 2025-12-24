@@ -18,6 +18,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import useAdressCampus from "@/hooks/hooksCampus/useAdressCampus";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +39,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { jwtDecode } from "jwt-decode";
+import useVerifyMentee from "@/hooks/hooksMentee/useVerifyMentee";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -64,6 +68,13 @@ const formSchema = z.object({
 });
 
 export default function DashboardMenteeVerifyAccount() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  const emailMentee = decode.email;
+  // console.log(emailMentee);
+  const { isLoading, error, message, verifyMentee } = useVerifyMentee();
+
   const [openProvince, setOpenProvince] = useState(false);
   const [openCity, setOpenCity] = useState(false);
   const [openSubdistrict, setOpenSubdistrict] = useState(false);
@@ -110,7 +121,7 @@ export default function DashboardMenteeVerifyAccount() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      email: "",
+      email: emailMentee,
       gender: "",
       educationStatus: "",
       valueProvince: "",
@@ -122,15 +133,20 @@ export default function DashboardMenteeVerifyAccount() {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
-    // Lakukan proses submit data di sini
+  async function onSubmit(values) {
+    try {
+      await verifyMentee(token, values);
+      toast.success("Verifikasi akun berhasil!");
+      navigate("/dashboard-mentee/beranda");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Gagal memverifikasi akun.");
+    }
   }
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-2xl text-primary font-bold">
+        <h1 className="text-3xl text-primary font-bold">
           Verifikasi Akun Mentee
         </h1>
         <p className="text-gray-500">
@@ -165,6 +181,7 @@ export default function DashboardMenteeVerifyAccount() {
                     <Input
                       placeholder="email@contoh.com"
                       type="email"
+                      disabled
                       {...field}
                     />
                   </FormControl>
@@ -215,16 +232,14 @@ export default function DashboardMenteeVerifyAccount() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Siswa Aktif (SMA/SMK/Sederajat)">
+                        <SelectItem value="0">
                           Siswa Aktif (SMA/SMK/Sederajat)
                         </SelectItem>
-                        <SelectItem value="Lulusan Baru / Gap Year (Belum Kuliah)">
+                        <SelectItem value="1">
                           Lulusan Baru / Gap Year (Belum Kuliah)
                         </SelectItem>
-                        <SelectItem value="Mahasiswa Aktif">
-                          Mahasiswa Aktif
-                        </SelectItem>
-                        <SelectItem value="Lainnya">Lainnya</SelectItem>
+                        <SelectItem value="2">Mahasiswa Aktif</SelectItem>
+                        <SelectItem value="3">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -585,8 +600,8 @@ export default function DashboardMenteeVerifyAccount() {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              Verifikasi Akun
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Memproses..." : "Verifikasi Akun"}
             </Button>
           </form>
         </Form>

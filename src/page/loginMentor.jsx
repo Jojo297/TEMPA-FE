@@ -131,7 +131,7 @@ export default function LoginMentor() {
               <div className="mb-10">
                 <h2 className="text-2xl font-semibold mb-2">Login</h2>
                 <p className="text-sm text-gray-500 mb-2">
-                  Enter the name and password you used to sign up before
+                  Masukkan NIK dan Password untuk masuk
                 </p>
                 <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
                   <div
