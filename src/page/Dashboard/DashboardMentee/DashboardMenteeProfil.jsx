@@ -749,7 +749,7 @@ export default function DashboardMenteeProfil() {
         </div>
       </div>
 
-      {/* <DashboardMenteeMajorInterest /> */}
+      <DashboardMenteeMajorInterest />
     </>
   );
 }

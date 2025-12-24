@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import useSaveMajorInterest from "@/hooks/hooksMentee/useSaveMajorInterest";
 import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
+import useGetMajorInterest from "@/hooks/hooksMentee/useGetMajorInterest";
 
 const interestSchema = z.object({
   selectedMajors: z
@@ -44,15 +45,18 @@ const DashboardMenteeMajorInterest = () => {
   const { saveMajorInterest, isLoadingMajorInterest, errorMajorInterest } =
     useSaveMajorInterest();
   const { verifyStatus, checkVerifyStatus } = useCheckVerifyStatus();
+  const { majorInterest, fetchMajorInterest } = useGetMajorInterest();
 
   const verifyMentee = verifyStatus ?? {};
-  // console.log(verifyMentee);
+  const majorsMentee = majorInterest ?? [];
+  console.log(majorsMentee);
 
   const {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(interestSchema),
     defaultValues: {
@@ -94,12 +98,23 @@ const DashboardMenteeMajorInterest = () => {
     if (selectedMajors.includes(id)) {
       setValue(
         "selectedMajors",
-        selectedMajors.filter((majorId) => majorId !== id)
+        selectedMajors.filter((majorId) => majorId !== id),
+        { shouldDirty: true, shouldValidate: true }
       );
     } else {
-      setValue("selectedMajors", [...selectedMajors, id]);
+      setValue("selectedMajors", [...selectedMajors, id], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
   };
+
+  // set default value if user already verified
+  useEffect(() => {
+    if (verifyMentee === true && majorsMentee.length > 0) {
+      reset({ selectedMajors: majorsMentee });
+    }
+  }, [verifyMentee, majorsMentee, reset]);
 
   const onSubmit = async (data) => {
     try {
@@ -124,6 +139,12 @@ const DashboardMenteeMajorInterest = () => {
   useEffect(() => {
     if (token) {
       checkVerifyStatus(token);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      fetchMajorInterest(token);
     }
   }, [token]);
 
@@ -240,18 +261,20 @@ const DashboardMenteeMajorInterest = () => {
                   Lewati untuk sekarang
                 </Button>
               )}
-              <Button
-                type="submit"
-                disabled={isLoadingMajorInterest}
-                className="bg-primary text-white  shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoadingMajorInterest ? (
-                  <Loader2 className="animate-spin" size={20} />
-                ) : (
-                  <Check size={20} />
-                )}
-                Simpan Minat ({selectedMajors.length})
-              </Button>
+              {isDirty && (
+                <Button
+                  type="submit"
+                  disabled={isLoadingMajorInterest}
+                  className="bg-primary text-white  shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoadingMajorInterest ? (
+                    <Loader2 className="animate-spin" size={20} />
+                  ) : (
+                    <Check size={20} />
+                  )}
+                  Simpan Minat ({selectedMajors.length})
+                </Button>
+              )}
             </div>
           </form>
         </section>
