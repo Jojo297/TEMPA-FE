@@ -408,6 +408,10 @@ const router = createBrowserRouter([
         element: <SuspenseWrapper Component={DashboardMenteeProfil} />,
       },
       {
+        path: "major-interest",
+        element: <SuspenseWrapper Component={DashboardMenteeMajorInterest} />,
+      },
+      {
         path: "kampus/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetail} />,
         children: [
@@ -445,11 +449,6 @@ const router = createBrowserRouter([
         index: true,
         path: "verify-account",
         element: <SuspenseWrapper Component={DashboardMenteeVerifyAccount} />,
-      },
-      {
-        index: true,
-        path: "major-interest",
-        element: <SuspenseWrapper Component={DashboardMenteeMajorInterest} />,
       },
     ],
   },

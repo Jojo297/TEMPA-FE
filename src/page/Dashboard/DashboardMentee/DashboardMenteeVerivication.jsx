@@ -24,6 +24,7 @@ export default function DashboardMenteeVerivication() {
       navigate("/dashboard-mentee/beranda");
     } else {
       navigate("/mentee-verification/verify-account");
+      // navigate("/mentee-verification/major-interest");
     }
   }, [token, verifyMentee]);
   return (

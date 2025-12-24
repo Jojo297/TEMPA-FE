@@ -145,7 +145,7 @@ export default function DashboardMenteeVerifyAccount() {
     try {
       await verifyMentee(token, values);
       toast.success("Verifikasi akun berhasil!");
-      navigate("/mentee-verification/major-interest");
+      navigate("/dashboard-mentee/major-interest");
     } catch (err) {
       toast.error(err.response?.data?.message || "Gagal memverifikasi akun.");
     }

@@ -18,20 +18,16 @@ import {
   FileQuestionIcon,
   Check,
   Loader2,
+  CogIcon,
 } from "lucide-react";
 import roboterror from "@/assets/robot-error.png";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 import { Button } from "@/components/ui/button";
+
+import { toast } from "sonner";
+import useSaveMajorInterest from "@/hooks/hooksMentee/useSaveMajorInterest";
 
 const interestSchema = z.object({
   selectedMajors: z
@@ -44,6 +40,8 @@ const DashboardMenteeMajorInterest = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const { majors, isLoading, error, fetchMajor } = useGetAllMajors();
+  const { saveMajorInterest, isLoadingMajorInterest, errorMajorInterest } =
+    useSaveMajorInterest();
 
   const {
     handleSubmit,
@@ -64,7 +62,7 @@ const DashboardMenteeMajorInterest = () => {
   // icon majors
   const majorIconMap = {
     Informatika: <Cpu size={48} />,
-    Mesin: <Cog size={48} />,
+    Mesin: <CogIcon size={48} />,
     Elektronika: <Lightbulb size={48} />,
     Akuntansi: <DollarSign size={48} />,
     Hukum: <Scale size={48} />,
@@ -98,9 +96,16 @@ const DashboardMenteeMajorInterest = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    console.log("Selected Interests:", data);
-    // Implementasi submit ke API di sini
+  const onSubmit = async (data) => {
+    try {
+      await saveMajorInterest(token, data.selectedMajors);
+      toast.success("Minat jurusan berhasil disimpan!");
+      navigate("/dashboard-mentee/beranda");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Gagal menyimpan minat jurusan."
+      );
+    }
   };
 
   // fetch data majors
@@ -223,10 +228,10 @@ const DashboardMenteeMajorInterest = () => {
               </Button>
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isLoadingMajorInterest}
                 className="bg-primary text-white  shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? (
+                {isLoadingMajorInterest ? (
                   <Loader2 className="animate-spin" size={20} />
                 ) : (
                   <Check size={20} />
