@@ -19,14 +19,14 @@ export default function DashboardMenteeVerivication() {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (verifyMentee) {
-      navigate("/dashboard-mentee/beranda");
-    } else {
-      navigate("/mentee-verification/verify-account");
-      // navigate("/mentee-verification/major-interest");
-    }
-  }, [token, verifyMentee]);
+  // useEffect(() => {
+  //   if (verifyMentee) {
+  //     navigate("/dashboard-mentee/beranda");
+  //   } else {
+  //     navigate("/mentee-verification/verify-account");
+  //     // navigate("/mentee-verification/major-interest");
+  //   }
+  // }, [token, verifyMentee]);
   return (
     <SidebarMenteeVerivication>
       <main className="px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">

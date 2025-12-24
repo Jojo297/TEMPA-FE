@@ -45,6 +45,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { jwtDecode } from "jwt-decode";
 import useVerifyMentee from "@/hooks/hooksMentee/useVerifyMentee";
 import { Spinner } from "@/components/ui/spinner";
+import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -79,6 +80,7 @@ export default function DashboardMenteeVerifyAccount() {
   const emailMentee = decode.email;
   // console.log(emailMentee);
   const { isLoading, error, message, verifyMentee } = useVerifyMentee();
+  const { checkVerifyStatus } = useCheckVerifyStatus();
 
   const [openProvince, setOpenProvince] = useState(false);
   const [openCity, setOpenCity] = useState(false);
@@ -144,6 +146,7 @@ export default function DashboardMenteeVerifyAccount() {
 
     try {
       await verifyMentee(token, values);
+      await checkVerifyStatus(token);
       toast.success("Verifikasi akun berhasil!");
       navigate("/dashboard-mentee/major-interest");
     } catch (err) {

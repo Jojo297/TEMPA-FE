@@ -170,7 +170,9 @@ const DashboardMenteeMajorInterest = () => {
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {!verifyMentee ? "Pilih Minat Jurusan" : "Minat Jurusan Anda"}
+                {majorsMentee.length <= 0
+                  ? "Pilih Minat Jurusan"
+                  : "Minat Jurusan Anda"}
               </h2>
               <p className="text-gray-500 text-sm mt-1">
                 Pilih jurusan yang sesuai dengan minatmu untuk mendapatkan
