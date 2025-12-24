@@ -19,7 +19,12 @@ import {
   Check,
   Loader2,
   CogIcon,
+  AlertCircleIcon,
+  Copy,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import roboterror from "@/assets/robot-error.png";
 import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
@@ -167,7 +172,7 @@ const DashboardMenteeMajorInterest = () => {
       <div className="min-h-screen  ">
         {/* all majors section */}
         <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center justify-between mb-10">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
                 {majorsMentee.length <= 0
@@ -194,6 +199,39 @@ const DashboardMenteeMajorInterest = () => {
               />
             </div>
           </div>
+
+          {/* informasi redirect test jurusan */}
+          {selectedMajors.length === 0 && (
+            <Alert className="mb-4 bg-indigo-50/50 border-indigo-100 shadow-sm py-3 px-4">
+              <div className="flex items-center w-full justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  {/* Gunakan warna indigo/violet untuk kesan AI yang modern */}
+                  <div className="bg-indigo-100 p-2 rounded-full">
+                    <Sparkles className="h-4 w-4 text-indigo-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-indigo-900 leading-none mb-1">
+                      Rekomendasi Jurusan Berbasis AI
+                    </p>
+                    <p className="text-xs text-indigo-700/80">
+                      Masih ragu? Biarkan sistem cerdas kami menganalisis minat
+                      dan bakatmu secara akurat.
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => navigate("/dashboard-mentee/test-jurusan")}
+                  className="bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white transition-all shadow-sm shrink-0 px-4"
+                >
+                  Mulai Analisis
+                  <ChevronRight size={14} className="ml-1" />
+                </Button>
+              </div>
+            </Alert>
+          )}
 
           {errors.selectedMajors && (
             <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-lg text-sm font-medium">
@@ -253,16 +291,15 @@ const DashboardMenteeMajorInterest = () => {
 
             {/* Submit Button */}
             <div className="col-span-full mt-8 flex justify-end gap-3">
-              {!verifyMentee && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => navigate("/dashboard-mentee/beranda")}
-                  className="text-gray-500 hover:text-primary hover:bg-primary/5"
-                >
-                  Lewati untuk sekarang
-                </Button>
-              )}
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => navigate("/dashboard-mentee/test-jurusan")}
+                className="text-gray-500 hover:text-primary hover:bg-primary/5"
+              >
+                Dapatkan Rekomendasi AI
+              </Button>
+
               {isDirty && (
                 <Button
                   type="submit"
