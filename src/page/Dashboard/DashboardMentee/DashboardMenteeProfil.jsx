@@ -1,212 +1,702 @@
-import React, { useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, ChevronsUpDown, Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import * as z from "zod";
+import { Pencil, Save, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Helper component for standard input fields
-const InputGroup = ({ label, type, value, onChange }) => (
-  <div>
-    <label className="block mb-1 text-sm font-medium">{label}</label>
-    <input
-      type={type}
-      // Tambahkan state dan handler jika diperlukan, untuk saat ini dibiarkan kosong
-      value={value}
-      onChange={onChange}
-      className={`w-full p-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#96CCEC] focus:border-transparent transition ${
-        // Fix for date input appearance
-        type === "date" ? "appearance-none" : ""
-      }`}
-      placeholder={`Masukkan ${label.toLowerCase()}`}
-    />
-  </div>
-);
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import useAdressCampus from "@/hooks/hooksCampus/useAdressCampus";
+import useGetProfileMentee from "@/hooks/hooksMentee/useGetProfileMentee";
 
-export default function DashboardMenteeDetailProfil() {
-  const [previewImage, setPreviewImage] = useState(null);
+const profileSchema = z.object({
+  fullName: z.string().min(2, "Nama harus diisi minimal 2 karakter."),
+  email: z.string().email("Email tidak valid."),
+  gender: z.string().min(1, "Pilih jenis kelamin."),
+  educationStatus: z.string().min(1, "Pilih status pendidikan."),
+  valueProvince: z.string().min(1, "Provinsi wajib dipilih."),
+  valueCity: z.string().min(1, "Kota/Kabupaten wajib dipilih."),
+  valueSubdistrict: z.string().min(1, "Kecamatan wajib dipilih."),
+  valueWard: z.string().min(1, "Desa/Kelurahan wajib dipilih."),
+  dob: z.string().min(1, "Tanggal lahir wajib diisi."),
+});
 
-  // State untuk menyimpan nilai input form (Opsional, untuk demonstrasi)
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    dob: "",
-    gender: "",
-    phone: "",
-    majorInterest1: "",
-    majorInterest2: "",
+export default function DashboardMenteeProfil() {
+  const token = localStorage.getItem("userJwt");
+  const { profile, isLoading, error, fetchProfile } = useGetProfileMentee();
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Location states
+  const [openProvince, setOpenProvince] = useState(false);
+  const [openCity, setOpenCity] = useState(false);
+  const [openSubdistrict, setOpenSubdistrict] = useState(false);
+  const [openWard, setOpenWard] = useState(false);
+
+  const [valueProvince, setvalueProvince] = useState("");
+  const [valueCity, setvalueCity] = useState("");
+  const [valueSubdistrict, setValueSubdistrict] = useState("");
+  const [valueWard, setValueWard] = useState("");
+
+  const {
+    province,
+    fetchProvince,
+    fetchCity,
+    city,
+    subdistrict,
+    fetchSubdistrict,
+    ward,
+    fetchWard,
+  } = useAdressCampus();
+
+  const displayProvince = province ?? [];
+  const displayCity = city ?? [];
+  const displaySubdistrict = subdistrict ?? [];
+  const displayWard = ward ?? [];
+  const displayProfile = profile ?? [];
+  // console.log(displayProfile);
+
+  const form = useForm({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      gender: "",
+      educationStatus: "",
+      valueProvince: "",
+      valueCity: "",
+      valueSubdistrict: "",
+      valueWard: "",
+      dob: "",
+    },
   });
 
-  const handleUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) setPreviewImage(URL.createObjectURL(file));
-  };
+  useEffect(() => {
+    if (profile) {
+      const genderMap = {
+        Male: "Laki-laki",
+        Female: "Perempuan",
+      };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+      const educationMap = {
+        Siswa_Aktif: "Siswa Aktif (SMA/SMK/Sederajat)",
+        Lulusan_Baru: "Lulusan Baru / Gap Year (Belum Kuliah)",
+        Mahasiswa_Aktif: "Mahasiswa Aktif",
+        Lainnya: "Lainnya",
+      };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Logic for saving data here
-    console.log("Form submitted!", formData);
+      form.reset({
+        fullName: profile.username || "",
+        email: profile.email || "",
+        gender: genderMap[profile.gender] || profile.gender || "",
+        educationStatus:
+          educationMap[profile.education_status] ||
+          profile.education_status ||
+          "",
+        valueProvince: profile.province || "",
+        valueCity: profile.city || "",
+        valueSubdistrict: profile.subdistrict || "",
+        valueWard: profile.ward || "",
+        dob: profile.date_of_birth
+          ? format(new Date(profile.date_of_birth), "yyyy-MM-dd")
+          : "",
+      });
+    }
+  }, [profile, form]);
+
+  // Set location codes to enable dropdowns
+  useEffect(() => {
+    if (profile && province?.length > 0) {
+      const selected = province.find((p) => p.name === profile.province);
+      if (selected) setvalueProvince(selected.code);
+    }
+  }, [profile, province]);
+
+  useEffect(() => {
+    if (profile && city?.length > 0) {
+      const selected = city.find((c) => c.name === profile.city);
+      if (selected) setvalueCity(selected.code);
+    }
+  }, [profile, city]);
+
+  useEffect(() => {
+    if (profile && subdistrict?.length > 0) {
+      const selected = subdistrict.find((s) => s.name === profile.subdistrict);
+      if (selected) setValueSubdistrict(selected.code);
+    }
+  }, [profile, subdistrict]);
+
+  useEffect(() => {
+    if (profile && ward?.length > 0) {
+      const selected = ward.find((w) => w.name === profile.ward);
+      if (selected) setValueWard(selected.code);
+    }
+  }, [profile, ward]);
+
+  useEffect(() => {
+    if (token) {
+      fetchProfile(token);
+    }
+  }, [token, fetchProfile]);
+
+  useEffect(() => {
+    fetchProvince();
+  }, [fetchProvince]);
+
+  useEffect(() => {
+    if (valueProvince) fetchCity(valueProvince);
+  }, [valueProvince, fetchCity]);
+
+  useEffect(() => {
+    if (valueCity) fetchSubdistrict(valueCity);
+  }, [valueCity, fetchSubdistrict]);
+
+  useEffect(() => {
+    if (valueSubdistrict) fetchWard(valueSubdistrict);
+  }, [valueSubdistrict, fetchWard]);
+
+  function onSubmit(values) {
+    console.log("Submitted Values:", values);
+    setIsEditing(false);
+    // Implement update logic here
+  }
+
+  const handleCancelEdit = () => {
+    // Re-run the reset logic to revert any changes
+    if (profile) {
+      const genderMap = {
+        Male: "Laki-laki",
+        Female: "Perempuan",
+      };
+      const educationMap = {
+        Siswa_Aktif: "Siswa Aktif (SMA/SMK/Sederajat)",
+        Lulusan_Baru: "Lulusan Baru / Gap Year (Belum Kuliah)",
+        Mahasiswa_Aktif: "Mahasiswa Aktif",
+        Lainnya: "Lainnya",
+      };
+      form.reset({
+        fullName: profile.username || "",
+        email: profile.email || "",
+        gender: genderMap[profile.gender] || profile.gender || "",
+        educationStatus:
+          educationMap[profile.education_status] ||
+          profile.education_status ||
+          "",
+        valueProvince: profile.province || "",
+        valueCity: profile.city || "",
+        valueSubdistrict: profile.subdistrict || "",
+        valueWard: profile.ward || "",
+        dob: profile.date_of_birth
+          ? format(new Date(profile.date_of_birth), "yyyy-MM-dd")
+          : "",
+      });
+    }
+    setIsEditing(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9F6] p-4 md:p-12 font-sans">
-      {/* --- HEADER BACK BUTTON + TITLE BOX (Centered Text) --- */}
-      <div className="bg-[#003631] text-white rounded-xl p-6 relative w-full max-w-3xl mx-auto shadow-lg">
-        {/* Back Button positioned on the left */}
-        <div className="absolute left-6 top-1/2 -translate-y-1/2 cursor-pointer transition hover:opacity-75">
-          <ChevronLeft size={26} />
-        </div>
-
-        {/* Centered Title and Subtitle */}
+    <div className="min-h-screen bg-[#F7F9F6] font-sans p-4">
+      <div className="bg-[#003631] text-white rounded-xl p-6 relative w-full mx-auto shadow-md mb-6">
         <div className="text-center">
           <h1 className="text-2xl font-semibold">Profil</h1>
           <p className="text-sm text-white/80 mt-1 max-w-md mx-auto">
-            Kami membutuhkan beberapa informasi dasar. Silakan isi data diri
-            Anda di bawah ini.
+            Kelola informasi profil Anda di sini.
           </p>
         </div>
       </div>
 
-      {/* --- MAIN CONTENT: PROFILE PHOTO (Left) and FORM (Right) --- */}
-      {/* Container utama menggunakan grid atau flex untuk layout dua kolom pada desktop */}
-      <div className="mt-8 w-full max-w-3xl mx-auto flex flex-col md:flex-row md:space-x-8 space-y-8 md:space-y-0 items-start">
-        {/* 1. PROFILE PHOTO SECTION (Left Column - OUTSIDE the main card) */}
-        {/* Bagian ini menggunakan lebar 1/3 di desktop dan di tengah pada mobile */}
-        <div className="md:w-1/3 w-full flex flex-col items-center md:items-start md:sticky md:top-12">
-          {/* Photo Circle Placeholder */}
-          <div className="w-36 h-36 md:w-40 md:h-40 bg-gray-300 border-4 border-gray-400 rounded-full overflow-hidden mb-4 flex items-center justify-center shadow-lg">
-            {previewImage ? (
-              <img
-                src={previewImage}
-                className="w-full h-full object-cover"
-                alt="Preview"
-              />
+      <div className="bg-white p-8 rounded-xl shadow-md  mx-auto">
+        <div className="my-2 flex justify-end">
+          <Button
+            onClick={isEditing ? handleCancelEdit : () => setIsEditing(true)}
+            variant={isEditing ? "destructive" : "secondary"}
+            size="sm"
+            className="shadow-md text-white"
+          >
+            {isEditing ? (
+              <X className="mr-2 h-4 w-4" />
             ) : (
-              // Simple SVG User Icon as Placeholder (menggunakan warna abu-abu terang)
-              <svg
-                className="w-20 h-20 text-gray-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fillRule="evenodd"
-                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  clipRule="evenodd"></path>
-              </svg>
+              <Pencil className="mr-2 h-4 w-4" />
             )}
-          </div>
-
-          {/* Upload Button */}
-          <label className="cursor-pointer">
-            <div className="px-5 py-2 bg-[#96CCEC] hover:bg-[#7dbedd] text-[#003631] rounded-lg text-sm font-medium transition duration-200 shadow-md">
-              Upload Foto Profil
-            </div>
-            <input
-              type="file"
-              className="hidden"
-              onChange={handleUpload}
-              accept="image/*"
-            />
-          </label>
+            {isEditing ? "Batal" : "Edit Profil"}
+          </Button>
         </div>
 
-        {/* 2. MAIN FORM CARD (Right Column - Takes up remaining 2/3 space) */}
-        <div className="bg-[#003631] rounded-xl p-8 md:w-2/3 w-full shadow-xl text-white">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <InputGroup
-              label="Nama Lengkap"
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-            />
-            <InputGroup
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-            <InputGroup
-              label="Tanggal Lahir"
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleInputChange}
-            />
-            <InputGroup
-              label="Jenis Kelamin"
-              type="text"
-              name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-            />
-            <InputGroup
-              label="Nomor Handphone"
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-            />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nama Asli</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nama Lengkap"
+                        disabled={!isEditing}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* MINAT JURUSAN (Side-by-side Selects) */}
-            <div>
-              <label className="block mb-1 text-sm font-medium">
-                Minat Jurusan
-              </label>
-              <div className="flex gap-3">
-                {/* Select 1 */}
-                <select
-                  className="w-1/2 p-3 rounded-lg bg-white text-gray-800 border border-gray-300 focus:ring-[#96CCEC] focus:border-[#96CCEC] appearance-none cursor-pointer"
-                  name="majorInterest1"
-                  value={formData.majorInterest1}
-                  onChange={handleInputChange}
-                  // Custom arrow style for consistent look across browsers
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3 3 3-3m0 6l-3 3-3-3' stroke='%234B5563' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e")`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "right 0.75rem center",
-                    backgroundSize: "1.5em 1.5em",
-                  }}>
-                  <option value="" disabled>
-                    Pilih 1
-                  </option>
-                  <option value="ilmu-komputer">Ilmu Komputer</option>
-                  <option value="kedokteran">Kedokteran</option>
-                  {/* Tambahkan opsi lain di sini */}
-                </select>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="email@contoh.com"
+                        type="email"
+                        disabled={!isEditing}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                {/* Select 2 */}
-                <select
-                  className="w-1/2 p-3 rounded-lg bg-white text-gray-800 border border-gray-300 focus:ring-[#96CCEC] focus:border-[#96CCEC] appearance-none cursor-pointer"
-                  name="majorInterest2"
-                  value={formData.majorInterest2}
-                  onChange={handleInputChange}
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3 3 3-3m0 6l-3 3-3-3' stroke='%234B5563' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e")`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "right 0.75rem center",
-                    backgroundSize: "1.5em 1.5em",
-                  }}>
-                  <option value="" disabled>
-                    Pilih 2
-                  </option>
-                  <option value="arsitektur">Arsitektur</option>
-                  <option value="hukum">Hukum</option>
-                  {/* Tambahkan opsi lain di sini */}
-                </select>
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Jenis Kelamin</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={!isEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih jenis kelamin" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Laki-laki">Laki-laki</SelectItem>
+                        <SelectItem value="Perempuan">Perempuan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="educationStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status Pendidikan Saat Ini</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={!isEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih status pendidikan" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Siswa Aktif (SMA/SMK/Sederajat)">
+                          Siswa Aktif (SMA/SMK/Sederajat)
+                        </SelectItem>
+                        <SelectItem value="Lulusan Baru / Gap Year (Belum Kuliah)">
+                          Lulusan Baru / Gap Year (Belum Kuliah)
+                        </SelectItem>
+                        <SelectItem value="Mahasiswa Aktif">
+                          Mahasiswa Aktif
+                        </SelectItem>
+                        <SelectItem value="Lainnya">Lainnya</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tanggal Lahir</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            type="button"
+                            disabled={!isEditing}
+                            className={cn(
+                              "w-full pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(new Date(field.value), "PPP", {
+                                locale: id,
+                              })
+                            ) : (
+                              <span>Pilih tanggal lahir</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          onSelect={(date) =>
+                            field.onChange(
+                              date ? format(date, "yyyy-MM-dd") : ""
+                            )
+                          }
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                          captionLayout="dropdown"
+                          fromYear={1900}
+                          toYear={new Date().getFullYear()}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Province */}
+              <FormField
+                control={form.control}
+                name="valueProvince"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Provinsi</FormLabel>
+                    <Popover open={openProvince} onOpenChange={setOpenProvince}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            disabled={!isEditing}
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? displayProvince.find(
+                                  (item) => item.name === field.value
+                                )?.name || field.value
+                              : "Pilih Provinsi"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari provinsi..." />
+                          <CommandList>
+                            <CommandEmpty>
+                              Provinsi tidak ditemukan.
+                            </CommandEmpty>
+                            <CommandGroup>
+                              {displayProvince.map((item) => (
+                                <CommandItem
+                                  value={item.name}
+                                  key={item.code}
+                                  onSelect={() => {
+                                    field.onChange(item.name);
+                                    setvalueProvince(item.code);
+                                    setOpenProvince(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      item.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {item.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* City */}
+              <FormField
+                control={form.control}
+                name="valueCity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kabupaten / Kota</FormLabel>
+                    <Popover open={openCity} onOpenChange={setOpenCity}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            disabled={!isEditing}
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? displayCity.find(
+                                  (item) => item.name === field.value
+                                )?.name || field.value
+                              : "Pilih Kota/Kabupaten"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari kota/kabupaten..." />
+                          <CommandList>
+                            <CommandEmpty>Kota tidak ditemukan.</CommandEmpty>
+                            <CommandGroup>
+                              {displayCity.map((item) => (
+                                <CommandItem
+                                  value={item.name}
+                                  key={item.code}
+                                  onSelect={() => {
+                                    field.onChange(item.name);
+                                    setvalueCity(item.code);
+                                    setOpenCity(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      item.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {item.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Subdistrict */}
+              <FormField
+                control={form.control}
+                name="valueSubdistrict"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kecamatan</FormLabel>
+                    <Popover
+                      open={openSubdistrict}
+                      onOpenChange={setOpenSubdistrict}
+                    >
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            disabled={!isEditing}
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? displaySubdistrict.find(
+                                  (item) => item.name === field.value
+                                )?.name || field.value
+                              : "Pilih Kecamatan"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari kecamatan..." />
+                          <CommandList>
+                            <CommandEmpty>
+                              Kecamatan tidak ditemukan.
+                            </CommandEmpty>
+                            <CommandGroup>
+                              {displaySubdistrict.map((item) => (
+                                <CommandItem
+                                  value={item.name}
+                                  key={item.code}
+                                  onSelect={() => {
+                                    field.onChange(item.name);
+                                    setValueSubdistrict(item.code);
+                                    setOpenSubdistrict(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      item.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {item.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Ward */}
+              <FormField
+                control={form.control}
+                name="valueWard"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kelurahan / Desa</FormLabel>
+                    <Popover open={openWard} onOpenChange={setOpenWard}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            disabled={!isEditing}
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? displayWard.find(
+                                  (item) => item.name === field.value
+                                )?.name || field.value
+                              : "Pilih Kelurahan/Desa"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari kelurahan/desa..." />
+                          <CommandList>
+                            <CommandEmpty>
+                              Kelurahan/Desa tidak ditemukan.
+                            </CommandEmpty>
+                            <CommandGroup>
+                              {displayWard.map((item) => (
+                                <CommandItem
+                                  value={item.name}
+                                  key={item.code}
+                                  onSelect={() => {
+                                    field.onChange(item.name);
+                                    setValueWard(item.code);
+                                    setOpenWard(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      item.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {item.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {isEditing && (
+              <div className="flex justify-end pt-4">
+                <Button
+                  type="submit"
+                  className="bg-[#003631] hover:bg-[#003631]/90"
+                  disabled={!form.formState.isDirty}
+                >
+                  <Save className="mr-2 h-4 w-4" /> Simpan Perubahan
+                </Button>
               </div>
-            </div>
-
-            {/* BUTTON SIMPAN */}
-            <button
-              type="submit"
-              className="w-full bg-[#96CCEC] text-[#003631] py-3 mt-6 rounded-lg font-bold hover:bg-[#7dbedd] transition shadow-lg transform hover:scale-[1.01] duration-150">
-              Simpan
-            </button>
+            )}
           </form>
-        </div>
+        </Form>
       </div>
     </div>
   );

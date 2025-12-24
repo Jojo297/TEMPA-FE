@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import {
   Command,
@@ -22,6 +24,7 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -55,6 +58,7 @@ const formSchema = z.object({
   educationStatus: z.string({
     required_error: "Silakan pilih status pendidikan.",
   }),
+  dob: z.string().min(1, "Tanggal lahir wajib diisi."),
   valueProvince: z.string().min(1, "Provinsi wajib dipilih."),
   valueCity: z.string().min(1, "Kota/Kabupaten wajib dipilih."),
   valueSubdistrict: z.string().min(1, "Kecamatan wajib dipilih."),
@@ -124,6 +128,7 @@ export default function DashboardMenteeVerifyAccount() {
       email: emailMentee,
       gender: "",
       educationStatus: "",
+      dob: "",
       valueProvince: "",
       valueCity: "",
       valueSubdistrict: "",
@@ -134,6 +139,8 @@ export default function DashboardMenteeVerifyAccount() {
   });
 
   async function onSubmit(values) {
+    // console.log("Submitted Values:", values);
+
     try {
       await verifyMentee(token, values);
       toast.success("Verifikasi akun berhasil!");
@@ -242,6 +249,62 @@ export default function DashboardMenteeVerifyAccount() {
                         <SelectItem value="3">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tanggal Lahir</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            type="button"
+                            className={cn(
+                              "w-full pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(new Date(field.value), "PPP", {
+                                locale: id,
+                              })
+                            ) : (
+                              <span>Pilih tanggal lahir</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          onSelect={(date) =>
+                            field.onChange(
+                              date ? format(date, "yyyy-MM-dd") : ""
+                            )
+                          }
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                          captionLayout="dropdown"
+                          fromYear={1900}
+                          toYear={new Date().getFullYear()}
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}

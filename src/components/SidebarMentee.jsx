@@ -141,7 +141,9 @@ const SidebarWithNavbar = ({ children }) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate("/dashboard-mentee/profil")}
+                >
                   {/* <IconUserCircle /> */}
                   <User />
                   Profile
