@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 
 import { toast } from "sonner";
 import useSaveMajorInterest from "@/hooks/hooksMentee/useSaveMajorInterest";
+import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
 
 const interestSchema = z.object({
   selectedMajors: z
@@ -42,6 +43,10 @@ const DashboardMenteeMajorInterest = () => {
   const { majors, isLoading, error, fetchMajor } = useGetAllMajors();
   const { saveMajorInterest, isLoadingMajorInterest, errorMajorInterest } =
     useSaveMajorInterest();
+  const { verifyStatus, checkVerifyStatus } = useCheckVerifyStatus();
+
+  const verifyMentee = verifyStatus ?? {};
+  // console.log(verifyMentee);
 
   const {
     handleSubmit,
@@ -115,6 +120,13 @@ const DashboardMenteeMajorInterest = () => {
     }
   }, []);
 
+  // fetch status acc
+  useEffect(() => {
+    if (token) {
+      checkVerifyStatus(token);
+    }
+  }, [token]);
+
   // handling error
   if (error) {
     return (
@@ -133,11 +145,11 @@ const DashboardMenteeMajorInterest = () => {
     <>
       <div className="min-h-screen  ">
         {/* all majors section */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-          <div className="flex items-center justify-between mb-6">
+        <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
+          <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Pilih Minat Jurusan
+                {!verifyMentee ? "Pilih Minat Jurusan" : "Minat Jurusan Anda"}
               </h2>
               <p className="text-gray-500 text-sm mt-1">
                 Pilih jurusan yang sesuai dengan minatmu untuk mendapatkan
@@ -155,7 +167,7 @@ const DashboardMenteeMajorInterest = () => {
                 placeholder="Cari jurusan..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2.5 w-full border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                className="pl-8 pr-3 py-2 w-full border rounded-lg text-sm focus:outline-none focus:ring focus:ring-[#004D40]/40"
               />
             </div>
           </div>
@@ -218,14 +230,16 @@ const DashboardMenteeMajorInterest = () => {
 
             {/* Submit Button */}
             <div className="col-span-full mt-8 flex justify-end gap-3">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => navigate("/dashboard-mentee/beranda")}
-                className="text-gray-500 hover:text-primary hover:bg-primary/5"
-              >
-                Lewati untuk sekarang
-              </Button>
+              {!verifyMentee && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => navigate("/dashboard-mentee/beranda")}
+                  className="text-gray-500 hover:text-primary hover:bg-primary/5"
+                >
+                  Lewati untuk sekarang
+                </Button>
+              )}
               <Button
                 type="submit"
                 disabled={isLoadingMajorInterest}

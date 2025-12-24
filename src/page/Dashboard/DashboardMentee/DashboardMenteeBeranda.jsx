@@ -44,7 +44,7 @@ export default function DashboardBeranda() {
   // get all program
   const displayPrograms = programs ?? [];
   const countProgram = displayPrograms.length;
-  console.log(displayPrograms);
+  // console.log(displayPrograms);
   // Filter programs based on selectedType and selectedStatus
   const filteredPrograms = displayPrograms.filter((program) => {
     const typeMatch =

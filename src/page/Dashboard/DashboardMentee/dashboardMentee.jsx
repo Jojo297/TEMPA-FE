@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { Check, X, GraduationCap } from "lucide-react";
 import SidebarWithNavbar from "@/components/SidebarMentee";
-import robotHappy from "@/assets/robot-happy.png";
-import roboterror from "@/assets/robot-error.png";
 import { Outlet, useNavigate } from "react-router";
 import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
 
@@ -23,9 +21,7 @@ const DashboardMentee = () => {
   }, [token]);
 
   useEffect(() => {
-    if (verifyMentee) {
-      navigate("/dashboard-mentee/beranda");
-    } else {
+    if (verifyMentee === false) {
       navigate("/mentee-verification/verify-account");
     }
   }, [token, verifyMentee]);
