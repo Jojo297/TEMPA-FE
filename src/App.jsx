@@ -80,6 +80,12 @@ const DashboardMenteeMateri = lazy(() =>
 const DashboardMenteeProfil = lazy(() =>
   import("./page/Dashboard/DashboardMentee/DashboardMenteeProfil")
 );
+const DashboardMenteeVerifyAccount = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeVerifyAccount")
+);
+const DashboardMenteeVerivication = lazy(() =>
+  import("./page/Dashboard/DashboardMentee/DashboardMenteeVerivication")
+);
 
 // Dashboard Kampus
 const DashboardCampus = lazy(() =>
@@ -398,7 +404,6 @@ const router = createBrowserRouter([
         path: "profil",
         element: <SuspenseWrapper Component={DashboardMenteeProfil} />,
       },
-
       {
         path: "kampus/:id",
         element: <SuspenseWrapper Component={DashboardCampusDetail} />,
@@ -423,7 +428,25 @@ const router = createBrowserRouter([
     ],
   },
 
-  // dashboard mentor
+  // Dashboard mentee verification routes
+  {
+    path: "/mentee-verification",
+    element: (
+      <ProtectedRoute
+        Component={DashboardMenteeVerivication}
+        allowedRoles={["mentee"]}
+      />
+    ),
+    children: [
+      {
+        index: true,
+        path: "verify-account",
+        element: <SuspenseWrapper Component={DashboardMenteeVerifyAccount} />,
+      },
+    ],
+  },
+
+  // ======================= DASHBOARD MENTOR =======================
   {
     path: "dashboard-mentor",
     element: (
@@ -436,13 +459,6 @@ const router = createBrowserRouter([
         )}
       />
     ),
-    // element:
-    //  (
-    // <ProtectedRoute
-    // element: <SuspenseWrapper Component={DashboardMentor} />,
-    // allowedRoles={["mentor"]}
-    // />
-    // )
     children: [
       {
         index: true,
@@ -528,7 +544,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // ===================== Dashboard lainnya =====================
 
   {
     path: "*",

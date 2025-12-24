@@ -6,6 +6,7 @@ import { ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
 
 const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -28,15 +29,18 @@ export default function LoginMentee() {
         `${BASE_URL}/login-mentee`,
         { credential: googleToken } // Backend can get req.body.credential
       );
-      const { token, uniqueId, fullName, email } = loginMentee.data.data;
-
-      console.log(loginMentee.data.data);
-
+      const { token, uniqueId, fullName, email, verify_status } =
+        loginMentee.data.data;
       // save JWT to localstorage
       localStorage.setItem("userJwt", token);
+      // console.log(verify_status);
 
-      // redirect
-      navigate("/dashboard-mentee");
+      if (!verify_status) {
+        navigate("/mentee-verification/verify-account");
+      } else {
+        // redirect
+        navigate("/dashboard-mentee");
+      }
 
       toast.success("Anda Berhasil Masuk!");
     } catch (error) {
