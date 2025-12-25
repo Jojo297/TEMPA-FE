@@ -22,7 +22,7 @@ export default function DashboardAdminDetailMajor() {
   const [editMode, setEditMode] = useState(false);
 
   const displayDetailMajor = detailMajor ?? [];
-  // console.log(displayDetailMajor);
+  console.log(displayDetailMajor);
 
   const handleSave = () => {
     fetchDetailStandardMajor(token, id); // Refetch data
@@ -41,7 +41,12 @@ export default function DashboardAdminDetailMajor() {
     return <DashboardAdminDetailMajorSkeleton />;
   }
 
-  if (editMode) {
+  if (
+    editMode ||
+    displayDetailMajor.description === null ||
+    displayDetailMajor.prospek_kerja === null ||
+    displayDetailMajor.banner_url === null
+  ) {
     return (
       <MajorEditForm
         initialData={displayDetailMajor}
@@ -132,14 +137,15 @@ export default function DashboardAdminDetailMajor() {
           Prospek Kerja
         </h2>
         <div className="flex flex-wrap gap-2">
-          {displayDetailMajor.prospek_kerja?.map((item, i) => (
-            <span
-              key={i}
-              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
-            >
-              {item}
-            </span>
-          ))}
+          {Array.isArray(displayDetailMajor.prospek_kerja) &&
+            displayDetailMajor.prospek_kerja.map((item, i) => (
+              <span
+                key={i}
+                className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
+              >
+                {item}
+              </span>
+            ))}
         </div>
       </div>
     </div>

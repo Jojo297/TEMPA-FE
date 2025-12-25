@@ -152,6 +152,9 @@ const DashboardAdminMajors = lazy(() =>
 const DashboardAdminDetailMajor = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailMajor")
 );
+const DashboardAdminAddDetailMajor = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminAddDetailMajor")
+);
 
 // ------------------
 
@@ -562,6 +565,10 @@ const router = createBrowserRouter([
       {
         path: "jurusan-detail/:id",
         element: <SuspenseWrapper Component={DashboardAdminDetailMajor} />,
+      },
+      {
+        path: "add-detail-major",
+        element: <SuspenseWrapper Component={DashboardAdminAddDetailMajor} />,
       },
     ],
   },

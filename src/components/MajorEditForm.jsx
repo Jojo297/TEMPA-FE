@@ -149,7 +149,13 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
   return (
     <div className="bg-white shadow-md rounded-xl p-6 border">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-[#013B35]">Ubah Jurusan</h2>
+        <h2 className="text-xl font-semibold text-[#013B35]">
+          {initialData.description === null ||
+          initialData.prospek_kerja === null ||
+          initialData.banner_url === null
+            ? "Tambahkan Detail Jurusan"
+            : "Ubah Jurusan"}
+        </h2>
         <button
           onClick={handleClose}
           className="text-gray-600 hover:text-black"

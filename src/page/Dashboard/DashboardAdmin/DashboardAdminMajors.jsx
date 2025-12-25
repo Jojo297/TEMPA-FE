@@ -1,6 +1,6 @@
 import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
 import DashboardAdminCampusSkeleton from "@/components/DashboardAdminCampusSkeleton";
-import { Search } from "lucide-react";
+import { CirclePlus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -21,7 +21,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetAllMentee from "@/hooks/hooksAdmin/useGetAllMentee";
 import {
   Dialog,
   DialogClose,
@@ -35,6 +34,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useGetStandardMajors from "@/hooks/hooksAdmin/useGetStandardMajors";
+import DynamicIcon from "@/components/DynamicIcon";
+import AdminAddStandartMajor from "@/components/AdminAddStandartMajor";
 
 export default function DashboardAdminMajors() {
   const navigate = useNavigate();
@@ -62,33 +63,6 @@ export default function DashboardAdminMajors() {
     return <DashboardAdminCampusSkeleton />;
   }
 
-  // get status color and label for verivication status campus
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "completed":
-        return "text-green-600 border-green-200 bg-green-50";
-      case "on_going":
-        return "text-amber-600 border-amber-200 bg-amber-50";
-      case "uncompleted":
-        return "text-red-600 border-red-200 bg-red-50";
-      default:
-        return "text-gray-600 border-gray-200 bg-gray-50";
-    }
-  };
-
-  // rename verification status campus
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case "completed":
-        return "Lulus";
-      case "on_going":
-        return "Sedang Berjalan";
-      case "uncompleted":
-        return "Tidak Lulus";
-      default:
-        return status;
-    }
-  };
   return (
     <div className="p-2 w-full">
       {/* breadcum */}
@@ -101,7 +75,7 @@ export default function DashboardAdminMajors() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">Mentee</BreadcrumbPage>
+            <BreadcrumbPage className="text-primary">Jurusan</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -109,29 +83,46 @@ export default function DashboardAdminMajors() {
         <div className="bg-primary text-white rounded-xl p-6 shadow">
           <h1 className="text-2xl font-bold mb-2">Jurusan</h1>
           <p className="text-sm max-w-2xl mx-auto">
-            Kelola data mentee yang terdaftar dalam sistem. Pantau informasi
-            pengguna mentee dan pastikan data akun yang ditampilkan valid.
+            Kelola data jurusan standar yang tersedia dalam sistem. Anda dapat
+            melihat detail dan mengelola informasi setiap jurusan.
           </p>
         </div>
       </div>
-      {/* verivication campus */}
-      <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
+
+      {/* Majors Card */}
+      <div className=" text-gray-900">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-primary">Jurusan</h2>
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="Cari mentee..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="flex gap-4">
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                placeholder="Cari jurusan..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <AdminAddStandartMajor
+              token={token}
+              onSuccess={() => fetchStandardMajors(token)}
             />
           </div>
         </div>
 
-        <div className="rounded-md border border-gray-200 overflow-hidden">
-          <Table>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {filteredMajors.map((item) => (
+            <Link
+              to={`/dashboard-admin/jurusan-detail/${item.id}`}
+              key={item.id}
+              className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
+            >
+              <DynamicIcon name={item.logo_url} size={48} />
+              <p className="mt-2 text-sm font-medium">{item.major_name}</p>
+            </Link>
+          ))}
+          {/* <Table>
             <TableHeader className="bg-gray-50">
               <TableRow className="hover:bg-gray-50 border-b border-gray-200">
                 <TableHead className="text-gray-700  font-bold w-[50px]">
@@ -189,7 +180,7 @@ export default function DashboardAdminMajors() {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+          </Table> */}
         </div>
       </div>
     </div>
