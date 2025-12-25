@@ -220,7 +220,7 @@ export default function DashboardJurusanDetail() {
 
   // store result fetch to displayMajor
   const displayDetailMajor = detailMajor ?? {};
-  // console.log(displayDetailMajor);
+  console.log(displayDetailMajor);
 
   // get campus
   const getCampus = displayDetailMajor.campus ?? [];
@@ -278,7 +278,7 @@ export default function DashboardJurusanDetail() {
           <div className="relative w-full h-[320px]">
             <img
               src={
-                jurusan?.heroImg ||
+                displayDetailMajor.banner_url ||
                 "https://via.placeholder.com/1200x320?text=HERO+JURUSAN"
               }
               alt={displayDetailMajor.major_name}

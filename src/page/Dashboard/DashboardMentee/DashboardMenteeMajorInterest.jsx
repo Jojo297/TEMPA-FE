@@ -35,6 +35,7 @@ import { toast } from "sonner";
 import useSaveMajorInterest from "@/hooks/hooksMentee/useSaveMajorInterest";
 import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
 import useGetMajorInterest from "@/hooks/hooksMentee/useGetMajorInterest";
+import DynamicIcon from "@/components/DynamicIcon";
 
 const interestSchema = z.object({
   selectedMajors: z
@@ -54,7 +55,7 @@ const DashboardMenteeMajorInterest = () => {
 
   const verifyMentee = verifyStatus ?? {};
   const majorsMentee = majorInterest ?? [];
-  console.log(majorsMentee);
+  // console.log(majorsMentee);
 
   const {
     handleSubmit,
@@ -72,30 +73,10 @@ const DashboardMenteeMajorInterest = () => {
   const selectedMajors = watch("selectedMajors");
 
   const displayMajors = majors ?? [];
-
-  // icon majors
-  const majorIconMap = {
-    Informatika: <Cpu size={48} />,
-    Mesin: <CogIcon size={48} />,
-    Elektronika: <Lightbulb size={48} />,
-    Akuntansi: <DollarSign size={48} />,
-    Hukum: <Scale size={48} />,
-    "Desain Komunikasi Visual (DKV)": <Palette size={48} />,
-    Psikologi: <Brain size={48} />,
-    Matematika: <Plus size={48} />,
-    Kelautan: <Waves size={48} />,
-    Kedokteran: <Cross size={48} />,
-  };
-
-  // merge majors name to icon
-  const mergedData = displayMajors.map((major) => ({
-    ...major,
-    icon: majorIconMap[major.major_name] || <FileQuestionIcon size={48} />,
-  }));
-  // console.log(mergedData);
+  console.log(displayMajors);
 
   // handle search majors
-  const filteredMajors = mergedData.filter((major) =>
+  const filteredMajors = displayMajors.filter((major) =>
     major.major_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -274,7 +255,7 @@ const DashboardMenteeMajorInterest = () => {
                         : "text-gray-400 group-hover:text-primary/70"
                     }`}
                   >
-                    {item.icon}
+                    <DynamicIcon name={item.logo_name} size={48} />
                   </div>
                   <p
                     className={`mt-4 text-sm font-semibold text-center transition-colors duration-200 ${

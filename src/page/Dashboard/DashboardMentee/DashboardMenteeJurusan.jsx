@@ -26,6 +26,7 @@ import {
 import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
+import DynamicIcon from "@/components/DynamicIcon";
 
 const DashboardJurusan = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,6 +34,7 @@ const DashboardJurusan = () => {
   const { majors, isLoading, error, fetchMajor } = useGetAllMajors();
 
   const displayMajors = majors ?? [];
+  // console.log(displayMajors);
 
   // icon majors
   const majorIconMap = {
@@ -138,8 +140,9 @@ const DashboardJurusan = () => {
                 <Link
                   to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
                   key={item.id}
-                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform">
-                  {item.icon}
+                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
+                >
+                  <DynamicIcon name={item.logo_name} size={48} />
                   <p className="mt-2 text-sm font-medium">{item.major_name}</p>
                 </Link>
               ))
