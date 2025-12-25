@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Breadcrumb,
@@ -9,15 +9,26 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useGetDetailStandardMajor from "@/hooks/hooksAdmin/useGetDetailStandardMajor";
+import DeleteProgram from "@/components/DeleteProgram";
+import { Pencil, Trash2 } from "lucide-react";
+import MajorEditForm from "@/components/MajorEditForm";
+import DashboardAdminDetailMajorSkeleton from "@/components/DashboardAdminDetailMajorSkeleton";
 
 export default function DashboardAdminDetailMajor() {
   const token = localStorage.getItem("userJwt");
   const { id } = useParams();
   const { detailMajor, isLoading, error, fetchDetailStandardMajor } =
     useGetDetailStandardMajor();
+  const [editMode, setEditMode] = useState(false);
 
   const displayDetailMajor = detailMajor ?? [];
-  console.log(displayDetailMajor);
+  // console.log(displayDetailMajor);
+
+  const handleSave = () => {
+    fetchDetailStandardMajor(token, id); // Refetch data
+    setEditMode(false); // Exit edit mode
+    window.scrollTo(0, 0);
+  };
 
   // fetch detail major
   useEffect(() => {
@@ -25,30 +36,66 @@ export default function DashboardAdminDetailMajor() {
       fetchDetailStandardMajor(token, id);
     }
   }, [token]);
+
+  if (isLoading) {
+    return <DashboardAdminDetailMajorSkeleton />;
+  }
+
+  if (editMode) {
+    return (
+      <MajorEditForm
+        initialData={displayDetailMajor}
+        onClose={() => setEditMode(false)}
+        onSave={handleSave}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen pb-16">
       {/* breadcum */}
-      <Breadcrumb className="mb-2">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee">Beranda</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild className="hover:text-primary">
-              <Link to="/dashboard-mentee/jurusan">Jurusan</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">
-              {displayDetailMajor.major_name}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+
+      <div className="flex justify-between items-center mb-4">
+        <Breadcrumb className="mb-2">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild className="hover:text-primary">
+                <Link to="/dashboard-admin/beranda">Beranda</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild className="hover:text-primary">
+                <Link to="/dashboard-admin/jurusan">Jurusan</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem className="text-primary">
+              <BreadcrumbPage className="text-primary">
+                {displayDetailMajor.major_name}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        {/* Grup Tombol */}
+        <div className="flex gap-3">
+          <button
+            className={
+              "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
+            }
+          >
+            {<Trash2 size={16} />}
+            Hapus Jurusan
+          </button>
+          <button
+            onClick={() => setEditMode(true)}
+            className="bg-secondary text-white px-4 py-2 text-sm hover:opacity-60 transition rounded-lg shadow-md flex items-center gap-2"
+          >
+            <Pencil size={16} /> Ubah Jurusan
+          </button>
+        </div>
+      </div>
 
       {/* header  */}
       <div className=" mx-auto">
