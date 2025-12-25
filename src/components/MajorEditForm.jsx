@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import useUpdateStandardMajor from "@/hooks/hooksAdmin/useUpdateStandardMajor";
 
 // Zod Schema
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -38,7 +38,7 @@ const majorSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran logo maksimal 2MB.`
+      `Ukuran logo maksimal 5MB.`
     )
     .refine(
       (files) =>
@@ -78,7 +78,11 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
     defaultValues: {
       major_name: initialData.major_name || "",
       description: initialData.description || "",
-      prospek_kerja: initialData.prospek_kerja || [],
+      prospek_kerja: Array.isArray(initialData.prospek_kerja)
+        ? initialData.prospek_kerja
+        : typeof initialData.prospek_kerja === "string"
+        ? [initialData.prospek_kerja]
+        : [],
       logo: undefined,
       banner: undefined,
     },

@@ -1,6 +1,6 @@
 import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
 import DashboardAdminCampusSkeleton from "@/components/DashboardAdminCampusSkeleton";
-import { CirclePlus, Search } from "lucide-react";
+import { CirclePlus, Loader2, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -22,35 +22,49 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import useGetStandardMajors from "@/hooks/hooksAdmin/useGetStandardMajors";
 import DynamicIcon from "@/components/DynamicIcon";
+import { toast } from "sonner";
 import AdminAddStandartMajor from "@/components/AdminAddStandartMajor";
+import useDeleteStandardMajor from "@/hooks/hooksAdmin/useDeleteStandardMajor";
+import AdminMajorsListSkeleton from "@/components/AdminMajorsListSkeleton";
 
 export default function DashboardAdminMajors() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const { standardMajors, isLoading, error, fetchStandardMajors } =
     useGetStandardMajors();
+  const { deleteMajor, isLoading: isDeleting } = useDeleteStandardMajor();
   const [searchQuery, setSearchQuery] = useState("");
 
   const displayMajors = standardMajors ?? [];
-  console.log(displayMajors);
+  // console.log(displayMajors);
 
   // search majors by name
   const filteredMajors = displayMajors.filter((item) =>
     item.major_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleDeleteMajor = async (id) => {
+    const result = await deleteMajor(token, id);
+    if (result.success) {
+      toast.success(result.message || "Jurusan berhasil dihapus.");
+      // Panggil kembali fetchStandardMajors untuk memperbarui daftar
+      fetchStandardMajors(token);
+    } else {
+      toast.error(result.error || "Gagal menghapus jurusan.");
+    }
+  };
 
   // fetch all campus
   useEffect(() => {
@@ -60,7 +74,7 @@ export default function DashboardAdminMajors() {
   }, [token]);
 
   if (isLoading) {
-    return <DashboardAdminCampusSkeleton />;
+    return <AdminMajorsListSkeleton />;
   }
 
   return (
@@ -79,6 +93,8 @@ export default function DashboardAdminMajors() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
+      {/* header */}
       <div className=" mb-8 text-center">
         <div className="bg-primary text-white rounded-xl p-6 shadow">
           <h1 className="text-2xl font-bold mb-2">Jurusan</h1>
@@ -111,76 +127,60 @@ export default function DashboardAdminMajors() {
           </div>
         </div>
 
+        {/* card majors */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {filteredMajors.map((item) => (
-            <Link
-              to={`/dashboard-admin/jurusan-detail/${item.id}`}
+            <div
               key={item.id}
-              className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
+              className="relative group bg-primary rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
             >
-              <DynamicIcon name={item.logo_url} size={48} />
-              <p className="mt-2 text-sm font-medium">{item.major_name}</p>
-            </Link>
+              <Link
+                to={`/dashboard-admin/jurusan-detail/${item.id}`}
+                className="flex flex-col items-center justify-center p-6 h-full w-full"
+              >
+                <DynamicIcon name={item.logo_url} size={48} color="white" />
+                <p className="mt-2 text-sm font-medium text-center text-white">
+                  {item.major_name}
+                </p>
+              </Link>
+              {/* button delete major */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100"
+                  >
+                    <X size={16} />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Hapus Jurusan "{item.major_name}"?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tindakan ini tidak dapat diurungkan. Ini akan menghapus
+                      jurusan secara permanen dari server.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDeleteMajor(item.id)}
+                      disabled={isDeleting}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      {isDeleting && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Hapus
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           ))}
-          {/* <Table>
-            <TableHeader className="bg-gray-50">
-              <TableRow className="hover:bg-gray-50 border-b border-gray-200">
-                <TableHead className="text-gray-700  font-bold w-[50px]">
-                  No
-                </TableHead>
-                <TableHead className="text-gray-700  font-bold">
-                  Jurusan
-                </TableHead>
-                <TableHead className="text-gray-700  font-bold">Logo</TableHead>
-                <TableHead className="text-gray-700  font-bold">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {displayMajors.length > 0 ? (
-                filteredMajors.map((item, index) => (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
-                  >
-                    <TableCell className="font-medium text-gray-700">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="min-w-0">
-                          <p className="font-semibold text-base truncate text-gray-900">
-                            {item.major_name}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <img src={item.logo_url} alt={item.major_name} />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() =>
-                          navigate(`/dashboard-admin/jurusan-detail/${item.id}`)
-                        }
-                        className="bg-secondary hover:bg-secondary hover:opacity-70 transition"
-                      >
-                        Lihat Detail
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center py-8 text-gray-500"
-                  >
-                    Tidak ada data mentee yang ditemukan.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table> */}
         </div>
       </div>
     </div>

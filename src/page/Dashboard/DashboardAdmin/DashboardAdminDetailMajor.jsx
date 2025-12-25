@@ -13,6 +13,7 @@ import DeleteProgram from "@/components/DeleteProgram";
 import { Pencil, Trash2 } from "lucide-react";
 import MajorEditForm from "@/components/MajorEditForm";
 import DashboardAdminDetailMajorSkeleton from "@/components/DashboardAdminDetailMajorSkeleton";
+import AdminDeleteMajor from "@/components/AdminDeleteMajor";
 
 export default function DashboardAdminDetailMajor() {
   const token = localStorage.getItem("userJwt");
@@ -22,7 +23,14 @@ export default function DashboardAdminDetailMajor() {
   const [editMode, setEditMode] = useState(false);
 
   const displayDetailMajor = detailMajor ?? [];
-  console.log(displayDetailMajor);
+  // console.log(displayDetailMajor);
+
+  // Normalisasi data prospek_kerja agar selalu berupa array
+  const prospects = Array.isArray(displayDetailMajor.prospek_kerja)
+    ? displayDetailMajor.prospek_kerja
+    : displayDetailMajor.prospek_kerja
+    ? [displayDetailMajor.prospek_kerja]
+    : [];
 
   const handleSave = () => {
     fetchDetailStandardMajor(token, id); // Refetch data
@@ -41,11 +49,11 @@ export default function DashboardAdminDetailMajor() {
     return <DashboardAdminDetailMajorSkeleton />;
   }
 
+  // check if still null redirect to insert data
   if (
     editMode ||
     displayDetailMajor.description === null ||
-    displayDetailMajor.prospek_kerja === null ||
-    displayDetailMajor.banner_url === null
+    displayDetailMajor.prospek_kerja === null
   ) {
     return (
       <MajorEditForm
@@ -85,14 +93,11 @@ export default function DashboardAdminDetailMajor() {
 
         {/* Grup Tombol */}
         <div className="flex gap-3">
-          <button
-            className={
-              "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
-            }
-          >
-            {<Trash2 size={16} />}
-            Hapus Jurusan
-          </button>
+          <AdminDeleteMajor
+            majorName={displayDetailMajor.major_name}
+            idMajor={displayDetailMajor.id}
+            token={token}
+          />
           <button
             onClick={() => setEditMode(true)}
             className="bg-secondary text-white px-4 py-2 text-sm hover:opacity-60 transition rounded-lg shadow-md flex items-center gap-2"
@@ -137,15 +142,14 @@ export default function DashboardAdminDetailMajor() {
           Prospek Kerja
         </h2>
         <div className="flex flex-wrap gap-2">
-          {Array.isArray(displayDetailMajor.prospek_kerja) &&
-            displayDetailMajor.prospek_kerja.map((item, i) => (
-              <span
-                key={i}
-                className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
-              >
-                {item}
-              </span>
-            ))}
+          {prospects.map((item, i) => (
+            <span
+              key={i}
+              className="px-4 py-2 border border-[#013B35] text-[#013B35] font-medium rounded-full text-sm hover:bg-[#013B35] hover:text-white transition"
+            >
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </div>
