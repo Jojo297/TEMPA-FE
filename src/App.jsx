@@ -146,6 +146,12 @@ const DashboardAdminProgram = lazy(() =>
 const DashboardAdminDetailProgram = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailProgram")
 );
+const DashboardAdminMajors = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminMajors")
+);
+const DashboardAdminDetailMajor = lazy(() =>
+  import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailMajor")
+);
 
 // ------------------
 
@@ -548,6 +554,14 @@ const router = createBrowserRouter([
       {
         path: "program/:id",
         element: <SuspenseWrapper Component={DashboardAdminDetailProgram} />,
+      },
+      {
+        path: "jurusan",
+        element: <SuspenseWrapper Component={DashboardAdminMajors} />,
+      },
+      {
+        path: "jurusan-detail/:id",
+        element: <SuspenseWrapper Component={DashboardAdminDetailMajor} />,
       },
     ],
   },

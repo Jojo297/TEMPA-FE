@@ -220,7 +220,7 @@ export default function DashboardJurusanDetail() {
 
   // store result fetch to displayMajor
   const displayDetailMajor = detailMajor ?? {};
-  console.log(displayDetailMajor);
+  // console.log(displayDetailMajor);
 
   // get campus
   const getCampus = displayDetailMajor.campus ?? [];

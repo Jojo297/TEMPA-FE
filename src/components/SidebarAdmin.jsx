@@ -14,6 +14,7 @@ import {
   User2,
   Users,
   CreditCardIcon,
+  Share2,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
@@ -78,6 +79,11 @@ export default function SidebarAdmin({ children }) {
       name: "PROGRAM",
       icon: <GraduationCap size={18} />,
       path: "/dashboard-admin/program",
+    },
+    {
+      name: "JURUSAN",
+      icon: <Share2 size={18} />,
+      path: "/dashboard-admin/jurusan",
     },
     { separator: true, name: "Service" },
     {
