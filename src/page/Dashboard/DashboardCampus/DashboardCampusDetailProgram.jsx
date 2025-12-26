@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { X, Pencil, Calendar } from "lucide-react";
+import { X, Pencil, Calendar, Eye, Users, UserCheck } from "lucide-react";
 import { Link, useParams } from "react-router";
 import {
   Breadcrumb,
@@ -157,61 +157,91 @@ export default function DashboardCampusDetailProgram() {
 
           <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
             <Tabs defaultValue="deskripsi" className="w-full">
-              {/* Navigation button */}
-              <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
-                {/* description */}
-                <TabsTrigger
-                  value="deskripsi"
-                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              <div className="flex items-center justify-between">
+                {/* Navigation button */}
+                <TabsList className="flex flex-wrap gap-2 justify-start h-auto bg-transparent">
+                  {/* description */}
+                  <TabsTrigger
+                    value="deskripsi"
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                  hover:bg-[#013B35] hover:text-white transition 
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-                >
-                  Deskripsi
-                </TabsTrigger>
+                  >
+                    Deskripsi
+                  </TabsTrigger>
 
-                {/* peserta */}
-                <TabsTrigger
-                  value="peserta"
-                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                  {/* peserta */}
+                  <TabsTrigger
+                    value="peserta"
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                  hover:bg-[#013B35] hover:text-white transition 
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-                >
-                  Peserta
-                </TabsTrigger>
+                  >
+                    Peserta
+                  </TabsTrigger>
 
-                {/* mentor */}
-                <TabsTrigger
-                  value="mentor"
-                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                  {/* mentor */}
+                  <TabsTrigger
+                    value="mentor"
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                  hover:bg-[#013B35] hover:text-white transition 
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-                >
-                  Mentor
-                </TabsTrigger>
+                  >
+                    Mentor
+                  </TabsTrigger>
 
-                {/* materi */}
-                <TabsTrigger
-                  value="materi"
-                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                  {/* materi */}
+                  <TabsTrigger
+                    value="materi"
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                  hover:bg-[#013B35] hover:text-white transition 
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-                >
-                  Materi
-                </TabsTrigger>
+                  >
+                    Materi
+                  </TabsTrigger>
 
-                {/* feedback */}
-                <TabsTrigger
-                  value="feedback"
-                  className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                  {/* feedback */}
+                  <TabsTrigger
+                    value="feedback"
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                  hover:bg-[#013B35] hover:text-white transition 
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-                >
-                  Feedback
-                </TabsTrigger>
-              </TabsList>
+                  >
+                    Feedback
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* <div className="flex items-center gap-3 py-1 text-slate-600">
+                  <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100 text-slate-500">
+                    <UserCheck className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col -space-y-0.5">
+                    <span className="text-sm font-bold text-slate-900 tabular-nums">
+                      {program.seen?.toLocaleString("en-US")} Mentee
+                    </span>
+                    <span className="text-[10px] uppercase tracking-wider font-medium text-slate-400">
+                      Pengunjung Unik
+                    </span>
+                  </div>
+                </div> */}
+
+                <div className="group flex items-center gap-2 text-muted-foreground hover:text-primary transition-all duration-300">
+                  <div className="relative">
+                    <Eye className="h-4 w-4 transition-transform group-hover:scale-110" />
+                    <div className="absolute -top-1 -right-1 h-1.5 w-1.5 bg-blue-500 rounded-full border border-white" />
+                  </div>
+                  <span className="text-sm font-medium tracking-tight">
+                    Telah dilihat oleh{" "}
+                    <b className="text-foreground tabular-nums">
+                      {program.seen?.toLocaleString("en-US")}
+                    </b>{" "}
+                    mentee
+                  </span>
+                </div>
+              </div>
 
               {/* content Tabs */}
-              <TabsContent value="deskripsi">
+              <TabsContent value="deskripsi" className="mt-5">
                 <DescriptionProgramCampus program={program} />
               </TabsContent>
 

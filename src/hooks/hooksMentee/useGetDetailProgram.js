@@ -47,6 +47,35 @@ const useGetDetailProgram = create((set) => ({
     }
   },
 
+  // add view program
+  addViewProgram: async (token, id) => {
+    try {
+      const API_URL = `${API_BASE_URL}/mentee/add-seen-program/${id}`;
+
+      const response = await axios.post(
+        API_URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response) {
+        sessionStorage.setItem(`viewed_prog_${id}`, "true");
+      }
+    } catch (error) {
+      console.error("Failed to add view program:", error);
+
+      const errorMessage = error.response?.data?.message;
+
+      if (error.response?.status === 404) {
+        set({ error: "404 not found" });
+      }
+    }
+  },
+
   // clear state
   clearDetailProgram: () =>
     set({ detailProgram: [], isLoadingL: false, errors: false }),

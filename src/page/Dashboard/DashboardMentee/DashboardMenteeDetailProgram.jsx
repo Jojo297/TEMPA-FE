@@ -42,8 +42,13 @@ const DashboardMenteeDetailProgram = () => {
 
   // hooks get details program
   const token = localStorage.getItem("userJwt");
-  const { detailProgram, isLoading, error, fetchDetailProgram } =
-    useGetDetailProgram();
+  const {
+    detailProgram,
+    isLoading,
+    error,
+    fetchDetailProgram,
+    addViewProgram,
+  } = useGetDetailProgram();
 
   // hooks register program
   const { message, isLoadingRegister, errorRegister, registerProgram } =
@@ -79,6 +84,24 @@ const DashboardMenteeDetailProgram = () => {
 
   const displayDetailProgram = detailProgram ?? [];
   console.log(displayDetailProgram);
+
+  // add view if mentee stay 5 second in this page
+  useEffect(() => {
+    if (!token) return;
+    const threshold = 5000; // 5 second
+
+    const isViewed = sessionStorage.getItem(`viewed_prog_${idProgram}`);
+    if (isViewed) return;
+
+    const timer = setTimeout(() => {
+      addViewProgram(token, idProgram);
+    }, threshold);
+
+    // cleanup timer
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [idProgram, token]);
 
   // get detail program
   useEffect(() => {
@@ -177,7 +200,6 @@ const DashboardMenteeDetailProgram = () => {
   };
 
   const formatTime = (isoTimeString) => {
-    // Cek hanya jika string benar-benar null atau kosong
     if (!isoTimeString) {
       return "-";
     }
