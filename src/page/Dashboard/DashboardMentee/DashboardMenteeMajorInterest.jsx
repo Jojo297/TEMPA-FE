@@ -155,7 +155,7 @@ const DashboardMenteeMajorInterest = () => {
         <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-primary">
                 {majorsMentee.length <= 0
                   ? "Pilih Minat Jurusan"
                   : "Minat Jurusan Anda"}

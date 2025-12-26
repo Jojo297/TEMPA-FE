@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { X, Pencil, Calendar } from "lucide-react";
-import { ProgramDummy } from "@/lib/ProgramDummy";
 import { Link, useParams } from "react-router";
 import {
   Breadcrumb,
@@ -23,6 +22,7 @@ import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMent
 import { toast } from "sonner";
 import FeedbackProgram from "@/components/FeedbackProgram";
 import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
+import { jwtDecode } from "jwt-decode";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -39,6 +39,10 @@ export default function DashboardCampusDetailProgram() {
   const { id } = useParams();
   const idProgram = parseInt(id);
   const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  // console.log(decode);
+  const idCampus = decode.id;
+
   const { detailProgram, isLoading, error, fetchDetailProgram } =
     useGetDetailProgram();
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
@@ -212,7 +216,11 @@ export default function DashboardCampusDetailProgram() {
               </TabsContent>
 
               <TabsContent value="peserta">
-                <ParticipantProgramCampus menteeList={program.mentee_list} />
+                <ParticipantProgramCampus
+                  menteeList={program.mentee_list}
+                  idCampus={idCampus}
+                  token={token}
+                />
               </TabsContent>
 
               <TabsContent value="mentor">

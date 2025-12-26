@@ -262,7 +262,7 @@ export default function DashboardMenteeProfil() {
               <BreadcrumbSeparator />
               <BreadcrumbItem className="text-primary">
                 <BreadcrumbPage className="text-primary">
-                  Program
+                  Akun Anda
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

@@ -496,38 +496,47 @@ export default function DashboardCampusBeranda() {
           </div>
 
           {/* informasi login mentor */}
-          <Alert className="mb-2 bg-blue-50 border-blue-200">
-            <AlertCircleIcon className="h-5 w-5 text-blue-600" />
-            <AlertTitle className="ml-2 text-blue-800 font-semibold">
-              Informasi Login Mentor
-            </AlertTitle>
-            <AlertDescription className="ml-2 text-blue-700 mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span>
-                Silakan bagikan tautan ini kepada mentor Anda untuk masuk ke
-                dalam sistem:{" "}
-                <a
-                  href={`${window.location.origin}/login-mentor`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline font-medium hover:text-blue-900 break-all"
-                >
-                  {`${DOMAIN_URL}/login-mentor`}
-                </a>
-              </span>
-              {/* button save link */}
-              <Button
-                size="sm"
-                variant="outline"
-                className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${DOMAIN_URL}/login-mentor`);
-                  toast.success("Link berhasil disalin!");
-                }}
-              >
-                <Copy size={14} className="mr-2" />
-                Salin Link
-              </Button>
-            </AlertDescription>
+          <Alert className="relative overflow-hidden border-none bg-blue-50/50 px-4 py-3 shadow-sm ring-1 ring-blue-100">
+            {/* Aksen garis di samping */}
+            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500" />
+
+            <div className="flex items-start gap-3">
+              <AlertCircleIcon className="mt-0.5 h-5 w-5 text-blue-600" />
+              <div className="grid gap-1">
+                <AlertTitle className="text-sm font-bold leading-none tracking-tight text-blue-900">
+                  Informasi Login Mentor
+                </AlertTitle>
+                <AlertDescription className="text-sm flex gap-4 items-center leading-relaxed text-blue-700/90">
+                  <span>
+                    Silakan bagikan tautan ini kepada mentor Anda untuk masuk ke
+                    dalam sistem:{" "}
+                    <a
+                      href={`${window.location.origin}/login-mentor`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline font-medium hover:text-blue-900 break-all"
+                    >
+                      {`${DOMAIN_URL}/login-mentor`}
+                    </a>
+                  </span>
+                  {/* button save link */}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `${DOMAIN_URL}/login-mentor`
+                      );
+                      toast.success("Link berhasil disalin!");
+                    }}
+                  >
+                    <Copy size={14} className="mr-2" />
+                    Salin Link
+                  </Button>
+                </AlertDescription>
+              </div>
+            </div>
           </Alert>
 
           <DataTable

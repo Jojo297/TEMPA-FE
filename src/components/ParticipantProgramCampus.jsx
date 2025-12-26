@@ -11,6 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import NotFounPages from "./NotFoundPages";
+import { SendHorizonal } from "lucide-react";
+import { Button } from "./ui/button";
+import CampusSendMessage from "./CampusSendMessage";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -22,7 +25,12 @@ function Info({ label, value }) {
   );
 }
 
-export default function ParticipantProgramCampus({ menteeList }) {
+export default function ParticipantProgramCampus({
+  menteeList,
+  idCampus,
+  token,
+}) {
+  // console.log(menteeList);
   return (
     <div className="max-w-6xl mx-auto mb-10">
       <div className="bg-white shadow-md rounded-xl p-6 border">
@@ -44,6 +52,7 @@ export default function ParticipantProgramCampus({ menteeList }) {
                   <TableHead className="w-[100px]">No</TableHead>
                   <TableHead>Nama Mentee</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Kirim Pesan</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -52,6 +61,14 @@ export default function ParticipantProgramCampus({ menteeList }) {
                     <TableCell className="font-medium">{index + 1}</TableCell>
                     <TableCell>{item.username}</TableCell>
                     <TableCell>{item.email}</TableCell>
+                    <TableCell>
+                      <CampusSendMessage
+                        idCampus={idCampus}
+                        idMentee={item.id}
+                        menteeName={item.username}
+                        token={token}
+                      />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
