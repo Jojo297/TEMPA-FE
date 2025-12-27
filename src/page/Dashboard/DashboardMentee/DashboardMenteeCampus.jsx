@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapPin, Search } from "lucide-react";
+import { BadgeCheckIcon, MapPin, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   Breadcrumb,
@@ -121,10 +121,19 @@ export default function DashboardCampus() {
                   className="w-8 h-8 object-contain"
                 />
                 <p className="font-semibold text-sm">{kampus.campus_name}</p>
+                {/* badge verif */}
+                {kampus.badge && (
+                  <div className="flex items-center gap-1.5 bg-blue-50  py-0.5 rounded-full ">
+                    <BadgeCheckIcon
+                      size={14}
+                      className="fill-blue-600 text-white"
+                    />
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-1 text-gray-500 text-xs">
                 <MapPin size={14} />
-                <span>{kampus.address}</span>
+                <span>{`${kampus.province}, ${kampus.city}`}</span>
               </div>
             </Link>
           ))}

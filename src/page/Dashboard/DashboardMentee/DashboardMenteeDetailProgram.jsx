@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, MapPin } from "lucide-react";
+import { BadgeCheckIcon, Calendar, MapPin } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 import {
   Dialog,
@@ -448,6 +448,15 @@ const DashboardMenteeDetailProgram = () => {
                     ?.campus_name
                 }
               </p>
+              {/* badge verif */}
+              {displayDetailProgram.badge && (
+                <div className="flex items-center gap-1.5 bg-blue-50  py-0.5 rounded-full ">
+                  <BadgeCheckIcon
+                    size={14}
+                    className="fill-blue-600 text-white"
+                  />
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-1 text-gray-500 text-xs">
               <MapPin size={14} />

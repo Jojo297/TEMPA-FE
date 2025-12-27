@@ -67,9 +67,9 @@ export default function DashboardCampusBerlangganan() {
           yang lebih tepat sasaran.
         </>,
         <>
-          <strong>Prioritas di Halaman Utama:</strong> Tingkatkan visibilitas
-          kampus Anda dengan penempatan program di baris teratas (Featured
-          Program) pada hasil pencarian siswa.
+          <strong>Penyematan Badge Eksklusif:</strong> Bangun kepercayaan calon
+          mentee secara instan dengan menampilkan badge verifikasi pada profil
+          program Anda, menandakan kualitas dan kurikulum yang terjamin.
         </>,
         <>
           <strong>Interaksi Tanpa Batas:</strong> Bebas mengunggah materi atau

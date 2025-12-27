@@ -1,5 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
-import { X, Plus, Pencil, MapPin, Upload, Loader2, Save } from "lucide-react";
+import {
+  X,
+  Plus,
+  Pencil,
+  MapPin,
+  Upload,
+  Loader2,
+  Save,
+  BadgeCheckIcon,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import useEditImageCampus from "@/hooks/hooksCampus/useEditImageCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 import { z } from "zod";
+import { Badge } from "@/components/ui/badge";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -74,7 +84,8 @@ export default function DetailCampus() {
 
   // Fallback ke objek kosong jika detailCampus null/undefined
   const displayDetailCampus = detailCampus || {};
-  console.log(displayDetailCampus);
+  // console.log(displayDetailCampus);
+
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
 
@@ -157,10 +168,21 @@ export default function DetailCampus() {
                     className="w-20 h-20 object-contain"
                   />
                 </div>
-                <div>
+                <div className="flex items-center gap-3">
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    {displayDetailCampus.campus_name}
+                    {displayDetailCampus.campus_name}{" "}
                   </h1>
+                  {/* Badge Verif */}
+                  {displayDetailCampus.badge && (
+                    <div className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-blue-400/50 transition-transform cursor-default">
+                      <div className="bg-white rounded-full p-0.5">
+                        <BadgeCheckIcon size={14} className="text-blue-600" />
+                      </div>
+                      <span className="text-[11px] font-black uppercase tracking-widest leading-none">
+                        Verified
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -177,7 +199,8 @@ export default function DetailCampus() {
               value="deskripsi"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
               Deskripsi
             </TabsTrigger>
 
@@ -186,7 +209,8 @@ export default function DetailCampus() {
               value="jurusan"
               className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white">
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
               Jurusan
             </TabsTrigger>
           </TabsList>

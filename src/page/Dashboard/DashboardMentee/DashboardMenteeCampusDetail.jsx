@@ -28,7 +28,7 @@ const DashboardCampusDetail = () => {
 
   // store detail campus to displayCampusDetail
   const displayCampusDetail = detailCampus ?? [];
-  // console.log(displayCampusDetail);
+  console.log(displayCampusDetail);
 
   // fetch detail campus
   useEffect(() => {
