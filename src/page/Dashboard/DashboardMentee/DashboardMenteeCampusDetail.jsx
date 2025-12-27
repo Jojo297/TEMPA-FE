@@ -23,7 +23,7 @@ import CampusLocation from "@/components/CampusLocation";
 const DashboardCampusDetail = () => {
   const { id } = useParams();
   const token = localStorage.getItem("userJwt");
-  const { detailCampus, isLoading, error, fetchDetailCampus } =
+  const { detailCampus, isLoading, error, fetchDetailCampus, addViewCampus } =
     useGetDetailCampus();
   const kampus = kampusList.find((k) => k.id === parseInt(id));
 
@@ -31,12 +31,32 @@ const DashboardCampusDetail = () => {
   const displayCampusDetail = detailCampus ?? [];
   console.log(displayCampusDetail);
 
+  const idCampus = displayCampusDetail.id;
+
   // fetch detail campus
   useEffect(() => {
     if (token) {
       fetchDetailCampus(token, id);
     }
   }, [token, fetchDetailCampus]);
+
+  // add view if mentee stay 5 second in this page
+  useEffect(() => {
+    if (!token) return;
+    const threshold = 5000; // 5 second
+
+    const isViewed = sessionStorage.getItem(`viewed_cam_${idCampus}`);
+    if (isViewed) return;
+
+    const timer = setTimeout(() => {
+      addViewCampus(token, idCampus);
+    }, threshold);
+
+    // cleanup timer
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [idCampus, token]);
 
   if (!kampus)
     return (

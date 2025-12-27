@@ -69,7 +69,7 @@ export default function DashboardCampusBerlangganan() {
         <>
           <strong>Penyematan Badge Eksklusif:</strong> Bangun kepercayaan calon
           mentee secara instan dengan menampilkan badge verifikasi pada profil
-          program Anda, menandakan kualitas dan kurikulum yang terjamin.
+          kampus Anda, menandakan kualitas dan kurikulum yang terjamin.
         </>,
         <>
           <strong>Interaksi Tanpa Batas:</strong> Bebas mengunggah materi atau

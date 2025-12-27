@@ -15,6 +15,7 @@ import {
   BellIcon,
   LogOutIcon,
   University,
+  ChartAreaIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -69,6 +70,11 @@ const Sidebarcampus = ({ children }) => {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
       path: "/dashboard-campus/beranda",
+    },
+    {
+      name: "ANALITIK",
+      icon: <ChartAreaIcon size={18} />,
+      path: "/dashboard-campus/analytics",
     },
     // {
     //   name: "DATA KAMPUS",

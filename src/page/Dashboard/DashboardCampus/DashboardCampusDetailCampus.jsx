@@ -8,6 +8,7 @@ import {
   Loader2,
   Save,
   BadgeCheckIcon,
+  Eye,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -206,39 +207,55 @@ export default function DetailCampus() {
 
       <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
         <Tabs defaultValue="deskripsi" className="w-full">
-          {/* Navigation button */}
-          <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
-            {/* description */}
-            <TabsTrigger
-              value="deskripsi"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+          <div className="flex items-center justify-between">
+            {/* Navigation button */}
+            <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
+              {/* description */}
+              <TabsTrigger
+                value="deskripsi"
+                className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
-              Deskripsi
-            </TabsTrigger>
+              >
+                Deskripsi
+              </TabsTrigger>
 
-            {/* jurusan */}
-            <TabsTrigger
-              value="jurusan"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              {/* jurusan */}
+              <TabsTrigger
+                value="jurusan"
+                className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
-              Jurusan
-            </TabsTrigger>
+              >
+                Jurusan
+              </TabsTrigger>
 
-            {/* location */}
-            <TabsTrigger
-              value="location"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              {/* location */}
+              <TabsTrigger
+                value="location"
+                className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
-            >
-              Lokasi
-            </TabsTrigger>
-          </TabsList>
+              >
+                Lokasi
+              </TabsTrigger>
+            </TabsList>
 
+            {/* total view campus */}
+            <div className="group flex items-center gap-2 text-muted-foreground hover:text-primary transition-all duration-300">
+              <div className="relative">
+                <Eye className="h-4 w-4 transition-transform group-hover:scale-110" />
+                <div className="absolute -top-1 -right-1 h-1.5 w-1.5 bg-blue-500 rounded-full border border-white" />
+              </div>
+              <span className="text-sm font-medium tracking-tight">
+                Telah dilihat oleh{" "}
+                <b className="text-foreground tabular-nums">
+                  {displayDetailCampus.seen?.toLocaleString("en-US")}
+                </b>{" "}
+                mentee
+              </span>
+            </div>
+          </div>
           {/* content Tabs */}
           <TabsContent value="deskripsi">
             <DetailCampusDescription

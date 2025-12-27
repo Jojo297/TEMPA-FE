@@ -104,19 +104,6 @@ export default function DetailCampusDescription({
             >
               <X size={16} /> Batal
             </Button>
-            <Button
-              type="submit"
-              onClick={handleSubmit(handleSave)}
-              disabled={isLoading}
-              className="flex items-center gap-2 bg-[#013B35] text-white disabled:opacity-50"
-            >
-              {isLoading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Save size={16} />
-              )}
-              {isLoading ? "Menyimpan..." : "Simpan"}
-            </Button>
           </div>
         ) : (
           <Button
@@ -187,6 +174,23 @@ export default function DetailCampusDescription({
                 <Plus size={16} className="mr-2" /> Tambah Misi
               </Button>
             </div>
+            {isEditing && (
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  onClick={handleSubmit(handleSave)}
+                  disabled={isLoading}
+                  className="flex  items-center gap-2 bg-[#013B35] text-white disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Save size={16} />
+                  )}
+                  {isLoading ? "Menyimpan..." : "Simpan"}
+                </Button>
+              </div>
+            )}
           </div>
         </form>
       ) : (

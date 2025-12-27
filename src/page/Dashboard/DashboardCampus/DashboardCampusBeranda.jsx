@@ -244,7 +244,7 @@ export default function DashboardCampusBeranda() {
       {/* === STATS CARDS === */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         {/* Card Total Program */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 border-l-4 border-l-blue-400 shadow-sm flex items-center gap-5">
           <div className="bg-blue-100 text-blue-600 rounded-full p-3">
             <ListChecks size={28} />
           </div>
@@ -255,7 +255,7 @@ export default function DashboardCampusBeranda() {
         </div>
 
         {/* Card Total Jurusan */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 border-l-4 border-l-orange-400 shadow-sm flex items-center gap-5">
           <div className="bg-orange-100 text-orange-600 rounded-full p-3">
             <GraduationCap size={28} />
           </div>
@@ -266,7 +266,7 @@ export default function DashboardCampusBeranda() {
         </div>
 
         {/* Card Total Mentor */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 border-l-4 border-l-green-400 shadow-sm flex items-center gap-5">
           <div className="bg-green-100 text-green-600 rounded-full p-3">
             <Users size={28} />
           </div>
@@ -277,7 +277,7 @@ export default function DashboardCampusBeranda() {
         </div>
 
         {/* Card Total Mentee */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-5">
+        <div className="bg-white p-6 rounded-xl border border-gray-200 border-l-4 border-l-purple-400 shadow-sm flex items-center gap-5">
           <div className="bg-purple-100 text-purple-600 rounded-full p-3">
             <UserCheck size={28} />
           </div>

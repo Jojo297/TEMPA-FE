@@ -118,6 +118,10 @@ const DashboardCampusBerlangganan = lazy(() =>
   import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan")
 );
 
+const AnalyticsPage = lazy(() =>
+  import("./page/Dashboard/DashboardCampus/DashboardCampusAnalytics")
+);
+
 //Dashboard Admin
 const DashboardAdmin = lazy(() =>
   import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
@@ -320,6 +324,10 @@ const router = createBrowserRouter([
       {
         path: "berlangganan",
         element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
+      },
+      {
+        path: "analytics",
+        element: <SuspenseWrapper Component={AnalyticsPage} />,
       },
     ],
   },

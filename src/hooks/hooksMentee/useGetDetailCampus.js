@@ -47,6 +47,35 @@ const useGetDetailCampus = create((set) => ({
     }
   },
 
+  // add view campus
+  addViewCampus: async (token, id) => {
+    try {
+      const API_URL = `${API_BASE_URL}/mentee/add-seen-campus/${id}`;
+
+      const response = await axios.post(
+        API_URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response) {
+        sessionStorage.setItem(`viewed_cam_${id}`, "true");
+      }
+    } catch (error) {
+      console.error("Failed to add view campus:", error);
+
+      const errorMessage = error.response?.data?.message;
+
+      if (error.response?.status === 404) {
+        set({ error: "404 not found" });
+      }
+    }
+  },
+
   // clear state
   clearDetailProgram: () =>
     set({ detailCampus: [], isLoadingL: false, errors: false }),
