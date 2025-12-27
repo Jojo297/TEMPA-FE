@@ -30,6 +30,7 @@ import useEditImageCampus from "@/hooks/hooksCampus/useEditImageCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
+import DetailCampusLocation from "@/components/DetailCampusLocation";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -89,12 +90,25 @@ export default function DetailCampus() {
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
 
+  const campusName = displayDetailCampus.campus_name;
+
   const DescriptionSection = {
     desc: displayDetailCampus.description,
     visi: displayDetailCampus.vision_mission,
   };
 
   const majors = displayDetailCampus.major;
+
+  const location = {
+    province: displayDetailCampus.province,
+    city: displayDetailCampus.city,
+    subdistrict: displayDetailCampus.subdistrict,
+    ward: displayDetailCampus.ward,
+    lat: displayDetailCampus.lat,
+    lng: displayDetailCampus.lng,
+  };
+
+  // console.log(campusName);
 
   useEffect(() => {
     if (token) {
@@ -213,6 +227,16 @@ export default function DetailCampus() {
             >
               Jurusan
             </TabsTrigger>
+
+            {/* location */}
+            <TabsTrigger
+              value="location"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Lokasi
+            </TabsTrigger>
           </TabsList>
 
           {/* content Tabs */}
@@ -226,6 +250,15 @@ export default function DetailCampus() {
           <TabsContent value="jurusan">
             <DetailCampusMajors
               majors={majors}
+              refetchCampusData={() => fetchDetailCampus(token)}
+            />
+          </TabsContent>
+
+          <TabsContent value="location">
+            <DetailCampusLocation
+              idCampus={displayDetailCampus.id}
+              location={location}
+              campusName={campusName}
               refetchCampusData={() => fetchDetailCampus(token)}
             />
           </TabsContent>

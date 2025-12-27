@@ -22,16 +22,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
 import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
-
-/* ========================== COMPONENT INFO ========================== */
-function Info({ label, value }) {
-  return (
-    <div>
-      <p className="font-medium text-gray-600">{label}</p>
-      <p className="text-gray-900">{value || "-"}</p>
-    </div>
-  );
-}
+import Info from "@/components/Info";
 
 const DashboardMenteeDetailProgram = () => {
   // get id program from url

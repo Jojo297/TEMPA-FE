@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import useGetDetailCampus from "@/hooks/hooksMentee/useGetDetailCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
+import CampusLocation from "@/components/CampusLocation";
 
 const DashboardCampusDetail = () => {
   const { id } = useParams();
@@ -110,6 +111,14 @@ const DashboardCampusDetail = () => {
             >
               Program
             </TabsTrigger>
+            <TabsTrigger
+              value="lokasi"
+              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+                               hover:bg-[#013B35] hover:text-white transition 
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+            >
+              Lokasi
+            </TabsTrigger>
           </TabsList>
 
           {/* content Tabs */}
@@ -123,6 +132,10 @@ const DashboardCampusDetail = () => {
 
           <TabsContent value="program">
             <DashboardCampusProgram kampus={displayCampusDetail} />
+          </TabsContent>
+
+          <TabsContent value="lokasi">
+            <CampusLocation kampus={displayCampusDetail} />
           </TabsContent>
         </Tabs>
       </section>
