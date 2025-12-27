@@ -149,7 +149,7 @@ export default function DetailCampus() {
         />
       ) : (
         <header className="bg-[#F8FAFB]">
-          <div className="max-w-6xl mx-auto rounded-xl shadow-lg overflow-hidden">
+          <div className=" mx-auto rounded-xl shadow-lg overflow-hidden">
             <div className="h-[400px] relative">
               {/* banner */}
               <img

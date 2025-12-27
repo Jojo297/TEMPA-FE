@@ -16,7 +16,7 @@ export default function DashboardBerandaCampus() {
   const displayVerification = isVerify ?? {};
 
   const status = displayVerification.verification_status;
-  console.log(status);
+  // console.log(status);
 
   // if verif redirect component CampusFirst
   useEffect(() => {
