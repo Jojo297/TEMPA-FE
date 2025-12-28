@@ -50,6 +50,7 @@ import z from "zod";
 import useSendMessage from "@/hooks/hooksCampus/useSendMessage";
 import { toast } from "sonner";
 import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
+import { ParticipantAnalytics } from "./ParticipantAnalytics";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -187,6 +188,7 @@ export default function ParticipantProgramCampus({
 
   return (
     <div className="max-w-6xl mx-auto mb-10">
+      <ParticipantAnalytics menteeList={menteeList} />
       <div className="bg-white shadow-md rounded-xl p-6 border">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-primary">

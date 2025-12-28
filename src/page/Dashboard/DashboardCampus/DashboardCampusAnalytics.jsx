@@ -165,7 +165,7 @@ const AnalyticsPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Chart Minat Jurusan */}
-        <div className="lg:col-span-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div className="lg:col-span-8 bg-white p-6 rounded-2xl shadow-md border border-gray-100">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h4 className="font-bold text-[#013B35] text-lg">
@@ -213,8 +213,8 @@ const AnalyticsPage = () => {
 
         {/* Sidebar Insights & Demographics */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Action Card */}
-          <div className="bg-[#013B35] p-6 rounded-2xl text-white shadow-lg relative overflow-hidden">
+          {/* Inshight Card */}
+          <div className="bg-[#013B35] p-6 rounded-2xl text-white shadow-md relative overflow-hidden">
             <div className="absolute top-0 right-0 opacity-10 transform translate-x-4 -translate-y-4">
               <BarChart3 size={120} />
             </div>
@@ -237,7 +237,7 @@ const AnalyticsPage = () => {
           </div>
 
           {/* Demographics Card (UX Improved with Progress Bars) */}
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-md">
             <h4 className="font-bold text-gray-900 text-sm mb-6 flex items-center gap-2">
               <MapPin size={16} className="text-red-500" />
               Analisis Demografi

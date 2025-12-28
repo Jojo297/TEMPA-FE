@@ -48,7 +48,7 @@ export default function DashboardCampusDetailProgram() {
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
 
   const program = detailProgram ?? {};
-  // console.log(program);
+  console.log(program);
 
   useEffect(() => {
     if (token) {
