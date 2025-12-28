@@ -3,6 +3,7 @@ import { Check, X, GraduationCap } from "lucide-react";
 import SidebarWithNavbar from "@/components/SidebarMentee";
 import { Outlet, useNavigate } from "react-router";
 import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
+import { jwtDecode } from "jwt-decode";
 
 const DashboardMentee = () => {
   const token = localStorage.getItem("userJwt");
@@ -12,6 +13,23 @@ const DashboardMentee = () => {
 
   const verifyMentee = verifyStatus ?? {};
   // console.log(verifyMentee);
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    } else {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("userJwt");
+          navigate("/");
+        }
+      } catch (error) {
+        localStorage.removeItem("userJwt");
+        navigate("/");
+      }
+    }
+  }, [token, navigate]);
 
   // fetch status acc
   useEffect(() => {

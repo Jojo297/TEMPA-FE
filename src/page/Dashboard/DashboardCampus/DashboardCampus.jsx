@@ -8,8 +8,8 @@ import useRegisterMitraCampus from "@/hooks/hooksCampus/useRegisterMitraCampus";
 export default function DashboardBerandaCampus() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
-  const decode = jwtDecode(token);
-  console.log(decode);
+  // const decode = jwtDecode(token);
+  // console.log(decode);
   const { isLoading, checkVeirificationCampus, isVerify } =
     useRegisterMitraCampus();
 
@@ -17,6 +17,23 @@ export default function DashboardBerandaCampus() {
 
   const status = displayVerification.verification_status;
   // console.log(status);
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login-campus");
+    } else {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("userJwt");
+          navigate("/login-campus");
+        }
+      } catch (error) {
+        localStorage.removeItem("userJwt");
+        navigate("/login-campus");
+      }
+    }
+  }, [token, navigate]);
 
   // if verif redirect component CampusFirst
   useEffect(() => {

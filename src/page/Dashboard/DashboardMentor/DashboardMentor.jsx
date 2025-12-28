@@ -1,7 +1,28 @@
 import SidebarMentor from "@/components/SidebarMentor";
-import { Outlet } from "react-router";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router";
 
 export default function DashboardMentor() {
+  const token = localStorage.getItem("userJwt");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login-mentor");
+    } else {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("userJwt");
+          navigate("/login-mentor");
+        }
+      } catch (error) {
+        localStorage.removeItem("userJwt");
+        navigate("/login-mentor");
+      }
+    }
+  }, [token, navigate]);
   return (
     <>
       <SidebarMentor>
