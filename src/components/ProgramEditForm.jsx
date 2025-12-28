@@ -59,6 +59,8 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
     field.onChange(formattedDate);
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -82,6 +84,8 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           onSelect={handleDateSelect}
           initialFocus
           captionLayout="dropdown"
+          fromYear={currentYear}
+          toYear={currentYear + 5}
         />
       </PopoverContent>
     </Popover>

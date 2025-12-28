@@ -74,7 +74,7 @@ const DashboardMenteeDetailProgram = () => {
   };
 
   const displayDetailProgram = detailProgram ?? [];
-  console.log(displayDetailProgram);
+  // console.log(displayDetailProgram);
 
   // add view if mentee stay 5 second in this page
   useEffect(() => {

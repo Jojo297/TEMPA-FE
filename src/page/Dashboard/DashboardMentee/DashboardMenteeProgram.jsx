@@ -74,15 +74,15 @@ export default function DashboardMenteeProgram() {
       };
     } else if (startDate.getTime() > today.getTime()) {
       return {
-        text: "Buka",
-        bgColor: "bg-green-200",
-        textColor: "text-green-800",
+        text: "Segera Buka",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
       };
     } else {
       return {
-        text: "Sedang Berjalan",
-        bgColor: "bg-blue-100",
-        textColor: "text-blue-800",
+        text: "Buka",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
       };
     }
   };

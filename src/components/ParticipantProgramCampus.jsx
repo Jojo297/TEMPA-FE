@@ -87,6 +87,8 @@ export default function ParticipantProgramCampus({
     },
   });
 
+  console.log(menteeList);
+
   // Columns definition
   const columns = useMemo(
     () => [
@@ -126,6 +128,24 @@ export default function ParticipantProgramCampus({
       {
         accessorKey: "email",
         header: "Email",
+      },
+      {
+        accessorKey: "completion_status",
+        header: "Status",
+        cell: ({ row }) => {
+          const status = row.getValue("completion_status");
+          return (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                status === "completed"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+            >
+              {status === "completed" ? "Selesai" : "Sedang Berjalan"}
+            </span>
+          );
+        },
       },
       {
         id: "actions",
