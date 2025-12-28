@@ -198,6 +198,7 @@ export function ParticipantAnalytics({ menteeList }) {
               <YAxis
                 axisLine={false}
                 tickLine={false}
+                allowDecimals={false}
                 tick={{ fontSize: 10, fill: "#9CA3AF" }}
               />
               <Tooltip
