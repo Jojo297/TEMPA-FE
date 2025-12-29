@@ -23,9 +23,10 @@ import {
 import useRejectCampus from "@/hooks/hooksAdmin/useRejectCampus";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
-import { X } from "lucide-react";
+import { AlertCircleIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router";
 
 const RejectSchema = z.object({
@@ -81,6 +82,22 @@ export default function RejectCampus({ token, idCampus }) {
               onSubmit={formReject.handleSubmit(onRejectSubmit)}
               className="space-y-4"
             >
+              {/* alert info */}
+              <Alert className="relative overflow-hidden border-none bg-blue-50/50 px-4 py-3 shadow-sm ring-1 ring-blue-100">
+                <div className="absolute left-0 top-0 h-full w-1 bg-blue-500" />
+                <div className="flex items-start gap-3">
+                  <AlertCircleIcon className="mt-0.5 h-5 w-5 text-blue-600" />
+                  <div className="grid gap-1">
+                    <AlertTitle className="text-sm font-bold leading-none tracking-tight text-blue-900">
+                      Informasi
+                    </AlertTitle>
+                    <AlertDescription className="text-sm leading-relaxed text-blue-700/90">
+                      Pesan konfirmasi beserta alasan penolakan akan dikirimkan
+                      ke email kampus.
+                    </AlertDescription>
+                  </div>
+                </div>
+              </Alert>
               <FormField
                 control={formReject.control}
                 name="reason"

@@ -30,7 +30,8 @@ import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import DashboardAdminVerificationSkeleton from "@/components/DashboardAdminVerificationSkeleton";
 import RejectCampus from "@/components/RejectCampus";
-import { Check } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon, Check } from "lucide-react";
 
 export default function DashboardAdminVerivication() {
   const { id } = useParams();

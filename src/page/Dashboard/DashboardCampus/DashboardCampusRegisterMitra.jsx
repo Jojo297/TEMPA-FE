@@ -273,551 +273,621 @@ export default function DashboardCampusRegisterMitra() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-slate-50/50 pb-20 font-sans">
       {/* Hero Section */}
-      <section className="bg-[#013B36] w-full mx-auto text-center text-white  py-6 rounded-md">
-        <h2 className="text-2xl font-semibold">Bergabung Sebagai Mitra</h2>
-        <p className="text-gray-300 text-sm mt-1">
-          Kami membutuhkan beberapa informasi. Silakan isi data kampus di bawah
-          ini.
-        </p>
-      </section>
+      <div className="bg-[#013B36] pt-16 pb-32 px-6 rounded-md">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white tracking-tight mb-3">
+            Bergabung Sebagai Mitra
+          </h2>
+          <p className="text-emerald-100/80 text-lg max-w-2xl mx-auto">
+            Lengkapi profil kampus Anda untuk mulai berkolaborasi dan membuka
+            peluang baru di ekosistem kami.
+          </p>
+        </div>
+      </div>
 
       {/* Form */}
-      <main className="flex justify-center w-full mt-10">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(
-              onSubmit,
-              // error handler
-              (errors) => {
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 -mt-20 relative z-10">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, (errors) => {
                 console.error("Validasi Gagal:", errors);
-                console.log("Status Form:", { isValid, isDirty, isSubmitting });
-              }
-            )}
-            className="bg-[#013B36] text-white w-full rounded-lg p-8 shadow-lg"
-          >
-            <div className="grid grid-cols-2 gap-5">
+                toast.error("Mohon lengkapi data yang wajib diisi.");
+              })}
+              className="p-6 md:p-10 space-y-10"
+            >
               <input
                 type="hidden"
                 {...form.register("isCampusVerifiedByApi")}
                 value={form.watch("isCampusVerifiedByApi").toString()} // Pastikan dikirim sebagai string 'true'/'false'
               />
 
-              {/* 1. Campus Name */}
-              <FormField
-                control={form.control}
-                name="campusName"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Nama Kampus (Cari)</FormLabel>
+              {/* Section 1: Informasi Dasar */}
+              <section>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-[#013B36] font-bold text-sm">
+                    1
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Informasi Dasar Kampus
+                  </h3>
+                </div>
 
-                    <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          {/* PENTING: Gunakan Button sebagai Trigger untuk menghindari konflik input. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* 1. Campus Name */}
+                  <FormField
+                    control={form.control}
+                    name="campusName"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Nama Kampus (Cari)
+                        </FormLabel>
 
-                          {/* Nilai yang ditampilkan adalah nilai yang sudah dipilih di RHF. */}
+                        <Popover
+                          open={popoverOpen}
+                          onOpenChange={setPopoverOpen}
+                        >
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100 hover:text-gray-900",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                  ? field.value // Menampilkan nilai RHF yang sudah dipilih
+                                  : "Cari & Pilih nama kampus..."}
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
 
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className="w-full justify-between bg-white text-black hover:bg-white/90"
+                          {/* Dropdown/Suggestions */}
+                          <PopoverContent
+                            className="w-[--radix-popover-trigger-width] p-0"
+                            align="start"
                           >
-                            {field.value
-                              ? field.value // Menampilkan nilai RHF yang sudah dipilih
-                              : "Cari & Pilih nama kampus..."}
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
+                            <Command>
+                              <CommandInput
+                                placeholder="Ketik nama kampus untuk mencari..."
+                                onValueChange={(value) => {
+                                  form.setValue("campusName", value);
+                                  form.setValue("isCampusVerifiedByApi", false);
+                                }}
+                                value={campusNameValue}
+                              />
 
-                      {/* Dropdown/Suggestions */}
-                      <PopoverContent
-                        className="w-[--radix-popover-trigger-width] p-0"
-                        align="start"
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Ketik nama kampus untuk mencari..."
-                            onValueChange={(value) => {
-                              form.setValue("campusName", value);
-                              form.setValue("isCampusVerifiedByApi", false);
-                            }}
-                            value={campusNameValue}
-                          />
+                              {isSearching ? (
+                                <div className="p-2 text-center text-sm">
+                                  Mencari data kampus...
+                                </div>
+                              ) : suggestions.length > 0 ? (
+                                <CommandGroup>
+                                  {suggestions.map((campus) => (
+                                    <CommandItem
+                                      key={campus.id}
+                                      onSelect={() => {
+                                        // Set nilai ke RHF dan tutup popover
+                                        form.setValue(
+                                          "campusName",
+                                          campus.nama,
+                                          {
+                                            shouldValidate: true,
+                                          }
+                                        );
+                                        form.setValue(
+                                          "isCampusVerifiedByApi",
+                                          true
+                                        );
+                                        setPopoverOpen(false);
+                                      }}
+                                      value={campus.nama}
+                                    >
+                                      {campus.nama} ({campus.kode})
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              ) : debouncedSearchTerm.length >= 3 &&
+                                !isSearching ? (
+                                <CommandEmpty>
+                                  Tidak ada hasil. Anda dapat melanjutkan dengan
+                                  nama manual.
+                                </CommandEmpty>
+                              ) : (
+                                <div className="p-2 text-sm text-gray-500">
+                                  Ketik minimal 3 karakter untuk mencari.
+                                </div>
+                              )}
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
 
-                          {isSearching ? (
-                            <div className="p-2 text-center text-sm">
-                              Mencari data kampus...
-                            </div>
-                          ) : suggestions.length > 0 ? (
-                            <CommandGroup>
-                              {suggestions.map((campus) => (
-                                <CommandItem
-                                  key={campus.id}
-                                  onSelect={() => {
-                                    // Set nilai ke RHF dan tutup popover
-                                    form.setValue("campusName", campus.nama, {
-                                      shouldValidate: true,
-                                    });
-                                    form.setValue(
-                                      "isCampusVerifiedByApi",
-                                      true
-                                    );
-                                    setPopoverOpen(false);
-                                  }}
-                                  value={campus.nama}
-                                >
-                                  {campus.nama} ({campus.kode})
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          ) : debouncedSearchTerm.length >= 3 &&
-                            !isSearching ? (
-                            <CommandEmpty>
-                              Tidak ada hasil. Anda dapat melanjutkan dengan
-                              nama manual.
-                            </CommandEmpty>
-                          ) : (
-                            <div className="p-2 text-sm text-gray-500">
-                              Ketik minimal 3 karakter untuk mencari.
-                            </div>
-                          )}
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                        <FormDescription className="text-gray-500 text-xs">
+                          Jika nama kampus tidak ditemukan, tuliskan saja nama
+                          lengkap kampus dan lanjutkan pengisian form.
+                        </FormDescription>
 
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
                     )}
-                  </FormItem>
-                )}
-              />
-
-              {/* 2. Email Kampus */}
-              <FormField
-                control={form.control}
-                name="emailCampus"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Email Kampus</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="bg-white text-black"
-                        type="email"
-                        placeholder="Masukkan email kampus"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-gray-100">
-                      Gunakan email resmi kampus.
-                    </FormDescription>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* 3. Deskripsi Kampus */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field, fieldState }) => (
-                  <FormItem className="">
-                    <FormLabel>Deskripsi Kampus</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="bg-white text-black"
-                        placeholder="Tuliskan deskripsi singkat kampus"
-                        {...field}
-                      />
-                    </FormControl>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* 4. Website Kampus */}
-              <FormField
-                control={form.control}
-                name="websiteCampus"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Website Kampus</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="bg-white text-black"
-                        type="text"
-                        placeholder="Masukkan link website kampus"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-gray-100">
-                      Contoh: https://kampusku.ac.id
-                    </FormDescription>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* provinsi */}
-              <FormField
-                control={form.control}
-                name="valueProvince"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Provinsi</FormLabel>
-                    <FormControl>
-                      <Popover
-                        open={openProvince}
-                        onOpenChange={setOpenProvince}
-                      >
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openCity}
-                            className={`w-full justify-between ${
-                              valueProvince
-                                ? "text-black"
-                                : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
-                            {valueProvince
-                              ? displayProvince.find(
-                                  (framework) =>
-                                    framework.code === valueProvince
-                                )?.name
-                              : "Pilih Provinsi..."}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Cari Provinsi..."
-                              className="h-9 w-full"
-                            />
-                            <CommandList>
-                              <CommandEmpty>
-                                Provonsi tidak ditemukan.
-                              </CommandEmpty>
-                              <CommandGroup>
-                                {displayProvince.map((framework) => (
-                                  <CommandItem
-                                    key={framework.code}
-                                    value={framework.name}
-                                    onSelect={(currentValue) => {
-                                      field.onChange(framework.name);
-                                      setvalueProvince(framework.code);
-                                      setOpenProvince(false);
-                                    }}
-                                  >
-                                    {framework.name}
-                                    <Check
-                                      className={cn(
-                                        "ml-auto",
-                                        valueProvince === framework.name
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* kota/kabupaten */}
-              <FormField
-                control={form.control}
-                name="valueCity"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Kota/Kabupaten</FormLabel>
-                    <FormControl>
-                      <Popover open={openCity} onOpenChange={setOpenCity}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openCity}
-                            className={`w-full justify-between ${
-                              valueCity
-                                ? "text-black"
-                                : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
-                            {valueCity
-                              ? displayCity.find(
-                                  (framework) => framework.code === valueCity
-                                )?.name
-                              : "Kota/Kabupaten"}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Cari Kota/Kabupaten..."
-                              className="h-9 w-full"
-                            />
-                            <CommandList>
-                              <CommandEmpty>
-                                Kota/Kabupaten tidak ditemukan.
-                              </CommandEmpty>
-                              <CommandGroup>
-                                {displayCity.map((framework) => (
-                                  <CommandItem
-                                    key={framework.code}
-                                    // Ganti value-nya menjadi framework.code agar lebih mudah dicari
-                                    value={framework.name}
-                                    onSelect={(currentCode) => {
-                                      setvalueCity(framework.code);
-                                      field.onChange(framework.name);
-                                      setOpenCity(false);
-                                    }}
-                                  >
-                                    {framework.name}
-                                    <Check
-                                      className={cn(
-                                        "ml-auto",
-                                        // Bandingkan dengan code, bukan name
-                                        framework.code === valueCity
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* kecamatan */}
-              <FormField
-                control={form.control}
-                name="valueSubdistrict"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Kecamatan</FormLabel>
-                    <FormControl>
-                      <Popover
-                        open={openSubdistrict}
-                        onOpenChange={setOpenSubdistrict}
-                      >
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openSubdistrict}
-                            className={`w-full justify-between ${
-                              valueSubdistrict
-                                ? "text-black"
-                                : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
-                            {valueSubdistrict
-                              ? displaySubdistrict.find(
-                                  (framework) =>
-                                    framework.code === valueSubdistrict
-                                )?.name
-                              : "Pilih Kecamatan..."}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Search kecamatan..."
-                              className="h-9 w-full"
-                            />
-                            <CommandList>
-                              <CommandEmpty>
-                                Kecamatan tidak ditemukan.
-                              </CommandEmpty>
-                              <CommandGroup>
-                                {displaySubdistrict.map((framework) => (
-                                  <CommandItem
-                                    key={framework.code}
-                                    value={framework.name}
-                                    onSelect={(currentValue) => {
-                                      setValueSubdistrict(framework.code);
-                                      field.onChange(framework.name);
-                                      setOpenSubdistrict(false);
-                                    }}
-                                  >
-                                    {framework.name}
-                                    <Check
-                                      className={cn(
-                                        "ml-auto",
-                                        framework.code === valueSubdistrict
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              {/* desa/kelurahan */}
-              <FormField
-                control={form.control}
-                name="valueWard"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Desa/Kelurahan</FormLabel>
-                    <FormControl>
-                      <Popover open={openWard} onOpenChange={setOpenWard}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openSubdistrict}
-                            className={`w-full justify-between ${
-                              valueWard
-                                ? "text-black"
-                                : "text-gray-500 hover:text-gray-500"
-                            }`}
-                          >
-                            {valueWard
-                              ? displayWard.find(
-                                  (framework) => framework.code === valueWard
-                                )?.name
-                              : "Pilih Kecamatan..."}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Search kecamatan..."
-                              className="h-9 w-full"
-                            />
-                            <CommandList>
-                              <CommandEmpty>
-                                Kecamatan tidak ditemukan.
-                              </CommandEmpty>
-                              <CommandGroup>
-                                {displayWard.map((framework) => (
-                                  <CommandItem
-                                    key={framework.code}
-                                    value={framework.name}
-                                    onSelect={(currentValue) => {
-                                      setValueWard(framework.code);
-                                      field.onChange(framework.name);
-                                      setOpenWard(false);
-                                    }}
-                                  >
-                                    {framework.name}
-                                    <Check
-                                      className={cn(
-                                        "ml-auto",
-                                        framework.code === valueWard
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* maps */}
-            <FormField
-              control={form.control}
-              name="selectedLocation"
-              render={({ field, fieldState }) => (
-                <FormItem className="mt-5">
-                  <FormLabel>Masukkan Titik Lokasi</FormLabel>
-                  {/* Komponen Peta Anda */}
-                  <ManageMapsCampusLocation
-                    onLocationSelect={handleLocationChange}
                   />
 
-                  {/* Tampilkan Pesan Error Validasi */}
-                  {fieldState.error && (
-                    <FormMessage className="mt-5">
-                      {fieldState.error.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
+                  {/* 2. Email Kampus */}
+                  <FormField
+                    control={form.control}
+                    name="emailCampus"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Email Kampus
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                            type="email"
+                            placeholder="Masukkan email kampus"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-gray-500">
+                          Gunakan email resmi kampus.
+                        </FormDescription>
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
 
-            {/* button submit */}
-            <div className="flex justify-center ">
-              <Button
-                type="submit"
-                disabled={isLoadingRegister}
-                className={`
-                mt-8 bg-[#5CC6BA] text-[#013D3A] font-semibold px-12 py-2 rounded-md transition duration-300
+                  {/* 4. Website Kampus */}
+                  <FormField
+                    control={form.control}
+                    name="websiteCampus"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Website Kampus
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                            type="text"
+                            placeholder="Masukkan link website kampus"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription className="text-gray-500">
+                          Contoh: https://kampusku.ac.id
+                        </FormDescription>
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* 3. Deskripsi Kampus */}
+                  <div className="md:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field, fieldState }) => (
+                        <FormItem className="">
+                          <FormLabel className="text-gray-700">
+                            Deskripsi Kampus
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea
+                              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors min-h-[120px]"
+                              placeholder="Tuliskan deskripsi singkat kampus"
+                              {...field}
+                            />
+                          </FormControl>
+                          {fieldState.error && (
+                            <FormMessage>
+                              {fieldState.error.message}
+                            </FormMessage>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 2: Alamat */}
+              <section>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-[#013B36] font-bold text-sm">
+                    2
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Alamat Lengkap
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* provinsi */}
+                  <FormField
+                    control={form.control}
+                    name="valueProvince"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Provinsi
+                        </FormLabel>
+                        <FormControl>
+                          <Popover
+                            open={openProvince}
+                            onOpenChange={setOpenProvince}
+                          >
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={openCity}
+                                className={cn(
+                                  "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100 hover:text-gray-900",
+                                  !valueProvince && "text-muted-foreground"
+                                )}
+                              >
+                                {valueProvince
+                                  ? displayProvince.find(
+                                      (framework) =>
+                                        framework.code === valueProvince
+                                    )?.name
+                                  : "Pilih Provinsi..."}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Cari Provinsi..."
+                                  className="h-9 w-full"
+                                />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Provonsi tidak ditemukan.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {displayProvince.map((framework) => (
+                                      <CommandItem
+                                        key={framework.code}
+                                        value={framework.name}
+                                        onSelect={(currentValue) => {
+                                          field.onChange(framework.name);
+                                          setvalueProvince(framework.code);
+                                          setOpenProvince(false);
+                                        }}
+                                      >
+                                        {framework.name}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            valueProvince === framework.name
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        </FormControl>
+
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* kota/kabupaten */}
+                  <FormField
+                    control={form.control}
+                    name="valueCity"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Kota/Kabupaten
+                        </FormLabel>
+                        <FormControl>
+                          <Popover open={openCity} onOpenChange={setOpenCity}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={openCity}
+                                className={cn(
+                                  "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100 hover:text-gray-900",
+                                  !valueCity && "text-muted-foreground"
+                                )}
+                              >
+                                {valueCity
+                                  ? displayCity.find(
+                                      (framework) =>
+                                        framework.code === valueCity
+                                    )?.name
+                                  : "Kota/Kabupaten"}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Cari Kota/Kabupaten..."
+                                  className="h-9 w-full"
+                                />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Kota/Kabupaten tidak ditemukan.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {displayCity.map((framework) => (
+                                      <CommandItem
+                                        key={framework.code}
+                                        // Ganti value-nya menjadi framework.code agar lebih mudah dicari
+                                        value={framework.name}
+                                        onSelect={(currentCode) => {
+                                          setvalueCity(framework.code);
+                                          field.onChange(framework.name);
+                                          setOpenCity(false);
+                                        }}
+                                      >
+                                        {framework.name}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            // Bandingkan dengan code, bukan name
+                                            framework.code === valueCity
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        </FormControl>
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* kecamatan */}
+                  <FormField
+                    control={form.control}
+                    name="valueSubdistrict"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Kecamatan
+                        </FormLabel>
+                        <FormControl>
+                          <Popover
+                            open={openSubdistrict}
+                            onOpenChange={setOpenSubdistrict}
+                          >
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={openSubdistrict}
+                                className={cn(
+                                  "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100 hover:text-gray-900",
+                                  !valueSubdistrict && "text-muted-foreground"
+                                )}
+                              >
+                                {valueSubdistrict
+                                  ? displaySubdistrict.find(
+                                      (framework) =>
+                                        framework.code === valueSubdistrict
+                                    )?.name
+                                  : "Pilih Kecamatan..."}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Search kecamatan..."
+                                  className="h-9 w-full"
+                                />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Kecamatan tidak ditemukan.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {displaySubdistrict.map((framework) => (
+                                      <CommandItem
+                                        key={framework.code}
+                                        value={framework.name}
+                                        onSelect={(currentValue) => {
+                                          setValueSubdistrict(framework.code);
+                                          field.onChange(framework.name);
+                                          setOpenSubdistrict(false);
+                                        }}
+                                      >
+                                        {framework.name}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            framework.code === valueSubdistrict
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        </FormControl>
+
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* desa/kelurahan */}
+                  <FormField
+                    control={form.control}
+                    name="valueWard"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700">
+                          Desa/Kelurahan
+                        </FormLabel>
+                        <FormControl>
+                          <Popover open={openWard} onOpenChange={setOpenWard}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={openSubdistrict}
+                                className={cn(
+                                  "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100 hover:text-gray-900",
+                                  !valueWard && "text-muted-foreground"
+                                )}
+                              >
+                                {valueWard
+                                  ? displayWard.find(
+                                      (framework) =>
+                                        framework.code === valueWard
+                                    )?.name
+                                  : "Pilih Kecamatan..."}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Search kecamatan..."
+                                  className="h-9 w-full"
+                                />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Kecamatan tidak ditemukan.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {displayWard.map((framework) => (
+                                      <CommandItem
+                                        key={framework.code}
+                                        value={framework.name}
+                                        onSelect={(currentValue) => {
+                                          setValueWard(framework.code);
+                                          field.onChange(framework.name);
+                                          setOpenWard(false);
+                                        }}
+                                      >
+                                        {framework.name}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            framework.code === valueWard
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        </FormControl>
+
+                        {fieldState.error && (
+                          <FormMessage>{fieldState.error.message}</FormMessage>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </section>
+
+              {/* Section 3: Lokasi */}
+              <section>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-[#013B36] font-bold text-sm">
+                    3
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Titik Lokasi
+                  </h3>
+                </div>
+                {/* maps */}
+                <FormField
+                  control={form.control}
+                  name="selectedLocation"
+                  render={({ field, fieldState }) => (
+                    <FormItem className="">
+                      <FormLabel className="text-gray-700">
+                        Pilih Lokasi di Peta
+                      </FormLabel>
+                      {/* Komponen Peta Anda */}
+                      <ManageMapsCampusLocation
+                        onLocationSelect={handleLocationChange}
+                      />
+
+                      {/* Tampilkan Pesan Error Validasi */}
+                      {fieldState.error && (
+                        <FormMessage className="mt-5">
+                          {fieldState.error.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </section>
+
+              {/* button submit */}
+              <div className="flex justify-end pt-6 border-t border-gray-100">
+                <Button
+                  type="submit"
+                  disabled={isLoadingRegister}
+                  className={`
+                bg-[#5CC6BA] text-[#013D3A] font-bold px-10 py-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-emerald-200 hover:-translate-y-1
                 ${
                   isLoadingRegister
                     ? "cursor-not-allowed" // Style saat loading/disabled
                     : "hover:bg-[#4bb2a8]" // Style saat aktif
                 }`}
-              >
-                {isLoadingRegister ? (
-                  <>
-                    <Spinner />
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  "Kirim"
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
+                >
+                  {isLoadingRegister ? (
+                    <>
+                      <Spinner />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    "Kirim"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
       </main>
     </div>
   );
