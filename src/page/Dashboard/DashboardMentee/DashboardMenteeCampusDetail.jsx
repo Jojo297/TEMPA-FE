@@ -29,7 +29,7 @@ const DashboardCampusDetail = () => {
 
   // store detail campus to displayCampusDetail
   const displayCampusDetail = detailCampus ?? [];
-  console.log(displayCampusDetail);
+  // console.log(displayCampusDetail);
 
   const idCampus = displayCampusDetail.id;
 

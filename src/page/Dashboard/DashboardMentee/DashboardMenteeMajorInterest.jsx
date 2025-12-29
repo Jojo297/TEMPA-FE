@@ -36,6 +36,7 @@ import useSaveMajorInterest from "@/hooks/hooksMentee/useSaveMajorInterest";
 import useCheckVerifyStatus from "@/hooks/hooksMentee/useCheckVerifyStatus";
 import useGetMajorInterest from "@/hooks/hooksMentee/useGetMajorInterest";
 import DynamicIcon from "@/components/DynamicIcon";
+import MajorsInterestSkeleton from "@/components/MajorsInterestSkeleton";
 
 const interestSchema = z.object({
   selectedMajors: z
@@ -73,7 +74,7 @@ const DashboardMenteeMajorInterest = () => {
   const selectedMajors = watch("selectedMajors");
 
   const displayMajors = majors ?? [];
-  console.log(displayMajors);
+  // console.log(displayMajors);
 
   // handle search majors
   const filteredMajors = displayMajors.filter((major) =>
@@ -145,11 +146,11 @@ const DashboardMenteeMajorInterest = () => {
 
   // handle loading
   if (isLoading) {
-    return <MajorsListSkeleton />;
+    return <MajorsInterestSkeleton />;
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto w-full min-w-0">
       <div className="min-h-screen  ">
         {/* all majors section */}
         <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
@@ -293,7 +294,7 @@ const DashboardMenteeMajorInterest = () => {
           </form>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 

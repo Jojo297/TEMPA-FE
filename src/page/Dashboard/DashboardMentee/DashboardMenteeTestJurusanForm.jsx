@@ -449,7 +449,7 @@ export default function DashboardTestJurusanForm() {
   }, [token, fetchResponseAi]);
   // store response to displayResponse
   const displayResponse = recomendationMajors ?? [];
-  console.log(displayResponse);
+  // console.log(displayResponse);
 
   // if mentee already assign form
   if (displayResponse.length > 0) {
@@ -526,7 +526,7 @@ export default function DashboardTestJurusanForm() {
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <section className="bg-primary text-center text-white rounded-xl md:rounded-2xl py-8 md:py-12 px-6 shadow-md">
         <h1 className="text-2xl md:text-3xl font-bold mb-3">
@@ -634,6 +634,6 @@ export default function DashboardTestJurusanForm() {
           </div>
         </form>
       </section>
-    </>
+    </div>
   );
 }

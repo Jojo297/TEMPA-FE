@@ -56,7 +56,7 @@ export default function DashboardCampus() {
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -147,6 +147,6 @@ export default function DashboardCampus() {
           )}
         </div>
       </section>
-    </>
+    </div>
   );
 }

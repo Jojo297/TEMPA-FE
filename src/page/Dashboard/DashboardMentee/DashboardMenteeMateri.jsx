@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import NotFounPages from "@/components/NotFoundPages";
 import FeedbackProgram from "@/components/FeedbackProgram";
 import ProgramNotStartedDialog from "@/components/ProgramNotStartedDialog";
+import DashboardMenteeMateriSkeleton from "@/components/DashboardMenteeMateriSkeleton";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -108,6 +109,10 @@ export default function DashboardMenteeMateri() {
       setIsNotStartedDialogOpen(true);
     }
   }, [startProgramDate]);
+
+  if (isLoading) {
+    return <DashboardMenteeMateriSkeleton />;
+  }
 
   return (
     <div className="max-w-7xl mx-auto">

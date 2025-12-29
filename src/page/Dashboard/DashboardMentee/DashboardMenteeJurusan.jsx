@@ -84,7 +84,7 @@ const DashboardJurusan = () => {
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -156,7 +156,7 @@ const DashboardJurusan = () => {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 

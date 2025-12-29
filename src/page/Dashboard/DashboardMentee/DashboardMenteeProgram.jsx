@@ -133,7 +133,7 @@ export default function DashboardMenteeProgram() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex max-w-7xl mx-auto min-h-screen bg-gray-50">
       {/* Sidebar */}
 
       {/* Konten utama */}

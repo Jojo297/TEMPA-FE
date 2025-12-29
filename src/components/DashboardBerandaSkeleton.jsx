@@ -7,60 +7,55 @@ const BannerSkeleton = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="bg-primary max-w-7xl rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-start justify-between">
+      <div className="relative bg-primary w-full rounded-2xl p-6 md:p-10 shadow-xl overflow-hidden flex flex-col md:flex-row items-start justify-between gap-6">
         {/* Left Side */}
-        <div className="flex-1 pr-4">
-          <p className="text-sm tracking-widest text-white/80 mb-2">
-            SELAMAT DATANG,
-          </p>
-          <h1 className="text-lg md:text-5xl font-extrabold text-white mb-6">
-            <div className="h-6 bg-gray-200 rounded w-52 animate-pulse"></div>
-          </h1>
+        <div className="relative flex-1 w-full">
+          <div className="mb-8">
+            <div className="h-4 bg-white/20 rounded w-48 mb-2 animate-pulse"></div>
+            <div className="h-10 md:h-14 bg-white/20 rounded w-3/4 animate-pulse"></div>
+          </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
             {/* Program */}
-            <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
-              <div className="bg-blue-200 rounded-full w-10 h-10 flex items-center justify-center text-[#003C3C]">
+            <div className="bg-white rounded-md p-4 shadow-md flex items-center gap-3">
+              <div className="bg-blue-200 rounded-full w-10 h-10 flex items-center justify-center text-[#003C3C] shrink-0">
                 <GraduationCap className="w-5 h-5" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">PROGRAM</p>
-                <p className="font-semibold text-lg">
-                  <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
-                </p>
+              <div className="w-full">
+                <div className="h-3 bg-gray-200 rounded w-16 mb-1 animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded w-24 animate-pulse"></div>
               </div>
             </div>
 
             {/* Lulus */}
-            <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
-              <div className="bg-green-200 rounded-full w-10 h-10 flex items-center justify-center text-[#32A852]">
+            <div className="bg-white rounded-md p-4 shadow-md flex items-center gap-3">
+              <div className="bg-green-200 rounded-full w-10 h-10 flex items-center justify-center text-[#32A852] shrink-0">
                 <Check className="w-5 h-5" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">LULUS</p>
-                <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
+              <div className="w-full">
+                <div className="h-3 bg-gray-200 rounded w-16 mb-1 animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded w-24 animate-pulse"></div>
               </div>
             </div>
 
             {/* Tidak Lulus */}
-            <div className="bg-white rounded-xl p-4 w-48 shadow-md flex items-center gap-3">
-              <div className="rounded-full w-10 h-10 flex bg-red-200 items-center justify-center text-[#FF4136]">
+            <div className="bg-white rounded-md p-4 shadow-md flex items-center gap-3">
+              <div className="rounded-full w-10 h-10 flex bg-red-200 items-center justify-center text-[#FF4136] shrink-0">
                 <X className="w-5 h-5" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">TIDAK LULUS</p>
-                <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
+              <div className="w-full">
+                <div className="h-3 bg-gray-200 rounded w-20 mb-1 animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded w-24 animate-pulse"></div>
               </div>
             </div>
           </div>
         </div>
         {/* Robot */}
-        <div className="mt-6 md:mt-0 md:ml-6 flex-shrink-0">
+        <div className="hidden md:block relative z-10 flex-shrink-0">
           <img
             src={robotHappy}
             alt="Robot TEMPA"
-            className="w-44 md:w-56 object-contain"
-            style={{ position: "relative", top: "-20px" }}
+            className="w-48 lg:w-64 object-contain opacity-50 grayscale"
           />
         </div>
       </div>

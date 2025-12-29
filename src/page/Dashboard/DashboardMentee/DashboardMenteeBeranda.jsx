@@ -8,7 +8,11 @@ import {
   Calendar,
   Users,
   Map,
+  Sparkle,
+  ChevronRight,
+  Bell,
 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import robotHappy from "@/assets/robot-happy.png";
 import roboterror from "@/assets/robot-error.png";
 import { jwtDecode } from "jwt-decode";
@@ -161,6 +165,38 @@ export default function DashboardBeranda() {
 
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
+      {/* notification */}
+      <Alert className="mb-4 bg-white border-indigo-100 shadow-sm py-3 px-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center w-full justify-between gap-4">
+          <div className="flex items-start gap-3">
+            {/* Gunakan warna indigo/violet untuk kesan AI yang modern */}
+            <div className="bg-indigo-100 p-2 rounded-full shrink-0">
+              <Bell className="h-4 w-4 text-indigo-600" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-indigo-900 leading-tight mb-1">
+                Jangan Lupa Isi Minat Jurusan Anda!
+              </p>
+              <p className="text-xs text-indigo-700/80 leading-relaxed">
+                Bantu kami menyesuaikan rekomendasi kampus dan program studi
+                yang paling sesuai dengan passion serta rencana karier masa
+                depanmu.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => navigate("/dashboard-mentee/major-interest")}
+            className="w-full md:w-auto bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white transition-all shadow-sm shrink-0 px-4"
+          >
+            Isi Sekarang
+            <ChevronRight size={14} className="ml-1" />
+          </Button>
+        </div>
+      </Alert>
+
       {/* Hero Section */}
       <div className="relative bg-primary w-full rounded-2xl p-6 md:p-10 shadow-xl overflow-hidden flex flex-col md:flex-row items-start justify-between gap-6">
         {/* Left Side */}
@@ -176,7 +212,7 @@ export default function DashboardBeranda() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
             {/* Program */}
-            <div className="bg-white rounded-md p-4  shadow-md flex items-center gap-3">
+            <div className="bg-white rounded-xl p-4  shadow-md flex items-center gap-3">
               <div className="bg-blue-200 rounded-full w-10 h-10 flex items-center justify-center text-[#003C3C]">
                 <GraduationCap className="w-5 h-5" />
               </div>
