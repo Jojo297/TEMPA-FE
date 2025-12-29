@@ -6,6 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const useProgramStoreMentee = create((set) => ({
   // State
   programs: [],
+  statusMajorInterest: null,
   isLoading: false,
   error: null,
 
@@ -24,9 +25,11 @@ const useProgramStoreMentee = create((set) => ({
       });
 
       const fetchedPrograms = response.data.data;
+      const getMajorInterest = response.data.major_interest_status;
 
       set({
         programs: fetchedPrograms,
+        statusMajorInterest: getMajorInterest,
         isLoading: false,
         error: null,
       });
