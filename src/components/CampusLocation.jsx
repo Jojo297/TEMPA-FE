@@ -6,12 +6,12 @@ export default function CampusLocation({ kampus }) {
     <>
       {/* Location Campus */}
       <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
-        <h2 className="text-2xl font-bold text-[#013B35] text-center">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#013B35] text-center">
           Lokasi {kampus.campus_name}
         </h2>
 
         <div className="flex flex-col gap-10 justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
             <Info label="Provinsi" value={kampus.province} />
 
             <Info label="Kota / Kabupaten" value={kampus.city} />

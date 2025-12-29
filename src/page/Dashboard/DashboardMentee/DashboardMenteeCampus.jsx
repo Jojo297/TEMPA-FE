@@ -73,9 +73,9 @@ export default function DashboardCampus() {
       </Breadcrumb>
       {/* Banner Section */}
       <div className=" mb-8 text-center">
-        <div className="bg-primary text-white rounded-xl p-6 shadow">
-          <h1 className="text-2xl font-bold mb-2">Kampus</h1>
-          <p className="text-sm max-w-2xl mx-auto">
+        <div className="bg-primary text-white rounded-xl p-6 md:p-8 shadow">
+          <h1 className="text-2xl md:text-3xl font-bold mb-3">Kampus</h1>
+          <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto">
             Jelajahi berbagai kampus terbaik dan temukan informasi seputar
             program, jurusan, serta prestasi mereka di sini.
           </p>
@@ -84,10 +84,12 @@ export default function DashboardCampus() {
 
       {/* Seluruh Kampus Section */}
       <section>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-          <h2 className="text-xl font-bold">Seluruh Kampus</h2>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+            Seluruh Kampus
+          </h2>
           {/* input search */}
-          <div className="relative w-full md:w-60">
+          <div className="relative w-full md:w-72">
             <Search
               size={16}
               className="absolute top-2.5 left-3 text-gray-400"
@@ -102,38 +104,41 @@ export default function DashboardCampus() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredKampus.map((kampus) => (
             <Link
               to={`/dashboard-mentee/kampus/${kampus.id}`}
               key={kampus.id}
-              className="bg-white rounded-xl shadow hover:shadow-md transition p-3 block hover:-translate-y-1 duration-200"
+              className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-4 block hover:-translate-y-1 duration-200"
             >
               <img
                 src={kampus.banner_url}
                 alt={kampus.campus_name}
-                className="rounded-lg w-full h-40 object-cover mb-3"
+                className="rounded-lg w-full h-40 object-cover mb-4"
               />
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-3 mb-3">
                 <img
                   src={kampus.logo_url}
                   alt="Logo"
-                  className="w-8 h-8 object-contain"
+                  className="w-10 h-10 object-contain p-1 bg-gray-50 rounded-full border border-gray-100"
                 />
-                <p className="font-semibold text-sm">{kampus.campus_name}</p>
-                {/* badge verif */}
-                {kampus.badge && (
-                  <div className="flex items-center gap-1.5 bg-blue-50  py-0.5 rounded-full ">
-                    <BadgeCheckIcon
-                      size={14}
-                      className="fill-blue-600 text-white"
-                    />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-bold text-base text-gray-900 truncate">
+                      {kampus.campus_name}
+                    </p>
+                    {kampus.badge && (
+                      <BadgeCheckIcon
+                        size={18}
+                        className="fill-blue-600 text-white shrink-0"
+                      />
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-gray-500 text-xs">
-                <MapPin size={14} />
-                <span>{`${kampus.province}, ${kampus.city}`}</span>
+              <div className="flex items-center gap-1.5 text-gray-500 text-sm">
+                <MapPin size={16} className="shrink-0" />
+                <span className="truncate">{`${kampus.province}, ${kampus.city}`}</span>
               </div>
             </Link>
           ))}

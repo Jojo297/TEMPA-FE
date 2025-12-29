@@ -72,7 +72,7 @@ const DashboardCampusDetail = () => {
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -89,7 +89,7 @@ const DashboardCampusDetail = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">
+            <BreadcrumbPage className="text-primary max-w-[150px] truncate md:max-w-none inline-block align-bottom">
               {displayCampusDetail.campus_name}
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -101,13 +101,13 @@ const DashboardCampusDetail = () => {
       <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
         <Tabs defaultValue="deskripsi" className="w-full">
           {/* Navigation button */}
-          <TabsList className="flex flex-wrap gap-4 mb-5 justify-start h-auto bg-transparent">
+          <TabsList className="flex flex-nowrap overflow-x-auto w-full gap-3 sm:gap-4 mb-5 justify-start h-auto bg-transparent pb-2 sm:pb-0">
             {/* description */}
             <TabsTrigger
               value="deskripsi"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
             >
               Deskripsi
             </TabsTrigger>
@@ -115,9 +115,9 @@ const DashboardCampusDetail = () => {
             {/* major */}
             <TabsTrigger
               value="jurusan"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
             >
               Jurusan
             </TabsTrigger>
@@ -125,17 +125,17 @@ const DashboardCampusDetail = () => {
             {/* program */}
             <TabsTrigger
               value="program"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
             >
               Program
             </TabsTrigger>
             <TabsTrigger
               value="lokasi"
-              className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
+              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
                                hover:bg-[#013B35] hover:text-white transition 
-                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
+                               data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
             >
               Lokasi
             </TabsTrigger>
@@ -159,7 +159,7 @@ const DashboardCampusDetail = () => {
           </TabsContent>
         </Tabs>
       </section>
-    </>
+    </div>
   );
 };
 

@@ -160,8 +160,8 @@ export default function DashboardMenteeProgram() {
           {/* Header Section */}
           <div className=" mb-8 text-center">
             <div className="bg-primary text-white rounded-xl p-6 shadow">
-              <h1 className="text-2xl font-bold mb-2">Program</h1>
-              <p className="text-sm max-w-2xl mx-auto">
+              <h1 className="text-xl md:text-2xl font-bold mb-2">Program</h1>
+              <p className="text-xs md:text-sm max-w-2xl mx-auto">
                 Jelajahi berbagai kampus terbaik dan temukan informasi seputar
                 program, jurusan, serta prestasi mereka di sini. Dapatkan
                 kesempatan untuk mengikuti Trial Kuliah atau kelas singkat
@@ -174,15 +174,17 @@ export default function DashboardMenteeProgram() {
 
           {/* Seluruh Program Section */}
           <section>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-              <h2 className="text-xl font-bold mb-4 items-center">
-                Seluruh Program
-              </h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+              <h2 className="text-lg md:text-xl font-bold">Seluruh Program</h2>
               {/* input search */}
-              <div className="flex gap-2">
-                <SelectTypeProgram />
-                <SearchMajors />
-                <div className="relative w-full md:w-60">
+              <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                <div className="w-full sm:w-auto">
+                  <SelectTypeProgram />
+                </div>
+                <div className="w-full sm:w-auto">
+                  <SearchMajors className={"w-full"} />
+                </div>
+                <div className="relative w-full sm:w-60">
                   <Search
                     size={16}
                     className="absolute top-2.5 left-3 text-gray-400"
@@ -227,13 +229,13 @@ export default function DashboardMenteeProgram() {
                         );
                         return (
                           <div
-                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
                           >
                             {statusData.text}
                           </div>
                         );
                       })()}
-                      <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-lg">
                         {item.program_name}
                       </h3>
                     </div>
@@ -242,25 +244,25 @@ export default function DashboardMenteeProgram() {
                     <div className="lg:w-2/3 p-6 flex flex-col justify-between">
                       <div>
                         {/* Main info: Kampus, Jurusan */}
-                        <div className="flex flex-wrap items-center space-x-4 mb-4">
-                          <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                        <div className="flex flex-wrap items-center gap-4 mb-4">
+                          <div className="flex items-center text-[#013B35] font-semibold text-base md:text-lg">
                             <span>{item.program_name}</span>
                           </div>
-                          <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
+                          <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                             {item.major_name}
                           </div>
-                          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                             {item.type_sesi}
                           </div>
                         </div>
 
                         {/* description */}
-                        <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                        <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
                           {item.description}
                         </p>
 
                         {/* date and location */}
-                        <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                        <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-xs sm:text-sm mb-6 border-t pt-4">
                           <div className="flex items-center">
                             <Calendar
                               size={16}
@@ -303,7 +305,7 @@ export default function DashboardMenteeProgram() {
                           onClick={() =>
                             navigate(`/dashboard-mentee/program/${item.id}`)
                           }
-                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300 text-sm sm:text-base"
                         >
                           Lihat Detail Program
                         </button>

@@ -15,7 +15,7 @@ const DashboardCampusJurusan = ({ kampus }) => {
     <>
       {/* Accordion Jurusan */}
       <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full">
-        <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#013B35] text-center">
           Jurusan & Program Studi {kampus.name}
         </h2>
         <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">

@@ -8,8 +8,8 @@ import {
 export const CampusHeaderProfile = ({ kampus }) => {
   return (
     <header className="bg-[#F8FAFB]">
-      <div className="max-w-6xl mx-auto rounded-xl shadow-md overflow-hidden">
-        <div className="h-[400px]">
+      <div className="max-w-7xl mx-auto rounded-xl shadow-md overflow-hidden">
+        <div className="h-48 sm:h-64 md:h-80 lg:h-[400px] relative">
           {/* banner */}
           <img
             src={kampus.banner_url}
@@ -18,29 +18,29 @@ export const CampusHeaderProfile = ({ kampus }) => {
           />
         </div>
 
-        <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
-          <div className="flex items-center space-x-4">
-            <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+        <div className="bg-[#013B35] text-white px-4 sm:px-8 md:px-12 py-4 sm:py-6 flex flex-col sm:flex-row justify-between items-center rounded-b-xl -mt-12 sm:-mt-16 relative z-10">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 w-full">
+            <div className="bg-white p-2 sm:p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-16 sm:-mt-10 flex-shrink-0">
               <img
                 src={kampus.logo_url}
                 alt={`${kampus.campus_name} Logo`}
-                className="w-20 h-20 object-contain"
+                className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
               />
             </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            <div className="text-center sm:text-left w-full">
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 sm:gap-3">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
                   {kampus.campus_name}
                 </h1>
                 {/* Badge Verif */}
                 {kampus.badge && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-blue-400/50 transition-transform cursor-default">
+                      <div className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-blue-400/50 transition-transform cursor-default">
                         <div className="bg-white rounded-full p-0.5">
-                          <BadgeCheckIcon size={14} className="text-blue-600" />
+                          <BadgeCheckIcon className="text-blue-600 w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </div>
-                        <span className="text-[11px] font-black uppercase tracking-widest leading-none">
+                        <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-widest leading-none">
                           Verified
                         </span>
                       </div>
@@ -85,9 +85,9 @@ export const CampusHeaderProfile = ({ kampus }) => {
                   </Tooltip>
                 )}
               </div>
-              <div className="flex items-center text-gray-300 mt-1">
-                <MapPin size={16} className="mr-2" />
-                <span className="text-sm">{`${kampus.province}, ${kampus.city}`}</span>
+              <div className="flex items-center justify-center sm:justify-start text-gray-200 mt-4 sm:mt-1 text-xs sm:text-sm font-medium">
+                <MapPin size={14} className="mr-1.5 sm:mr-2" />
+                <span>{`${kampus.province}, ${kampus.city}`}</span>
               </div>
             </div>
           </div>

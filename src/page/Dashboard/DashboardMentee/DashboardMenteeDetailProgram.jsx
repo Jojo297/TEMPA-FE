@@ -222,7 +222,7 @@ const DashboardMenteeDetailProgram = () => {
   }
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -239,23 +239,24 @@ const DashboardMenteeDetailProgram = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">
+            <BreadcrumbPage className="text-primary max-w-[150px] truncate md:max-w-none inline-block align-bottom">
               {displayDetailProgram.program_name}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
       {/* Header */}
       <div className="relative rounded-xl overflow-hidden shadow-md mb-10">
         <img
           src={displayDetailProgram.image_url}
           alt="Program"
-          className="w-full h-72 object-cover"
+          className="w-full h-48 sm:h-72 object-cover"
         />
         {/* Overlay konten di bawah gambar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#0E3B3D]/90 text-white p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold">
+        <div className="absolute bottom-0 left-0 right-0 bg-[#0E3B3D]/90 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div className="w-full sm:w-auto">
+            <h1 className="text-sm sm:text-2xl font-bold line-clamp-1">
               {displayDetailProgram.program_name}
             </h1>
           </div>
@@ -268,7 +269,7 @@ const DashboardMenteeDetailProgram = () => {
                     displayDetailProgram.capacity <= 0 ||
                     new Date(displayDetailProgram.end_regis_date) < new Date()
                   }
-                  className={`mt-4 sm:mt-0 font-semibold px-6 py-2 rounded-md transition flex-shrink-0 ${
+                  className={`w-full sm:w-auto font-semibold px-4 py-2 sm:px-6 rounded-md transition flex-shrink-0 text-sm sm:text-base ${
                     new Date(displayDetailProgram.end_regis_date) < new Date()
                       ? "bg-red-500 text-white cursor-not-allowed"
                       : displayDetailProgram.capacity <= 0
@@ -385,7 +386,7 @@ const DashboardMenteeDetailProgram = () => {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+              <p className="text-sm text-gray-900 sm:text-base whitespace-pre-line border p-3 rounded-xl">
                 {displayDetailProgram.description || "-"}
               </p>
             </div>
@@ -479,7 +480,7 @@ const DashboardMenteeDetailProgram = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

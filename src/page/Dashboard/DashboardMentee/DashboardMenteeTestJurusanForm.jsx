@@ -184,23 +184,34 @@ const newQuestionsData = [
 
 // custom radio component
 const CircleButton = ({ value, isSelected, onClick, showLabel = true }) => (
-  // ... (CircleButton tetap sama, tidak perlu diubah) ...
-  <div className="flex flex-col items-center mr-4">
-    {showLabel && <span className="text-gray-400 text-sm mb-1">{value}</span>}
+  <div className="flex flex-col items-center mr-4 last:mr-0">
+    {showLabel && (
+      <span
+        className={`text-xs font-medium mb-2 ${
+          isSelected ? "text-[#013B35]" : "text-gray-400"
+        }`}
+      >
+        {value}
+      </span>
+    )}
     <button
       type="button"
       onClick={onClick}
       className={`
-        w-6 h-6 rounded-full border-2 
-        transition-colors duration-200 ease-in-out
+        w-6 h-6 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center
+        transition-all duration-200 ease-in-out
         ${
           isSelected
-            ? "bg-[#18A0FB] border-[#18A0FB] ring-4 ring-[#18A0FB]/50"
-            : "bg-transparent border-gray-400 hover:border-gray-300"
+            ? "bg-[#013B35] border-[#013B35] ring-4 ring-[#013B35]/20 scale-110"
+            : "bg-white border-gray-300 hover:border-[#013B35]/60"
         }
       `}
       aria-label={showLabel ? `Pilihan ${value}` : "Pilihan"}
-    />
+    >
+      {isSelected && (
+        <div className="w-2 h-2 md:w-3 md:h-3 bg-white rounded-full" />
+      )}
+    </button>
   </div>
 );
 
@@ -213,13 +224,15 @@ const QuestionRenderer = ({ question, field, error }) => {
     const isLong = type === "text_long";
     const Component = isLong ? Textarea : Input;
     const customClasses = `
-      w-full p-3 rounded-lg bg-[#013B35] text-white placeholder-gray-400
+      w-full p-4 rounded-xl bg-gray-50 text-gray-900 placeholder:text-gray-400
+      border transition-all duration-200
       ${
         error
-          ? "border-red-500 focus-visible:ring-red-500"
-          : "border-gray-600 focus-visible:ring-[#18A0FB] focus-visible:border-[#18A0FB]"
+          ? "border-red-500 focus-visible:ring-red-500 bg-red-50"
+          : "border-gray-200 focus-visible:ring-[#013B35] focus-visible:border-[#013B35] hover:border-gray-300 focus:bg-white"
       }
-      ${isLong ? "h-28 resize-none" : "h-10"}
+      ${isLong ? "h-32 resize-none" : "h-12"}
+      text-sm md:text-base
     `;
 
     return (
@@ -241,14 +254,27 @@ const QuestionRenderer = ({ question, field, error }) => {
         <div
           key={option.value}
           onClick={() => field.onChange(option.value)} // Memperbarui RHF Field Value
-          className="flex items-start text-white cursor-pointer hover:bg-[#013B35]/50 p-2 rounded-lg transition-colors"
+          className={`
+            flex items-start cursor-pointer p-4 rounded-xl border transition-all duration-200
+            ${
+              field.value === option.value
+                ? "bg-[#013B35]/5 border-[#013B35] shadow-sm"
+                : "bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+            }
+          `}
         >
-          <CircleButton
-            isSelected={field.value === option.value}
-            onClick={() => field.onChange(option.value)} // Memperbarui RHF Field Value
-            showLabel={false}
-          />
-          <span className="text-sm font-normal flex-1 pt-0.5">
+          <div className="mt-0.5">
+            <CircleButton
+              isSelected={field.value === option.value}
+              onClick={() => field.onChange(option.value)} // Memperbarui RHF Field Value
+              showLabel={false}
+            />
+          </div>
+          <span
+            className={`text-sm md:text-base font-medium flex-1 ml-2 ${
+              field.value === option.value ? "text-[#013B35]" : "text-gray-700"
+            }`}
+          >
             {option.label}
           </span>
         </div>
@@ -262,12 +288,12 @@ const QuestionRenderer = ({ question, field, error }) => {
     const scaleOptions = [1, 2, 3, 4, 5];
 
     return (
-      <div className="px-2 sm:px-4">
-        <div className="flex justify-between items-end mb-3">
-          <span className="text-sm font-medium text-gray-200">
+      <div className="px-2 py-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
+          <span className="text-xs sm:text-sm font-medium text-gray-500 order-2 sm:order-1">
             {scaleLabels[1]}
           </span>
-          <div className="flex space-x-4 sm:space-x-8">
+          <div className="flex justify-between w-full sm:w-auto sm:space-x-6 order-1 sm:order-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
             {scaleOptions.map((value) => (
               <CircleButton
                 key={value}
@@ -278,7 +304,7 @@ const QuestionRenderer = ({ question, field, error }) => {
               />
             ))}
           </div>
-          <span className="text-sm font-medium text-gray-200">
+          <span className="text-xs sm:text-sm font-medium text-gray-500 text-right order-3">
             {scaleLabels[5]}
           </span>
         </div>
@@ -302,18 +328,26 @@ const QuestionRenderer = ({ question, field, error }) => {
   };
 
   return (
-    <div className="p-4 sm:p-6 bg-[#004D47] rounded-lg shadow-lg mb-4 text-white">
-      <p className="text-base font-normal mb-3">
-        <span className="font-semibold">{id}.</span> {text}
-      </p>
-      {renderInput()}
-      {/* Tampilkan Error Validasi */}
-      {error && (
-        <p className="mt-2 text-sm text-red-400 flex items-center">
-          <AlertCircle className="h-4 w-4 mr-1" />
-          {error.message}
+    <div className="p-5 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 hover:shadow-md transition-shadow duration-300">
+      <div className="flex gap-4 mb-6">
+        <span className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#013B35] text-white flex items-center justify-center font-bold text-sm md:text-base shadow-md">
+          {id}
+        </span>
+        <p className="text-base md:text-lg font-semibold text-gray-800 pt-1 leading-relaxed">
+          {text}
         </p>
-      )}
+      </div>
+
+      <div className="pl-0 md:pl-14">
+        {renderInput()}
+        {/* Tampilkan Error Validasi */}
+        {error && (
+          <p className="mt-3 text-sm text-red-500 flex items-center font-medium animate-in fade-in slide-in-from-top-1">
+            <AlertCircle className="h-4 w-4 mr-1.5" />
+            {error.message}
+          </p>
+        )}
+      </div>
     </div>
   );
 };
@@ -494,13 +528,13 @@ export default function DashboardTestJurusanForm() {
   return (
     <>
       {/* Header */}
-      <section className="bg-primary text-center text-white rounded-2xl py-10 px-6 shadow-md">
-        <h1 className="text-2xl font-semibold mb-2">
+      <section className="bg-primary text-center text-white rounded-xl md:rounded-2xl py-8 md:py-12 px-6 shadow-md">
+        <h1 className="text-2xl md:text-3xl font-bold mb-3">
           Rekomendasi Jurusan Cerdas
         </h1>
-        <p className="text-sm max-w-2xl mx-auto">
+        <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto leading-relaxed">
           Tes ini dirancang untuk{" "}
-          <span className="font-semibold">
+          <span className="font-bold text-white">
             menganalisis minat, motivasi, dan kecenderungan akademik
           </span>{" "}
           Anda. Jawablah setiap pertanyaan dengan sejujur-jujurnya untuk
@@ -510,44 +544,54 @@ export default function DashboardTestJurusanForm() {
       </section>
 
       {/* alert */}
-      <div className="mt-4">
-        <Alert variant="warning" className="bg-white shadow-sm">
-          <AlertCircleIcon />
-          <AlertTitle>PENTING: Tes Hanya Bisa Diisi Sekali!</AlertTitle>
-          <AlertDescription>
-            <p>
-              Hasil tes ini akan menjadi{" "}
-              <span className="font-semibold">
-                dasar utama rekomendasi jurusan
-              </span>{" "}
-              Anda. Mohon isi setiap pertanyaan dengan serius dan tanpa
-              ragu-ragu. Setelah tombol{" "}
-              <span className="font-semibold">Kirim</span> ditekan, jawaban
-              tidak dapat diubah lagi.
-            </p>
-          </AlertDescription>
+      <div className="mt-6 max-w-7xl mx-auto">
+        <Alert className="bg-red-50/50 border-red-100 shadow-sm py-4 px-5">
+          <div className="flex items-start gap-4">
+            <div className="shrink-0 bg-red-100 p-2 rounded-full">
+              <AlertCircleIcon className="h-5 w-5 text-red-600" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-red-900 mb-1 leading-none">
+                PENTING: Tes Hanya Bisa Diisi Sekali!
+              </p>
+              <div className="text-sm text-red-800/90 leading-relaxed mt-1">
+                <p>
+                  Hasil tes ini akan menjadi{" "}
+                  <span className="font-bold">
+                    dasar utama rekomendasi jurusan
+                  </span>{" "}
+                  Anda. Mohon isi setiap pertanyaan dengan serius dan tanpa
+                  ragu-ragu. Setelah tombol{" "}
+                  <span className="font-bold">Kirim</span> ditekan, jawaban
+                  tidak dapat diubah lagi.
+                </p>
+              </div>
+            </div>
+          </div>
         </Alert>
       </div>
 
       {/* Form and question */}
-      <section className="">
-        <div className="flex items-center gap-2 mb-4 mt-6">
-          <h2 className="text-xl font-medium">Soal Terjawab:</h2>
-          <span className="text-xl font-semibold text-[#013B35]">
+      <section className="max-w-7xl mx-auto pb-10">
+        <div className="flex items-center justify-between gap-2 mb-3 mt-8 px-1">
+          <h2 className="text-sm md:text-base font-medium text-gray-600">
+            Progress Pengerjaan
+          </h2>
+          <span className="text-sm md:text-base font-bold text-[#013B35]">
             {answeredCount}/{totalQuestions}
           </span>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+        <div className="w-full bg-gray-100 rounded-full h-3 mb-8 overflow-hidden shadow-inner">
           <div
-            className="bg-[#96CCEC] h-2.5 rounded-full transition-all duration-500"
+            className="bg-gradient-to-r from-[#013B35] to-[#007F7F] h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressValue}%` }}
           ></div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
           {newQuestionsData.map((question) => (
             <Controller
               key={question.id}
@@ -568,11 +612,12 @@ export default function DashboardTestJurusanForm() {
             <button
               type="submit"
               className={`
-                bg-[#18A0FB] text-white font-semibold py-3 px-12 rounded-lg 
-                hover:bg-[#18A0FB]/90 transition-colors duration-200 shadow-lg 
+                w-full md:w-auto bg-[#013B35] text-white font-bold py-4 px-16 rounded-xl
+                hover:bg-[#014d45] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0
+                transition-all duration-200 shadow-lg text-base md:text-lg
                 ${
                   !isFormComplete || isSubmitting
-                    ? "opacity-60 cursor-not-allowed"
+                    ? "opacity-50 cursor-not-allowed hover:transform-none hover:shadow-none"
                     : ""
                 }
               `}

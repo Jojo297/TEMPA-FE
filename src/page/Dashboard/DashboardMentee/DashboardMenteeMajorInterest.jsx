@@ -184,17 +184,17 @@ const DashboardMenteeMajorInterest = () => {
           {/* informasi redirect test jurusan */}
           {selectedMajors.length === 0 && (
             <Alert className="mb-4 bg-indigo-50/50 border-indigo-100 shadow-sm py-3 px-4">
-              <div className="flex items-center w-full justify-between gap-4">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row items-start md:items-center w-full justify-between gap-4">
+                <div className="flex items-start gap-3">
                   {/* Gunakan warna indigo/violet untuk kesan AI yang modern */}
-                  <div className="bg-indigo-100 p-2 rounded-full">
+                  <div className="bg-indigo-100 p-2 rounded-full shrink-0">
                     <Sparkles className="h-4 w-4 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-indigo-900 leading-none mb-1">
+                    <p className="text-sm font-semibold text-indigo-900 leading-tight mb-1">
                       Rekomendasi Jurusan Berbasis AI
                     </p>
-                    <p className="text-xs text-indigo-700/80">
+                    <p className="text-xs text-indigo-700/80 leading-relaxed">
                       Masih ragu? Biarkan sistem cerdas kami menganalisis minat
                       dan bakatmu secara akurat.
                     </p>
@@ -205,19 +205,13 @@ const DashboardMenteeMajorInterest = () => {
                   size="sm"
                   variant="ghost"
                   onClick={() => navigate("/dashboard-mentee/test-jurusan")}
-                  className="bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white transition-all shadow-sm shrink-0 px-4"
+                  className="w-full md:w-auto bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white transition-all shadow-sm shrink-0 px-4"
                 >
                   Mulai Analisis
                   <ChevronRight size={14} className="ml-1" />
                 </Button>
               </div>
             </Alert>
-          )}
-
-          {errors.selectedMajors && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-lg text-sm font-medium">
-              {errors.selectedMajors.message}
-            </div>
           )}
 
           {/* card majors */}

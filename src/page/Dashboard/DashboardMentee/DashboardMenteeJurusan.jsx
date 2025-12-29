@@ -101,9 +101,9 @@ const DashboardJurusan = () => {
       </Breadcrumb>
       <div className="min-h-screen  ">
         {/* header Section */}
-        <div className="bg-primary text-white p-6 rounded-2xl shadow-md mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Jurusan</h1>
-          <p className="text-sm">
+        <div className="bg-primary text-white p-6 md:p-8 rounded-xl shadow mb-8 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold mb-3">Jurusan</h1>
+          <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto">
             Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan
             minat serta bakatmu.
           </p>
@@ -111,10 +111,12 @@ const DashboardJurusan = () => {
 
         {/* all majors section */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">Seluruh Jurusan</h2>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+              Seluruh Jurusan
+            </h2>
             {/* input search */}
-            <div className="relative w-full md:w-60">
+            <div className="relative w-full md:w-72">
               <Search
                 size={16}
                 className="absolute top-2.5 left-3 text-gray-400"
@@ -140,10 +142,14 @@ const DashboardJurusan = () => {
                 <Link
                   to={`/dashboard-mentee/jurusan/${item.major_name.toLowerCase()}`}
                   key={item.id}
-                  className="bg-primary text-white rounded-xl flex flex-col items-center justify-center p-6 hover:scale-105 transition-transform"
+                  className="group bg-white border border-gray-100 rounded-xl flex flex-col items-center justify-center p-5 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
                 >
-                  <DynamicIcon name={item.logo_name} size={48} />
-                  <p className="mt-2 text-sm font-medium">{item.major_name}</p>
+                  <div className="p-3.5 bg-primary/5 rounded-full text-primary mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <DynamicIcon name={item.logo_name} size={40} />
+                  </div>
+                  <p className="text-sm font-bold text-gray-700 text-center group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                    {item.major_name}
+                  </p>
                 </Link>
               ))
             )}

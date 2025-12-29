@@ -110,7 +110,7 @@ export default function DashboardMenteeMateri() {
   }, [startProgramDate]);
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto">
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -121,7 +121,7 @@ export default function DashboardMenteeMateri() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">
+            <BreadcrumbPage className="text-primary max-w-[150px] truncate md:max-w-none inline-block align-bottom">
               {program_name}
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -129,10 +129,13 @@ export default function DashboardMenteeMateri() {
       </Breadcrumb>
       <div className="min-h-screen  ">
         {/* header Section */}
-        <div className="bg-primary text-white p-6 rounded-2xl shadow-md mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">{program_name}</h1>
-          <p className="text-sm">{program_description}</p>
+        <div className="bg-primary text-white p-6 md:p-8 rounded-xl md:rounded-2xl shadow-md mb-8 text-center">
+          <h1 className="text-xl md:text-3xl font-bold mb-3">{program_name}</h1>
+          <p className="text-sm md:text-base text-white/90 max-w-3xl mx-auto leading-relaxed">
+            {program_description}
+          </p>
         </div>
+
         <div className="container">
           {/* Accordion Materi, Quiz, Link Meeting */}
           <Accordion type="single" collapsible className="w-full">
@@ -227,6 +230,6 @@ export default function DashboardMenteeMateri() {
           startDate={startProgramDate}
         />
       </div>
-    </>
+    </div>
   );
 }

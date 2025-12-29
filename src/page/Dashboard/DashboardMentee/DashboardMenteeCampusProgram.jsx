@@ -58,7 +58,7 @@ export default function DashboardCampusProgram({ kampus }) {
     <>
       {/* List Program */}
       <div className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-8 w-full">
-        <h2 className="text-2xl font-bold text-[#013B35] text-center mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#013B35] text-center">
           Program yang Ditawarkan {kampus.name}
         </h2>
         <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-8">
@@ -93,13 +93,13 @@ export default function DashboardCampusProgram({ kampus }) {
                     );
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
                       >
                         {statusData.text}
                       </div>
                     );
                   })()}
-                  <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-lg">
                     {item.program_name}
                   </h3>
                 </div>
@@ -108,28 +108,28 @@ export default function DashboardCampusProgram({ kampus }) {
                 <div className="lg:w-2/3 p-6 flex flex-col justify-between">
                   <div>
                     {/* Main info: Kampus, Jurusan */}
-                    <div className="flex flex-wrap items-center space-x-4 mb-4">
-                      <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                    <div className="flex flex-wrap items-center gap-4 mb-4">
+                      <div className="flex items-center text-[#013B35] font-semibold text-base md:text-lg">
                         <span>{item.program_name}</span>
                       </div>
-                      <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium mt-2 sm:mt-0">
+                      <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                         {
                           item.campus_program_id_majorTocampus.standard_major
                             .major_name
                         }
                       </div>
-                      <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                      <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                         {item.type_sesi}
                       </div>
                     </div>
 
                     {/* description */}
-                    <p className="text-gray-600 mb-4 text-sm">
+                    <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
                       {item.description}
                     </p>
 
                     {/* date and location */}
-                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-xs sm:text-sm mb-6 border-t pt-4">
                       <div className="flex items-center">
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>
@@ -151,7 +151,7 @@ export default function DashboardCampusProgram({ kampus }) {
                         </span>
                       </div>
                       <div className="flex items-center">
-                        <Home size={16} className="mr-2 text-[#013B35]" />
+                        <Home className="w-[16px] h-[16px] mr-2 text-[#013B35]" />
                         <span>{kampus.campus_name}</span>
                       </div>
                       <div className="flex items-center">
@@ -169,7 +169,7 @@ export default function DashboardCampusProgram({ kampus }) {
                       onClick={() =>
                         navigate(`/dashboard-mentee/program/${item.id}`)
                       }
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300 text-sm sm:text-base"
                     >
                       Lihat Detail Program
                     </button>

@@ -220,16 +220,17 @@ export default function DashboardJurusanDetail() {
 
   // store result fetch to displayMajor
   const displayDetailMajor = detailMajor ?? {};
-  console.log(displayDetailMajor);
+  // console.log(displayDetailMajor);
 
   // get campus
   const getCampus = displayDetailMajor.campus ?? [];
+  // console.log(displayDetailMajor);
 
   // get program
   const getProgram = getCampus.flatMap(
     (majorEntry) => majorEntry.program_program_id_majorTocampus || []
   );
-  // console.log(getProgram);
+  console.log(getProgram);
 
   // fetch detail major
   useEffect(() => {
@@ -273,9 +274,9 @@ export default function DashboardJurusanDetail() {
       </Breadcrumb>
 
       {/* header  */}
-      <div className=" mx-auto">
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
-          <div className="relative w-full h-[320px]">
+      <div className="max-w-7xl mx-auto ">
+        <div className="bg-white rounded-xl md:rounded-2xl shadow-md overflow-hidden border border-gray-200">
+          <div className="relative w-full h-48 md:h-[320px]">
             <img
               src={
                 displayDetailMajor.banner_url ||
@@ -285,8 +286,8 @@ export default function DashboardJurusanDetail() {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="bg-[#013B35] py-4 px-6">
-            <h1 className="text-2xl font-extrabold text-white uppercase tracking-wider">
+          <div className="bg-[#013B35] p-5 md:py-6 md:px-8">
+            <h1 className="text-xl md:text-3xl font-extrabold text-white uppercase tracking-wide md:tracking-wider">
               {displayDetailMajor.major_name}
             </h1>
           </div>
@@ -294,7 +295,7 @@ export default function DashboardJurusanDetail() {
       </div>
 
       {/* description */}
-      <div className="max-w-6xl mx-auto px-6 mt-10">
+      <div className="max-w-7xl mx-auto mt-10">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-3">
           Tentang Jurusan
         </h2>
@@ -305,7 +306,7 @@ export default function DashboardJurusanDetail() {
       </div>
 
       {/* job prospects */}
-      <div className="max-w-6xl mx-auto px-6 mt-12">
+      <div className="max-w-7xl mx-auto mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Prospek Kerja
         </h2>
@@ -322,7 +323,7 @@ export default function DashboardJurusanDetail() {
       </div>
 
       {/* get campus all campus */}
-      <div className="max-w-6xl mx-auto px-6 mt-12">
+      <div className="max-w-7xl mx-auto mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Kampus Terkait
         </h2>
@@ -367,7 +368,7 @@ export default function DashboardJurusanDetail() {
       </div>
 
       {/* get program */}
-      <div className="max-w-6xl mx-auto px-6 mt-12">
+      <div className="max-w-7xl mx-auto mt-12">
         <h2 className="text-2xl font-semibold text-[#013B35] mb-4">
           Program Terkait
         </h2>
@@ -390,7 +391,7 @@ export default function DashboardJurusanDetail() {
                   className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
                   // Menggunakan background image dengan overlay warna untuk efek keren
                   style={{
-                    backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.program_image_url})`,
+                    backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
                     backgroundColor: "#013B35",
                     minHeight: "200px",
                   }}
@@ -404,13 +405,13 @@ export default function DashboardJurusanDetail() {
                     );
                     return (
                       <div
-                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                        className={`absolute top-4 z-10 px-3 py-1 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
                       >
                         {statusData.text}
                       </div>
                     );
                   })()}
-                  <h3 className="text-3xl font-extrabold leading-tight drop-shadow-lg">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-lg">
                     {item.program_name}
                   </h3>
                 </div>
@@ -419,23 +420,25 @@ export default function DashboardJurusanDetail() {
                 <div className="lg:w-2/3 p-6 flex flex-col justify-between">
                   <div>
                     {/* Main info: Kampus, Jurusan */}
-                    <div className="flex flex-wrap items-center space-x-4 mb-4">
-                      <div className="flex items-center text-[#013B35] font-semibold text-lg">
+                    <div className="flex flex-wrap items-center gap-4 mb-4">
+                      <div className="flex items-center text-[#013B35] font-semibold text-base md:text-lg">
                         <span>{item.program_name}</span>
                       </div>
-
-                      <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mt-2 sm:mt-0">
+                      <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
+                        {displayDetailMajor.major_name}
+                      </div>
+                      <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                         {item.type_sesi}
                       </div>
                     </div>
 
                     {/* description */}
-                    <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                    <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
                       {item.description}
                     </p>
 
                     {/* date and location */}
-                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-xs sm:text-sm mb-6 border-t pt-4">
                       <div className="flex items-center">
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>
@@ -481,7 +484,7 @@ export default function DashboardJurusanDetail() {
                       onClick={() =>
                         navigate(`/dashboard-mentee/program/${item.id}`)
                       }
-                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
+                      className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300 text-sm sm:text-base"
                     >
                       Lihat Detail Program
                     </button>
