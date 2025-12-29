@@ -15,8 +15,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
 import useGetDashboardStatistics from "@/hooks/hooksCampus/useGetDashboardStatistics";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import AnalyticsPageSkeletonLoading from "@/components/AnalyticsPageSkeletonLoading";
 
 const AnalyticsPage = () => {
   const token = localStorage.getItem("userJwt");
@@ -24,6 +26,7 @@ const AnalyticsPage = () => {
   const { statistics, isLoading, error, fetchDashboardStatistics } =
     useGetDashboardStatistics();
 
+  // fetch data
   useEffect(() => {
     if (token) {
       fetchDashboardStatistics(token);
@@ -31,13 +34,13 @@ const AnalyticsPage = () => {
   }, [token, fetchDashboardStatistics]);
 
   const displayData = statistics ?? {};
-  console.log(displayData);
+  // console.log(displayData);
 
-  // Logika Data Utama
+  // get total profile and program visits
   const total_profile_visits = displayData.total_profile_visits ?? 0;
   const total_program_visits = displayData.total_program_visits ?? 0;
 
-  // Ambil Jurusan Terfavorit
+  // get major favorit
   const favorite_major =
     displayData?.major_interests?.length > 0
       ? displayData.major_interests.reduce((prev, current) =>
@@ -47,27 +50,22 @@ const AnalyticsPage = () => {
 
   const majorInterest = displayData?.major_interests ?? [];
 
-  // Logika Demografi (Mendapatkan data teratas)
+  // get address city mentee (get top 5)
   const cityDistribution =
     displayData?.mentee_demographics?.city_distribution || [];
   const educationDistribution =
     displayData?.mentee_demographics?.education_status_distribution || [];
 
-  // Helper untuk membersihkan teks enum status pendidikan yang berantakan
   const formatStatus = (text) =>
     text?.replace(/_/g, " ").replace(/\s+/g, " ").trim();
-
-  // Hitung persentase untuk Progress Bar Demografi
-  const totalMentees =
-    displayData?.mentee_demographics?.city_distribution?.reduce(
-      (acc, curr) => acc + curr.total,
-      0
-    ) || 1;
 
   // Hitung total khusus untuk edukasi agar persentase akurat berdasarkan data edukasi yang ada
   const totalEducation =
     educationDistribution.reduce((acc, curr) => acc + curr.total, 0) || 1;
 
+  if (isLoading) {
+    return <AnalyticsPageSkeletonLoading />;
+  }
   return (
     <div className="p-6 bg-gray-50 min-h-screen text-gray-800 font-sans">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
