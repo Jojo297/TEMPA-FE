@@ -69,7 +69,7 @@ export default function DashboardAdminCampus() {
       case "pending":
         return "Belum dicek";
       case "null":
-        return "Belum dicek";
+        return "Belum Memasukkan Data";
       case "rejected":
         return "Ditolak";
       default:

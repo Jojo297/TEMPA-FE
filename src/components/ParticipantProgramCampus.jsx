@@ -87,7 +87,7 @@ export default function ParticipantProgramCampus({
     },
   });
 
-  console.log(menteeList);
+  // console.log(menteeList);
 
   // Columns definition
   const columns = useMemo(
@@ -207,7 +207,7 @@ export default function ParticipantProgramCampus({
   };
 
   return (
-    <div className="max-w-6xl mx-auto mb-10">
+    <div className="max-w-7xl mx-auto mb-10">
       <ParticipantAnalytics menteeList={menteeList} />
       <div className="bg-white shadow-md rounded-xl p-6 border">
         <div className="flex justify-between items-center mb-4">

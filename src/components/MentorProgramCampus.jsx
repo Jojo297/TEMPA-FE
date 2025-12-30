@@ -187,7 +187,7 @@ export default function MentorProgramCampus({
   );
 
   return (
-    <div className="max-w-6xl mx-auto mb-10">
+    <div className="max-w-7xl mx-auto mb-10">
       <div className="bg-white shadow-md rounded-xl p-6 border">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-[#013B35]">Mentor</h2>

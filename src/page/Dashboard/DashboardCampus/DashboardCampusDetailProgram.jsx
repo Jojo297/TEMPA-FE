@@ -96,7 +96,7 @@ export default function DashboardCampusDetailProgram() {
           onSave={handleSaveEdit}
         />
       ) : (
-        <div>
+        <div className="max-w-7xl">
           {/* Wrapper untuk Breadcrumb dan Tombol */}
           <div className="flex justify-between items-center mb-4">
             {/* Breadcrumb */}
@@ -122,7 +122,7 @@ export default function DashboardCampusDetailProgram() {
               </BreadcrumbList>
             </Breadcrumb>
 
-            {/* Grup Tombol */}
+            {/* Grup Tombol edit and delete */}
             <div className="flex gap-3">
               <DeleteProgram
                 idProgram={program.id}

@@ -168,7 +168,7 @@ export default function DashboardBeranda() {
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* notification */}
-      {!statusMajorInterest && (
+      {statusMajorInterest && (
         <Alert className="mb-4 bg-white border-indigo-100 shadow-sm py-3 px-4">
           <div className="flex flex-col md:flex-row items-start md:items-center w-full justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -329,7 +329,7 @@ export default function DashboardBeranda() {
                   Belum ada aktivitas yang diikuti
                 </p>
                 <Button
-                  className="mt-4 px-24 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  className="mt-4 px-24 transition"
                   onClick={() => navigate("program")}
                 >
                   Cari Program <Search />

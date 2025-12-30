@@ -102,11 +102,13 @@ export default function DashboardMenteeMateri() {
 
   // Cek apakah program belum dimulai
   useEffect(() => {
-    if (
-      startProgramDate &&
-      new Date(startProgramDate).getTime() > new Date().setHours(0, 0, 0, 0)
-    ) {
+    const startDate = new Date(startProgramDate).setHours(0, 0, 0, 0);
+    const today = new Date().setHours(0, 0, 0, 0);
+
+    if (startDate > today) {
       setIsNotStartedDialogOpen(true);
+    } else {
+      setIsNotStartedDialogOpen(false);
     }
   }, [startProgramDate]);
 
