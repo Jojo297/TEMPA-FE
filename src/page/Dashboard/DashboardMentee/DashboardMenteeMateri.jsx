@@ -28,6 +28,8 @@ import NotFounPages from "@/components/NotFoundPages";
 import FeedbackProgram from "@/components/FeedbackProgram";
 import ProgramNotStartedDialog from "@/components/ProgramNotStartedDialog";
 import DashboardMenteeMateriSkeleton from "@/components/DashboardMenteeMateriSkeleton";
+import ReactLinkify from "react-linkify";
+import renderLink from "@/utils/RenderLink";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -165,7 +167,13 @@ export default function DashboardMenteeMateri() {
 
                   <AccordionContent className="pt-2 pl-8 space-y-2">
                     {/* deskripsi */}
-                    <div className="py-3 text-gray-700">{item.description}</div>
+                    <div className="py-3 text-gray-700">
+                      {
+                        <ReactLinkify componentDecorator={renderLink}>
+                          {item.description}
+                        </ReactLinkify>
+                      }
+                    </div>
                     <hr />
                     {/* end deskripsi */}
 

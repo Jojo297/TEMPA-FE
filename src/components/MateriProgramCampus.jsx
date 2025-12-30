@@ -38,6 +38,7 @@ import { Spinner } from "./ui/spinner";
 import DeleteMateriDialog from "./DeleteMateriDialog";
 import AddResourceDialog from "./AddResourceDialog";
 import ReactLinkify from "react-linkify";
+import renderLink from "@/utils/RenderLink";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -128,15 +129,6 @@ export default function MateriProgramCampus({
       console.error(error);
       toast.error(error.message || "Gagal memperbarui materi");
     }
-  };
-
-  const renderLink = ({ attributes, content }) => {
-    const { href, ...props } = attributes;
-    return (
-      <a href={href} target="_blank" {...props}>
-        {content}
-      </a>
-    );
   };
 
   return (
@@ -294,7 +286,7 @@ export default function MateriProgramCampus({
                               rows={3}
                             />
                           ) : (
-                            <ReactLinkify options={{ render: renderLink }}>
+                            <ReactLinkify componentDecorator={renderLink}>
                               {item.description}
                             </ReactLinkify>
                           )}
