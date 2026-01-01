@@ -21,23 +21,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useGetAllMentee from "@/hooks/hooksAdmin/useGetAllMentee";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { toast } from "sonner";
 import useGetSubscriptionPackages from "@/hooks/hooksAdmin/useGetSubscriptionPackages";
 import ServiceDialogContent from "@/components/ServiceDialogContent";
 import AddServiceDialog from "@/components/AddServiceDialog";
+import DeleteService from "@/components/DeleteService";
 
 export default function DashboardAdminServices() {
   const navigate = useNavigate();
@@ -176,49 +166,11 @@ export default function DashboardAdminServices() {
                         {<Eye size={16} />} Lihat Detail
                       </Button>
 
-                      {/* delete sevive */}
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <button
-                            className={
-                              "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
-                            }
-                          >
-                            {<Trash2 size={16} />}
-                            Hapus Layanan
-                          </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader className="flex flex-col items-center gap-1">
-                            <div className="bg-gray-200 p-2 rounded-sm">
-                              {/* AlertTriangleIcon hanya muncul jika className kosong/null/undefined */}
-                              <AlertTriangleIcon className="text-gray-400" />
-                            </div>
-
-                            <AlertDialogTitle className="text-xl font-semibold">
-                              Hapus Layanan {item.package_name}?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription className="text-gray-600 mb-4 text-center">
-                              Apakah Anda yakin ingin menghapus layanan ini?
-                              Mohon pertimbangkan kembali keputusan Anda karena
-                              Anda tidak akan bisa mengembalikan (undo) tindakan
-                              ini.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-
-                          <AlertDialogFooter className="mt-6 flex justify-end gap-3">
-                            {/* Tombol Batal */}
-                            <AlertDialogCancel className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">
-                              Batal
-                            </AlertDialogCancel>
-
-                            {/* Tombol Hapus (Mengikuti Style Merah di Gambar) */}
-                            <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1">
-                              <Trash2 size={16} /> Hapus
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <DeleteService
+                        id={item.id}
+                        item={item}
+                        refetch={() => fetchPackages(token)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

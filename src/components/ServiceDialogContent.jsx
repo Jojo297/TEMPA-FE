@@ -110,6 +110,7 @@ export default function ServiceDialogContent({ item, refetch, onOpenChange }) {
       if (refetch) refetch();
       toast.success(result.message || "Layanan berhasil diubah!");
       onOpenChange(false);
+      setIsEditing(false);
     } else {
       toast.error(result.error || "Gagal mengubah layanan");
     }
