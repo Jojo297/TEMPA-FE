@@ -46,6 +46,8 @@ export default function DashboardAdminServices() {
     useGetSubscriptionPackages();
   const [searchQuery, setSearchQuery] = useState("");
   const [services, setServices] = useState([]); // Placeholder if you want to maintain local state, but we will use displayPackage directly for reading
+  const [selectedService, setSelectedService] = useState(null);
+  const [isDialogEdit, setIsDialogEdit] = useState(false);
 
   const displayPackage = packages ?? [];
   // console.log(displayPackage);
@@ -62,6 +64,11 @@ export default function DashboardAdminServices() {
 
   const handleUpdateService = (id, updatedData) => {
     toast.info("Fitur ubah layanan belum terhubung ke API.");
+  };
+
+  const handleEditClick = (item) => {
+    setSelectedService(item);
+    setIsDialogEdit(true);
   };
 
   // get status color
@@ -162,17 +169,12 @@ export default function DashboardAdminServices() {
                     </TableCell>
                     <TableCell className="flex gap-4">
                       {/* lihat detail */}
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button className="bg-secondary hover:bg-secondary hover:opacity-70 transition">
-                            {<Eye size={16} />} Lihat Detail
-                          </Button>
-                        </DialogTrigger>
-                        <ServiceDialogContent
-                          item={item}
-                          onUpdate={handleUpdateService}
-                        />
-                      </Dialog>
+                      <Button
+                        className="bg-secondary hover:bg-secondary hover:opacity-70 transition"
+                        onClick={() => handleEditClick(item)}
+                      >
+                        {<Eye size={16} />} Lihat Detail
+                      </Button>
 
                       {/* delete sevive */}
                       <AlertDialog>
@@ -234,6 +236,16 @@ export default function DashboardAdminServices() {
           </Table>
         </div>
       </div>
+
+      <Dialog open={isDialogEdit} onOpenChange={setIsDialogEdit}>
+        {selectedService && (
+          <ServiceDialogContent
+            item={selectedService}
+            refetch={() => fetchPackages(token)}
+            onOpenChange={setIsDialogEdit}
+          />
+        )}
+      </Dialog>
     </div>
   );
 }

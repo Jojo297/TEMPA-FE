@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -25,6 +25,8 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "./ui/textarea";
+import useUpdateSubscriptionPackage from "@/hooks/hooksAdmin/useUpdateSubscriptionPackage";
+import { Spinner } from "./ui/spinner";
 
 const formSchema = z.object({
   package_name: z.string().min(1, "Nama layanan harus diisi"),
@@ -45,7 +47,9 @@ const formSchema = z.object({
     .min(1, "Minimal satu benefit harus diisi"),
 });
 
-export default function ServiceDialogContent({ item, onUpdate }) {
+export default function ServiceDialogContent({ item, refetch, onOpenChange }) {
+  const { isLoading, error, data, updatePackage } =
+    useUpdateSubscriptionPackage();
   const [isEditing, setIsEditing] = useState(false);
   const [newBenefit, setNewBenefit] = useState({ title: "", desc: "" });
   const form = useForm({
@@ -66,6 +70,20 @@ export default function ServiceDialogContent({ item, onUpdate }) {
   const { register, handleSubmit, formState, reset, setValue, watch } = form;
   const { errors } = formState;
 
+  useEffect(() => {
+    reset({
+      package_name: item.package_name,
+      logo_name: item.logo_name || "",
+      price: item.price,
+      duration_month: item.duration_month,
+      description: item.description,
+      sub_heading: item.sub_heading,
+      isPopular: item.isPopular || false,
+      free_trial: item.free_trial || false,
+      benefit: item.benefit,
+    });
+  }, [item, reset]);
+
   const benefits = watch("benefit");
   const iconName = watch("logo_name");
   const SelectedIcon = icons[iconName];
@@ -82,10 +100,19 @@ export default function ServiceDialogContent({ item, onUpdate }) {
     setValue("benefit", updatedBenefits);
   };
 
-  const onSubmit = (data) => {
-    onUpdate(item.id, data);
-    toast.success("Layanan berhasil diperbarui!");
-    setIsEditing(false);
+  const onSubmit = async (data) => {
+    // console.log(item.id);
+    const token = localStorage.getItem("userJwt");
+
+    const result = await updatePackage(token, item.id, data);
+
+    if (result.success) {
+      if (refetch) refetch();
+      toast.success(result.message || "Layanan berhasil diubah!");
+      onOpenChange(false);
+    } else {
+      toast.error(result.error || "Gagal mengubah layanan");
+    }
   };
 
   // get status color
@@ -298,8 +325,18 @@ export default function ServiceDialogContent({ item, onUpdate }) {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-primary hover:bg-primary/80">
-                Simpan
+              <Button
+                disabled={isLoading}
+                type="submit"
+                className="bg-primary hover:bg-primary/80"
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Spinner /> Memprosess...
+                  </div>
+                ) : (
+                  "Ubah Data"
+                )}
               </Button>
               <Button
                 type="button"
