@@ -7,10 +7,11 @@ const useCreatePaymentIntent = create((set) => ({
   isLoading: false,
   error: null,
   paymentUrl: null,
+  isFree: false,
 
   // Action untuk membuat payment intent
   createPaymentIntent: async (token, idSubscription) => {
-    set({ isLoading: true, error: null, paymentUrl: null });
+    set({ isLoading: true, error: null, paymentUrl: null, isFree: false });
 
     try {
       // Endpoint: /create-payment-intent/:id
@@ -24,10 +25,10 @@ const useCreatePaymentIntent = create((set) => ({
         }
       );
 
-      const { paymentUrl, message } = response.data;
+      const { paymentUrl, message, isFree } = response.data;
 
-      set({ isLoading: false, paymentUrl: paymentUrl });
-      return { success: true, message, paymentUrl };
+      set({ isLoading: false, paymentUrl: paymentUrl, isFree: isFree });
+      return { success: true, message, paymentUrl, isFree };
     } catch (error) {
       console.error("Gagal membuat payment intent:", error);
 
@@ -41,7 +42,8 @@ const useCreatePaymentIntent = create((set) => ({
     }
   },
 
-  resetState: () => set({ isLoading: false, error: null, paymentUrl: null }),
+  resetState: () =>
+    set({ isLoading: false, error: null, paymentUrl: null, isFree: false }),
 }));
 
 export default useCreatePaymentIntent;

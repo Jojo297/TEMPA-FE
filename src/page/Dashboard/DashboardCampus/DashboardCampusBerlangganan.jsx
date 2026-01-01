@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { TrendingUp, Handshake, Check, Star, Info, Crown } from "lucide-react";
+import {
+  TrendingUp,
+  Handshake,
+  Check,
+  Star,
+  Info,
+  Crown,
+  Rocket,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
 import { id } from "date-fns/locale";
@@ -8,6 +16,7 @@ import DynamicIcon from "@/components/DynamicIcon";
 import { set } from "zod";
 import { Spinner } from "@/components/ui/spinner";
 import DashboardCampusBerlanggananSkeleton from "@/components/DashboardCampusBerlanggananSkeleton";
+import { toast } from "sonner";
 
 export default function DashboardCampusBerlangganan() {
   const token = localStorage.getItem("userJwt");
@@ -20,6 +29,8 @@ export default function DashboardCampusBerlangganan() {
   const { isLoading, error, paymentUrl, createPaymentIntent } =
     useCreatePaymentIntent();
   const [loadingPackageId, setLoadingPackageId] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
 
   // const packages = [
   //   {
@@ -111,20 +122,48 @@ export default function DashboardCampusBerlangganan() {
       // createPaymentIntent sudah kita buat mengembalikan { success, paymentUrl }
       const result = await createPaymentIntent(token, idSubscription);
 
-      if (result.success && result.paymentUrl) {
-        // 2. Panggil SDK DOKU untuk memunculkan modal pembayaran
-        window.loadJokulCheckout(result.paymentUrl);
-        setLoadingPackageId(null);
+      if (result.success) {
+        if (result.isFree) {
+          setLoadingPackageId(null);
+          toast.success(
+            result.message || "Paket Free Trial berhasil diaktifkan!"
+          );
+          window.location.reload();
+        } else if (result.paymentUrl) {
+          // 2. Panggil SDK DOKU untuk memunculkan modal pembayaran
+          window.loadJokulCheckout(result.paymentUrl);
+          setLoadingPackageId(null);
+        }
       } else {
         setLoadingPackageId(null);
-        alert("Gagal memulai pembayaran: " + result.error);
-        console.log("Gagal memulai pembayaran: " + result.error);
+        toast.error(result.message || "Gagal memulai pembayaran");
+        console.log("Gagal memulai pembayaran: " + result);
       }
     } catch (err) {
       // Error sudah dihandle di Zustand, tapi bisa tambah alert di sini
-      alert("Gagal memulai pembayaran: " + err.message);
-      console.log("Gagal memulai pembayaran: " + err.message);
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Gagal memulai pembayaran";
+      toast.error(errorMessage);
+      console.log("Gagal memulai pembayaran: " + err);
       setLoadingPackageId(null);
+    }
+  };
+
+  const handlePackageClick = (pkg) => {
+    if (pkg.free_trial) {
+      setSelectedPackage(pkg);
+      setIsDialogOpen(true);
+    } else {
+      dokuPayment(pkg.id);
+    }
+  };
+
+  const confirmFreeTrial = () => {
+    if (selectedPackage) {
+      dokuPayment(selectedPackage.id);
+      setIsDialogOpen(false);
     }
   };
 
@@ -186,16 +225,37 @@ export default function DashboardCampusBerlangganan() {
               </div>
 
               {/* Price */}
-              <div className="mb-8 py-6 border-y border-gray-50 flex flex-col items-center">
-                <div className="flex items-baseline gap-1 text-[#003631]">
-                  <span className="text-sm font-bold">Rp</span>
-                  <span className="text-4xl font-black tracking-tighter">
-                    {pkg.price.toLocaleString("id-ID")}
-                  </span>
-                </div>
-                <p className="text-gray-400 text-xs font-medium mt-1 uppercase tracking-widest">
-                  Per {pkg.duration_month} Bulan (Flat Rate)
-                </p>
+              <div className="mb-8 py-6 border-y border-gray-50 flex flex-col items-center min-h-[120px] justify-center">
+                {pkg.free_trial ? (
+                  <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <span className="text-3xl font-black tracking-tight text-[#003631] text-center">
+                      Uji Coba Gratis
+                    </span>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-gray-400 text-sm font-medium line-through decoration-red-400/60 decoration-2">
+                        Rp {pkg.price.toLocaleString("id-ID")}
+                      </span>
+                      <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                        HEMAT 100%
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-xs font-medium mt-2 uppercase tracking-widest">
+                      Durasi {pkg.duration_month} Bulan
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-baseline gap-1 text-[#003631]">
+                      <span className="text-sm font-bold">Rp</span>
+                      <span className="text-4xl font-black tracking-tighter">
+                        {pkg.price.toLocaleString("id-ID")}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-xs font-medium mt-1 uppercase tracking-widest">
+                      Per {pkg.duration_month} Bulan (Flat Rate)
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Features List */}
@@ -229,9 +289,7 @@ export default function DashboardCampusBerlangganan() {
 
               {/* CTA Button */}
               <button
-                onClick={() => {
-                  dokuPayment(pkg.id);
-                }}
+                onClick={() => handlePackageClick(pkg)}
                 disabled={loadingPackageId !== null}
                 className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg ${
                   pkg.isPopular
@@ -265,6 +323,50 @@ export default function DashboardCampusBerlangganan() {
           </span>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {isDialogOpen && selectedPackage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100 animate-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 ring-8 ring-emerald-50/50">
+                <Rocket
+                  className="text-[#003631] w-10 h-10"
+                  strokeWidth={1.5}
+                />
+              </div>
+
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Aktifkan Free Trial?
+              </h3>
+
+              <p className="text-gray-500 text-sm leading-relaxed mb-8">
+                Anda akan mengaktifkan paket{" "}
+                <span className="font-bold text-[#003631]">
+                  {selectedPackage.package_name}
+                </span>{" "}
+                secara gratis. Kesempatan ini hanya berlaku satu kali untuk
+                kampus Anda.
+              </p>
+
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => setIsDialogOpen(false)}
+                  className="flex-1 py-3.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={confirmFreeTrial}
+                  className="flex-1 py-3.5 px-4 rounded-xl bg-[#003631] text-white font-bold text-sm hover:bg-[#004d45] shadow-lg shadow-emerald-100 transition-all active:scale-95"
+                >
+                  Ya, Aktifkan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
