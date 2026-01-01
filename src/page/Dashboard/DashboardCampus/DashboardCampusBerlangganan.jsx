@@ -7,6 +7,7 @@ import useGetSubscriptionPackages from "@/hooks/hooksCampus/useGetSubscriptionPa
 import DynamicIcon from "@/components/DynamicIcon";
 import { set } from "zod";
 import { Spinner } from "@/components/ui/spinner";
+import DashboardCampusBerlanggananSkeleton from "@/components/DashboardCampusBerlanggananSkeleton";
 
 export default function DashboardCampusBerlangganan() {
   const token = localStorage.getItem("userJwt");
@@ -93,6 +94,12 @@ export default function DashboardCampusBerlangganan() {
       fetchPackages(token);
     }
   }, [token, fetchPackages]);
+
+  if (isLoadingPackages) {
+    return <DashboardCampusBerlanggananSkeleton />;
+  }
+
+  // handle payment
   const dokuPayment = async (idSubscription) => {
     // console.log(idSubscription);
     setLoadingPackageId(idSubscription);
