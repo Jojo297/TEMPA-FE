@@ -1,6 +1,6 @@
 import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
 import DashboardAdminCampusSkeleton from "@/components/DashboardAdminCampusSkeleton";
-import { Search, Plus, X, Trash2, AlertTriangleIcon, Eye } from "lucide-react";
+import { Search, Trash2, AlertTriangleIcon, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -22,16 +22,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useGetAllMentee from "@/hooks/hooksAdmin/useGetAllMentee";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,77 +34,47 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { toast } from "sonner";
+import useGetSubscriptionPackages from "@/hooks/hooksAdmin/useGetSubscriptionPackages";
+import ServiceDialogContent from "@/components/ServiceDialogContent";
+import AddServiceDialog from "@/components/AddServiceDialog";
 
 export default function DashboardAdminServices() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("userJwt");
+  const { packages, isLoading, error, fetchPackages } =
+    useGetSubscriptionPackages();
   const [searchQuery, setSearchQuery] = useState("");
+  const [services, setServices] = useState([]); // Placeholder if you want to maintain local state, but we will use displayPackage directly for reading
 
-  const [services, setServices] = useState([
-    {
-      id: 1,
-      service_name: "Tempa Berkembang",
-      benefit: [
-        "Tambahkan 5 Program",
-        "Tambahkan 5 Program",
-        "Masukkan 5 Materi Per-Program",
-      ],
-      price: 2000000,
-      duration: "6 Bulan",
-    },
-    {
-      id: 2,
-      service_name: "Tempa Dasar",
-      benefit: [
-        "Akses 3 Program Dasar",
-        "Materi Pendahuluan",
-        "Sertifikat Digital",
-      ],
-      price: 500000,
-      duration: "3 Bulan",
-    },
-    {
-      id: 3,
-      service_name: "Tempa Menengah",
-      benefit: ["Akses 10 Program", "Mentoring Mingguan", "Proyek Riil"],
-      price: 1500000,
-      duration: "6 Bulan",
-    },
-    {
-      id: 4,
-      service_name: "Tempa Profesional",
-      benefit: [
-        "Akses Semua Program",
-        "Mentoring 1-on-1",
-        "Jaminan Penyaluran Kerja",
-      ],
-      price: 5000000,
-      duration: "12 Bulan",
-    },
-  ]);
+  const displayPackage = packages ?? [];
+  console.log(displayPackage);
 
-  const filteredData = services.filter((item) =>
-    item.service_name.toLowerCase().includes(searchQuery.toLowerCase())
+  useEffect(() => {
+    if (token) {
+      fetchPackages(token);
+    }
+  }, [token, fetchPackages]);
+
+  const filteredData = displayPackage.filter((item) =>
+    item.package_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleAddService = (newServiceData) => {
-    const newId =
-      services.length > 0 ? Math.max(...services.map((s) => s.id)) + 1 : 1;
-    const newService = { ...newServiceData, id: newId };
-    setServices((prev) => [...prev, newService]);
+    toast.info("Fitur tambah layanan belum terhubung ke API.");
   };
 
   const handleUpdateService = (id, updatedData) => {
-    setServices((prev) =>
-      prev.map((service) =>
-        service.id === id ? { ...service, ...updatedData } : service
-      )
-    );
+    toast.info("Fitur ubah layanan belum terhubung ke API.");
+  };
+
+  // get status color
+  const getStatusColor = (status) => {
+    if (status) {
+      return "text-amber-600 border-amber-200 bg-amber-50";
+    } else {
+      return "text-green-600 border-green-200 bg-green-50";
+    }
   };
 
   return (
@@ -170,6 +131,7 @@ export default function DashboardAdminServices() {
                 <TableHead className="text-gray-700 font-bold">
                   Nama Layanan
                 </TableHead>
+                <TableHead className="text-gray-700 font-bold"></TableHead>
 
                 <TableHead className="text-gray-700  font-bold">Aksi</TableHead>
               </TableRow>
@@ -188,10 +150,19 @@ export default function DashboardAdminServices() {
                       <div className="flex items-center gap-3">
                         <div className="min-w-0">
                           <p className="font-semibold text-base truncate text-gray-900">
-                            {item.service_name}
+                            {item.package_name}
                           </p>
                         </div>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
+                          item.free_trial
+                        )} font-semibold whitespace-nowrap`}
+                      >
+                        {item.free_trial ? "Gratis Uji Coba" : "Biasa"}
+                      </span>
                     </TableCell>
                     <TableCell className="flex gap-4">
                       {/* lihat detail */}
@@ -227,7 +198,7 @@ export default function DashboardAdminServices() {
                             </div>
 
                             <AlertDialogTitle className="text-xl font-semibold">
-                              Hapus Layanan {item.service_name}?
+                              Hapus Layanan {item.package_name}?
                             </AlertDialogTitle>
                             <AlertDialogDescription className="text-gray-600 mb-4 text-center">
                               Apakah Anda yakin ingin menghapus layanan ini?
@@ -268,372 +239,5 @@ export default function DashboardAdminServices() {
         </div>
       </div>
     </div>
-  );
-}
-
-const formSchema = z.object({
-  service_name: z.string().min(1, "Nama layanan harus diisi"),
-  price: z.coerce.number().min(1, "Harga harus lebih dari 0"),
-  duration: z.string().min(1, "Durasi harus diisi"),
-  benefit: z.array(z.string()).min(1, "Minimal satu benefit harus diisi"),
-});
-
-// detail service component
-function ServiceDialogContent({ item, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newBenefit, setNewBenefit] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      service_name: item.service_name,
-      price: item.price,
-      duration: item.duration,
-      benefit: item.benefit,
-    },
-  });
-
-  const benefits = watch("benefit");
-
-  const handleAddBenefit = () => {
-    if (newBenefit.trim()) {
-      setValue("benefit", [...(benefits || []), newBenefit.trim()]);
-      setNewBenefit("");
-    }
-  };
-
-  const handleRemoveBenefit = (index) => {
-    const updatedBenefits = benefits.filter((_, i) => i !== index);
-    setValue("benefit", updatedBenefits);
-  };
-
-  const onSubmit = (data) => {
-    onUpdate(item.id, data);
-    toast.success("Layanan berhasil diperbarui!");
-    setIsEditing(false);
-  };
-
-  return (
-    <DialogContent className="sm:max-w-[500px]">
-      <DialogHeader>
-        <DialogTitle>
-          {isEditing ? "Ubah Layanan" : "Detail Layanan"}
-        </DialogTitle>
-        <DialogDescription>
-          {isEditing
-            ? "Ubah informasi layanan di bawah ini."
-            : "Informasi detail mengenai layanan."}
-        </DialogDescription>
-      </DialogHeader>
-
-      {isEditing ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="py-4 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="service_name">Nama Layanan</Label>
-            <Input id="service_name" {...register("service_name")} />
-            {errors.service_name && (
-              <p className="text-red-500 text-xs">
-                {errors.service_name.message}
-              </p>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="price">Harga</Label>
-              <Input id="price" type="number" {...register("price")} />
-              {errors.price && (
-                <p className="text-red-500 text-xs">{errors.price.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="duration">Durasi</Label>
-              <Input id="duration" {...register("duration")} />
-              {errors.duration && (
-                <p className="text-red-500 text-xs">
-                  {errors.duration.message}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label>Benefit</Label>
-            <div className="space-y-2">
-              {benefits?.map((benefit, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between bg-gray-50 p-2 rounded-md border border-gray-200"
-                >
-                  <span className="text-sm text-gray-700">{benefit}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleRemoveBenefit(index)}
-                    className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <div className="flex gap-2">
-                <Input
-                  value={newBenefit}
-                  onChange={(e) => setNewBenefit(e.target.value)}
-                  placeholder="Tambah benefit..."
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddBenefit();
-                    }
-                  }}
-                />
-                <Button
-                  type="button"
-                  onClick={handleAddBenefit}
-                  className="bg-secondary hover:bg-secondary/80 shrink-0"
-                  size="icon"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-            {errors.benefit && (
-              <p className="text-red-500 text-xs">{errors.benefit.message}</p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button type="submit" className="bg-primary hover:bg-primary/80">
-              Simpan
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setIsEditing(false);
-                reset();
-              }}
-            >
-              Batal
-            </Button>
-          </DialogFooter>
-        </form>
-      ) : (
-        <>
-          <div className="py-4 space-y-4">
-            <div>
-              <Label className="text-xs text-gray-500">Nama Layanan</Label>
-              <div className="font-medium text-gray-900">
-                {item.service_name}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-gray-500">Harga</Label>
-                <div className="font-medium text-gray-900">
-                  Rp {item.price.toLocaleString("id-ID")}
-                </div>
-              </div>
-              <div>
-                <Label className="text-xs text-gray-500">Durasi</Label>
-                <div className="font-medium text-gray-900">{item.duration}</div>
-              </div>
-            </div>
-            <div>
-              <Label className="text-xs text-gray-500 mb-2 block">
-                Benefit
-              </Label>
-              <ul className="list-disc pl-4 space-y-1">
-                {item.benefit.map((benefit, idx) => (
-                  <li key={idx} className="text-sm text-gray-700">
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-secondary hover:bg-secondary hover:opacity-70 transition"
-              onClick={() => setIsEditing(true)}
-            >
-              Ubah Data
-            </Button>
-            <DialogClose asChild>
-              <Button>Tutup</Button>
-            </DialogClose>
-          </DialogFooter>
-        </>
-      )}
-    </DialogContent>
-  );
-}
-
-function AddServiceDialog({ onAdd }) {
-  const [open, setOpen] = useState(false);
-  const [newBenefit, setNewBenefit] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      service_name: "",
-      price: 0,
-      duration: "",
-      benefit: [],
-    },
-  });
-
-  const benefits = watch("benefit");
-
-  const handleAddBenefit = () => {
-    if (newBenefit.trim()) {
-      setValue("benefit", [...(benefits || []), newBenefit.trim()], {
-        shouldValidate: true,
-      });
-      setNewBenefit("");
-    }
-  };
-
-  const handleRemoveBenefit = (index) => {
-    const updatedBenefits = benefits.filter((_, i) => i !== index);
-    setValue("benefit", updatedBenefits, { shouldValidate: true });
-  };
-
-  const onSubmit = (data) => {
-    onAdd(data);
-    toast.success("Layanan berhasil ditambahkan!");
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    if (!open) {
-      reset({
-        service_name: "",
-        price: 0,
-        duration: "",
-        benefit: [],
-      });
-      setNewBenefit("");
-    }
-  }, [open, reset]);
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Tambahkan Layanan</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Tambahkan Layanan Baru</DialogTitle>
-          <DialogDescription>
-            Isi detail untuk layanan baru yang akan ditambahkan.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="py-4 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="service_name_add">Nama Layanan</Label>
-            <Input id="service_name_add" {...register("service_name")} />
-            {errors.service_name && (
-              <p className="text-red-500 text-xs">
-                {errors.service_name.message}
-              </p>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="price_add">Harga</Label>
-              <Input id="price_add" type="number" {...register("price")} />
-              <p className="text-gray-500 text-xs">
-                *Masukkan harga tanpa titik (".") atau koma (",")
-              </p>
-              {errors.price && (
-                <p className="text-red-500 text-xs">{errors.price.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="duration_add">Durasi</Label>
-              <Input id="duration_add" {...register("duration")} />
-              <p className="text-gray-500 text-xs">
-                *Durasi dalam satuan bulan
-              </p>
-              {errors.duration && (
-                <p className="text-red-500 text-xs">
-                  {errors.duration.message}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label>Benefit</Label>
-            <div className="space-y-2">
-              {benefits?.map((benefit, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between bg-gray-50 p-2 rounded-md border border-gray-200"
-                >
-                  <span className="text-sm text-gray-700">{benefit}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleRemoveBenefit(index)}
-                    className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <div className="flex gap-2">
-                <Input
-                  value={newBenefit}
-                  onChange={(e) => setNewBenefit(e.target.value)}
-                  placeholder="Tambah benefit..."
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddBenefit();
-                    }
-                  }}
-                />
-                <Button
-                  type="button"
-                  onClick={handleAddBenefit}
-                  className="bg-secondary hover:bg-secondary/80 shrink-0"
-                  size="icon"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-            {errors.benefit && (
-              <p className="text-red-500 text-xs">{errors.benefit.message}</p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Batal
-            </Button>
-            <Button type="submit" className="bg-primary hover:bg-primary/80">
-              Tambahkan
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
   );
 }
