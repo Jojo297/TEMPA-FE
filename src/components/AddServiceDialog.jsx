@@ -25,6 +25,9 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Textarea } from "./ui/textarea";
+import useCreateSubscriptionPackage from "@/hooks/hooksAdmin/useCreateSubscriptionPackage";
+import { Spinner } from "./ui/spinner";
 
 const formSchema = z.object({
   package_name: z.string().min(1, "Nama layanan harus diisi"),
@@ -45,8 +48,10 @@ const formSchema = z.object({
     .min(1, "Minimal satu benefit harus diisi"),
 });
 
-export default function AddServiceDialog({ onAdd }) {
+export default function AddServiceDialog({ refetch }) {
   const [open, setOpen] = useState(false);
+  const { isLoading, error, data, createPackage } =
+    useCreateSubscriptionPackage();
   const [newBenefit, setNewBenefit] = useState({ title: "", desc: "" });
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -82,12 +87,20 @@ export default function AddServiceDialog({ onAdd }) {
     setValue("benefit", updatedBenefits);
   };
 
-  const onSubmit = (data) => {
-    onAdd(data);
-    toast.success("Layanan berhasil ditambahkan!");
-    setOpen(false);
-    reset();
-    setNewBenefit({ title: "", desc: "" });
+  const onSubmit = async (data) => {
+    const token = localStorage.getItem("userJwt");
+
+    const result = await createPackage(token, data);
+
+    if (result.success) {
+      if (refetch) refetch();
+      toast.success(result.message || "Layanan berhasil ditambahkan!");
+      setOpen(false);
+      reset();
+      setNewBenefit({ title: "", desc: "" });
+    } else {
+      toast.error(result.error || "Gagal menambahkan layanan");
+    }
   };
 
   return (
@@ -182,7 +195,7 @@ export default function AddServiceDialog({ onAdd }) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Deskripsi</Label>
-                <Input id="description" {...register("description")} />
+                <Textarea id="description" {...register("description")} />
                 {errors.description && (
                   <p className="text-red-500 text-xs">
                     {errors.description.message}
@@ -296,8 +309,18 @@ export default function AddServiceDialog({ onAdd }) {
               >
                 Batal
               </Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/80">
-                Tambahkan
+              <Button
+                disabled={isLoading}
+                type="submit"
+                className="bg-primary hover:bg-primary/80"
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Spinner /> Menambahkan...
+                  </div>
+                ) : (
+                  "Tambahkan"
+                )}
               </Button>
             </DialogFooter>
           </form>

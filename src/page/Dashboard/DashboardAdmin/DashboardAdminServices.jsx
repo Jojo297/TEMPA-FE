@@ -48,7 +48,7 @@ export default function DashboardAdminServices() {
   const [services, setServices] = useState([]); // Placeholder if you want to maintain local state, but we will use displayPackage directly for reading
 
   const displayPackage = packages ?? [];
-  console.log(displayPackage);
+  // console.log(displayPackage);
 
   useEffect(() => {
     if (token) {
@@ -59,10 +59,6 @@ export default function DashboardAdminServices() {
   const filteredData = displayPackage.filter((item) =>
     item.package_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const handleAddService = (newServiceData) => {
-    toast.info("Fitur tambah layanan belum terhubung ke API.");
-  };
 
   const handleUpdateService = (id, updatedData) => {
     toast.info("Fitur ubah layanan belum terhubung ke API.");
@@ -117,7 +113,7 @@ export default function DashboardAdminServices() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <AddServiceDialog onAdd={handleAddService} />
+            <AddServiceDialog refetch={() => fetchPackages(token)} />
           </div>
         </div>
 
