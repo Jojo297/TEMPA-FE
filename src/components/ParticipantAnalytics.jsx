@@ -20,7 +20,8 @@ const formatStatus = (text) =>
   text?.replace(/_/g, " ").replace(/\s+/g, " ").trim();
 
 // Tambahkan library format date jika diperlukan, atau tetap gunakan toLocaleDateString
-export function ParticipantAnalytics({ menteeList }) {
+export function ParticipantAnalytics({ menteeList, statusSubscription }) {
+  // console.log(statusSubscription);
   const stats = useMemo(() => {
     if (!menteeList || menteeList.length === 0) return null;
 
@@ -87,39 +88,66 @@ export function ParticipantAnalytics({ menteeList }) {
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                   Sebaran Kota Terbanyak
                 </p>
-                <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-500">
-                  {cityDistribution.length} Kota
+                <span
+                  className={`text-[10px] ${
+                    statusSubscription
+                      ? "blur-sm select-none pointer-events-none"
+                      : ""
+                  } bg-gray-100 px-2 py-0.5 rounded text-gray-500`}
+                >
+                  {statusSubscription ? "5+" : cityDistribution.length} Kota
                 </span>
               </div>
 
-              <div className="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
-                {cityDistribution
-                  .sort((a, b) => b.total - a.total)
-                  .slice(0, 5) // Tampilkan Top 5 saja agar profesional
-                  .map((item, index) => (
+              {statusSubscription ? (
+                <div className="space-y-2 blur-sm select-none pointer-events-none opacity-80">
+                  {[...Array(5)].map((_, i) => (
                     <div
-                      key={index}
-                      className="flex items-center justify-between p-2 rounded-lg bg-gray-50/50 border border-transparent hover:border-gray-200 transition-all"
+                      key={i}
+                      className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-white border border-gray-200 rounded-full text-gray-400">
-                          {index + 1}
+                        <span className="flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-white border border-gray-200 rounded-full text-gray-300">
+                          {i + 1}
                         </span>
-                        <span className="text-xs font-semibold text-gray-700 truncate max-w-[120px]">
-                          {item.city}
-                        </span>
+                        <div className="h-3 w-24 bg-gray-200 rounded-full"></div>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-[#013B35]">
-                          {item.total}
-                        </span>
-                        <span className="text-[10px] text-gray-400">
-                          Mentee
-                        </span>
+                        <div className="h-3 w-6 bg-gray-200 rounded-full"></div>
                       </div>
                     </div>
                   ))}
-              </div>
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
+                  {cityDistribution
+                    .sort((a, b) => b.total - a.total)
+                    .slice(0, 5) // Tampilkan Top 5 saja agar profesional
+                    .map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 rounded-lg bg-gray-50/50 border border-transparent hover:border-gray-200 transition-all"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-white border border-gray-200 rounded-full text-gray-400">
+                            {index + 1}
+                          </span>
+                          <span className="text-xs font-semibold text-gray-700 truncate max-w-[120px]">
+                            {item.city}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-black text-[#013B35]">
+                            {item.total}
+                          </span>
+                          <span className="text-[10px] text-gray-400">
+                            Mentee
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
 
             {/* Divider */}
@@ -171,7 +199,13 @@ export function ParticipantAnalytics({ menteeList }) {
           </div>
         </div>
 
-        <div className="flex-1 w-full min-h-[250px]">
+        <div
+          className={`flex-1 w-full min-h-[250px] transition-all duration-500 ${
+            statusSubscription
+              ? "blur-sm select-none pointer-events-none opacity-60"
+              : ""
+          }`}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={stats.trendData}

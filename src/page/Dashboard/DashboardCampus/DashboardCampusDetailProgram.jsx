@@ -48,7 +48,7 @@ export default function DashboardCampusDetailProgram() {
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
 
   const program = detailProgram ?? {};
-  console.log(program);
+  // console.log(program);
 
   useEffect(() => {
     if (token) {
@@ -247,6 +247,7 @@ export default function DashboardCampusDetailProgram() {
 
               <TabsContent value="peserta">
                 <ParticipantProgramCampus
+                  statusSubscription={program.free_trial}
                   menteeList={program.mentee_list}
                   idCampus={idCampus}
                   token={token}
