@@ -55,6 +55,8 @@ import {
   Lock,
   Sparkles,
   ArrowRight,
+  HardHat,
+  Award,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
@@ -67,6 +69,33 @@ import useSendMessage from "@/hooks/hooksCampus/useSendMessage";
 import { toast } from "sonner";
 import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
 import { ParticipantAnalytics } from "./ParticipantAnalytics";
+
+const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in-50">
+      <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center border border-gray-200 transform transition-all animate-in zoom-in-95">
+        <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center mx-auto mb-6 ring-8 ring-white/50">
+          <HardHat className="w-10 h-10 text-blue-600" strokeWidth={1.5} />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+          Fitur Segera Hadir!
+        </h3>
+        <p className="text-gray-500 mb-8 leading-relaxed">
+          Fitur pembuatan sertifikat otomatis sedang dalam tahap pengembangan.
+          Kami akan segera memberitahu Anda jika fitur ini sudah siap digunakan.
+        </p>
+        <Button
+          onClick={() => onOpenChange(false)}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5"
+        >
+          Mengerti
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 const PremiumFeatureDialog = ({ isOpen, onOpenChange }) => {
   const navigate = useNavigate();
@@ -140,6 +169,8 @@ export default function ParticipantProgramCampus({
     useSendBulkMessage();
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
   const [isPremiumDialogOpen, setIsPremiumDialogOpen] = useState(false);
+  const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
+    useState(false);
 
   // console.log(statusSubscription);
 
@@ -314,6 +345,10 @@ export default function ParticipantProgramCampus({
         isOpen={isPremiumDialogOpen}
         onOpenChange={setIsPremiumDialogOpen}
       />
+      <InDevelopmentDialog
+        isOpen={isInDevelopmentDialogOpen}
+        onOpenChange={setIsInDevelopmentDialogOpen}
+      />
       <ParticipantAnalytics
         menteeList={menteeList}
         statusSubscription={statusSubscription}
@@ -340,115 +375,140 @@ export default function ParticipantProgramCampus({
                 className="pl-9 max-w-sm"
               />
             </div>
+
+            {/* button generate certificate */}
+            {statusSubscription ? (
+              <Button
+                variant="outline"
+                onClick={() => setIsPremiumDialogOpen(true)}
+                className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+              >
+                <Award size={16} />
+                Generate Sertifikat ({selectedMentees.length})
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={() => setIsInDevelopmentDialogOpen(true)}
+                className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+              >
+                <Award size={16} />
+                Generate Sertifikat ({selectedMentees.length})
+              </Button>
+            )}
             {/* button send bulk message */}
-            {selectedMentees.length > 0 &&
-              (statusSubscription ? (
-                <Button
-                  onClick={() => setIsPremiumDialogOpen(true)}
-                  className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2"
-                >
-                  <Mail size={16} />
-                  Kirim Pesan ({selectedMentees.length})
-                </Button>
-              ) : (
-                <Dialog
-                  open={isBulkDialogOpen}
-                  onOpenChange={setIsBulkDialogOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2">
-                      <Mail size={16} />
-                      Kirim Pesan ({selectedMentees.length})
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                      <DialogTitle>
-                        Kirim Pesan ke {selectedMentees.length} Mentee
-                      </DialogTitle>
-                      <DialogDescription>
-                        Pesan ini akan dikirimkan ke semua mentee yang Anda
-                        pilih.
-                      </DialogDescription>
-                    </DialogHeader>
+            {selectedMentees.length > 0 && (
+              <>
+                {/* Tombol Kirim Pesan */}
+                {statusSubscription ? (
+                  <Button
+                    onClick={() => setIsPremiumDialogOpen(true)}
+                    className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2"
+                  >
+                    <Mail size={16} />
+                    Kirim Pesan ({selectedMentees.length})
+                  </Button>
+                ) : (
+                  <Dialog
+                    open={isBulkDialogOpen}
+                    onOpenChange={setIsBulkDialogOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2">
+                        <Mail size={16} />
+                        Kirim Pesan ({selectedMentees.length})
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[500px]">
+                      <DialogHeader>
+                        <DialogTitle>
+                          Kirim Pesan ke {selectedMentees.length} Mentee
+                        </DialogTitle>
+                        <DialogDescription>
+                          Pesan ini akan dikirimkan ke semua mentee yang Anda
+                          pilih.
+                        </DialogDescription>
+                      </DialogHeader>
 
-                    <Alert className="relative overflow-hidden border-none bg-blue-50/50 px-4 py-3 shadow-sm ring-1 ring-blue-100">
-                      <div className="absolute left-0 top-0 h-full w-1 bg-blue-500" />
-                      <div className="flex items-start gap-3">
-                        <AlertCircleIcon className="mt-0.5 h-5 w-5 text-blue-600" />
-                        <div className="grid gap-1">
-                          <AlertTitle className="text-sm font-bold leading-none tracking-tight text-blue-900">
-                            Informasi Pengiriman Masal
-                          </AlertTitle>
-                          <AlertDescription className="text-sm leading-relaxed text-blue-700/90">
-                            Pastikan pesan Anda bersifat umum dan relevan untuk
-                            semua penerima yang dipilih.
-                          </AlertDescription>
+                      <Alert className="relative overflow-hidden border-none bg-blue-50/50 px-4 py-3 shadow-sm ring-1 ring-blue-100">
+                        <div className="absolute left-0 top-0 h-full w-1 bg-blue-500" />
+                        <div className="flex items-start gap-3">
+                          <AlertCircleIcon className="mt-0.5 h-5 w-5 text-blue-600" />
+                          <div className="grid gap-1">
+                            <AlertTitle className="text-sm font-bold leading-none tracking-tight text-blue-900">
+                              Informasi Pengiriman Masal
+                            </AlertTitle>
+                            <AlertDescription className="text-sm leading-relaxed text-blue-700/90">
+                              Pastikan pesan Anda bersifat umum dan relevan
+                              untuk semua penerima yang dipilih.
+                            </AlertDescription>
+                          </div>
                         </div>
-                      </div>
-                    </Alert>
+                      </Alert>
 
-                    <Form {...formBulkMessage}>
-                      <form
-                        onSubmit={formBulkMessage.handleSubmit(
-                          onSendBulkMessage
-                        )}
-                        className="space-y-4"
-                      >
-                        <FormField
-                          control={formBulkMessage.control}
-                          name="subject"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Subjek</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Masukkan subjek pesan..."
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
+                      <Form {...formBulkMessage}>
+                        <form
+                          onSubmit={formBulkMessage.handleSubmit(
+                            onSendBulkMessage
                           )}
-                        />
-                        <FormField
-                          control={formBulkMessage.control}
-                          name="message"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Pesan</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="Tulis pesan Anda di sini..."
-                                  className="min-h-[100px]"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <DialogFooter>
-                          <DialogClose asChild>
-                            <Button type="button" variant="outline">
-                              Batal
-                            </Button>
-                          </DialogClose>
-                          <Button type="submit" disabled={isLoading}>
-                            {isLoading ? (
-                              <div className="flex items-center gap-2">
-                                <Spinner /> Mengirim...
-                              </div>
-                            ) : (
-                              "Kirim Pesan"
+                          className="space-y-4"
+                        >
+                          <FormField
+                            control={formBulkMessage.control}
+                            name="subject"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Subjek</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Masukkan subjek pesan..."
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
                             )}
-                          </Button>
-                        </DialogFooter>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              ))}
+                          />
+                          <FormField
+                            control={formBulkMessage.control}
+                            name="message"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Pesan</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Tulis pesan Anda di sini..."
+                                    className="min-h-[100px]"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button type="button" variant="outline">
+                                Batal
+                              </Button>
+                            </DialogClose>
+                            <Button type="submit" disabled={isLoading}>
+                              {isLoading ? (
+                                <div className="flex items-center gap-2">
+                                  <Spinner /> Mengirim...
+                                </div>
+                              ) : (
+                                "Kirim Pesan"
+                              )}
+                            </Button>
+                          </DialogFooter>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </>
+            )}
           </div>
         </div>
 
