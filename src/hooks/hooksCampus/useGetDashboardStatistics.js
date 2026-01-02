@@ -8,6 +8,7 @@ const useGetDashboardStatistics = create((set) => ({
   statistics: null,
   isLoading: false,
   error: null,
+  status: null,
 
   // Actions
   /**
@@ -44,13 +45,14 @@ const useGetDashboardStatistics = create((set) => ({
       set({
         isLoading: false,
         error: errorMessage,
+        status: error.response?.status,
       });
     }
   },
 
   // Function for clear state
   clearStatistics: () =>
-    set({ statistics: null, isLoading: false, error: null }),
+    set({ statistics: null, isLoading: false, status: null, error: null }),
 }));
 
 export default useGetDashboardStatistics;

@@ -16,10 +16,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
-import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
-export function SearchMajorsProgramForm({
+export function EditSearchMajorsProgramForm({
   className,
   value,
   onChange,

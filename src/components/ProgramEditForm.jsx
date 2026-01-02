@@ -45,6 +45,7 @@ import { cn } from "@/lib/utils";
 import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
 import { toast } from "sonner";
+import { EditSearchMajorsProgramForm } from "./EditSearchMajorsProgramForm";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -491,7 +492,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
                   <FormItem className="flex flex-col ">
                     <FormLabel className="mb-[10px]">Pilih Jurusan</FormLabel>
                     <FormControl>
-                      <SearchMajorsProgramForm
+                      <EditSearchMajorsProgramForm
                         value={field.value}
                         onChange={field.onChange}
                         initialMajorName={initialData.major_name}
