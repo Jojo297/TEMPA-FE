@@ -5,6 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const useGetSubscriptionPackages = create((set) => ({
   packages: [],
+  campusSubscription: {},
   isLoading: false,
   error: null,
 
@@ -22,9 +23,9 @@ const useGetSubscriptionPackages = create((set) => ({
         }
       );
 
-      // Response structure: { message: "...", data: [...] }
       set({
         packages: response.data.data,
+        campusSubscription: response.data.campusSubscription,
         isLoading: false,
         error: null,
       });
@@ -40,7 +41,13 @@ const useGetSubscriptionPackages = create((set) => ({
     }
   },
 
-  resetState: () => set({ packages: [], isLoading: false, error: null }),
+  resetState: () =>
+    set({
+      packages: [],
+      isLoading: false,
+      campusSubscription: {},
+      error: null,
+    }),
 }));
 
 export default useGetSubscriptionPackages;
