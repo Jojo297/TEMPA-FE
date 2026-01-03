@@ -74,7 +74,8 @@ export default function AdminAddStandartMajor({ token }) {
 
     if (result.success) {
       toast.success("Jurusan berhasil ditambahkan");
-      newIdMajor = data.id;
+      newIdMajor = result.data.id;
+      console.log(result.data);
       navigate(`/dashboard-admin/jurusan-detail/${newIdMajor}`);
       setIsOpen(false);
     } else {

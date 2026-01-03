@@ -16,6 +16,7 @@ import {
 import { X, Pencil, Plus, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import useUpdateStandardMajor from "@/hooks/hooksAdmin/useUpdateStandardMajor";
+import { useNavigate } from "react-router";
 
 // Zod Schema
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -65,6 +66,7 @@ const majorSchema = z.object({
 });
 
 export default function MajorEditForm({ initialData, onClose, onSave }) {
+  const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const { isLoading, updateMajor } = useUpdateStandardMajor();
   const [newProspect, setNewProspect] = useState("");
@@ -122,7 +124,7 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
         onClose();
       }
     } else {
-      onClose();
+      navigate(-1);
     }
   };
 
