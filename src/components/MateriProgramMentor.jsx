@@ -39,6 +39,8 @@ import DeleteMateriDialog from "./DeleteMateriDialog";
 import AddResourceDialog from "./AddResourceDialog";
 import MentorAddMateriProgram from "./MentorAddMateriProgram";
 import MentorDeleteMateriDialog from "./MentorDeleteMateriDialog";
+import ReactLinkify from "react-linkify";
+import renderLink from "@/utils/RenderLink";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -286,7 +288,10 @@ export default function MateriProgramMentor({
                               rows={3}
                             />
                           ) : (
-                            item.description
+                            // item.description
+                            <ReactLinkify componentDecorator={renderLink}>
+                              {item.description}
+                            </ReactLinkify>
                           )}
                         </div>
                         <hr />
