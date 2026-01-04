@@ -69,6 +69,7 @@ import useSendMessage from "@/hooks/hooksCampus/useSendMessage";
 import { toast } from "sonner";
 import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
 import { ParticipantAnalytics } from "./ParticipantAnalytics";
+import { jwtDecode } from "jwt-decode";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;
@@ -97,8 +98,11 @@ const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   );
 };
 
-const PremiumFeatureDialog = ({ isOpen, onOpenChange }) => {
+const PremiumFeatureDialog = ({ isOpen, onOpenChange, token }) => {
   const navigate = useNavigate();
+  const decode = jwtDecode(token);
+  const role = decode.role;
+  // console.log(decode.role);
 
   if (!isOpen) return null;
 
@@ -116,19 +120,21 @@ const PremiumFeatureDialog = ({ isOpen, onOpenChange }) => {
           berlangganan paket premium kami.
         </p>
         <div className="flex flex-col gap-3">
-          <Button
-            onClick={() => {
-              navigate("/dashboard-campus/berlangganan");
-              onOpenChange(false);
-            }}
-            className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
-          >
-            Lihat Paket Berlangganan
-            <ArrowRight
-              size={18}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </Button>
+          {!role === "mentor" && (
+            <Button
+              onClick={() => {
+                navigate("/dashboard-campus/berlangganan");
+                onOpenChange(false);
+              }}
+              className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+            >
+              Lihat Paket Berlangganan
+              <ArrowRight
+                size={18}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </Button>
+          )}
           <Button
             variant="ghost"
             onClick={() => onOpenChange(false)}
@@ -343,6 +349,7 @@ export default function ParticipantProgramCampus({
     <div className="max-w-7xl mx-auto mb-10">
       <PremiumFeatureDialog
         isOpen={isPremiumDialogOpen}
+        token={token}
         onOpenChange={setIsPremiumDialogOpen}
       />
       <InDevelopmentDialog

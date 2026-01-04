@@ -200,7 +200,12 @@ export default function DashboardMentorProgramDetail() {
               </TabsContent>
 
               <TabsContent value="peserta">
-                <ParticipantProgramCampus menteeList={program.mentee_list} />
+                <ParticipantProgramCampus
+                  statusSubscription={program.free_trial}
+                  menteeList={program.mentee_list}
+                  idCampus={program.idCampus}
+                  token={token}
+                />
               </TabsContent>
 
               <TabsContent value="materi">
