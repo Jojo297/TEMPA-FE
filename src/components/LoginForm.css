@@ -1,0 +1,14 @@
+/* Anda dapat menyalin kode dari 'style.css' di jawaban sebelumnya ke sini */
+:root {
+    --dark-green: #10403D; 
+    --light-blue: #5BC0EB; 
+    --text-color: #1a1a1a;
+    --light-bg: #f5f5f5;
+}
+
+/* ... (dan seterusnya) ... */
+
+.tab.active {
+    color: var(--text-color);
+}
+/* ... */
