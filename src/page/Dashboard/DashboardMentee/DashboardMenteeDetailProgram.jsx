@@ -221,6 +221,30 @@ const DashboardMenteeDetailProgram = () => {
     return <DetailProgramSkeleton />;
   }
 
+  // Logic button register
+  const now = new Date();
+  const startDate = new Date(displayDetailProgram.start_regis_date);
+  const endDate = new Date(displayDetailProgram.end_regis_date);
+  const isFull = displayDetailProgram.capacity <= 0;
+
+  let buttonText = "Daftar Sekarang";
+  let buttonClass = "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]";
+  let isDisabled = false;
+
+  if (endDate < now) {
+    buttonText = "Pendaftaran Sudah Tutup";
+    buttonClass = "bg-red-500 text-white cursor-not-allowed";
+    isDisabled = true;
+  } else if (startDate > now) {
+    buttonText = "Segera Dibuka";
+    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
+    isDisabled = true;
+  } else if (isFull) {
+    buttonText = "Program Sudah Penuh";
+    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
+    isDisabled = true;
+  }
+
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* breadcum */}
@@ -265,23 +289,10 @@ const DashboardMenteeDetailProgram = () => {
             <form>
               <DialogTrigger asChild>
                 <button
-                  disabled={
-                    displayDetailProgram.capacity <= 0 ||
-                    new Date(displayDetailProgram.end_regis_date) < new Date()
-                  }
-                  className={`w-full sm:w-auto font-semibold px-4 py-2 sm:px-6 rounded-md transition flex-shrink-0 text-sm sm:text-base ${
-                    new Date(displayDetailProgram.end_regis_date) < new Date()
-                      ? "bg-red-500 text-white cursor-not-allowed"
-                      : displayDetailProgram.capacity <= 0
-                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                      : "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
-                  }`}
+                  disabled={isDisabled}
+                  className={`w-full sm:w-auto font-semibold px-4 py-2 sm:px-6 rounded-md transition flex-shrink-0 text-sm sm:text-base ${buttonClass}`}
                 >
-                  {new Date(displayDetailProgram.end_regis_date) < new Date()
-                    ? "Pendaftaran Sudah Tutup"
-                    : displayDetailProgram.capacity <= 0
-                    ? "Program Sudah Penuh"
-                    : "Daftar Sekarang"}
+                  {buttonText}
                 </button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] bg-[#0E3B3D] border-[#B4D0E7]">
@@ -454,7 +465,7 @@ const DashboardMenteeDetailProgram = () => {
               <MapPin size={14} />
               {/* campus location */}
               <span>
-                {displayDetailProgram.campus_program_id_campusTocampus?.address}
+                {`${displayDetailProgram.campus_program_id_campusTocampus?.province}, ${displayDetailProgram.campus_program_id_campusTocampus?.city}`}
               </span>
             </div>
           </Link>
