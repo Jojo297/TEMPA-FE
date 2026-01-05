@@ -30,47 +30,33 @@ export default function LoadingAiRecomendationMajors() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-8 bg-white text-center">
+    <div className="flex flex-col items-center justify-center min-h-[70vh] p-8 text-center">
       <div className="max-w-md w-full">
-        {/* Kontainer Animasi Robot/AI */}
-        <div className="relative w-40 h-40 mb-8 mx-auto">
-          {/* Lingkaran luar yang berdenyut */}
-          <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping"></div>
-          {/* Lingkaran dalam yang berdenyut dengan delay */}
-          <div
-            className="absolute inset-0 bg-primary/20 rounded-full animate-ping"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          {/* Ikon Robot di tengah */}
-          <div className="absolute inset-2 flex items-center justify-center bg-primary rounded-full shadow-2xl">
-            <img
-              src={robotLoading}
-              alt="AI Robot sedang berpikir"
-              className="w-24 h-24 object-contain"
-            />
+        {/* Kontainer Animasi AI Thinking State */}
+        <div className="flex flex-col items-center justify-center mb-10">
+          <div className="relative flex items-center justify-center w-24 h-24">
+            {/* Efek Cahaya Halus di Latar Belakang (Glow) */}
+            <div className="absolute inset-0 bg-[#10403D]/20 rounded-full blur-xl animate-pulse"></div>
+
+            {/* Animasi Orbital/Lingkaran AI */}
+            <div className="absolute w-full h-full border-t-2 border-b-2 border-[#10403D] rounded-full animate-spin"></div>
+            <div className="absolute w-full h-full border-r-2 border-l-2 border-[#10403D]/30 rounded-full animate-spin [animation-duration:3s]"></div>
+
+            {/* Tiga Titik Berdenyut (AI Pulse Dots) */}
+            <div className="flex space-x-1.5 z-10">
+              <div className="w-3 h-3 bg-[#10403D] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+              <div className="w-3 h-3 bg-[#10403D] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+              <div className="w-3 h-3 bg-[#10403D] rounded-full animate-bounce"></div>
+            </div>
           </div>
-        </div>
-        {/* Teks Loading Dinamis */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          AI sedang memproses jawaban Anda...
-        </h2>
-        <p className="text-base text-gray-600 transition-opacity duration-500 min-h-[48px] flex items-center justify-center">
-          {loadingText}
-        </p>
-        {/* Animasi Dots Berkedip */}
-        <div className="flex space-x-1.5 mt-4 justify-center">
-          <div
-            className="w-2.5 h-2.5 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0s" }}
-          ></div>
-          <div
-            className="w-2.5 h-2.5 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0.2s" }}
-          ></div>
-          <div
-            className="w-2.5 h-2.5 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: "0.4s" }}
-          ></div>
+
+          {/* Teks Indikator di Bawah Animasi */}
+          <div className="mt-6 flex flex-col items-center">
+            <span className="text-sm font-medium text-gray-400 tracking-widest uppercase animate-pulse">
+              AI sedang menganalisis
+            </span>
+            <p className="text-xs text-gray-400 mt-1">{loadingText}</p>
+          </div>
         </div>
       </div>
     </div>
