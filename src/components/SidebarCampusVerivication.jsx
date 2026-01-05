@@ -233,15 +233,15 @@ const SidebarCampusVerivication = ({ children }) => {
       {/* MAIN CONTENT + FOOTER */}
       <div className="flex flex-col pt-16 min-h-screen">
         <main
-          className={`flex-1 transition-all duration-300 ${
-            isOpen ? "ml-64" : "ml-0"
-          } p-6`}
+          className={`flex-1 transition-all duration-300 p-2 lg:p-6 ${
+            isOpen ? "md:ml-64" : ""
+          }`}
         >
           {children}
         </main>
 
         <div
-          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
+          className={`transition-all duration-300 ${isOpen ? "md:ml-64" : ""}`}
         >
           <Footer />
         </div>

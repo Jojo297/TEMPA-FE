@@ -51,7 +51,7 @@ export default function DashboardCampusVerivication() {
 
   return (
     <SidebarCampusVerivication>
-      <main className="px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">
+      <main className="lg:px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">
         {/* 3. Render Konten yang Dipilih */}
         {contentToRender}
       </main>
