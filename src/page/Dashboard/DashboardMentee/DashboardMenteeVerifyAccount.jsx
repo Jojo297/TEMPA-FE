@@ -155,7 +155,7 @@ export default function DashboardMenteeVerifyAccount() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
+    <div className="max-w-3xl mx-auto py-4">
       <div className="mb-8">
         <h1 className="text-3xl text-primary font-bold">
           Verifikasi Akun Mentee

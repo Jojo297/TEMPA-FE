@@ -36,16 +36,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { Button } from "@/components/ui/button";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // FIXED
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
-import { icon } from "leaflet";
 import { jwtDecode } from "jwt-decode";
 
 const SidebarWithNavbar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -226,7 +224,7 @@ const SidebarWithNavbar = ({ children }) => {
       {/* MAIN CONTENT */}
       <div className="flex flex-col pt-16 min-h-screen">
         <main
-          className={`flex-1 transition-all duration-300 p-6 ${
+          className={`flex-1 transition-all duration-300 p-2 lg:p-6 ${
             isOpen ? "md:ml-64" : ""
           }`}
         >

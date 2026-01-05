@@ -11,6 +11,9 @@ import {
   X,
   CreditCardIcon,
   CreditCard,
+  User,
+  BellIcon,
+  LogOutIcon,
 } from "lucide-react";
 
 import {
@@ -24,14 +27,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-text.png";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
 
 const SidebarCampusVerivication = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const token = localStorage.getItem("userJwt");
+  const decode = jwtDecode(token);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -89,9 +105,59 @@ const SidebarCampusVerivication = ({ children }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold">P</span>
-          </div>
+          {/* Profile */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="w-8 h-8 bg-white/20 hover:cursor-pointer rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold">
+                  {decode.username?.substring(0, 2).toUpperCase()}
+                </span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+              align="end"
+              sideOffset={4}
+            >
+              <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-semibold">
+                      {decode.username?.substring(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">
+                      {decode.username}
+                    </span>
+                    <span className="text-muted-foreground truncate text-xs">
+                      {decode.email}
+                    </span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  {/* <IconUserCircle /> */}
+                  <User />
+                  Profile
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  {/* <IconNotification /> */}
+                  <BellIcon />
+                  Notifikasi
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+                {/* <IconLogout /> */}
+                <LogOutIcon />
+                Keluar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -137,54 +203,45 @@ const SidebarCampusVerivication = ({ children }) => {
             )
           )}
 
-          {/* LOGOUT */}
-          <li>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <p className="flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all hover:bg-white/10 text-white/80">
-                  <LogOut size={18} />
-                  <span>KELUAR</span>
-                </p>
-              </AlertDialogTrigger>
+          {/* Alert Logout */}
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialogContent className="bg-primary text-white">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Yakin ingin keluar?</AlertDialogTitle>
+                <AlertDialogDescription className="text-white">
+                  Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
+                  kembali kapan saja dengan alamat email Anda.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
 
-              <AlertDialogContent className="bg-primary text-white">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Yakin ingin keluar?</AlertDialogTitle>
-                  <AlertDialogDescription className="text-white">
-                    Anda akan keluar dari sesi Anda saat ini. Anda dapat masuk
-                    kembali kapan saja dengan alamat email Anda.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter className="flex justify-end">
-                  <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70">
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleLogout}
-                    className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70"
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </li>
+              <AlertDialogFooter className="flex justify-end">
+                <AlertDialogCancel className="bg-red-200 text-red-600 hover:bg-red-200 hover:text-red-600 transition hover:opacity-70">
+                  Batal
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleLogout}
+                  className="bg-[#B4D0E7] text-primary hover:bg-[#B4D0E7] transition hover:opacity-70"
+                >
+                  Iya, Saya Yakin
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </ul>
       </div>
 
       {/* MAIN CONTENT + FOOTER */}
       <div className="flex flex-col pt-16 min-h-screen">
         <main
-          className={`flex-1 transition-all duration-300 ${
-            isOpen ? "ml-64" : "ml-0"
-          } p-6`}
+          className={`flex-1 transition-all duration-300 p-2 lg:p-6 ${
+            isOpen ? "md:ml-64" : ""
+          }`}
         >
           {children}
         </main>
 
         <div
-          className={`${isOpen ? "ml-64" : "ml-0"} transition-all duration-300`}
+          className={`transition-all duration-300 ${isOpen ? "md:ml-64" : ""}`}
         >
           <Footer />
         </div>

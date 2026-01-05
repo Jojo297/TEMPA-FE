@@ -202,7 +202,7 @@ export default function DashboardBeranda() {
       )}
 
       {/* Hero Section */}
-      <div className="relative bg-primary w-full rounded-2xl p-6 md:p-10 shadow-xl overflow-hidden flex flex-col md:flex-row items-start justify-between gap-6">
+      <div className="relative bg-primary w-full rounded-2xl p-6 md:p-10 shadow-lg overflow-hidden flex flex-col md:flex-row items-start justify-between gap-6">
         {/* Left Side */}
         <div className="relative flex-1 w-full">
           <div className="mb-8">

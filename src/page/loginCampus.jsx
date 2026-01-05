@@ -75,12 +75,12 @@ export default function LoginCampus() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <div
-        className={`flex w-[900px] h-[600px] shadow-2xl rounded-xl overflow-hidden`}
+        className={`flex flex-col md:flex-row w-full max-w-[900px] h-auto md:h-[600px] shadow-2xl rounded-xl overflow-hidden bg-white`}
       >
         <div
-          className={`w-2/5 p-10 ${DARK_GREEN} text-white flex flex-col justify-start`}
+          className={`hidden md:flex w-full md:w-2/5 p-10 ${DARK_GREEN} text-white flex-col justify-start`}
         >
           <div className="mb-20">
             {" "}
@@ -96,10 +96,20 @@ export default function LoginCampus() {
           </h1>
         </div>
 
-        <div className="w-3/5 bg-white p-16 flex flex-col">
+        <div className="w-full md:w-3/5 bg-white p-8 md:p-16 flex flex-col justify-center lg:justify-start">
+          {/* Mobile Logo */}
+          <div className="md:hidden flex justify-center mb-10">
+            <div className="bg-[#10403D] p-4 rounded-2xl shadow-md flex items-center justify-center w-full transform transition-transform duration-300">
+              <img
+                src={logoText}
+                alt="Logo TEMPA"
+                className="w-40 h-24 object-contain"
+              />
+            </div>
+          </div>
           <div className="mb-10">
             <div className="flex justify-between mb-1 font-bold text-gray-400">
-              <span className="text-gray-900">Login</span>
+              <span className="text-gray-900">Kampus Masuk</span>
             </div>
             <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
               <div
@@ -109,7 +119,7 @@ export default function LoginCampus() {
           </div>
 
           {/* Form Utama */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 lg:mb-8">
             <div>
               <h2 className="text-2xl font-semibold mb-1">
                 Masuk ke Akun Anda
@@ -135,14 +145,24 @@ export default function LoginCampus() {
             {/* button login google*/}
             <div className="flex flex-col items-center">
               <div
-                className="g_id_signin mb-3"
+                className="g_id_signin mb-3 lg:hidden"
                 data-type="standard"
                 data-shape="rectangular"
                 data-theme="outline"
                 data-text="signin_with"
                 data-size="large"
                 data-logo_alignment="left"
-                data-width="500"
+                data-width="300"
+              ></div>
+              <div
+                className="g_id_signin mb-3 hidden lg:block"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signin_with"
+                data-size="large"
+                data-logo_alignment="left"
+                data-width="600"
               ></div>
               {/* button back */}
               <Button

@@ -121,7 +121,7 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAF8] font-sans overflow-x-hidden pt-20">
+    <div className="min-h-screen bg-[#F8FAF8] font-sans pt-20">
       {/* Navbar */}
       <NavbarLandingPage />
 
@@ -151,11 +151,12 @@ const LandingPage = () => {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className=" lg:flex lg:w-1/2 lg:pt-20 justify-start"
             >
-              <div className="relative lg:w-[480px] lg:h-[580px] xl:w-[520px] xl:h-[620px] bg-[#013B35] rounded-t-full overflow-hidden shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+              <div className="relative lg:w-[480px] lg:h-[580px] xl:w-[520px] xl:h-[620px] p-4">
+                {" "}
                 <img
                   src={img2}
                   alt="Eksplorasi Masa Depan"
-                  className="w-full h-full object-cover transform scale-105 hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover object-top rounded-t-full transition-transform duration-700"
                 />
               </div>
             </motion.div>
