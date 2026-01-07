@@ -81,12 +81,12 @@ export default function DetailCampus() {
   const token = localStorage.getItem("userJwt");
   const [isInfoEditOpen, setIsInfoEditOpen] = useState(false);
 
-  const { detailCampus, isLoading, error, fetchDetailCampus } =
+  const { detailCampus, isLoading, error, fetchDetailCampus, clearState } =
     useDetailCampus();
 
   // Fallback ke objek kosong jika detailCampus null/undefined
   const displayDetailCampus = detailCampus || {};
-  // console.log(displayDetailCampus);
+  console.log(displayDetailCampus);
 
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
@@ -113,6 +113,7 @@ export default function DetailCampus() {
 
   useEffect(() => {
     if (token) {
+      clearState();
       fetchDetailCampus(token);
     }
   }, [token, fetchDetailCampus]);
@@ -140,7 +141,8 @@ export default function DetailCampus() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      {/* ====================== HEADER BANNER ====================== */}
+
+      {/* HEADER BANNER*/}
       {isInfoEditOpen ? (
         <EditHeader
           displayDetailCampus={displayDetailCampus}
@@ -249,8 +251,16 @@ export default function DetailCampus() {
               </div>
               <span className="text-sm font-medium tracking-tight">
                 Telah dilihat oleh{" "}
-                <b className="text-foreground tabular-nums">
-                  {displayDetailCampus.seen?.toLocaleString("en-US")}
+                <b
+                  className={`text-foreground tabular-nums ${
+                    !displayDetailCampus.seen
+                      ? "blur-sm select-none pointer-events-none"
+                      : ""
+                  }`}
+                >
+                  {displayDetailCampus.seen
+                    ? displayDetailCampus.seen?.toLocaleString("en-US")
+                    : "xxx.xxx"}
                 </b>{" "}
                 mentee
               </span>

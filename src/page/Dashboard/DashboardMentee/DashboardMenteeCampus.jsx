@@ -20,7 +20,7 @@ export default function DashboardCampus() {
 
   // store all campus to displayCampus
   const displayCampus = campus ?? [];
-  // console.log(displayCampus);
+  console.log(displayCampus);
 
   // fetch all campus
   useEffect(() => {

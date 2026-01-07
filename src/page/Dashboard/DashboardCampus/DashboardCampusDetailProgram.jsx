@@ -43,15 +43,22 @@ export default function DashboardCampusDetailProgram() {
   // console.log(decode);
   const idCampus = decode.id;
 
-  const { detailProgram, isLoading, error, fetchDetailProgram } =
-    useGetDetailProgram();
+  const {
+    detailProgram,
+    isLoading,
+    error,
+    fetchDetailProgram,
+    clearDetailProgram,
+  } = useGetDetailProgram();
+
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
 
   const program = detailProgram ?? {};
-  // console.log(program);
+  console.log(program);
 
   useEffect(() => {
     if (token) {
+      clearDetailProgram();
       fetchDetailProgram(token, idProgram);
     }
   }, [token, idProgram]);
@@ -232,8 +239,16 @@ export default function DashboardCampusDetailProgram() {
                   </div>
                   <span className="text-sm font-medium tracking-tight">
                     Telah dilihat oleh{" "}
-                    <b className="text-foreground tabular-nums">
-                      {program.seen?.toLocaleString("en-US")}
+                    <b
+                      className={`text-foreground tabular-nums ${
+                        program.seen
+                          ? ""
+                          : "blur-sm select-none pointer-events-none"
+                      }`}
+                    >
+                      {program.seen
+                        ? program.seen?.toLocaleString("en-US")
+                        : "xxx.xxx"}
                     </b>{" "}
                     mentee
                   </span>
@@ -251,6 +266,7 @@ export default function DashboardCampusDetailProgram() {
                   menteeList={program.mentee_list}
                   idCampus={idCampus}
                   token={token}
+                  sendMail={program.send_mail}
                 />
               </TabsContent>
 
