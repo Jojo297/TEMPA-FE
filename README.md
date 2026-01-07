@@ -1,2 +1,2 @@
-# Tempa - Tempat Eksplorasi..(lupa kepanjangannya apa 😅)
+# Tempa - Tempat Eksplorasi Masa Depan dan Persiapan Arah
 
