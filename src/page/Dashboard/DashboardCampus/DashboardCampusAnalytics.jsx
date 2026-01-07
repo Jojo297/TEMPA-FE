@@ -21,6 +21,7 @@ import useGetDashboardStatistics from "@/hooks/hooksCampus/useGetDashboardStatis
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import AnalyticsPageSkeletonLoading from "@/components/AnalyticsPageSkeletonLoading";
 
+// alert peremium
 const PremiumLockOverlay = () => {
   const navigate = useNavigate();
 
@@ -85,7 +86,7 @@ const AnalyticsPage = () => {
   } = useGetDashboardStatistics();
 
   useEffect(() => {
-    // Membersihkan state hook (error, success message) saat komponen unmount
+    // clear state
     return () => {
       clearStatistics();
     };

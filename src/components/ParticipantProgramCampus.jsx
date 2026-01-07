@@ -168,6 +168,7 @@ export default function ParticipantProgramCampus({
   statusSubscription,
   idCampus,
   token,
+  sendMail,
 }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
@@ -232,7 +233,7 @@ export default function ParticipantProgramCampus({
         header: "Email",
         cell: ({ row }) => {
           const email = row.getValue("email");
-          if (statusSubscription) {
+          if (email === null) {
             return (
               <div className="relative blur-sm select-none pointer-events-none">
                 <span className="">xxxxx@example.com</span>
@@ -269,34 +270,34 @@ export default function ParticipantProgramCampus({
         id: "actions",
         header: "Kirim Pesan",
         cell: ({ row }) => {
-          if (statusSubscription) {
+          if (sendMail) {
             return (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8 cursor-pointer"
-                      onClick={() => setIsPremiumDialogOpen(true)}
-                    >
-                      <SendHorizonal size={16} className="text-gray-400" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Upgrade untuk mengirim pesan</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CampusSendMessage
+                idCampus={idCampus}
+                idMentee={row.original.id}
+                menteeName={row.original.username}
+                token={token}
+              />
             );
           }
           return (
-            <CampusSendMessage
-              idCampus={idCampus}
-              idMentee={row.original.id}
-              menteeName={row.original.username}
-              token={token}
-            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 cursor-pointer"
+                    onClick={() => setIsPremiumDialogOpen(true)}
+                  >
+                    <SendHorizonal size={16} className="text-gray-400" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Upgrade untuk mengirim pesan</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           );
         },
       },
@@ -384,7 +385,7 @@ export default function ParticipantProgramCampus({
             </div>
 
             {/* button generate certificate */}
-            {statusSubscription ? (
+            {!statusSubscription ? (
               <Button
                 variant="outline"
                 onClick={() => setIsPremiumDialogOpen(true)}
@@ -407,15 +408,7 @@ export default function ParticipantProgramCampus({
             {selectedMentees.length > 0 && (
               <>
                 {/* Tombol Kirim Pesan */}
-                {statusSubscription ? (
-                  <Button
-                    onClick={() => setIsPremiumDialogOpen(true)}
-                    className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2"
-                  >
-                    <Mail size={16} />
-                    Kirim Pesan ({selectedMentees.length})
-                  </Button>
-                ) : (
+                {sendMail ? (
                   <Dialog
                     open={isBulkDialogOpen}
                     onOpenChange={setIsBulkDialogOpen}
@@ -513,6 +506,14 @@ export default function ParticipantProgramCampus({
                       </Form>
                     </DialogContent>
                   </Dialog>
+                ) : (
+                  <Button
+                    onClick={() => setIsPremiumDialogOpen(true)}
+                    className="bg-primary text-white hover:bg-[#013B35]/90 flex items-center gap-2"
+                  >
+                    <Mail size={16} />
+                    Kirim Pesan ({selectedMentees.length})
+                  </Button>
                 )}
               </>
             )}

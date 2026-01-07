@@ -31,22 +31,38 @@ export function ParticipantAnalytics({ menteeList, statusSubscription }) {
       menteeList[0]?.education_status_distribution || [];
 
     // Hitung Tren Pendaftaran
-    const trendMap = {};
-    menteeList.forEach((m) => {
-      const date = new Date(m.create_at).toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "short",
+    let trendData = [];
+    if (!statusSubscription) {
+      // Data Fake
+      const today = new Date();
+      trendData = Array.from({ length: 7 }).map((_, i) => {
+        const d = new Date();
+        d.setDate(today.getDate() - (6 - i));
+        return {
+          date: d.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "short",
+          }),
+          pendaftar: Math.floor(Math.random() * 50) + 10,
+        };
       });
-      trendMap[date] = (trendMap[date] || 0) + 1;
-    });
-
-    const trendData = Object.keys(trendMap)
-      .map((date) => ({
-        date,
-        pendaftar: trendMap[date],
-      }))
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
-      .slice(-7);
+    } else {
+      const trendMap = {};
+      menteeList.forEach((m) => {
+        const date = new Date(m.create_at).toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "short",
+        });
+        trendMap[date] = (trendMap[date] || 0) + 1;
+      });
+      trendData = Object.keys(trendMap)
+        .map((date) => ({
+          date,
+          pendaftar: trendMap[date],
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(-7);
+    }
 
     return {
       total: menteeList.length,
@@ -54,7 +70,7 @@ export function ParticipantAnalytics({ menteeList, statusSubscription }) {
       cityDistribution,
       educationDistribution,
     };
-  }, [menteeList]);
+  }, [menteeList, statusSubscription]);
 
   if (!stats) return null;
   const { cityDistribution, educationDistribution } = stats;
@@ -90,7 +106,7 @@ export function ParticipantAnalytics({ menteeList, statusSubscription }) {
                 </p>
                 <span
                   className={`text-[10px] ${
-                    statusSubscription
+                    cityDistribution.length <= 0
                       ? "blur-sm select-none pointer-events-none"
                       : ""
                   } bg-gray-100 px-2 py-0.5 rounded text-gray-500`}
@@ -99,7 +115,7 @@ export function ParticipantAnalytics({ menteeList, statusSubscription }) {
                 </span>
               </div>
 
-              {statusSubscription ? (
+              {cityDistribution.length <= 0 ? (
                 <div className="space-y-2 blur-sm select-none pointer-events-none opacity-80">
                   {[...Array(5)].map((_, i) => (
                     <div
@@ -202,8 +218,8 @@ export function ParticipantAnalytics({ menteeList, statusSubscription }) {
         <div
           className={`flex-1 w-full min-h-[250px] transition-all duration-500 ${
             statusSubscription
-              ? "blur-sm select-none pointer-events-none opacity-60"
-              : ""
+              ? ""
+              : "blur-sm select-none pointer-events-none opacity-60"
           }`}
         >
           <ResponsiveContainer width="100%" height="100%">

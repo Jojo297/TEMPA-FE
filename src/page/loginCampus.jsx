@@ -30,7 +30,7 @@ export default function LoginCampus() {
       );
       const { token, uniqueId, fullName, email } = loginMentee.data.data;
 
-      console.log(loginMentee.data.data);
+      // console.log(loginMentee.data.data);
 
       // save JWT to localstorage
       localStorage.setItem("userJwt", token);
@@ -40,8 +40,8 @@ export default function LoginCampus() {
 
       toast.success("Anda Berhasil Masuk!");
     } catch (error) {
-      console.log(error);
-      const statusCode = error.response.status;
+      // console.log(error);
+      const statusCode = error.response?.status;
       // Unauthorized
       if (statusCode === 401) {
         toast.error("Username atau Password salah!");
