@@ -48,8 +48,10 @@ export default function LoginMentee() {
       const statusCode = error.response.status;
       // Unauthorized
       if (statusCode === 401) {
-        toast.error("Username atau Password salah!");
-        // url not found
+        // Ubah pesan agar lebih relevan dengan Google Login
+        toast.error("Gagal verifikasi akun Google. Silakan coba lagi.");
+      } else if (statusCode === 403) {
+        toast.error("Akses ditolak oleh server.");
       } else if (statusCode === 404) {
         const axiosMessage = error.message;
         toast.error(`${axiosMessage}`);

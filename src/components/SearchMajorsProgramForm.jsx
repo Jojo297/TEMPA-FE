@@ -59,8 +59,9 @@ export function SearchMajorsProgramForm({
           } text-sm overflow-hidden whitespace-nowrap text-ellipsis`}
         >
           {value
-            ? displayMajors.find((item) => item.id === value)?.standard_major
-                ?.major_name || initialMajorName
+            ? // GANTI: Cari berdasarkan id_standard_major
+              displayMajors.find((item) => item.id_standard_major === value)
+                ?.standard_major?.major_name || initialMajorName
             : "Pilih Jurusan"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -73,15 +74,20 @@ export function SearchMajorsProgramForm({
             <CommandGroup>
               {displayMajors.map((item) => (
                 <CommandItem
+                  // GANTI: Key tetap item.id (karena harus unik), tapi value gunakan id_standard_major
                   key={item.id}
                   value={item.standard_major?.major_name}
-                  onSelect={() => handleSelectMajor(item.id)} // Kirim ID ke handler
+                  // GANTI: Kirim id_standard_major saat di-select
+                  onSelect={() => handleSelectMajor(item.id_standard_major)}
                 >
                   {item.standard_major?.major_name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === item.id ? "opacity-100" : "opacity-0"
+                      // GANTI: Cek kecocokan dengan id_standard_major
+                      value === item.id_standard_major
+                        ? "opacity-100"
+                        : "opacity-0",
                     )}
                   />
                 </CommandItem>
