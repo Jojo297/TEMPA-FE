@@ -65,11 +65,11 @@ import CampusSendMessage from "./CampusSendMessage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import useSendMessage from "@/hooks/hooksCampus/useSendMessage";
 import { toast } from "sonner";
 import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
 import { ParticipantAnalytics } from "./ParticipantAnalytics";
 import { jwtDecode } from "jwt-decode";
+import { DialogGenerateCertificate } from "./DialogGenerateCertificate";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;
@@ -302,7 +302,7 @@ export default function ParticipantProgramCampus({
         },
       },
     ],
-    [idCampus, token, statusSubscription]
+    [idCampus, token, statusSubscription],
   );
 
   const table = useReactTable({
@@ -336,7 +336,7 @@ export default function ParticipantProgramCampus({
 
     if (result) {
       toast.success(
-        `Pesan berhasil dikirim ke ${selectedMentees.length} mentee`
+        `Pesan berhasil dikirim ke ${selectedMentees.length} mentee`,
       );
       setIsBulkDialogOpen(false);
       setRowSelection({}); // Reset selection
@@ -353,9 +353,14 @@ export default function ParticipantProgramCampus({
         token={token}
         onOpenChange={setIsPremiumDialogOpen}
       />
-      <InDevelopmentDialog
+      {/* <InDevelopmentDialog
         isOpen={isInDevelopmentDialogOpen}
         onOpenChange={setIsInDevelopmentDialogOpen}
+      /> */}
+      <DialogGenerateCertificate
+        isOpen={isInDevelopmentDialogOpen}
+        onOpenChange={setIsInDevelopmentDialogOpen}
+        menteeList={selectedMentees}
       />
       <ParticipantAnalytics
         menteeList={menteeList}
@@ -449,7 +454,7 @@ export default function ParticipantProgramCampus({
                       <Form {...formBulkMessage}>
                         <form
                           onSubmit={formBulkMessage.handleSubmit(
-                            onSendBulkMessage
+                            onSendBulkMessage,
                           )}
                           className="space-y-4"
                         >
@@ -537,7 +542,7 @@ export default function ParticipantProgramCampus({
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext()
+                                  header.getContext(),
                                 )}
                           </TableHead>
                         );
@@ -556,7 +561,7 @@ export default function ParticipantProgramCampus({
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </TableCell>
                         ))}

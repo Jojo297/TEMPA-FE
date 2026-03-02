@@ -31,7 +31,7 @@ export default function DeleteProgram({
     try {
       await deleteProgram(token, idProgram);
       toast.success("Program berhasil dihapus!");
-      refetch();
+      navigate("/dashboard-campus/program");
     } catch (error) {
       toast.error(error.message || "Gagal menghapus program.");
       console.error(error);

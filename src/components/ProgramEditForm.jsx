@@ -69,7 +69,7 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           variant={"outline"}
           className={cn(
             "w-full justify-between text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value
@@ -114,7 +114,7 @@ const ProgramSchema = z
         // Izinkan jika tidak ada file (undefined) atau jika tidak ada file yang dipilih (panjang 0)
         (files) =>
           !files || files.length === 0 || files[0]?.size <= MAX_FILE_SIZE,
-        `Ukuran file maksimal adalah 2MB.`
+        `Ukuran file maksimal adalah 2MB.`,
       )
       .refine(
         // Izinkan jika tidak ada file atau jika tidak ada file yang dipilih
@@ -122,7 +122,7 @@ const ProgramSchema = z
           !files ||
           files.length === 0 ||
           ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
-        ".jpg, .jpeg, .png dan .webp adalah format yang didukung."
+        ".jpg, .jpeg, .png dan .webp adalah format yang didukung.",
       ),
     name: z.string().min(3, "Nama program harus memiliki minimal 3 karakter."),
     majorName: z
@@ -199,7 +199,7 @@ const ProgramSchema = z
     {
       message: "Nama tempat dan lokasi peta wajib diisi untuk program Onsite.",
       path: ["onsiteLocationName"],
-    }
+    },
   );
 
 // =====================================================================
@@ -212,7 +212,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
   const [newBenefit, setNewBenefit] = useState("");
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(
-    initialData.image_url || null
+    initialData.image_url || null,
   );
   const [selectedLocation, setSelectedLocation] = useState(
     initialData.lat && initialData.lng
@@ -221,16 +221,17 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
           lat: initialData.lat,
           lng: initialData.lng,
         }
-      : null
+      : null,
   );
 
   console.log("initialData:", initialData);
+  console.log("id_major:", initialData.id_major);
 
   // Siapkan nilai default untuk formulir
   const defaultFormValues = {
     bannerImage: undefined, // Input file selalu undefined pada awalnya
     name: initialData.program_name || "",
-    majorName: initialData.id_major || undefined, // Menggunakan id_major dari data
+    majorName: initialData.id_standard_major || undefined, // Menggunakan id_major dari data
     programType: initialData.type_sesi || "",
     visibility: initialData.visibility || "",
     startRegisDate: initialData.start_regis_date
@@ -259,13 +260,13 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
     benefits: Array.isArray(initialData.benefit)
       ? initialData.benefit
       : typeof initialData.benefit === "string"
-      ? initialData.benefit.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.benefit.split(",").map((s) => s.trim())
+        : [],
     terms: Array.isArray(initialData.terms_and_conditions)
       ? initialData.terms_and_conditions
       : typeof initialData.terms_and_conditions === "string"
-      ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
+        : [],
     imageUrl: initialData.image_url || "",
   };
 
@@ -295,7 +296,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
             lat: initialData.lat,
             lng: initialData.lng,
           }
-        : null
+        : null,
     );
   }, [initialData]);
 
@@ -334,7 +335,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
     if (isDirty) {
       if (
         window.confirm(
-          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?"
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?",
         )
       ) {
         onClose();
@@ -357,6 +358,11 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
     if (data.bannerImage && data.bannerImage.length > 0) {
       formData.append("bannerImage", data.bannerImage[0]);
     }
+
+    console.log("--- DEBUG DATA FORM ---");
+    console.log("Raw Data:", data);
+    console.log("Major Name ID:", data.majorName);
+    console.log("Benefits Array:", data.benefits);
 
     // Tambahkan field lainnya
     formData.append("name", data.name);
@@ -404,7 +410,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
       console.error("VALIDATION ERRORS:", errors);
       // Tampilkan error ke toast agar langsung terlihat
       toast.error(
-        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai."
+        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai.",
       );
     }
   }, [errors]);
@@ -816,7 +822,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
                                 handleAddListItem(
                                   "benefit",
                                   newBenefit,
-                                  setNewBenefit
+                                  setNewBenefit,
                                 )
                               }
                               disabled={newBenefit.trim() === ""}

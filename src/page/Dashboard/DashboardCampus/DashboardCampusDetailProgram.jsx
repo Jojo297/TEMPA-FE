@@ -20,7 +20,6 @@ import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusDetailProgramSkeleton from "@/components/DashboardCampusDetailProgramSkeleton";
 import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMentorFromProgram";
 import { toast } from "sonner";
-import FeedbackProgram from "@/components/FeedbackProgram";
 import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 import { jwtDecode } from "jwt-decode";
 
@@ -54,7 +53,7 @@ export default function DashboardCampusDetailProgram() {
   const { deleteMentorFromProgram } = useDeleteMentorFromProgram();
 
   const program = detailProgram ?? {};
-  console.log(program);
+  // console.log(program);
 
   useEffect(() => {
     if (token) {
@@ -79,14 +78,14 @@ export default function DashboardCampusDetailProgram() {
 
       if (result.success) {
         toast.success(
-          result.message || "Mentor berhasil dihapus dari program."
+          result.message || "Mentor berhasil dihapus dari program.",
         );
         fetchDetailProgram(token, idProgram); // Muat ulang data program
       } else {
         toast.error(result.error || "Gagal menghapus mentor.");
       }
     },
-    [token, idProgram, fetchDetailProgram, deleteMentorFromProgram]
+    [token, idProgram, fetchDetailProgram, deleteMentorFromProgram],
   );
 
   if (isLoading) {
@@ -217,20 +216,6 @@ export default function DashboardCampusDetailProgram() {
                     Feedback
                   </TabsTrigger>
                 </TabsList>
-
-                {/* <div className="flex items-center gap-3 py-1 text-slate-600">
-                  <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100 text-slate-500">
-                    <UserCheck className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col -space-y-0.5">
-                    <span className="text-sm font-bold text-slate-900 tabular-nums">
-                      {program.seen?.toLocaleString("en-US")} Mentee
-                    </span>
-                    <span className="text-[10px] uppercase tracking-wider font-medium text-slate-400">
-                      Pengunjung Unik
-                    </span>
-                  </div>
-                </div> */}
 
                 <div className="group flex items-center gap-2 text-muted-foreground hover:text-primary transition-all duration-300">
                   <div className="relative">
