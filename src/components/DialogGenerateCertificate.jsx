@@ -10,23 +10,37 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button"; // Pastikan path button sesuai
+import useGenerateCertificate from "@/hooks/hooksCampus/useGenerateCertificate";
+import { toast } from "sonner";
 
 export const DialogGenerateCertificate = ({
   isOpen,
   onOpenChange,
   menteeList = [],
 }) => {
+  const token = localStorage.getItem("userJwt");
   const [isGenerating, setIsGenerating] = useState(false);
+  const { message, isLoading, error, generateCertificate } =
+    useGenerateCertificate();
 
   if (!isOpen) return null;
+  //   console.log(menteeList);
+  //   only get id mentees
+  const menteeId = menteeList.map((mentee) => mentee.id);
+  console.log(menteeId);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
-    // Simulasi proses API
-    setTimeout(() => {
+    try {
+      const result = await generateCertificate(token, menteeId);
+      toast.success(result);
       setIsGenerating(false);
       onOpenChange(false);
-    }, 3000);
+    } catch (error) {
+      setIsGenerating(false);
+      console.log(error);
+      toast.error("Gagal menghasilkan sertifikat!");
+    }
   };
 
   return (
