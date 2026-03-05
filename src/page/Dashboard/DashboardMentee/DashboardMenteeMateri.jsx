@@ -30,6 +30,7 @@ import ProgramNotStartedDialog from "@/components/ProgramNotStartedDialog";
 import DashboardMenteeMateriSkeleton from "@/components/DashboardMenteeMateriSkeleton";
 import ReactLinkify from "react-linkify";
 import renderLink from "@/utils/RenderLink";
+import DialogProgramCompleted from "@/components/DialogProgramCompleted";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -45,6 +46,8 @@ export default function DashboardMenteeMateri() {
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [isNotStartedDialogOpen, setIsNotStartedDialogOpen] = useState(false);
+  const [isDialogProgramCompleted, setIsDialogProgramCompleted] =
+    useState(false);
 
   useEffect(() => {
     if (token) {
@@ -101,6 +104,14 @@ export default function DashboardMenteeMateri() {
       }
     }
   }, [endProgramDate, completion_status]);
+
+  useEffect(() => {
+    if (completion_status === "completed") {
+      setIsDialogProgramCompleted(true);
+    } else {
+      setIsDialogProgramCompleted(false);
+    }
+  }, [completion_status]);
 
   // Cek apakah program belum dimulai
   useEffect(() => {
@@ -242,6 +253,11 @@ export default function DashboardMenteeMateri() {
         {/* Program Not Started Dialog */}
         <ProgramNotStartedDialog
           isOpen={isNotStartedDialogOpen}
+          startDate={startProgramDate}
+        />
+        {/* Program completed */}
+        <DialogProgramCompleted
+          isOpen={isDialogProgramCompleted}
           startDate={startProgramDate}
         />
       </div>
