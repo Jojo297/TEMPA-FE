@@ -57,6 +57,10 @@ import {
   ArrowRight,
   HardHat,
   Award,
+  Check,
+  X,
+  Minus,
+  QrCode,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
@@ -70,6 +74,8 @@ import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
 import { ParticipantAnalytics } from "./ParticipantAnalytics";
 import { jwtDecode } from "jwt-decode";
 import { DialogGenerateCertificate } from "./DialogGenerateCertificate";
+import { DialogGenerateQrCodePresensi } from "./DialogGenerateQrCodePresensi";
+import { QRCodeSVG } from "qrcode.react";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;
@@ -169,6 +175,8 @@ export default function ParticipantProgramCampus({
   idCampus,
   token,
   sendMail,
+  startProgram,
+  endProgram,
 }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
@@ -179,7 +187,7 @@ export default function ParticipantProgramCampus({
   const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
     useState(false);
 
-  // console.log(statusSubscription);
+  // console.log(startProgram, endProgram);
 
   // Form for bulk message
   const formBulkMessage = useForm({
@@ -189,6 +197,18 @@ export default function ParticipantProgramCampus({
       message: "",
     },
   });
+
+  const getDayProgram = (startDate, endDate) => {
+    if (!startDate || !endDate) return "-";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // console.log(diffDays);
+    return diffDays;
+  };
 
   // console.log(menteeList);
 
@@ -219,15 +239,18 @@ export default function ParticipantProgramCampus({
         enableSorting: false,
         enableHiding: false,
       },
+      // number
       {
         id: "no",
         header: "No",
         cell: ({ row }) => row.index + 1,
       },
+      // username
       {
         accessorKey: "username",
         header: "Nama Mentee",
       },
+      // email
       {
         accessorKey: "email",
         header: "Email",
@@ -248,6 +271,7 @@ export default function ParticipantProgramCampus({
           );
         },
       },
+      // completion status
       {
         accessorKey: "completion_status",
         header: "Status",
@@ -266,6 +290,61 @@ export default function ParticipantProgramCampus({
           );
         },
       },
+      // presensi
+      {
+        header: "Presensi",
+        id: "presensi",
+        cell: ({ row }) => {
+          // get duration program
+          const totalDays = getDayProgram(startProgram, endProgram);
+
+          const rawAttendance = ["pending"];
+
+          // Transform so that the length is exactly the same as totalDays
+          const attendanceData = Array.from({ length: totalDays }, (_, i) => {
+            return rawAttendance[i] ?? "pending";
+          });
+
+          return (
+            <div className="flex items-center gap-1.5 overflow-x-auto max-w-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
+              {attendanceData.map((status, index) => {
+                if (status === "present") {
+                  return (
+                    <div
+                      key={index}
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm transition-transform hover:scale-110"
+                    >
+                      <Check className="h-2 w-2 stroke-[4px]" />
+                    </div>
+                  );
+                }
+
+                if (status === "absent") {
+                  return (
+                    <div
+                      key={index}
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-500 text-white shadow-sm transition-transform hover:scale-110"
+                    >
+                      <X className="h-2 w-2 stroke-[4px]" />
+                    </div>
+                  );
+                }
+
+                // Status 'pending' atau belum saatnya (Abu-abu)
+                return (
+                  <div
+                    key={index}
+                    className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-400 text-white/80 shadow-sm transition-opacity hover:opacity-80"
+                  >
+                    <Minus className="h-2 w-2 stroke-[4px]" />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        },
+      },
+      // send email
       {
         id: "actions",
         header: "Kirim Pesan",
@@ -353,10 +432,7 @@ export default function ParticipantProgramCampus({
         token={token}
         onOpenChange={setIsPremiumDialogOpen}
       />
-      {/* <InDevelopmentDialog
-        isOpen={isInDevelopmentDialogOpen}
-        onOpenChange={setIsInDevelopmentDialogOpen}
-      /> */}
+
       <DialogGenerateCertificate
         isOpen={isInDevelopmentDialogOpen}
         onOpenChange={setIsInDevelopmentDialogOpen}
@@ -391,6 +467,7 @@ export default function ParticipantProgramCampus({
 
             {/* button generate certificate */}
             {!statusSubscription ? (
+              // if not subscription
               <Button
                 variant="outline"
                 onClick={() => setIsPremiumDialogOpen(true)}
@@ -400,6 +477,7 @@ export default function ParticipantProgramCampus({
                 Generate Sertifikat ({selectedMentees.length})
               </Button>
             ) : (
+              // if subscription
               <Button
                 variant="outline"
                 onClick={() => setIsInDevelopmentDialogOpen(true)}
@@ -522,6 +600,19 @@ export default function ParticipantProgramCampus({
                 )}
               </>
             )}
+            {/* button generate qr-code */}
+            <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+                >
+                  <QrCode size={16} />
+                  Presensi
+                </Button>
+              </DialogTrigger>
+              <DialogGenerateQrCodePresensi />
+            </Dialog>
           </div>
         </div>
 

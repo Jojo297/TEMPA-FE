@@ -32,9 +32,13 @@ export default function DescriptionProgramCampus({ program }) {
   };
 
   const formatDateRange = (startDate, endDate) => {
+    // console.log(startDate, endDate);
     if (!startDate || !endDate) return "-";
     const start = new Date(startDate);
     const end = new Date(endDate);
+
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     const fullOptions = {
       year: "numeric",
@@ -45,34 +49,28 @@ export default function DescriptionProgramCampus({ program }) {
 
     const startYear = start.getUTCFullYear();
     const endYear = end.getUTCFullYear();
-
-    if (startYear !== endYear) {
-      return `${start.toLocaleDateString(
-        "id-ID",
-        fullOptions
-      )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
-    }
-
     const startMonth = start.getUTCMonth();
     const endMonth = end.getUTCMonth();
 
-    if (startMonth !== endMonth) {
+    let formattedDate = "";
+
+    // Logika format teks tanggal
+    if (startYear !== endYear) {
+      formattedDate = `${start.toLocaleDateString("id-ID", fullOptions)} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    } else if (startMonth !== endMonth) {
       const startFormatted = start.toLocaleDateString("id-ID", {
         day: "numeric",
         month: "long",
         timeZone: "UTC",
       });
-      return `${startFormatted} - ${end.toLocaleDateString(
-        "id-ID",
-        fullOptions
-      )}`;
+      formattedDate = `${startFormatted} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    } else {
+      const startDay = start.getUTCDate();
+      formattedDate = `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
     }
 
-    const startDay = start.toLocaleDateString("id-ID", {
-      day: "numeric",
-      timeZone: "UTC",
-    });
-    return `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    // Gabungkan dengan durasi
+    return `${formattedDate} (${diffDays} hari)`;
   };
 
   const getMapsUrl = (lat, lng) => {
@@ -125,14 +123,14 @@ export default function DescriptionProgramCampus({ program }) {
               label="Buka Pendaftaran"
               value={formatDateRange(
                 program.start_regis_date,
-                program.end_regis_date
+                program.end_regis_date,
               )}
             />
             <Info
               label="Tanggal Pelaksanaan"
               value={formatDateRange(
                 program.start_program_date,
-                program.end_program_date
+                program.end_program_date,
               )}
             />
             {program.type_sesi !== "online" && (
