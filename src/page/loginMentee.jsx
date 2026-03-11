@@ -3,7 +3,7 @@ import logoText from "@/assets/logo-text.png";
 import { Button } from "@/components/ui/button";
 import googleIcon from "@/assets/google-logo.svg";
 import { ArrowBigLeft } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
@@ -12,12 +12,9 @@ const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function LoginMentee() {
-  // Definisi warna khusus agar lebih mudah dibaca (sesuai gambar)
-  const DARK_GREEN = "bg-[#10403D]";
-  const LIGHT_BLUE = "text-[#5BC0EB]";
-  const PROGRESS_BLUE = "bg-[#5BC0EB]";
-
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard-mentee";
   const handleRedirect = () => navigate("/");
 
   // handle oauth google and send to backend
@@ -27,7 +24,7 @@ export default function LoginMentee() {
     try {
       const loginMentee = await axios.post(
         `${BASE_URL}/login-mentee`,
-        { credential: googleToken } // Backend can get req.body.credential
+        { credential: googleToken }, // Backend can get req.body.credential
       );
       const { token, uniqueId, fullName, email, verify_status } =
         loginMentee.data.data;
@@ -39,7 +36,7 @@ export default function LoginMentee() {
         navigate("/mentee-verification/verify-account");
       } else {
         // redirect
-        navigate("/dashboard-mentee");
+        navigate(from, { replace: true });
       }
 
       toast.success("Anda Berhasil Masuk!");

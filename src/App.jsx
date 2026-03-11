@@ -25,200 +25,206 @@ const CampusDetailPage = lazy(() => import("./components/CampusDetailPage"));
 const DetailJurusan = lazy(() => import("./components/DetailJurusan"));
 const CampusJurusanPage = lazy(() => import("./components/CampusJurusanPage"));
 const CampusProgram = lazy(() => import("./components/CampusProgram"));
-const CampusPrestasiPage = lazy(() =>
-  import("./components/CampusPrestasiPage")
+const CampusPrestasiPage = lazy(
+  () => import("./components/CampusPrestasiPage"),
 );
 const PanduanPage = lazy(() => import("./page/PanduanPage"));
 
 // Dashboard Mentee
-const DashboardMenteePage = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/dashboardMentee")
+const DashboardMenteePage = lazy(
+  () => import("./page/Dashboard/DashboardMentee/dashboardMentee"),
 );
-const DashboardMenteeBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeBeranda")
+const DashboardMenteeBeranda = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeBeranda"),
 );
-const DashboardProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeProgram")
+const DashboardProgram = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeProgram"),
 );
-const DashboardMenteeCampus = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampus")
+const DashboardMenteeCampus = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeCampus"),
 );
-const DashboardCampusDetail = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusDetail")
+const DashboardCampusDetail = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusDetail"),
 );
-const DashboardMenteeDetailProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeDetailProgram")
+const DashboardMenteeDetailProgram = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeDetailProgram"),
 );
-const DashboardCampusPrestasi = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusPrestasi")
+const DashboardCampusPrestasi = lazy(
+  () =>
+    import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusPrestasi"),
 );
-const DashboardCampusJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusJurusan")
+const DashboardCampusJurusan = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusJurusan"),
 );
-const DashboardMenteeProgramDaftar = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar")
+const DashboardMenteeProgramDaftar = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashbordMenteeProgramDaftar"),
 );
-const DashboardMenteeCampusProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusProgram")
+const DashboardMenteeCampusProgram = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeCampusProgram"),
 );
-const DashboardJurusan = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusan")
+const DashboardJurusan = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusan"),
 );
-const DashboardJurusanDetail = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusanDetail")
+const DashboardJurusanDetail = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeJurusanDetail"),
 );
-const DashboardTestJurusanForm = lazy(() =>
-  import("@/page/Dashboard/DashboardMentee/DashboardMenteeTestJurusanForm")
-);
-
-const Penilaian = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/Penilaian")
-);
-const DashboardMenteeMateri = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeMateri")
-);
-const DashboardMenteeProfil = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeProfil")
-);
-const DashboardMenteeVerifyAccount = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeVerifyAccount")
-);
-const DashboardMenteeMajorInterest = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeMajorInterest")
-);
-const DashboardMenteeVerivication = lazy(() =>
-  import("./page/Dashboard/DashboardMentee/DashboardMenteeVerivication")
+const DashboardTestJurusanForm = lazy(
+  () =>
+    import("@/page/Dashboard/DashboardMentee/DashboardMenteeTestJurusanForm"),
 );
 
-// Dashboard Kampus
-const DashboardCampus = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampus")
+const Penilaian = lazy(
+  () => import("./page/Dashboard/DashboardMentee/Penilaian"),
+);
+const DashboardMenteeMateri = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeMateri"),
+);
+const DashboardMenteeProfil = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeProfil"),
+);
+const DashboardMenteeVerifyAccount = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeVerifyAccount"),
+);
+const DashboardMenteeMajorInterest = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeMajorInterest"),
+);
+const DashboardMenteeVerivication = lazy(
+  () => import("./page/Dashboard/DashboardMentee/DashboardMenteeVerivication"),
 );
 
-const DashboardCampusRegisterMitra = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra")
-);
-const DashboardCampusEditRegisterMitra = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusEditRegisterMitra")
-);
-const DashboardCampusVerivication = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication")
-);
-const KampusVerifikasiBerhasil = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/CampusVerificationAccept")
-);
-const KampusVerifikasiGagal = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/KampusVerifikasiGagal")
-);
-const DashboardCampusBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda")
+const PresensiMentee = lazy(
+  () => import("./page/Dashboard/DashboardMentee/PresensiMentee"),
 );
 
-const DashboardCampusBerlangganan = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan")
+// -------------------------- Dashboard Kampus
+const DashboardCampus = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampus"),
 );
 
-const AnalyticsPage = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusAnalytics")
+const DashboardCampusRegisterMitra = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusRegisterMitra"),
+);
+const DashboardCampusEditRegisterMitra = lazy(
+  () =>
+    import("./page/Dashboard/DashboardCampus/DashboardCampusEditRegisterMitra"),
+);
+const DashboardCampusVerivication = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusVerivication"),
+);
+const KampusVerifikasiBerhasil = lazy(
+  () => import("./page/Dashboard/DashboardCampus/CampusVerificationAccept"),
+);
+const KampusVerifikasiGagal = lazy(
+  () => import("./page/Dashboard/DashboardCampus/KampusVerifikasiGagal"),
+);
+const DashboardCampusBeranda = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda"),
 );
 
-//Dashboard Admin
-const DashboardAdmin = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdmin")
-);
-const DashboardAdminBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminBeranda")
-);
-const DashboardAdminVerivication = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminVerivication")
-);
-const DashboardAdminCampus = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminCampus")
-);
-const DashboardAdminCampusDetail = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminCampusDetail")
-);
-const DashboardAdminMentee = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminMentee")
-);
-const DashboardAdminServices = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminServices")
-);
-const DashboardAdminProgram = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminProgram")
-);
-const DashboardAdminDetailProgram = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailProgram")
-);
-const DashboardAdminMajors = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminMajors")
-);
-const DashboardAdminDetailMajor = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailMajor")
-);
-const DashboardAdminAddDetailMajor = lazy(() =>
-  import("./page/Dashboard/DashboardAdmin/DashboardAdminAddDetailMajor")
+const DashboardCampusBerlangganan = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan"),
 );
 
-// ------------------
-
-const Jurusan = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusJurusan")
+const AnalyticsPage = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusAnalytics"),
 );
 
-const DetailCampus = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusDetailCampus")
+// --------------------------- Dashboard Admin
+const DashboardAdmin = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdmin"),
+);
+const DashboardAdminBeranda = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminBeranda"),
+);
+const DashboardAdminVerivication = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminVerivication"),
+);
+const DashboardAdminCampus = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminCampus"),
+);
+const DashboardAdminCampusDetail = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminCampusDetail"),
+);
+const DashboardAdminMentee = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminMentee"),
+);
+const DashboardAdminServices = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminServices"),
+);
+const DashboardAdminProgram = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminProgram"),
+);
+const DashboardAdminDetailProgram = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailProgram"),
+);
+const DashboardAdminMajors = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminMajors"),
+);
+const DashboardAdminDetailMajor = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminDetailMajor"),
+);
+const DashboardAdminAddDetailMajor = lazy(
+  () => import("./page/Dashboard/DashboardAdmin/DashboardAdminAddDetailMajor"),
 );
 
-const DashboardCampusDetailProgram = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusDetailProgram")
+const Jurusan = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusJurusan"),
 );
 
-const DashboardCampusProgram = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusProgram")
+const DetailCampus = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusDetailCampus"),
 );
 
-const CampusPrestasiDashboard = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/prestasi")
+const DashboardCampusDetailProgram = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusDetailProgram"),
 );
 
-const CampusFirst = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/CampusFirst")
+const DashboardCampusProgram = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusProgram"),
 );
 
-const DashboardCampusWaitingRegisterMitra = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/CampusVerificationPending")
+const CampusPrestasiDashboard = lazy(
+  () => import("./page/Dashboard/DashboardCampus/prestasi"),
 );
 
-const DashboardCampusAddProgram = lazy(() =>
-  import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram")
-);
-// dashboard mentor
-const DashboardMentorBeranda = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda")
-);
-const DashboardMentorDeskripsi = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/ProgramDeskripsi")
-);
-const DashboardMentorPeserta = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/ProgramPeserta")
+const CampusFirst = lazy(
+  () => import("./page/Dashboard/DashboardCampus/CampusFirst"),
 );
 
-const DashboardMentor = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentor")
+const DashboardCampusWaitingRegisterMitra = lazy(
+  () => import("./page/Dashboard/DashboardCampus/CampusVerificationPending"),
 );
 
-const DashboardMentorProgramDetail = lazy(() =>
-  import("@/page/Dashboard/DashboardMentor/DashboardMentorProgramDetail")
+const DashboardCampusAddProgram = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusAddProgram"),
 );
-const DashboardMentorProgram = lazy(() =>
-  import("@/page/Dashboard/DashboardMentor/DashboardMentorProgram")
+
+// -------------------------- dashboard mentor
+const DashboardMentorBeranda = lazy(
+  () => import("./page/Dashboard/DashboardMentor/DashboardMentorBeranda"),
 );
-const DashboardMentorAddProgram = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorAddProgram")
+const DashboardMentorDeskripsi = lazy(
+  () => import("./page/Dashboard/DashboardMentor/ProgramDeskripsi"),
 );
-const DashboardMentorDetailCampus = lazy(() =>
-  import("./page/Dashboard/DashboardMentor/DashboardMentorDetailCampus")
+const DashboardMentorPeserta = lazy(
+  () => import("./page/Dashboard/DashboardMentor/ProgramPeserta"),
+);
+
+const DashboardMentor = lazy(
+  () => import("./page/Dashboard/DashboardMentor/DashboardMentor"),
+);
+
+const DashboardMentorProgramDetail = lazy(
+  () => import("@/page/Dashboard/DashboardMentor/DashboardMentorProgramDetail"),
+);
+const DashboardMentorProgram = lazy(
+  () => import("@/page/Dashboard/DashboardMentor/DashboardMentorProgram"),
+);
+const DashboardMentorAddProgram = lazy(
+  () => import("./page/Dashboard/DashboardMentor/DashboardMentorAddProgram"),
+);
+const DashboardMentorDetailCampus = lazy(
+  () => import("./page/Dashboard/DashboardMentor/DashboardMentorDetailCampus"),
 );
 
 const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
@@ -452,6 +458,20 @@ const router = createBrowserRouter([
     ],
   },
 
+  // presensi mentee
+  {
+    path: "presensi/:programId",
+    element: (
+      <SuspenseWrapper
+        Component={() => (
+          <ProtectedRoute
+            Component={PresensiMentee}
+            allowedRoles={["mentee"]}
+          />
+        )}
+      />
+    ),
+  },
   // Dashboard mentee verification routes
   {
     path: "/mentee-verification",
