@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useNavigate, useParams } from "react-router-dom"; // Atau 'next/navigation' jika pakai Next.js
-import { CheckCircle2, MapPin, CalendarDays } from "lucide-react";
+import { CheckCircle2, MapPin, CalendarDays, Badge } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +37,6 @@ const formSchema = z.object({
   status: z.enum(["present", "absent"], {
     required_error: "Silakan pilih status kehadiran.",
   }),
-  keterangan: z.string().max(200).optional(),
 });
 
 export default function PresensiMentee() {
@@ -45,8 +44,18 @@ export default function PresensiMentee() {
   const { programId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { res, isLoadingFetch, error, getPresensi, statusCode } =
-    useGetPresensi();
+  const {
+    res,
+    isLoadingFetch,
+    error,
+    getPresensi,
+    statusCode,
+    resSubmitPresensi,
+    isLoadingSubmit,
+    statusCodeSubmit,
+    errorSubmit,
+    submitPresensi,
+  } = useGetPresensi();
 
   // fetch data to get data program
   useEffect(() => {
@@ -62,14 +71,31 @@ export default function PresensiMentee() {
     },
   });
 
-  function onSubmit(values) {
+  const onSubmit = async (values) => {
     setIsLoading(true);
+    try {
+      await submitPresensi(token, programId, values);
 
-    console.log({ ...values, programId });
-    toast.success("Presensi berhasil dikirim!");
-    setIsLoading(false);
-  }
+      toast.success("Presensi berhasil dikirim!");
 
+      navigate("/dashboard-mentee/beranda");
+    } catch (error) {
+      const backendMessage = error.response?.data?.message;
+
+      switch (statusCodeSubmit) {
+        case 400:
+          toast.error("Anda sudah melakukan presensi hari ini");
+          break;
+        default:
+          toast.error(backendMessage || "Gagal mengirim presensi.");
+          break;
+      }
+
+      console.error("Detail Error:", error.response);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // get location
   const getLocation = (type_sesi, res) => {
     switch (type_sesi) {
@@ -78,6 +104,17 @@ export default function PresensiMentee() {
       case "onsite":
         return res?.onsiteLocationName;
     }
+  };
+
+  // get days program
+  const getDaysProgram = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return `Hari ke-${diffDays}`;
   };
 
   // if program is end/presensi is expired
@@ -100,7 +137,19 @@ export default function PresensiMentee() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md border-t-4 border-t-primary shadow-lg">
-        <CardHeader className="space-y-1">
+        <CardHeader className="space-y-1 relative">
+          {/* Badge Hari ke-x */}
+          <div className="absolute right-6 top-6">
+            {!isLoadingFetch && (
+              <div
+                variant="outline"
+                className="primary/30 text-primary bg-primary/5 px-3 text-sm rounded-md py-1"
+              >
+                {getDaysProgram(res?.start_program_date, res?.end_program_date)}
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center space-x-2 text-primary mb-2">
             <CheckCircle2 className="w-6 h-6" />
             <span className="font-bold tracking-tight">ATTENDANCE SYSTEM</span>

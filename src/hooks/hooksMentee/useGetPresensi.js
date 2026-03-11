@@ -9,6 +9,10 @@ const useGetPresensi = create((set) => ({
   isLoadingFetch: false,
   statusCode: null,
   error: null,
+  resSubmitPresensi: {},
+  isLoadingSubmit: false,
+  statusCodeSubmit: null,
+  errorSubmit: null,
 
   // Actions get data
   getPresensi: async (token, idProgram) => {
@@ -48,9 +52,56 @@ const useGetPresensi = create((set) => ({
     }
   },
 
+  // submit presensi
+  submitPresensi: async (token, idProgram, data) => {
+    set({ isLoadingSubmit: true, errorSubmit: null, statusCodeSubmit: null });
+    try {
+      const API_URL = `${API_BASE_URL}/mentee/submit-presensi/${idProgram}`;
+
+      const response = await axios.post(API_URL, data, {
+        headers: {
+          // Mengirim JWT dalam header Authorizationb
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = response.data.data;
+
+      set({
+        resSubmitPresensi: result,
+        isLoadingSubmit: false,
+        errorSubmit: null,
+      });
+
+      return response.data;
+    } catch (error) {
+      const status = error.response?.status;
+      const errorMessage =
+        error.response?.data?.message || "Terjadi kesalahan.";
+
+      set({
+        isLoadingSubmit: false,
+        statusCodeSubmit: status,
+        errorSubmit: errorMessage,
+      });
+
+      // PENTING: Throw error agar bisa ditangkap catch di komponen UI
+      throw error;
+    }
+  },
+
   // function for clear state
   clearState: () =>
-    set({ res: {}, isLoadingFetch: false, error: null, statusCode: null }),
+    set({
+      res: {},
+      isLoadingFetch: false,
+      error: null,
+      statusCode: null,
+      resSubmitPresensi: {},
+      isLoadingSubmit: false,
+      statusCodeSubmit: null,
+      errorSubmit: null,
+    }),
 }));
 
 export default useGetPresensi;
