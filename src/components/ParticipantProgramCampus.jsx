@@ -1,5 +1,5 @@
 import useGetDetailProgram from "@/hooks/hooksCampus/useGetDetailProgram";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -75,7 +75,7 @@ import { ParticipantAnalytics } from "./ParticipantAnalytics";
 import { jwtDecode } from "jwt-decode";
 import { DialogGenerateCertificate } from "./DialogGenerateCertificate";
 import { DialogGenerateQrCodePresensi } from "./DialogGenerateQrCodePresensi";
-import { QRCodeSVG } from "qrcode.react";
+import { addDays, isSameDay, format, startOfDay } from "date-fns";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;
@@ -179,6 +179,7 @@ export default function ParticipantProgramCampus({
   endProgram,
   expiredPresensi,
   idProgram,
+  attendance_list,
 }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
@@ -189,7 +190,7 @@ export default function ParticipantProgramCampus({
   const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
     useState(false);
 
-  // console.log(expiredPresensi);
+  // console.log(attendance_list);
 
   // Form for bulk message
   const formBulkMessage = useForm({
@@ -297,14 +298,18 @@ export default function ParticipantProgramCampus({
         header: "Presensi",
         id: "presensi",
         cell: ({ row }) => {
-          // get duration program
+          const menteeAttendance = row.original.attendance_list || [];
+
           const totalDays = getDayProgram(startProgram, endProgram);
 
-          const rawAttendance = ["pending"];
-
-          // Transform so that the length is exactly the same as totalDays
           const attendanceData = Array.from({ length: totalDays }, (_, i) => {
-            return rawAttendance[i] ?? "pending";
+            const targetDate = addDays(new Date(startProgram), i);
+
+            const foundAttendance = menteeAttendance.find((attend) =>
+              isSameDay(new Date(attend.attendance_date), targetDate),
+            );
+
+            return foundAttendance ? foundAttendance.status : "pending";
           });
 
           return (

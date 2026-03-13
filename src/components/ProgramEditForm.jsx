@@ -224,8 +224,8 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
       : null,
   );
 
-  console.log("initialData:", initialData);
-  console.log("id_major:", initialData.id_major);
+  // console.log("initialData:", initialData);
+  // console.log("id_major:", initialData.id_major);
 
   // Siapkan nilai default untuk formulir
   const defaultFormValues = {

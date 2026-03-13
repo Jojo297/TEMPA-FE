@@ -29,7 +29,7 @@ export function EditSearchMajorsProgramForm({
     useGetAllMajorsCampus();
 
   const displayMajors = majors ?? [];
-  console.log("display major", displayMajors);
+  // console.log("display major", displayMajors);
 
   useEffect(() => {
     if (token) {

@@ -256,6 +256,7 @@ export default function DashboardCampusDetailProgram() {
                   endProgram={program.end_program_date}
                   expiredPresensi={program.expired_presensi}
                   idProgram={program.id}
+                  attendance_list={program.attendance_list}
                 />
               </TabsContent>
 
