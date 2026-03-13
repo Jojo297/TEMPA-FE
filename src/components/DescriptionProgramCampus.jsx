@@ -1,4 +1,5 @@
 import { X, Pencil, Calendar } from "lucide-react";
+import { differenceInDays, parseISO, format, addDays } from "date-fns";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -37,6 +38,11 @@ export default function DescriptionProgramCampus({ program }) {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
+    const totdalDays =
+      startDate && endDate
+        ? differenceInDays(new Date(endDate), new Date(startDate)) + 1
+        : 0;
+
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -70,7 +76,7 @@ export default function DescriptionProgramCampus({ program }) {
     }
 
     // Gabungkan dengan durasi
-    return `${formattedDate} (${diffDays} hari)`;
+    return `${formattedDate} (${totdalDays} hari)`;
   };
 
   const getMapsUrl = (lat, lng) => {

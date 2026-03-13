@@ -254,6 +254,8 @@ export default function DashboardCampusDetailProgram() {
                   sendMail={program.send_mail}
                   startProgram={program.start_program_date}
                   endProgram={program.end_program_date}
+                  expiredPresensi={program.expired_presensi}
+                  idProgram={program.id}
                 />
               </TabsContent>
 

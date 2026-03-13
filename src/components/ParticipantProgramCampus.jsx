@@ -177,6 +177,8 @@ export default function ParticipantProgramCampus({
   sendMail,
   startProgram,
   endProgram,
+  expiredPresensi,
+  idProgram,
 }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
@@ -187,7 +189,7 @@ export default function ParticipantProgramCampus({
   const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
     useState(false);
 
-  // console.log(startProgram, endProgram);
+  // console.log(expiredPresensi);
 
   // Form for bulk message
   const formBulkMessage = useForm({
@@ -611,7 +613,12 @@ export default function ParticipantProgramCampus({
                   Presensi
                 </Button>
               </DialogTrigger>
-              <DialogGenerateQrCodePresensi />
+              <DialogGenerateQrCodePresensi
+                startProgram={startProgram}
+                endProgram={endProgram}
+                expiredPresensi={expiredPresensi}
+                idProgram={idProgram}
+              />
             </Dialog>
           </div>
         </div>
