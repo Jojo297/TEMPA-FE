@@ -231,7 +231,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
   const defaultFormValues = {
     bannerImage: undefined, // Input file selalu undefined pada awalnya
     name: initialData.program_name || "",
-    majorName: initialData.id_standard_major || undefined, // Menggunakan id_major dari data
+    majorName: initialData.id_major || undefined, // Menggunakan id_major dari data
     programType: initialData.type_sesi || "",
     visibility: initialData.visibility || "",
     startRegisDate: initialData.start_regis_date

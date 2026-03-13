@@ -118,7 +118,7 @@ export default function PresensiMentee() {
   };
 
   // if program is end/presensi is expired
-  if (statusCode === 410) {
+  if (statusCode === 410 || statusCode === 400) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ProgramExpiredState

@@ -25,23 +25,22 @@ export function EditSearchMajorsProgramForm({
   initialMajorName,
 }) {
   const token = localStorage.getItem("userJwt");
-  const { majors, isLoading, error, fetchMajor } = useGetAllMajorsCampus();
+  const { majors, fetchMajor, isLoading, error, fetchMajorsForForm } =
+    useGetAllMajorsCampus();
 
   const displayMajors = majors ?? [];
-  console.log(displayMajors);
+  console.log("display major", displayMajors);
 
   useEffect(() => {
     if (token) {
       fetchMajor(token);
     }
-  }, [token, fetchMajor]);
+  }, [token, fetchMajorsForForm]);
 
   const [open, setOpen] = useState(false);
 
   const handleSelectMajor = (selectedId) => {
-    // `selectedId` adalah ID dari CommandItem, yang sudah berupa angka.
-    // Kita langsung memanggil onChange dengan ID tersebut.
-    // Jika nilai yang sama dipilih lagi, kita bisa atur untuk mengosongkan pilihan (opsional).
+    // selectedId sekarang adalah item.id (ID tabel major, misal: 3)
     onChange(value === selectedId ? undefined : selectedId);
     setOpen(false);
   };
@@ -58,8 +57,8 @@ export function EditSearchMajorsProgramForm({
           } text-sm overflow-hidden whitespace-nowrap text-ellipsis`}
         >
           {value
-            ? displayMajors.find((item) => item.id_standard_major === value)
-                ?.standard_major?.major_name || initialMajorName
+            ? displayMajors.find((item) => item.id === value)?.standard_major
+                ?.major_name || initialMajorName
             : "Pilih Jurusan"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -72,20 +71,19 @@ export function EditSearchMajorsProgramForm({
             <CommandGroup>
               {displayMajors.map((item) => (
                 <CommandItem
-                  // GANTI: Key tetap item.id (karena harus unik), tapi value gunakan id_standard_major
-                  key={item.id}
+                  key={item.id} // ID: 3, 4, 5
                   value={item.standard_major?.major_name}
-                  // GANTI: Kirim id_standard_major saat di-select
-                  onSelect={() => handleSelectMajor(item.id_standard_major)}
+                  onSelect={() => {
+                    onChange(item.id); // Kirim 3 untuk Informatika Kampus 1
+                    setOpen(false);
+                  }}
                 >
                   {item.standard_major?.major_name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      // GANTI: Cek kecocokan dengan id_standard_major
-                      value === item.id_standard_major
-                        ? "opacity-100"
-                        : "opacity-0",
+                      // PERBAIKAN: Bandingkan value dengan item.id, bukan id_standard_major
+                      value === item.id ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>
