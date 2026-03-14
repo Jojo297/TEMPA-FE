@@ -7,6 +7,8 @@ export default function RecomendationMajors({ responseAI }) {
   const navigate = useNavigate();
   const displayResponseAi = responseAI ?? [];
 
+  // console.log(displayResponseAi);
+
   //   handle displayResponseAi null
   if (displayResponseAi <= 0) {
     return <NotFounPages message="Anda Belum Meningisi Form" />;
@@ -41,6 +43,21 @@ export default function RecomendationMajors({ responseAI }) {
                   </span>{" "}
                   {item.kesesuaian}
                 </p>
+                <div className="mt-4">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">
+                    Profesi Karir Terpopuler:
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {item.profesi_relevan.map((profesi, profIndex) => (
+                      <span
+                        key={profIndex}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-white transition-colors duration-200"
+                      >
+                        {profesi}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
