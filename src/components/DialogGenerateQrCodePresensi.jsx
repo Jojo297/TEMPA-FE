@@ -34,6 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import useUpdateExpiredPresensi from "@/hooks/hooksCampus/useUpdateExpiredPresensi";
 import { Spinner } from "./ui/spinner";
+import { jwtDecode } from "jwt-decode";
 
 const DOMAIN_BASE_URL = import.meta.env.VITE_DOMAIN_URL;
 
@@ -60,8 +61,15 @@ export const DialogGenerateQrCodePresensi = ({
   idProgram,
 }) => {
   const token = localStorage.getItem("userJwt");
-  const { isLoading, errorEditExpired, successMessage, editExpiredPresensi } =
-    useUpdateExpiredPresensi();
+  const decode = jwtDecode(token);
+  // console.log(decode);
+  const {
+    isLoading,
+    errorEditExpired,
+    successMessage,
+    editExpiredPresensi,
+    editExpiredPresensiMentor,
+  } = useUpdateExpiredPresensi();
   const attendanceUrl = `${DOMAIN_BASE_URL}/presensi/${idProgram}`;
 
   // function download qr code
@@ -122,8 +130,11 @@ export const DialogGenerateQrCodePresensi = ({
   const onSubmit = async (data) => {
     try {
       // console.log("Payload yang akan dikirim ke API:", data);
-      await editExpiredPresensi(token, data, idProgram);
-
+      if (decode.role == "mentor") {
+        editExpiredPresensiMentor(token, data, idProgram);
+      } else {
+        await editExpiredPresensi(token, data, idProgram);
+      }
       toast.success("Konfigurasi berhasil disimpan!");
     } catch (error) {
       console.error(error);

@@ -53,6 +53,43 @@ const useUpdateExpiredPresensi = create((set) => ({
     }
   },
 
+  editExpiredPresensiMentor: async (token, payload, idProgram) => {
+    set({ isLoading: true, error: null, successMessage: null });
+
+    try {
+      const API_URL = `${API_BASE_URL}/mentor/update-expired-presensi-mentor/${idProgram}`;
+
+      const response = await axios.put(API_URL, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const successMsg = response.data.message;
+
+      set({
+        isLoading: false,
+        successMessage: successMsg,
+        errorEditExpired: null,
+      });
+
+      return { success: true, message: successMsg, data: response.data.data };
+    } catch (error) {
+      console.error("Gagal memperbarui expired presensi:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Gagal memperbarui expired presensi.";
+
+      set({
+        isLoading: false,
+        errorEditExpired: errorMessage,
+        successMessage: null,
+      });
+      throw new Error(errorMessage);
+    }
+  },
+
   // Fungsi untuk membersihkan state
   clearState: () =>
     set({ isLoading: false, errorEditExpired: null, successMessage: null }),
