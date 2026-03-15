@@ -38,7 +38,7 @@ const DashboardAdminCampusDetail = () => {
     }
   }, [token, fetchDetailCampus]);
 
-  if (!kampus)
+  if (!displayCampusDetail)
     return (
       <SidebarWithNavbar>
         <div className="min-h-screen flex items-center justify-center text-red-500">

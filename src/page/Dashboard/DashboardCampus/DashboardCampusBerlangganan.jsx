@@ -10,6 +10,8 @@ import {
   ShieldCheck,
   Calendar,
   ShieldX,
+  Wallet,
+  Plus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
@@ -74,7 +76,7 @@ export default function DashboardCampusBerlangganan() {
         if (result.isFree) {
           setLoadingPackageId(null);
           toast.success(
-            result.message || "Paket Free Trial berhasil diaktifkan!"
+            result.message || "Paket Free Trial berhasil diaktifkan!",
           );
           window.location.reload();
         } else if (result.paymentUrl) {
@@ -138,100 +140,99 @@ export default function DashboardCampusBerlangganan() {
       <div className="max-w-6xl mx-auto -mt-20 px-6">
         {/* Section package now */}
         {currentPackage && (
-          <div
-            className={`rounded-3xl p-6 md:p-8 shadow-lg border relative overflow-hidden mb-8 z-30 transition-all duration-300 ${
-              isExpired
-                ? "bg-red-50 border-red-100"
-                : "bg-white border-emerald-100"
-            }`}
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 z-30 relative">
+            {/* Status Paket Card */}
             <div
-              className={`absolute top-0 right-0 w-32 h-32 rounded-full -mr-10 -mt-10 blur-2xl ${
-                isExpired ? "bg-red-100" : "bg-emerald-50"
+              className={`lg:col-span-2 rounded-3xl p-6 md:p-8 shadow-lg border overflow-hidden transition-all duration-300 ${
+                isExpired
+                  ? "bg-red-50 border-red-100"
+                  : "bg-white border-emerald-100"
               }`}
-            />
-
-            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="flex items-center gap-6">
-                <div
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${
-                    isExpired ? "bg-red-100" : "bg-emerald-100"
-                  }`}
-                >
-                  {isExpired ? (
-                    <ShieldX size={32} className="text-red-600" />
-                  ) : (
-                    <ShieldCheck size={32} className="text-[#003631]" />
-                  )}
-                </div>
-                <div>
-                  <h2
-                    className={`text-sm font-bold uppercase tracking-wider mb-1 ${
-                      isExpired ? "text-red-600" : "text-emerald-600"
+            >
+              <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                  <div
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                      isExpired
+                        ? "bg-red-100 text-red-600"
+                        : "bg-emerald-100 text-[#003631]"
                     }`}
                   >
-                    {isExpired ? "Paket Telah Berakhir" : "Paket Anda Saat Ini"}
-                  </h2>
-                  <h3
-                    className={`text-2xl font-black ${
-                      isExpired ? "text-red-900" : "text-gray-900"
-                    }`}
-                  >
-                    {currentPackage
-                      ? currentPackage.package_name
-                      : "Belum Berlangganan"}
-                  </h3>
-                  <p
-                    className={`text-sm mt-1 ${
-                      isExpired ? "text-red-700/80" : "text-gray-500"
-                    }`}
-                  >
-                    {isExpired
-                      ? "Masa aktif paket Anda telah habis. Segera perbarui untuk menikmati layanan kembali."
-                      : currentPackage.sub_heading ||
-                        "Pilih paket di bawah untuk meningkatkan layanan kampus Anda."}
-                  </p>
-                </div>
-              </div>
-
-              {currentPackage && (
-                <div
-                  className={`flex items-center gap-4 px-5 py-3 rounded-xl border transition-colors ${
-                    isExpired
-                      ? "bg-white border-red-100 shadow-sm"
-                      : "bg-gray-50 border-gray-100"
-                  }`}
-                >
-                  <Calendar
-                    size={20}
-                    className={isExpired ? "text-red-400" : "text-gray-400"}
-                  />
+                    {isExpired ? (
+                      <ShieldX size={28} />
+                    ) : (
+                      <ShieldCheck size={28} />
+                    )}
+                  </div>
                   <div>
-                    <p
-                      className={`text-xs font-bold uppercase ${
-                        isExpired ? "text-red-400" : "text-gray-400"
+                    <h2
+                      className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${
+                        isExpired ? "text-red-500" : "text-emerald-600"
                       }`}
                     >
-                      {isExpired ? "Berakhir Sejak" : "Berakhir Pada"}
-                    </p>
-                    <p
-                      className={`text-sm font-bold ${
-                        isExpired ? "text-red-700" : "text-gray-700"
-                      }`}
-                    >
-                      {currentPackage.expired_date
-                        ? new Date(
-                            currentPackage.expired_date
-                          ).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })
-                        : "-"}
+                      {isExpired ? "Status: Expired" : "Paket Aktif"}
+                    </h2>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {currentPackage.package_name}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Berlaku hingga{" "}
+                      {new Date(currentPackage.expired_date).toLocaleDateString(
+                        "id-ID",
+                        { day: "numeric", month: "long", year: "numeric" },
+                      )}
                     </p>
                   </div>
                 </div>
-              )}
+                <button className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                  Riwayat Transaksi
+                </button>
+              </div>
+            </div>
+
+            {/* Wallet / Balance Card */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 shadow-xl relative overflow-hidden group border border-slate-700">
+              {/* Efek Glassmorphism lebih halus */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-amber-400/20 transition-all" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full -ml-12 -mb-12 blur-2xl" />
+
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">
+                      Sisa Saldo Deposit
+                    </p>
+                    <div className="h-1 w-8 bg-amber-400 rounded-full" />
+                  </div>
+                  <div className="p-2 bg-slate-700/50 rounded-xl border border-slate-600">
+                    <Wallet size={18} className="text-amber-400" />
+                  </div>
+                </div>
+
+                <div className="flex items-baseline gap-2 text-white">
+                  <span className="text-lg font-medium text-slate-400">Rp</span>
+                  <span className="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
+                    {currentPackage.balance?.toLocaleString("id-ID") || "0"}
+                  </span>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-700/50 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">
+                      Estimasi Kuota
+                    </p>
+                    <p className="text-sm text-white font-bold">
+                      ~{0}{" "}
+                      <span className="text-slate-400 font-medium">Siswa</span>
+                    </p>
+                  </div>
+
+                  <button className="flex items-center gap-2 text-[10px] font-black text-slate-900 bg-amber-400 px-4 py-2 rounded-xl hover:bg-amber-300 transition-all shadow-lg shadow-amber-900/20 active:scale-95">
+                    <Plus size={12} strokeWidth={4} />
+                    TOP UP
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
