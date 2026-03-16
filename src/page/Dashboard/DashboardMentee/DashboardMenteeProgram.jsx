@@ -57,7 +57,7 @@ export default function DashboardMenteeProgram() {
 
   // search program by name
   const filteredPrograms = programsAfterTypeFilter.filter((item) =>
-    item.program_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.program_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // badge for status program
@@ -225,7 +225,7 @@ export default function DashboardMenteeProgram() {
                         // get badge status
                         const statusData = getBadgeClass(
                           item.start_regis_date,
-                          item.end_regis_date
+                          item.end_regis_date,
                         );
                         return (
                           <div
@@ -258,7 +258,12 @@ export default function DashboardMenteeProgram() {
 
                         {/* description */}
                         <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
-                          {item.description}
+                          <div
+                            className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
                         </p>
 
                         {/* date and location */}
@@ -270,13 +275,13 @@ export default function DashboardMenteeProgram() {
                             />
                             <span>
                               {new Date(
-                                item.start_program_date
+                                item.start_program_date,
                               ).toLocaleDateString("id-ID", {
                                 day: "numeric",
                               })}
                               {" - "}
                               {new Date(
-                                item.end_program_date
+                                item.end_program_date,
                               ).toLocaleDateString("id-ID", {
                                 year: "numeric",
                                 month: "long",

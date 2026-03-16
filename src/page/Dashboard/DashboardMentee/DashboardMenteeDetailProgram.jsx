@@ -153,7 +153,7 @@ const DashboardMenteeDetailProgram = () => {
       // Different years: "20 Des 2025 - 10 Jan 2026"
       return `${start.toLocaleDateString(
         "id-ID",
-        fullOptions
+        fullOptions,
       )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
     }
 
@@ -170,7 +170,7 @@ const DashboardMenteeDetailProgram = () => {
       });
       return `${startFormatted} - ${end.toLocaleDateString(
         "id-ID",
-        fullOptions
+        fullOptions,
       )}`;
     }
 
@@ -311,7 +311,7 @@ const DashboardMenteeDetailProgram = () => {
                           <li key={index} className="text-sm">
                             {item}
                           </li>
-                        )
+                        ),
                       )}
                     </ul>
                   </DialogDescription>
@@ -374,14 +374,14 @@ const DashboardMenteeDetailProgram = () => {
               label="Buka Pendaftaran"
               value={formatDateRange(
                 displayDetailProgram.start_regis_date,
-                displayDetailProgram.end_regis_date
+                displayDetailProgram.end_regis_date,
               )}
             />
             <Info
               label="Tanggal Pelaksanaan"
               value={formatDateRange(
                 displayDetailProgram.start_program_date,
-                displayDetailProgram.end_program_date
+                displayDetailProgram.end_program_date,
               )}
             />
 
@@ -398,7 +398,19 @@ const DashboardMenteeDetailProgram = () => {
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
               <p className="text-sm text-gray-900 sm:text-base whitespace-pre-line border p-3 rounded-xl">
-                {displayDetailProgram.description || "-"}
+                <div
+                  className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      displayDetailProgram.description ||
+                      "Deskripsi belum ditambahkan.",
+                  }}
+                />
               </p>
             </div>
 

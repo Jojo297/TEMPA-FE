@@ -46,6 +46,8 @@ import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
 import { toast } from "sonner";
 import { EditSearchMajorsProgramForm } from "./EditSearchMajorsProgramForm";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -761,10 +763,10 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
                     <FormItem>
                       <FormLabel>Detail Kegiatan / Deskripsi</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Jelaskan secara rinci kegiatan yang akan dilaksanakan..."
-                          rows={5}
-                          {...field}
+                        <ReactQuill
+                          theme="snow"
+                          value={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />

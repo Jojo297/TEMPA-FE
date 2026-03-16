@@ -256,7 +256,7 @@ export default function DashboardCampusProgram() {
                         // get badge status
                         const statusData = getBadgeClass(
                           item.start_date,
-                          item.end_date
+                          item.end_date,
                         );
                         return (
                           <div
@@ -270,7 +270,7 @@ export default function DashboardCampusProgram() {
                       {/* visibility */}
                       {(() => {
                         const getVisibility = getBadgeVisibility(
-                          item.visibility
+                          item.visibility,
                         );
                         return (
                           <Tooltip>
@@ -309,7 +309,12 @@ export default function DashboardCampusProgram() {
                         </div>
                       </div>
                       <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                        {item.description}
+                        <div
+                          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                          dangerouslySetInnerHTML={{
+                            __html: item.description,
+                          }}
+                        />
                       </p>
 
                       <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
@@ -320,7 +325,7 @@ export default function DashboardCampusProgram() {
                               "id-ID",
                               {
                                 day: "numeric",
-                              }
+                              },
                             )}
                             {" - "}
                             {new Date(item.end_date).toLocaleDateString(
@@ -329,7 +334,7 @@ export default function DashboardCampusProgram() {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </div>

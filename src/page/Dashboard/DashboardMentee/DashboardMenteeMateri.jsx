@@ -67,7 +67,7 @@ export default function DashboardMenteeMateri() {
     completion_status = firstMateriItem.completion_status;
     startProgramDate = firstMateriItem.start_program_date;
   }
-  // console.log(startProgramDate);
+  // console.log(displayMateri.resources);
 
   // Fungsi utilitas untuk mendapatkan nama file dari URL
   const getFileNameFromUrl = (url) => {
@@ -180,9 +180,12 @@ export default function DashboardMenteeMateri() {
                     {/* deskripsi */}
                     <div className="py-3 text-gray-700">
                       {
-                        <ReactLinkify componentDecorator={renderLink}>
-                          {item.description}
-                        </ReactLinkify>
+                        <div
+                          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                          dangerouslySetInnerHTML={{
+                            __html: item.description,
+                          }}
+                        />
                       }
                     </div>
                     <hr />
@@ -191,26 +194,34 @@ export default function DashboardMenteeMateri() {
                     {/* Tautan File/Resource (Nested Mapping) */}
                     {item.resources && item.resources.length > 0 ? (
                       item.resources.map((resource) => {
-                        // --- 1. Definisikan Ikon dan Warna secara Kondisional ---
+                        // 1. Tentukan Ikon dan Warna
+                        const isVideo = resource.type === "video";
+                        const isKuis = resource.type === "kuis";
+
                         let IconComponent = FileText;
-                        let iconClassName = "text-green-600"; // Default untuk 'file' atau lainnya
+                        let iconClassName = "text-green-600";
 
-                        if (resource.type === "kuis") {
+                        if (isKuis) {
                           IconComponent = ClipboardList;
-                          iconClassName = "text-orange-500"; // Warna untuk Kuis
-                        } else if (resource.type === "video") {
+                          iconClassName = "text-orange-500";
+                        } else if (isVideo) {
                           IconComponent = Video;
-                          iconClassName = "text-red-500"; // Contoh warna untuk Video
+                          iconClassName = "text-red-500";
                         }
-                        // Anda bisa menambahkan logika lain (e.g., 'file' untuk PDF/DOCX)
 
-                        // --- 2. Definisikan Teks Tautan ---
+                        // 2. Tentukan URL Tujuan (Kuis/Video pakai path_file, File pakai file_url)
+                        const targetUrl =
+                          isKuis || isVideo
+                            ? resource.path_file
+                            : resource.file_url;
+
+                        // 3. Tentukan Teks Tautan
                         let linkText;
-                        if (resource.type === "kuis") {
-                          // Untuk Kuis/Link Google Form, tampilkan Judul Materi, bukan nama file yang diekstrak
-                          linkText = item.title || "Mulai Kuis";
+                        if (isKuis) {
+                          linkText = `Mulai Kuis: ${item.title}`;
+                        } else if (isVideo) {
+                          linkText = "Lihat Video Materi"; // Atau bisa ambil dari judul jika ada
                         } else {
-                          // Untuk File, gunakan nama file yang diekstrak
                           linkText = getFileNameFromUrl(resource.file_url);
                         }
 
@@ -227,11 +238,11 @@ export default function DashboardMenteeMateri() {
                             {/* 4. Gunakan resource.file_url sebagai href */}
                             <a
                               target="_blank"
-                              href={resource.file_url}
+                              href={targetUrl}
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline break-all"
+                              className="text-blue-600 hover:underline font-medium break-all"
                             >
-                              {linkText}
+                              {linkText || "Buka Tautan"}
                             </a>
                           </div>
                         );

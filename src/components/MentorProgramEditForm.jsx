@@ -46,6 +46,8 @@ import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useUpdateProgram from "@/hooks/hooksMentor/useUpdateProgram";
 import { toast } from "sonner";
 import { SearchMajorsProgramFormMentor } from "./SearchMajorsProgramFormMentor";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -69,7 +71,7 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           variant={"outline"}
           className={cn(
             "w-full justify-between text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value
@@ -114,7 +116,7 @@ const ProgramSchema = z
         // Izinkan jika tidak ada file (undefined) atau jika tidak ada file yang dipilih (panjang 0)
         (files) =>
           !files || files.length === 0 || files[0]?.size <= MAX_FILE_SIZE,
-        `Ukuran file maksimal adalah 2MB.`
+        `Ukuran file maksimal adalah 2MB.`,
       )
       .refine(
         // Izinkan jika tidak ada file atau jika tidak ada file yang dipilih
@@ -122,7 +124,7 @@ const ProgramSchema = z
           !files ||
           files.length === 0 ||
           ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
-        ".jpg, .jpeg, .png dan .webp adalah format yang didukung."
+        ".jpg, .jpeg, .png dan .webp adalah format yang didukung.",
       ),
     name: z.string().min(3, "Nama program harus memiliki minimal 3 karakter."),
     majorName: z
@@ -199,7 +201,7 @@ const ProgramSchema = z
     {
       message: "Nama tempat dan lokasi peta wajib diisi untuk program Onsite.",
       path: ["onsiteLocationName"],
-    }
+    },
   );
 
 // =====================================================================
@@ -216,7 +218,7 @@ export default function MentorProgramEditForm({
   const [newBenefit, setNewBenefit] = useState("");
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(
-    initialData.image_url || null
+    initialData.image_url || null,
   );
   const [selectedLocation, setSelectedLocation] = useState(
     initialData.lat && initialData.lng
@@ -225,7 +227,7 @@ export default function MentorProgramEditForm({
           lat: initialData.lat,
           lng: initialData.lng,
         }
-      : null
+      : null,
   );
 
   console.log("initialData:", initialData);
@@ -263,13 +265,13 @@ export default function MentorProgramEditForm({
     benefits: Array.isArray(initialData.benefit)
       ? initialData.benefit
       : typeof initialData.benefit === "string"
-      ? initialData.benefit.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.benefit.split(",").map((s) => s.trim())
+        : [],
     terms: Array.isArray(initialData.terms_and_conditions)
       ? initialData.terms_and_conditions
       : typeof initialData.terms_and_conditions === "string"
-      ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
+        : [],
     imageUrl: initialData.image_url || "",
   };
 
@@ -299,7 +301,7 @@ export default function MentorProgramEditForm({
             lat: initialData.lat,
             lng: initialData.lng,
           }
-        : null
+        : null,
     );
   }, [initialData]);
 
@@ -338,7 +340,7 @@ export default function MentorProgramEditForm({
     if (isDirty) {
       if (
         window.confirm(
-          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?"
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?",
         )
       ) {
         onClose();
@@ -408,7 +410,7 @@ export default function MentorProgramEditForm({
       console.error("VALIDATION ERRORS:", errors);
       // Tampilkan error ke toast agar langsung terlihat
       toast.error(
-        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai."
+        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai.",
       );
     }
   }, [errors]);
@@ -759,10 +761,10 @@ export default function MentorProgramEditForm({
                     <FormItem>
                       <FormLabel>Detail Kegiatan / Deskripsi</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Jelaskan secara rinci kegiatan yang akan dilaksanakan..."
-                          rows={5}
-                          {...field}
+                        <ReactQuill
+                          theme="snow"
+                          value={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />
@@ -820,7 +822,7 @@ export default function MentorProgramEditForm({
                                 handleAddListItem(
                                   "benefit",
                                   newBenefit,
-                                  setNewBenefit
+                                  setNewBenefit,
                                 )
                               }
                               disabled={newBenefit.trim() === ""}

@@ -54,7 +54,7 @@ const addMajorsFormSchema = z.object({
       z.object({
         id: z.number(),
         name: z.string().min(1, "Nama jurusan tidak boleh kosong."),
-      })
+      }),
     )
     .min(1, "Minimal harus ada 1 jurusan yang ditambahkan."),
 });
@@ -108,7 +108,7 @@ export default function DetailCampusMajors({
     }
 
     const majorToAdd = majorsForForm.find(
-      (item) => item.id === parseInt(selectedMajorIdFromCombobox)
+      (item) => item.id === parseInt(selectedMajorIdFromCombobox),
     );
 
     if (majorToAdd) {
@@ -168,7 +168,7 @@ export default function DetailCampusMajors({
   const availableMajorsForAdding = majorsForForm.filter((availableMajor) => {
     // Hanya tampilkan jurusan yang belum ada di daftar 'majorsToAdd'
     return !majorsToAdd.some(
-      (addedMajor) => addedMajor.id === availableMajor.id
+      (addedMajor) => addedMajor.id === availableMajor.id,
     );
   });
 
@@ -223,7 +223,7 @@ export default function DetailCampusMajors({
                                 ? majorsForForm.find(
                                     (item) =>
                                       item.id ===
-                                      parseInt(selectedMajorIdFromCombobox)
+                                      parseInt(selectedMajorIdFromCombobox),
                                   )?.major_name
                                 : "Pilih Jurusan..."}
                               <ChevronsUpDown className="opacity-50" />
@@ -256,7 +256,7 @@ export default function DetailCampusMajors({
                                     value={item.major_name}
                                     onSelect={() => {
                                       setSelectedMajorIdFromCombobox(
-                                        item.id.toString()
+                                        item.id.toString(),
                                       );
                                       setOpenCombobox(false);
                                     }}
@@ -268,7 +268,7 @@ export default function DetailCampusMajors({
                                         selectedMajorIdFromCombobox ===
                                           item.id.toString()
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                   </CommandItem>
@@ -377,9 +377,15 @@ export default function DetailCampusMajors({
                           Deskripsi
                         </h3>
                       </div>
-                      <p className="text-gray-800 mb-6 leading-relaxed">
+                      {/* <p className="text-gray-800 mb-6 leading-relaxed">
                         {item.standard_major?.description}
-                      </p>
+                      </p> */}
+                      <div
+                        className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{
+                          __html: item.standard_major?.description,
+                        }}
+                      />
 
                       {/* Prospek Kerja */}
                       <h3 className="text-xl font-bold text-[#013B35] mb-3 flex items-center">
@@ -400,7 +406,7 @@ export default function DetailCampusMajors({
                                 />
                                 {prospek}
                               </li>
-                            )
+                            ),
                           )}
                       </ul>
                     </AccordionContent>

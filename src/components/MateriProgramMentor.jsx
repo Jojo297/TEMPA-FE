@@ -39,8 +39,9 @@ import DeleteMateriDialog from "./DeleteMateriDialog";
 import AddResourceDialog from "./AddResourceDialog";
 import MentorAddMateriProgram from "./MentorAddMateriProgram";
 import MentorDeleteMateriDialog from "./MentorDeleteMateriDialog";
-import ReactLinkify from "react-linkify";
-import renderLink from "@/utils/RenderLink";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Controller } from "react-hook-form";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -108,7 +109,7 @@ export default function MateriProgramMentor({
         } else {
           formData.append(
             `new_resources[${index}][url]`,
-            resource.resource_url
+            resource.resource_url,
           );
         }
       });
@@ -183,10 +184,10 @@ export default function MateriProgramMentor({
                     const { isDirty } = form.formState;
                     const originalResources = item.materi_resource || [];
                     const newResourcesAdded = tempResources.some(
-                      (r) => r.isNew
+                      (r) => r.isNew,
                     );
                     const oldResourcesKeptCount = tempResources.filter(
-                      (r) => !r.isNew
+                      (r) => !r.isNew,
                     ).length;
                     const resourcesRemoved =
                       oldResourcesKeptCount < originalResources.length;
@@ -277,21 +278,45 @@ export default function MateriProgramMentor({
                         {/* deskripsi */}
                         <div className="py-3 text-gray-700">
                           {isEditing ? (
-                            <textarea
-                              {...form.register("description")}
-                              onClick={(e) => e.stopPropagation()}
-                              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                form.formState.errors.description
-                                  ? "border-red-500 focus:ring-red-500"
-                                  : ""
-                              }`}
-                              rows={3}
+                            <Controller
+                              control={form.control}
+                              name="description"
+                              render={({ field }) => (
+                                <div className="space-y-2">
+                                  <ReactQuill
+                                    {...field}
+                                    theme="snow"
+                                    placeholder="Masukkan deskripsi materi"
+                                    // Kita tangani onChange secara manual agar sinkron dengan react-hook-form
+                                    onChange={(content) =>
+                                      field.onChange(content)
+                                    }
+                                    className={`bg-white ${
+                                      form.formState.errors.description
+                                        ? "border-red-500"
+                                        : ""
+                                    }`}
+                                  />
+                                  {/* Menampilkan pesan error jika ada */}
+                                  {form.formState.errors.description && (
+                                    <p className="text-sm text-red-500">
+                                      {
+                                        form.formState.errors.description
+                                          .message
+                                      }
+                                    </p>
+                                  )}
+                                </div>
+                              )}
                             />
                           ) : (
                             // item.description
-                            <ReactLinkify componentDecorator={renderLink}>
-                              {item.description}
-                            </ReactLinkify>
+                            <div
+                              className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                              dangerouslySetInnerHTML={{
+                                __html: item.description,
+                              }}
+                            />
                           )}
                         </div>
                         <hr />
@@ -334,7 +359,7 @@ export default function MateriProgramMentor({
                                 linkText = resource.file.name;
                               } else {
                                 linkText = getFileNameFromUrl(
-                                  resource.resource_url
+                                  resource.resource_url,
                                 );
                               }
                             }
@@ -388,7 +413,7 @@ export default function MateriProgramMentor({
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setTempResources((prev) =>
-                                        prev.filter((_, i) => i !== index)
+                                        prev.filter((_, i) => i !== index),
                                       );
                                     }}
                                   >
@@ -421,7 +446,7 @@ export default function MateriProgramMentor({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 form.handleSubmit((data) =>
-                                  handleSaveEdit(data, item)
+                                  handleSaveEdit(data, item),
                                 )(e);
                               }}
                               alt="Simpan"

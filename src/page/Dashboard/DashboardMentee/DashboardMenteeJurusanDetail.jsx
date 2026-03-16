@@ -228,7 +228,7 @@ export default function DashboardJurusanDetail() {
 
   // get program
   const getProgram = getCampus.flatMap(
-    (majorEntry) => majorEntry.program_program_id_majorTocampus || []
+    (majorEntry) => majorEntry.program_program_id_majorTocampus || [],
   );
   console.log(getProgram);
 
@@ -300,8 +300,12 @@ export default function DashboardJurusanDetail() {
           Tentang Jurusan
         </h2>
         <p className="text-gray-700 leading-relaxed text-justify">
-          {displayDetailMajor.description ||
-            "Deskripsi jurusan belum tersedia."}
+          <div
+            className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: displayDetailMajor.description,
+            }}
+          />
         </p>
       </div>
 
@@ -401,7 +405,7 @@ export default function DashboardJurusanDetail() {
                     // get badge status
                     const statusData = getBadgeClass(
                       item.start_program_date,
-                      item.end_program_date
+                      item.end_program_date,
                     );
                     return (
                       <div
@@ -444,7 +448,7 @@ export default function DashboardJurusanDetail() {
                         <span>
                           <span>
                             {new Date(
-                              item.start_program_date
+                              item.start_program_date,
                             ).toLocaleDateString("id-ID", {
                               day: "numeric",
                             })}
@@ -455,7 +459,7 @@ export default function DashboardJurusanDetail() {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </span>

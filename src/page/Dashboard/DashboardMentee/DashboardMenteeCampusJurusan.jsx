@@ -66,9 +66,13 @@ const DashboardCampusJurusan = ({ kampus }) => {
                     <h3 className="text-xl font-bold text-[#013B35] mb-3">
                       Deskripsi
                     </h3>
-                    <p className="text-gray-800 mb-6 leading-relaxed">
-                      {item.description}
-                    </p>
+
+                    <div
+                      className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                      dangerouslySetInnerHTML={{
+                        __html: item.description,
+                      }}
+                    />
 
                     {/* Prospek Kerja */}
                     <h3 className="text-xl font-bold text-[#013B35] mb-3 flex items-center">

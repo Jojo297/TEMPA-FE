@@ -14,6 +14,9 @@ import { Pencil, Trash2 } from "lucide-react";
 import MajorEditForm from "@/components/MajorEditForm";
 import DashboardAdminDetailMajorSkeleton from "@/components/DashboardAdminDetailMajorSkeleton";
 import AdminDeleteMajor from "@/components/AdminDeleteMajor";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Controller } from "react-hook-form";
 
 export default function DashboardAdminDetailMajor() {
   const token = localStorage.getItem("userJwt");
@@ -29,8 +32,8 @@ export default function DashboardAdminDetailMajor() {
   const prospects = Array.isArray(displayDetailMajor.prospek_kerja)
     ? displayDetailMajor.prospek_kerja
     : displayDetailMajor.prospek_kerja
-    ? [displayDetailMajor.prospek_kerja]
-    : [];
+      ? [displayDetailMajor.prospek_kerja]
+      : [];
 
   const handleSave = () => {
     fetchDetailStandardMajor(token, id); // Refetch data
@@ -130,10 +133,12 @@ export default function DashboardAdminDetailMajor() {
         <h2 className="text-2xl font-semibold text-[#013B35] mb-3">
           Tentang Jurusan
         </h2>
-        <p className="text-gray-700 leading-relaxed text-justify">
-          {displayDetailMajor.description ||
-            "Deskripsi jurusan belum tersedia."}
-        </p>
+        <div
+          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+          dangerouslySetInnerHTML={{
+            __html: displayDetailMajor.description,
+          }}
+        />
       </div>
 
       {/* job prospects */}

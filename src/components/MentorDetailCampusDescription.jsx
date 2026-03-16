@@ -8,6 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import useEditCampusInfo from "@/hooks/hooksMentor/useEditCampusInfo";
 import { toast } from "sonner";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Controller } from "react-hook-form";
 
 // Skema validasi menggunakan Zod
 const descriptionSchema = z.object({
@@ -19,7 +22,7 @@ const descriptionSchema = z.object({
     .array(
       z.object({
         value: z.string().min(5, "Misi harus memiliki minimal 5 karakter."),
-      })
+      }),
     )
     .min(1, "Minimal harus ada 1 misi."),
 });
@@ -130,15 +133,31 @@ export default function MentorDetailCampusDescription({
 
       {isEditing ? (
         <form onSubmit={handleSubmit(handleSave)} className="space-y-6">
-          <Textarea
-            {...register("description")}
-            className="w-full mt-4 leading-relaxed"
-            rows={5}
-            placeholder="Tulis deskripsi tentang kampus Anda..."
-          />
-          {errors.description && (
-            <p className="text-sm text-red-500">{errors.description.message}</p>
-          )}
+          <div className="space-y-2">
+            <label className="font-semibold text-lg mb-2">
+              Deskripsi Kampus
+            </label>
+
+            <Controller
+              name="description"
+              control={control} // 'control' didapat dari useForm()
+              render={({ field }) => (
+                <ReactQuill
+                  {...field}
+                  theme="snow"
+                  placeholder="Tulis deskripsi tentang kampus Anda..."
+                  onChange={(content) => field.onChange(content)}
+                  className={`bg-white ${errors.description ? "border-red-500" : ""}`}
+                />
+              )}
+            />
+
+            {errors.description && (
+              <p className="text-sm text-red-500">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
 
           <div>
             <h3 className="font-semibold text-lg mb-2">Visi</h3>
@@ -191,9 +210,21 @@ export default function MentorDetailCampusDescription({
         </form>
       ) : (
         <>
-          <p className="text-gray-700 mt-4 leading-relaxed">
-            {DescriptionSection.desc || "Deskripsi belum ditambahkan."}
-          </p>
+          <div className="text-gray-700 mt-4 w-full overflow-hidden break-words">
+            <div
+              className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{
+                __html:
+                  DescriptionSection.desc || "Deskripsi belum ditambahkan.",
+              }}
+            />
+          </div>
+
           <div className="mt-6">
             <h3 className="font-semibold text-lg">Visi</h3>
             <p className="text-gray-700 mt-2">

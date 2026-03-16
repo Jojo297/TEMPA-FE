@@ -37,8 +37,9 @@ import * as z from "zod";
 import { Spinner } from "./ui/spinner";
 import DeleteMateriDialog from "./DeleteMateriDialog";
 import AddResourceDialog from "./AddResourceDialog";
-import ReactLinkify from "react-linkify";
-import renderLink from "@/utils/RenderLink";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Controller } from "react-hook-form";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -106,7 +107,7 @@ export default function MateriProgramCampus({
         } else {
           formData.append(
             `new_resources[${index}][url]`,
-            resource.resource_url
+            resource.resource_url,
           );
         }
       });
@@ -156,12 +157,14 @@ export default function MateriProgramCampus({
 
         <div className="w-full gap-4">
           {isAddingMateri ? (
+            // component add materi
             <AddMateri
               onCancel={() => setIsAddingMateri(false)}
               idProgram={idProgram}
               onSubmitSuccess={onUpdateSuccess}
             />
           ) : (
+            // materi
             <Accordion type="single" collapsible className="w-full">
               {/* Accordion Materi */}
               {materiList.length <= 0 ? (
@@ -181,10 +184,10 @@ export default function MateriProgramCampus({
                     const { isDirty } = form.formState;
                     const originalResources = item.materi_resource || [];
                     const newResourcesAdded = tempResources.some(
-                      (r) => r.isNew
+                      (r) => r.isNew,
                     );
                     const oldResourcesKeptCount = tempResources.filter(
-                      (r) => !r.isNew
+                      (r) => !r.isNew,
                     ).length;
                     const resourcesRemoved =
                       oldResourcesKeptCount < originalResources.length;
@@ -202,6 +205,7 @@ export default function MateriProgramCampus({
                       <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:no-underline flex items-center justify-between">
                         <div className="flex items-center flex-1">
                           <ChevronDown className="w-5 h-5 mr-3 transition-transform duration-300 data-[state=open]:rotate-180" />
+                          {/* input edit title */}
                           {isEditing ? (
                             <Input
                               {...form.register("title")}
@@ -272,23 +276,47 @@ export default function MateriProgramCampus({
                       </AccordionTrigger>
 
                       <AccordionContent className="pt-2 pl-8 space-y-2">
-                        {/* deskripsi */}
+                        {/* input edit deskripsi */}
                         <div className="py-3 text-gray-700">
                           {isEditing ? (
-                            <textarea
-                              {...form.register("description")}
-                              onClick={(e) => e.stopPropagation()}
-                              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                form.formState.errors.description
-                                  ? "border-red-500 focus:ring-red-500"
-                                  : ""
-                              }`}
-                              rows={3}
+                            <Controller
+                              control={form.control}
+                              name="description"
+                              render={({ field }) => (
+                                <div className="space-y-2">
+                                  <ReactQuill
+                                    {...field}
+                                    theme="snow"
+                                    placeholder="Masukkan deskripsi materi"
+                                    // Kita tangani onChange secara manual agar sinkron dengan react-hook-form
+                                    onChange={(content) =>
+                                      field.onChange(content)
+                                    }
+                                    className={`bg-white ${
+                                      form.formState.errors.description
+                                        ? "border-red-500"
+                                        : ""
+                                    }`}
+                                  />
+                                  {/* Menampilkan pesan error jika ada */}
+                                  {form.formState.errors.description && (
+                                    <p className="text-sm text-red-500">
+                                      {
+                                        form.formState.errors.description
+                                          .message
+                                      }
+                                    </p>
+                                  )}
+                                </div>
+                              )}
                             />
                           ) : (
-                            <ReactLinkify componentDecorator={renderLink}>
-                              {item.description}
-                            </ReactLinkify>
+                            <div
+                              className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                              dangerouslySetInnerHTML={{
+                                __html: item.description,
+                              }}
+                            />
                           )}
                         </div>
                         <hr />
@@ -331,7 +359,7 @@ export default function MateriProgramCampus({
                                 linkText = resource.file.name;
                               } else {
                                 linkText = getFileNameFromUrl(
-                                  resource.resource_url
+                                  resource.resource_url,
                                 );
                               }
                             }
@@ -385,7 +413,7 @@ export default function MateriProgramCampus({
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setTempResources((prev) =>
-                                        prev.filter((_, i) => i !== index)
+                                        prev.filter((_, i) => i !== index),
                                       );
                                     }}
                                   >
@@ -418,7 +446,7 @@ export default function MateriProgramCampus({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 form.handleSubmit((data) =>
-                                  handleSaveEdit(data, item)
+                                  handleSaveEdit(data, item),
                                 )(e);
                               }}
                               alt="Simpan"

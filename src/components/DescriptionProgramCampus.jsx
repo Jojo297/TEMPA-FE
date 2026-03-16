@@ -21,6 +21,8 @@ export default function DescriptionProgramCampus({ program }) {
       ? program.terms_and_conditions.split(",").map((item) => item.trim())
       : program.terms_and_conditions || [];
 
+  // console.log(program);
+
   const getTypeSesi = (sesi) => {
     switch (sesi) {
       case "online":
@@ -164,9 +166,20 @@ export default function DescriptionProgramCampus({ program }) {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
-                {program.description || "-"}
-              </p>
+              <div className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+                <div
+                  className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      program.description || "Deskripsi belum ditambahkan.",
+                  }}
+                />
+              </div>
             </div>
 
             <div className="col-span-2">
