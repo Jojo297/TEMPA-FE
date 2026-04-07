@@ -16,30 +16,20 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { useState } from "react";
 
-export default function DeleteProgram({
-  idProgram,
-  programName,
-  token,
-  className,
-  refetch,
-  ScrollTop,
-}) {
+// this component is inside detail program
+export default function DeleteProgramDetail({ idProgram, programName, token }) {
   const navigate = useNavigate();
   const { deleteProgram, isLoading, error, data } = useUpdateProgram();
   const [isOpend, setIsOpen] = useState(false);
-
-  const isClassNameEmpty = !className || className.trim() === "";
   // console.log(programName);
 
   const handleDeleteProgram = async (idProgram) => {
     try {
       await deleteProgram(token, idProgram);
-
-      await refetch();
-
       toast.success("Program berhasil dihapus!");
       setIsOpen(false);
-      ScrollTop();
+
+      navigate("/dashboard-campus/program");
     } catch (error) {
       toast.error(error.message || "Gagal menghapus program.");
       console.error(error);
@@ -49,14 +39,8 @@ export default function DeleteProgram({
   return (
     <AlertDialog open={isOpend} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <button
-          className={
-            className
-              ? className
-              : "bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2"
-          }
-        >
-          {isClassNameEmpty && <Trash2 size={16} />}
+        <button className="bg-red-500 hover:opacity-60 transition text-white px-4 py-2 text-sm rounded-lg shadow-md flex items-center gap-2">
+          {<Trash2 size={16} />}
           Hapus Program
         </button>
       </AlertDialogTrigger>

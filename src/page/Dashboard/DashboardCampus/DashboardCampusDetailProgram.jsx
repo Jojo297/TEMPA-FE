@@ -22,6 +22,7 @@ import useDeleteMentorFromProgram from "../../../hooks/hooksCampus/useDeleteMent
 import { toast } from "sonner";
 import FeedbackProgramCampus from "@/components/FeedbackProgramCampus";
 import { jwtDecode } from "jwt-decode";
+import DeleteProgramDetail from "@/components/DeleteProgramDetail";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -130,7 +131,7 @@ export default function DashboardCampusDetailProgram() {
 
             {/* Grup Tombol edit and delete */}
             <div className="flex gap-3">
-              <DeleteProgram
+              <DeleteProgramDetail
                 idProgram={program.id}
                 programName={program.program_name}
                 token={token}

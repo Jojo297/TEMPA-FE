@@ -19,8 +19,7 @@ const useUpdateProgram = create((set) => ({
       const response = await axios.put(API_URL, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          // "Content-Type": "multipart/form-data" tidak perlu di-set manual
-          // untuk axios saat mengirim FormData, browser akan menanganinya.
+          // "Content-Type": "multipart/form-data"
         },
       });
 

@@ -47,11 +47,13 @@ export default function DashboardCampusProgram() {
   const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
     useGetAllProgram();
 
+  const ScrollTop = () => window.scrollTo(0, 0);
+
   useEffect(() => {
     if (!token) return;
 
     getAllPrograms(token);
-  }, [token]);
+  }, [token, getAllPrograms]);
 
   // Data program
   const programs = allPrograms || [];
@@ -373,6 +375,7 @@ export default function DashboardCampusProgram() {
                         <DeleteProgram
                           idProgram={item.id}
                           programName={item.program_name}
+                          ScrollTop={() => ScrollTop()}
                           token={token}
                           refetch={() => getAllPrograms(token)}
                           className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"

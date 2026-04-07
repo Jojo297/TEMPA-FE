@@ -155,7 +155,7 @@ export default function DashboardCampusBeranda() {
         toast.error(result.error);
       }
     },
-    [token, deleteMentor, fetchMentors]
+    [token, deleteMentor, fetchMentors],
   );
 
   // fetch program for chart
@@ -176,7 +176,7 @@ export default function DashboardCampusBeranda() {
 
   const columns = useMemo(
     () => getColumns(handleDeleteMentor, () => fetchMentors(token)),
-    [handleDeleteMentor, fetchMentors, token]
+    [handleDeleteMentor, fetchMentors, token],
   );
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -526,7 +526,7 @@ export default function DashboardCampusBeranda() {
                     className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `${DOMAIN_URL}/login-mentor`
+                        `${DOMAIN_URL}/login-mentor`,
                       );
                       toast.success("Link berhasil disalin!");
                     }}
