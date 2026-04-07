@@ -41,14 +41,14 @@ const editHeaderSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran file maksimal adalah 5MB.`
+      `Ukuran file maksimal adalah 5MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp.",
     ),
   logo: z
     .any()
@@ -56,14 +56,14 @@ const editHeaderSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran file maksimal adalah 5MB.`
+      `Ukuran file maksimal adalah 5MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp.",
     ),
 });
 
@@ -81,6 +81,7 @@ export default function DashboardMentorDetailCampus() {
   const [campusData, setCampusData] = useState(displayDetailCampus);
 
   const DescriptionSection = {
+    campusWebsite: displayDetailCampus.website_campus,
     desc: displayDetailCampus.description,
     visi: displayDetailCampus.vision_mission,
   };

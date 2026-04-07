@@ -86,7 +86,7 @@ export default function DetailCampus() {
 
   // Fallback ke objek kosong jika detailCampus null/undefined
   const displayDetailCampus = detailCampus || {};
-  console.log(displayDetailCampus);
+  // console.log(displayDetailCampus);
 
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
@@ -96,6 +96,7 @@ export default function DetailCampus() {
   const DescriptionSection = {
     desc: displayDetailCampus.description,
     visi: displayDetailCampus.vision_mission,
+    campusWebsite: displayDetailCampus.website_campus,
   };
 
   const majors = displayDetailCampus.major;

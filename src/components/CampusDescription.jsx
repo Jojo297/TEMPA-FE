@@ -1,4 +1,5 @@
 export default function CampusDescription({ kampus }) {
+  // console.log(kampus);
   return (
     <>
       {/* Deskripsi & Visi Misi */}
