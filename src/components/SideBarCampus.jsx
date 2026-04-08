@@ -16,6 +16,7 @@ import {
   LogOutIcon,
   University,
   ChartAreaIcon,
+  Users,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -70,6 +71,11 @@ const Sidebarcampus = ({ children }) => {
       name: "BERANDA",
       icon: <LayoutGrid size={18} />,
       path: "/dashboard-campus/beranda",
+    },
+    {
+      name: "MENTOR",
+      icon: <Users size={18} />,
+      path: "/dashboard-campus/mentor",
     },
     {
       name: "ANALITIK",
@@ -206,7 +212,7 @@ const Sidebarcampus = ({ children }) => {
                   <span>{item.name}</span>
                 </Link>
               </li>
-            )
+            ),
           )}
 
           {/* Alert Logout */}

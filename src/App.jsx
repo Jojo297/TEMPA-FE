@@ -120,6 +120,9 @@ const KampusVerifikasiGagal = lazy(
 const DashboardCampusBeranda = lazy(
   () => import("./page/Dashboard/DashboardCampus/DashboardCampusBeranda"),
 );
+const DashboardCampusMentor = lazy(
+  () => import("./page/Dashboard/DashboardCampus/DashboardCampusMentor"),
+);
 
 const DashboardCampusBerlangganan = lazy(
   () => import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan"),
@@ -303,6 +306,10 @@ const router = createBrowserRouter([
       {
         path: "beranda",
         element: <SuspenseWrapper Component={DashboardCampusBeranda} />,
+      },
+      {
+        path: "mentor",
+        element: <SuspenseWrapper Component={DashboardCampusMentor} />,
       },
 
       { path: "jurusan", element: <SuspenseWrapper Component={Jurusan} /> },
