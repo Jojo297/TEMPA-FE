@@ -10,7 +10,7 @@ const useGenerateCertificate = create((set) => ({
   error: null,
 
   // Actions generate certificate
-  generateCertificate: async (token, payload) => {
+  generateCertificate: async (token, payload, idProgram) => {
     set({ isLoading: true, error: null });
 
     try {
@@ -34,15 +34,12 @@ const useGenerateCertificate = create((set) => ({
 
       return result;
     } catch (error) {
-      console.error("Failed to generate certificate:", error);
-
       const errorMessage =
-        error.response?.data?.message || "Gagal mengambil data program.";
+        error.response?.data?.message || "Gagal menghasilkan sertifikat.";
 
-      set({
-        isLoading: false,
-        error: errorMessage,
-      });
+      set({ isLoading: false, error: errorMessage, message: errorMessage });
+
+      throw new Error(errorMessage);
     }
   },
 

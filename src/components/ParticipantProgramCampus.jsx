@@ -442,6 +442,7 @@ export default function ParticipantProgramCampus({
 
       <DialogGenerateCertificate
         isOpen={isInDevelopmentDialogOpen}
+        idProgram={idProgram}
         onOpenChange={setIsInDevelopmentDialogOpen}
         menteeList={selectedMentees}
       />
