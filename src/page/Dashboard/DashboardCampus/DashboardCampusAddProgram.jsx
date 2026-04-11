@@ -80,7 +80,7 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           variant={"outline"}
           className={cn(
             "w-full justify-between text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value
@@ -103,10 +103,6 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
     </Popover>
   );
 };
-// =====================================================================
-// 1. KONSTANTA DAN SKEMA VALIDASI ZOD
-// 1. DEFINISI SKEMA VALIDASI DENGAN ZOD (DIMODIFIKASI)
-// =====================================================================
 
 const MAX_FILE_SIZE = 2000000; // 2MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -123,11 +119,11 @@ const ProgramSchema = z
       .refine((files) => files?.length == 1, "Banner gambar wajib diunggah.")
       .refine(
         (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-        `Ukuran file maksimal adalah 2MB.`
+        `Ukuran file maksimal adalah 2MB.`,
       )
       .refine(
         (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        ".jpg, .jpeg, .png dan .webp adalah format yang didukung."
+        ".jpg, .jpeg, .png dan .webp adalah format yang didukung.",
       ),
     name: z.string().min(3, "Nama program harus memiliki minimal 3 karakter."),
     majorName: z
@@ -194,7 +190,7 @@ const ProgramSchema = z
     {
       message: "Nama tempat dan lokasi peta wajib diisi untuk program Onsite.",
       path: ["onsiteLocationName"],
-    }
+    },
   );
 
 // =====================================================================
@@ -229,7 +225,7 @@ export default function DashboardCampusAddProgram() {
   const [bannerPreview, setBannerPreview] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  // Panggil hook untuk add program
+  // add program
   const { addProgram, isLoading, error } = useAddProgram();
 
   // 2. Setup React Hook Form dan Zod Resolver
@@ -754,7 +750,7 @@ export default function DashboardCampusAddProgram() {
                                   handleAddListItem(
                                     "benefit",
                                     newBenefit,
-                                    setNewBenefit
+                                    setNewBenefit,
                                   )
                                 }
                                 disabled={newBenefit.trim() === ""}
