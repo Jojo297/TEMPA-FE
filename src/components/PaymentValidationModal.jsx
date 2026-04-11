@@ -110,18 +110,19 @@ const PaymentValidationModal = ({
             </div>
           </div>
 
-          <div className="col-span-2 mt-2 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="bg-white dark:bg-slate-800 p-1 rounded shadow-sm">
-                <QrCode className="h-4 w-4 text-slate-700 dark:text-slate-200" />
-              </div>
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                Metode Pembayaran
-              </span>
+          {/* Info Box: QRIS Only */}
+          <div className="col-span-2 mt-2 p-3 gap-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center ">
+            <div className="bg-white p-2 rounded-xl shadow-sm">
+              <QrCode className="h-5 w-5 text-slate-700" />
             </div>
-            <Badge className="bg-rose-50 text-rose-600 hover:bg-rose-50 border-rose-100 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/50 font-bold px-2 py-0">
-              QRIS ONLY
-            </Badge>
+            <div>
+              <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider">
+                Metode Pembayaran
+              </p>
+              <p className="text-sm font-bold text-slate-700">
+                QRIS (Otomatis & Real-time)
+              </p>
+            </div>
           </div>
 
           {/* Kotak Informasi Penting (Refund Policy) */}

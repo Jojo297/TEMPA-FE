@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
-import { id } from "date-fns/locale";
+import { id, se } from "date-fns/locale";
 import useGetSubscriptionPackages from "@/hooks/hooksCampus/useGetSubscriptionPackages";
 import DynamicIcon from "@/components/DynamicIcon";
 import { set } from "zod";
@@ -25,6 +25,8 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentValidationModal from "@/components/PaymentValidationModal";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import TopUpModal from "@/components/TopUpModal";
+import useTopUpWallet from "@/hooks/hooksCampus/useTopUpWallet";
 
 export default function DashboardCampusBerlangganan() {
   const token = localStorage.getItem("userJwt");
@@ -44,9 +46,12 @@ export default function DashboardCampusBerlangganan() {
     error: errorWallet,
     getWallet,
   } = useCreatePaymentIntent();
+  const { isLoadingTopUp, error, topUpSaldo } = useTopUpWallet();
   const [loadingPackageId, setLoadingPackageId] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [showTopUp, setShowTopUp] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Cari paket yang sedang aktif (sesuaikan logika 'is_active' dengan response backend Anda)
   const currentPackage = campusSubscription;
@@ -73,7 +78,7 @@ export default function DashboardCampusBerlangganan() {
     return <DashboardCampusBerlanggananSkeleton />;
   }
 
-  // handle payment
+  // handle payment subscription feature
   const dokuPayment = async (idSubscription) => {
     setLoadingPackageId(idSubscription);
     try {
@@ -94,6 +99,30 @@ export default function DashboardCampusBerlangganan() {
       toast.error(errorMessage);
     } finally {
       setLoadingPackageId(null);
+    }
+  };
+
+  const handleTopUpProcess = async (amount) => {
+    setIsProcessing(true);
+    try {
+      // console.log("saldo: ", amount);
+      const token = localStorage.getItem("userJwt");
+      const result = await topUpSaldo(token, amount);
+
+      if (result.success && result.data?.pay_url) {
+        // Redirect menggunakan window.location.href untuk URL eksternal
+        window.location.href = result.data.pay_url;
+      } else {
+        toast.error("Gagal memulai pembayaran");
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Gagal memulai pembayaran";
+      toast.error(errorMessage);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -245,13 +274,22 @@ export default function DashboardCampusBerlangganan() {
                     )}
                   </div>
 
-                  <button className="flex items-center gap-2 text-[10px] font-black text-slate-900 bg-amber-400 px-4 py-2 rounded-xl hover:bg-amber-300 transition-all shadow-lg shadow-amber-900/20 active:scale-95">
+                  <button
+                    onClick={() => setShowTopUp(true)}
+                    className="flex items-center gap-2 text-[10px] font-black text-slate-900 bg-amber-400 px-4 py-2 rounded-xl hover:bg-amber-300 transition-all shadow-lg shadow-amber-900/20 active:scale-95"
+                  >
                     <Plus size={12} strokeWidth={4} />
                     TOP UP
                   </button>
                 </div>
               </div>
             </div>
+            <TopUpModal
+              isOpen={showTopUp}
+              onClose={() => setShowTopUp(false)}
+              onConfirm={(amount) => handleTopUpProcess(amount)}
+              isLoading={isProcessing}
+            />
           </div>
         )}
 
