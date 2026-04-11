@@ -136,7 +136,7 @@ export default function DashboardCampusBerlangganan() {
       <div className="max-w-6xl mx-auto -mt-20 px-6">
         {/* Section package now */}
         {currentPackage && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 z-30 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 z-30 relative items-start">
             {/* Status Paket Card */}
             <div
               className={`lg:col-span-2 rounded-3xl p-6 md:p-8 shadow-lg border overflow-hidden transition-all duration-300 ${
@@ -180,7 +180,12 @@ export default function DashboardCampusBerlangganan() {
                     </p>
                   </div>
                 </div>
-                <button className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                <button
+                  onClick={() =>
+                    navigate("/dashboard-campus/history-transaction")
+                  }
+                  className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
+                >
                   Riwayat Transaksi
                 </button>
               </div>

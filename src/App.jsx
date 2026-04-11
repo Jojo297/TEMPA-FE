@@ -127,6 +127,10 @@ const DashboardCampusMentor = lazy(
 const DashboardCampusBerlangganan = lazy(
   () => import("./page/Dashboard/DashboardCampus/DashboardCampusBerlangganan"),
 );
+const DashboardCampusHistoryTransaction = lazy(
+  () =>
+    import("./page/Dashboard/DashboardCampus/DashboardCampusHistoryTransaction"),
+);
 
 const AnalyticsPage = lazy(
   () => import("./page/Dashboard/DashboardCampus/DashboardCampusAnalytics"),
@@ -337,6 +341,12 @@ const router = createBrowserRouter([
       {
         path: "berlangganan",
         element: <SuspenseWrapper Component={DashboardCampusBerlangganan} />,
+      },
+      {
+        path: "history-transaction",
+        element: (
+          <SuspenseWrapper Component={DashboardCampusHistoryTransaction} />
+        ),
       },
       {
         path: "analytics",

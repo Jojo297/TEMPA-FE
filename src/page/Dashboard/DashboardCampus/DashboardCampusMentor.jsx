@@ -171,10 +171,11 @@ export default function DashboardCampusMentor() {
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="bg-primary text-white rounded-xl p-6 shadow">
-              <h1 className="text-2xl font-bold mb-2">Mentor</h1>
-              <p className="text-sm max-w-2xl mx-auto">
-                Tarik perhatian calon mentee unggulan! Publikasikan dan kelola
-                berbagai program kampus Anda.
+              <h1 className="text-3xl font-bold mb-2">Mentor</h1>
+              <p className="text-emerald-100/80 text-md max-w-2xl mx-auto leading-relaxed">
+                Pusat kendali mentor kampus. Tambahkan, pantau, dan
+                organisasikan para ahli yang akan membimbing perjalanan sukses
+                mentee Anda.
               </p>
             </div>
           </div>
