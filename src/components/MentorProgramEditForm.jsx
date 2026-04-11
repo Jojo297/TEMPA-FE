@@ -48,6 +48,7 @@ import { toast } from "sonner";
 import { SearchMajorsProgramFormMentor } from "./SearchMajorsProgramFormMentor";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import useGetBalance from "@/hooks/hooksMentor/useGetBalance";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -214,7 +215,7 @@ export default function MentorProgramEditForm({
 }) {
   const navigate = useNavigate();
   const { updateProgram, isLoading } = useUpdateProgram();
-
+  const token = localStorage.getItem("userJwt");
   const [newBenefit, setNewBenefit] = useState("");
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(
@@ -230,7 +231,22 @@ export default function MentorProgramEditForm({
       : null,
   );
 
-  console.log("initialData:", initialData);
+  // console.log("initialData:", initialData);
+  const {
+    balance,
+    quotaMentee,
+    isLoadingWallet,
+    error: errorWallet,
+    getWallet,
+  } = useGetBalance();
+
+  useEffect(() => {
+    if (token) {
+      getWallet(token);
+    }
+  }, [token, getWallet]);
+
+  const displayQuotaMentee = quotaMentee ?? 0;
 
   // Siapkan nilai default untuk formulir
   const defaultFormValues = {
@@ -355,6 +371,14 @@ export default function MentorProgramEditForm({
     if (!token) {
       toast.error("Sesi Anda telah berakhir. Silakan login kembali.");
       return;
+    }
+
+    if (data.capacity > displayQuotaMentee) {
+      form.setError("capacity", {
+        type: "manual",
+        message: `Kuota melebihi batas langganan Anda. Sisa kuota saat ini: ${displayQuotaMentee}. Silakan isi ulang saldo wallet Anda.`,
+      });
+      return; // Berhenti disini
     }
 
     const formData = new FormData();
@@ -648,23 +672,48 @@ export default function MentorProgramEditForm({
               <ShadcnFormField
                 control={control}
                 name="capacity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kuota Peserta</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Contoh: 50"
-                        {...field}
-                        min="1"
-                        onChange={(e) =>
-                          field.onChange(parseInt(e.target.value, 10))
-                        } // Pastikan tipe angka
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const isOverLimit = field.value > displayQuotaMentee;
+
+                  return (
+                    <FormItem>
+                      <div className="flex justify-between items-end">
+                        <FormLabel>Kuota Peserta</FormLabel>
+                        <span
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${
+                            isOverLimit
+                              ? "bg-red-50 text-red-600 border-red-100"
+                              : "bg-emerald-50 text-emerald-700 border-emerald-100"
+                          }`}
+                        >
+                          Tersedia: {displayQuotaMentee} Peserta
+                        </span>
+                      </div>
+
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Contoh: 50"
+                          {...field}
+                          className={
+                            isOverLimit
+                              ? "border-red-500 focus-visible:ring-red-500"
+                              : ""
+                          }
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+
+                      <FormDescription className="text-[11px] leading-relaxed">
+                        <span>
+                          Jumlah peserta yang dapat ditampung dalam program ini.
+                          Pastikan kuota mencukupi kapasitas mentor.
+                        </span>
+                      </FormDescription>
+                    </FormItem>
+                  );
+                }}
               />
 
               {/* 2. Input Nama Tempat/Alamat (Hanya muncul jika ONSITE) */}

@@ -183,11 +183,7 @@ const DashboardMenteeDetailProgram = () => {
   };
 
   const getMapsUrl = (lat, lng) => {
-    // Format universal untuk Google Maps
     return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-
-    // Opsi lain: Untuk menampilkan pin tunggal (Place mode)
-    // return `https://www.google.com/maps/place/${lat},${lng}`;
   };
 
   const formatTime = (isoTimeString) => {
@@ -223,28 +219,34 @@ const DashboardMenteeDetailProgram = () => {
 
   // Logic button register
   const now = new Date();
-  const startDate = new Date(displayDetailProgram.start_regis_date);
-  const endDate = new Date(displayDetailProgram.end_regis_date);
+  const start = new Date(displayDetailProgram.start_regis_date);
+  const end = new Date(displayDetailProgram.end_regis_date);
   const isFull = displayDetailProgram.capacity <= 0;
 
+  // Default State (Kondisi Ideal: Bisa Daftar)
   let buttonText = "Daftar Sekarang";
   let buttonClass = "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]";
   let isDisabled = false;
 
-  if (endDate < now) {
-    buttonText = "Pendaftaran Sudah Tutup";
-    buttonClass = "bg-red-500 text-white cursor-not-allowed";
-    isDisabled = true;
-  } else if (startDate > now) {
+  // check if register is not ready open
+  if (now < start) {
     buttonText = "Segera Dibuka";
-    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
-    isDisabled = true;
-  } else if (isFull) {
-    buttonText = "Program Sudah Penuh";
-    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
+    buttonClass = "bg-gray-400 text-white cursor-not-allowed";
     isDisabled = true;
   }
 
+  // Check whether the registration has PASSED the date OR is closed because the balance is exhausted.
+  else if (now > end || displayDetailProgram.is_registration_closed) {
+    buttonText = "Pendaftaran Ditutup";
+    buttonClass = "bg-red-500 text-white cursor-not-allowed text-xs"; // Beri warna merah untuk indikasi tutup
+    isDisabled = true;
+  }
+  // check if quota is full
+  else if (isFull) {
+    buttonText = "Kuota Penuh";
+    buttonClass = "bg-orange-500 text-white cursor-not-allowed";
+    isDisabled = true;
+  }
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* breadcum */}

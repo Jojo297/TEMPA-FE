@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -54,6 +54,7 @@ import { SearchMajors } from "@/components/SearchMajors";
 import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useAddProgram from "@/hooks/hooksCampus/useAddProgram";
 import { toast } from "sonner";
+import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -224,9 +225,25 @@ export default function DashboardCampusAddProgram() {
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const token = localStorage.getItem("userJwt");
 
   // add program
   const { addProgram, isLoading, error } = useAddProgram();
+  const {
+    balance,
+    quotaMentee,
+    isLoadingWallet,
+    error: errorWallet,
+    getWallet,
+  } = useCreatePaymentIntent();
+
+  useEffect(() => {
+    if (token) {
+      getWallet();
+    }
+  }, [token, getWallet]);
+
+  const displayQuotaMentee = quotaMentee ?? 0;
 
   // 2. Setup React Hook Form dan Zod Resolver
   const form = useForm({
@@ -288,6 +305,14 @@ export default function DashboardCampusAddProgram() {
     if (!token) {
       alert("Sesi Anda telah berakhir. Silakan login kembali.");
       return;
+    }
+
+    if (data.capacity > displayQuotaMentee) {
+      form.setError("capacity", {
+        type: "manual",
+        message: `Kuota melebihi batas langganan Anda. Sisa kuota saat ini: ${displayQuotaMentee}. Silakan isi ulang saldo wallet Anda.`,
+      });
+      return; // Berhenti disini
     }
 
     // 1. Buat objek FormData
@@ -577,20 +602,65 @@ export default function DashboardCampusAddProgram() {
                 <ShadcnFormField
                   control={control}
                   name="capacity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kuota Peserta</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Contoh: 50"
-                          {...field}
-                          min="1"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const isOverLimit = field.value > displayQuotaMentee;
+
+                    return (
+                      <FormItem>
+                        <div className="flex justify-between items-end">
+                          <FormLabel>Kuota Peserta</FormLabel>
+                          <span
+                            className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${
+                              isOverLimit
+                                ? "bg-red-50 text-red-600 border-red-100"
+                                : "bg-emerald-50 text-emerald-700 border-emerald-100"
+                            }`}
+                          >
+                            Tersedia: {displayQuotaMentee} Peserta
+                          </span>
+                        </div>
+
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Contoh: 50"
+                            {...field}
+                            className={
+                              isOverLimit
+                                ? "border-red-500 focus-visible:ring-red-500"
+                                : ""
+                            }
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+
+                        <FormDescription className="text-[11px] leading-relaxed">
+                          {isOverLimit ? (
+                            <span className="text-red-600 font-medium flex flex-wrap items-center gap-1.5">
+                              <span className="flex items-center gap-1">
+                                ⚠️ Kuota melebihi batas langganan.
+                              </span>
+                              <button
+                                type="button" // Penting: agar tidak mentrigger submit form
+                                onClick={() =>
+                                  navigate("/dashboard-campus/berlangganan")
+                                }
+                                className="ml-1 px-2 py-0.5 bg-red-600 text-white rounded-md text-[10px] font-bold uppercase tracking-wider hover:bg-red-700 transition-colors shadow-sm active:scale-95"
+                              >
+                                Isi Saldo
+                              </button>
+                            </span>
+                          ) : (
+                            <span>
+                              Jumlah peserta yang dapat ditampung dalam program
+                              ini. Pastikan kuota mencukupi kapasitas mentor.
+                            </span>
+                          )}
+                        </FormDescription>
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 {/* ========================================================= */}
