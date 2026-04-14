@@ -20,6 +20,7 @@ import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
 import { AdminSearchMajors } from "@/components/AdminSearchMajors";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminProgram() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,7 +59,7 @@ export default function DashboardAdminProgram() {
 
   // search program by name
   const filteredPrograms = programsAfterTypeFilter.filter((item) =>
-    item.program_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.program_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // badge for status program
@@ -158,20 +159,15 @@ export default function DashboardAdminProgram() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          {/* Header Section */}
-          <div className=" mb-8 text-center">
-            <div className="bg-primary text-white rounded-xl p-6 shadow">
-              <h1 className="text-2xl font-bold mb-2">Program</h1>
-              <p className="text-sm max-w-2xl mx-auto">
-                Jelajahi berbagai kampus terbaik dan temukan informasi seputar
-                program, jurusan, serta prestasi mereka di sini. Dapatkan
-                kesempatan untuk mengikuti Trial Kuliah atau kelas singkat
-                sebelum Anda membuat keputusan besar!
-              </p>
-            </div>
-          </div>
 
-          {/* Rekomendasi Section */}
+          {/* header */}
+          <HeaderPage
+            title={"Program"}
+            description={
+              "Jelajahi berbagai kampus terbaik dan temukan informasi seputar program, jurusan, serta prestasi mereka di sini. Dapatkan kesempatan untuk mengikuti Trial Kuliah atau kelas singkat sebelum Anda membuat keputusan besar!"
+            }
+            badge={"Manage Program"}
+          />
 
           {/* Seluruh Program Section */}
           <section>
@@ -224,7 +220,7 @@ export default function DashboardAdminProgram() {
                         // get badge status
                         const statusData = getBadgeClass(
                           item.start_regis_date,
-                          item.end_regis_date
+                          item.end_regis_date,
                         );
                         return (
                           <div
@@ -269,13 +265,13 @@ export default function DashboardAdminProgram() {
                             />
                             <span>
                               {new Date(
-                                item.start_program_date
+                                item.start_program_date,
                               ).toLocaleDateString("id-ID", {
                                 day: "numeric",
                               })}
                               {" - "}
                               {new Date(
-                                item.end_program_date
+                                item.end_program_date,
                               ).toLocaleDateString("id-ID", {
                                 year: "numeric",
                                 month: "long",
