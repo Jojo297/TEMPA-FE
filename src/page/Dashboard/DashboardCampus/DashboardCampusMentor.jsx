@@ -51,6 +51,7 @@ import useAddMentor from "@/hooks/hooksCampus/useAddMentor";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { DataTable } from "@/components/data-table";
 import LoadingSkeletonMentorPage from "@/components/LoadingSkeletonMentorPage";
+import HeaderPage from "@/components/HeaderPage";
 
 // Skema validasi untuk form tambah mentor
 const addMentorSchema = z
@@ -169,16 +170,13 @@ export default function DashboardCampusMentor() {
           </div>
 
           {/* Header */}
-          <div className="mb-8 text-center">
-            <div className="bg-primary text-white rounded-xl p-6 shadow">
-              <h1 className="text-3xl font-bold mb-2">Mentor</h1>
-              <p className="text-emerald-100/80 text-md max-w-2xl mx-auto leading-relaxed">
-                Pusat kendali mentor kampus. Tambahkan, pantau, dan
-                organisasikan para ahli yang akan membimbing perjalanan sukses
-                mentee Anda.
-              </p>
-            </div>
-          </div>
+          <HeaderPage
+            title={"Mentor"}
+            description={
+              "Pusat kendali mentor kampus. Tambahkan, pantau, dan organisasikan para ahli yang akan membimbing perjalanan sukses mentee Anda."
+            }
+            badge={"Manage Mentors"}
+          />
 
           {/* Mentor Section */}
           <section className="bg-white rounded-xl p-6 pt-6 text-gray-800 shadow-md border">

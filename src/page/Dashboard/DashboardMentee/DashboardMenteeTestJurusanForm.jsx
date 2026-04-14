@@ -451,7 +451,7 @@ export default function DashboardTestJurusanForm() {
   // console.log(displayResponse);
 
   // if mentee already assign form
-  if (displayResponse.length < 0) {
+  if (displayResponse.length > 0) {
     return <RecomendationMajors responseAI={displayResponse} />;
   }
 
@@ -532,7 +532,7 @@ export default function DashboardTestJurusanForm() {
         description={
           "Tes ini dirancang untuk  menganalisis minat, motivasi, dan kecenderungan akademik Anda. Jawablah setiap pertanyaan dengan sejujur-jujurnya untuk mendapatkan rekomendasi jurusan yang paling sesuai dengan potensi diri Anda."
         }
-        badge={"Majors"}
+        badge={"Explore Majors"}
       />
 
       {/* alert */}

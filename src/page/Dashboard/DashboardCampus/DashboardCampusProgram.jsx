@@ -37,6 +37,7 @@ import { CampusSearchMajors } from "@/components/CampusSearchMajors";
 import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
 import NotFounPages from "@/components/NotFoundPages";
+import HeaderPage from "@/components/HeaderPage";
 // import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
@@ -186,15 +187,13 @@ export default function DashboardCampusProgram() {
         </div>
 
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="bg-primary text-white rounded-xl p-6 shadow">
-            <h1 className="text-3xl font-bold mb-2">Program</h1>
-            <p className="text-emerald-100/80 text-md max-w-2xl mx-auto leading-relaxed">
-              Tarik perhatian calon mentee unggulan! Publikasikan dan kelola
-              berbagai program kampus Anda.
-            </p>
-          </div>
-        </div>
+        <HeaderPage
+          title={"Program"}
+          description={
+            "Tarik perhatian calon mentee unggulan! Publikasikan dan kelola berbagai program kampus Anda."
+          }
+          badge={"Manage Program"}
+        />
 
         {/* Filters */}
         <section>

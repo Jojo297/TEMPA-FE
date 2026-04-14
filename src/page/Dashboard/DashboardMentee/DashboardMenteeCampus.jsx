@@ -79,7 +79,7 @@ export default function DashboardCampus() {
         description={
           "Temukan institusi pendidikan tinggi yang paling sesuai dengan ambisi dan minat Anda. Mulai dari profil lengkap universitas dan rincian jurusan. Kami menyajikan data komprehensif untuk memastikan setiap calon mahasiswa memiliki referensi yang kuat sebelum memutuskan tempat terbaik untuk bertumbuh dan berkarya."
         }
-        badge={"Campus"}
+        badge={"Explore Campus"}
       />
 
       {/* Seluruh Kampus Section */}

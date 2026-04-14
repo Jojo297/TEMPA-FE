@@ -145,18 +145,20 @@ export default function DashboardMenteeProgram() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem className="text-primary">
-            <BreadcrumbPage className="text-primary">Program</BreadcrumbPage>
+            <BreadcrumbPage className="text-primary">
+              Trial Kuliah
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       {/* Header Section */}
       <HeaderPage
-        title={"Program"}
+        title={"Trial Kuliah"}
         description={
-          "Jelajahi berbagai kampus terbaik dan temukan informasi seputar program, jurusan, serta prestasi mereka di sini. Dapatkan kesempatan untuk mengikuti Trial Kuliah atau kelas singkat sebelum Anda membuatkeputusan besar!"
+          "Jelajahi berbagai kampus terbaik dan temukan informasi seputar program, jurusan, serta prestasi mereka di sini. Dapatkan kesempatan untuk mengikuti Trial Kuliah atau kelas singkat sebelum Anda membuat keputusan besar!"
         }
-        badge={"Program"}
+        badge={"Explore Program"}
       />
 
       {/* Rekomendasi Section */}

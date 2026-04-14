@@ -107,7 +107,7 @@ const DashboardJurusan = () => {
           description={
             "Memilih jurusan adalah langkah awal yang krusial dalam perjalanan akademik Anda. Di sini, Anda dapat menelusuri berbagai bidang studi. Pelajari setiap detail mengenai apa yang akan dipelajari selama masa perkuliahan dan bagaimana jurusan tersebut relevan dengan perkembangan industri saat ini guna menemukan kecocokan yang sempurna."
           }
-          badge={"Majors"}
+          badge={"Explore Majors"}
         />
 
         {/* all majors section */}

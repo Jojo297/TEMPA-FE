@@ -11,7 +11,7 @@ export default function HeaderPage({ title, description, badge }) {
         {/* Badge Premium */}
         <div className="mb-6 rounded-full bg-white/5 px-4 py-1.5 border border-white/10 backdrop-blur-md">
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-emerald-100/80">
-            Explore {badge}
+            {badge}
           </p>
         </div>
 
