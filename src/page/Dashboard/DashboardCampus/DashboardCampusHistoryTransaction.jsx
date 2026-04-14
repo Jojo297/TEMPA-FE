@@ -27,6 +27,7 @@ import {
 import useGetHistoryTransaction from "@/hooks/hooksCampus/useGetHistoryTransaction";
 import { useEffect } from "react";
 import { Link } from "react-router";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardCampusHistoryTransaction() {
   const token = localStorage.getItem("userJwt");
@@ -83,17 +84,14 @@ export default function DashboardCampusHistoryTransaction() {
           </div>
 
           {/* Header */}
-          <div className="mb-8 text-center">
-            <div className="bg-[#013D3A] text-white rounded-2xl p-8 shadow-lg">
-              <h1 className="text-3xl font-bold mb-2">Riwayat Transaksi</h1>
-              <p className="text-emerald-100/80 text-md max-w-2xl mx-auto leading-relaxed">
-                Pantau arus kas masuk dan keluar dari dompet kampus Anda secara
-                transparan.
-              </p>
-            </div>
-          </div>
+          <HeaderPage
+            title={"Riwayat Transaksi"}
+            description={
+              "Pantau arus kas masuk dan keluar dari dompet kampus Anda secara transparan."
+            }
+            badge={"Manage Transaction"}
+          />
 
-          {/* datatable Section */}
           {/* Datatable Section */}
           <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
