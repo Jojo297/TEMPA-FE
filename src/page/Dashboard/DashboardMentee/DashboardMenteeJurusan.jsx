@@ -27,6 +27,7 @@ import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 import DynamicIcon from "@/components/DynamicIcon";
+import HeaderPage from "@/components/HeaderPage";
 
 const DashboardJurusan = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,7 +60,7 @@ const DashboardJurusan = () => {
 
   // handle search majors
   const filteredMajors = mergedData.filter((major) =>
-    major.major_name.toLowerCase().includes(searchTerm.toLowerCase())
+    major.major_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // fetch data majors
@@ -101,13 +102,13 @@ const DashboardJurusan = () => {
       </Breadcrumb>
       <div className="min-h-screen  ">
         {/* header Section */}
-        <div className="bg-primary text-white p-6 md:p-8 rounded-xl shadow mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-3">Jurusan</h1>
-          <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto">
-            Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan
-            minat serta bakatmu.
-          </p>
-        </div>
+        <HeaderPage
+          title={"Jurusan"}
+          description={
+            "Memilih jurusan adalah langkah awal yang krusial dalam perjalanan akademik Anda. Di sini, Anda dapat menelusuri berbagai bidang studi. Pelajari setiap detail mengenai apa yang akan dipelajari selama masa perkuliahan dan bagaimana jurusan tersebut relevan dengan perkembangan industri saat ini guna menemukan kecocokan yang sempurna."
+          }
+          badge={"Majors"}
+        />
 
         {/* all majors section */}
         <section>

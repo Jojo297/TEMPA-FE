@@ -12,6 +12,7 @@ import RecomendationMajors from "@/components/RecomendationMajors";
 import LoadingAiRecomendationMajors from "@/components/LoadingAiRecomendationMajors";
 import LoadingSkeletonFetchRecomendationMajors from "@/components/LoadingSkeletonFetchRecomendationMajors";
 import LoadingRedirect from "@/components/loadingRedirect";
+import HeaderPage from "@/components/HeaderPage";
 
 // validation
 const formSchema = z.object({
@@ -52,7 +53,6 @@ const formSchema = z.object({
 
 // question data
 const newQuestionsData = [
-  // ... (Data pertanyaan 1-10) ...
   {
     id: 1,
     type: "text_short",
@@ -219,7 +219,6 @@ const CircleButton = ({ value, isSelected, onClick, showLabel = true }) => (
 const QuestionRenderer = ({ question, field, error }) => {
   const { id, type, text, placeholder, options, scaleLabels } = question;
 
-  // Render Input/Textarea menggunakan komponen shadcn + RHF
   const renderTextInput = () => {
     const isLong = type === "text_long";
     const Component = isLong ? Textarea : Input;
@@ -427,7 +426,7 @@ export default function DashboardTestJurusanForm() {
   let blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
       shouldBlockNavigation &&
-      currentLocation.pathname !== nextLocation.pathname
+      currentLocation.pathname !== nextLocation.pathname,
   );
 
   // handle if the user suddenly exits the form (navigate client side)
@@ -452,7 +451,7 @@ export default function DashboardTestJurusanForm() {
   // console.log(displayResponse);
 
   // if mentee already assign form
-  if (displayResponse.length > 0) {
+  if (displayResponse.length < 0) {
     return <RecomendationMajors responseAI={displayResponse} />;
   }
 
@@ -462,7 +461,7 @@ export default function DashboardTestJurusanForm() {
 
     // filter to get question type radio
     const radioQuestions = newQuestionsData.filter(
-      (item) => item.type === "radio"
+      (item) => item.type === "radio",
     );
 
     // change from key to label in radio question
@@ -473,7 +472,7 @@ export default function DashboardTestJurusanForm() {
       if (selectedValue) {
         // search object where id
         const selectedOption = question.options.find(
-          (opt) => opt.value === selectedValue
+          (opt) => opt.value === selectedValue,
         );
 
         if (selectedOption) {
@@ -528,20 +527,13 @@ export default function DashboardTestJurusanForm() {
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <section className="bg-primary text-center text-white rounded-xl md:rounded-2xl py-8 md:py-12 px-6 shadow-md">
-        <h1 className="text-2xl md:text-3xl font-bold mb-3">
-          Rekomendasi Jurusan Cerdas
-        </h1>
-        <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto leading-relaxed">
-          Tes ini dirancang untuk{" "}
-          <span className="font-bold text-white">
-            menganalisis minat, motivasi, dan kecenderungan akademik
-          </span>{" "}
-          Anda. Jawablah setiap pertanyaan dengan sejujur-jujurnya untuk
-          mendapatkan rekomendasi jurusan yang paling sesuai dengan potensi diri
-          Anda.
-        </p>
-      </section>
+      <HeaderPage
+        title={"Rekomendasi Jurusan Cerdas"}
+        description={
+          "Tes ini dirancang untuk  menganalisis minat, motivasi, dan kecenderungan akademik Anda. Jawablah setiap pertanyaan dengan sejujur-jujurnya untuk mendapatkan rekomendasi jurusan yang paling sesuai dengan potensi diri Anda."
+        }
+        badge={"Majors"}
+      />
 
       {/* alert */}
       <div className="mt-6 max-w-7xl mx-auto">

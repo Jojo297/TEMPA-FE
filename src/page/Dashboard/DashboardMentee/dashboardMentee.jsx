@@ -45,7 +45,7 @@ const DashboardMentee = () => {
   }, [token, verifyMentee, isLoading]);
   return (
     <SidebarWithNavbar>
-      <main className="px-4 pt-4 pb-6 flex-1 bg-[#F8FAFB] rounded-xl">
+      <main className="px-4 pt-4 pb-6 flex-1 rounded-xl">
         <Outlet />
       </main>
     </SidebarWithNavbar>

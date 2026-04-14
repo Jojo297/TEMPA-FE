@@ -70,7 +70,7 @@ export default function DashboardBeranda() {
   // console.log(completedCount);
 
   const unCompleted = displayPrograms.filter(
-    (item) => item.completion_status === "uncompleted"
+    (item) => item.completion_status === "uncompleted",
   );
 
   const countUnCompleted = unCompleted.length;
@@ -203,6 +203,9 @@ export default function DashboardBeranda() {
 
       {/* Hero Section */}
       <div className="relative bg-primary w-full rounded-2xl p-6 md:p-10 shadow-lg overflow-hidden flex flex-col md:flex-row items-start justify-between gap-6">
+        {/* Glow left top */}
+        <div className="absolute -left-16 -top-16 h-80 w-80 rounded-full bg-emerald-400/20 blur-[100px] pointer-events-none" />
+
         {/* Left Side */}
         <div className="relative flex-1 w-full">
           <div className="mb-8">
@@ -255,6 +258,9 @@ export default function DashboardBeranda() {
             </div>
           </div>
         </div>
+
+        {/* Glow right bottom */}
+        <div className="absolute -right-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-600/30 blur-[100px] pointer-events-none" />
 
         {/* Robot */}
         <div className="hidden md:block relative z-10 flex-shrink-0">
@@ -364,7 +370,7 @@ export default function DashboardBeranda() {
                     const statusData = getBadgeClass(
                       item.completion_status,
                       item.program_details?.start_date,
-                      item.program_details?.end_date
+                      item.program_details?.end_date,
                     );
                     return (
                       <div
@@ -399,7 +405,7 @@ export default function DashboardBeranda() {
                         <Calendar size={16} className="mr-2 text-[#013B35]" />
                         <span>
                           {new Date(
-                            item.program_details?.start_date
+                            item.program_details?.start_date,
                           ).toLocaleDateString("id-ID", {
                             year: "numeric",
                             month: "long",
@@ -421,7 +427,7 @@ export default function DashboardBeranda() {
                           Tempat:{" "}
                           {getLocation(
                             item.program_details?.type_sesi,
-                            item.program_details.onsiteLocationName
+                            item.program_details.onsiteLocationName,
                           )}
                         </span>
                       </div>
@@ -431,7 +437,7 @@ export default function DashboardBeranda() {
                     <button
                       onClick={() => {
                         navigate(
-                          `/dashboard-mentee/materi/${item.program_details?.id}`
+                          `/dashboard-mentee/materi/${item.program_details?.id}`,
                         );
                       }}
                       className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300"
