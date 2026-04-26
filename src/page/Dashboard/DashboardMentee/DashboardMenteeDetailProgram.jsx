@@ -216,37 +216,45 @@ const DashboardMenteeDetailProgram = () => {
   if (isLoading) {
     return <DetailProgramSkeleton />;
   }
-
-  // Logic button register
   const now = new Date();
   const start = new Date(displayDetailProgram.start_regis_date);
   const end = new Date(displayDetailProgram.end_regis_date);
+
+  // Fungsi untuk reset waktu ke 00:00:00.000 agar akurat per tanggal
+  const stripTime = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  const todayClean = stripTime(now);
+  const startClean = stripTime(start);
+  const endClean = stripTime(end);
+
   const isFull = displayDetailProgram.capacity <= 0;
 
-  // Default State (Kondisi Ideal: Bisa Daftar)
   let buttonText = "Daftar Sekarang";
   let buttonClass = "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]";
   let isDisabled = false;
 
-  // check if register is not ready open
-  if (now < start) {
+  // check date if date not
+  if (todayClean < startClean) {
     buttonText = "Segera Dibuka";
     buttonClass = "bg-gray-400 text-white cursor-not-allowed";
     isDisabled = true;
-  }
-
-  // Check whether the registration has PASSED the date OR is closed because the balance is exhausted.
-  else if (now > end || displayDetailProgram.is_registration_closed) {
+  } else if (
+    todayClean > endClean ||
+    displayDetailProgram.is_registration_closed
+  ) {
     buttonText = "Pendaftaran Ditutup";
-    buttonClass = "bg-red-500 text-white cursor-not-allowed text-xs"; // Beri warna merah untuk indikasi tutup
+    buttonClass = "bg-red-500 text-white cursor-not-allowed text-xs";
     isDisabled = true;
-  }
-  // check if quota is full
-  else if (isFull) {
+  } else if (isFull) {
     buttonText = "Kuota Penuh";
     buttonClass = "bg-orange-500 text-white cursor-not-allowed";
     isDisabled = true;
   }
+
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
       {/* breadcum */}
@@ -333,7 +341,7 @@ const DashboardMenteeDetailProgram = () => {
                     className="ml-2 text-sm text-white cursor-pointer"
                   >
                     Saya telah membaca, memahami, dan menyetujui semua
-                    **Ketentuan dan Prasyarat** di atas.
+                    <strong> Ketentuan dan Prasyarat</strong> di atas.
                   </label>
                 </div>
 
@@ -399,21 +407,22 @@ const DashboardMenteeDetailProgram = () => {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <p className="text-sm text-gray-900 sm:text-base whitespace-pre-line border p-3 rounded-xl">
+              {/* Ganti <p> di bawah ini menjadi <div> */}
+              <div className="text-sm text-gray-900 sm:text-base border p-3 rounded-xl break-words">
                 <div
                   className="whitespace-pre-wrap 
-             [&_ol]:list-decimal [&_ol]:ml-5 
-             [&_ul]:list-disc [&_ul]:ml-5 
-             [&_li]:mb-1
-             [&_p]:mb-4 
-             [&_a]:text-blue-600 [&_a]:underline"
+      [&_ol]:list-decimal [&_ol]:ml-5 
+      [&_ul]:list-disc [&_ul]:ml-5 
+      [&_li]:mb-1
+      [&_p]:mb-4 
+      [&_a]:text-blue-600 [&_a]:underline"
                   dangerouslySetInnerHTML={{
                     __html:
                       displayDetailProgram.description ||
                       "Deskripsi belum ditambahkan.",
                   }}
                 />
-              </p>
+              </div>
             </div>
 
             <div className="col-span-2">

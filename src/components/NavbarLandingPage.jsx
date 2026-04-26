@@ -12,8 +12,7 @@ import LoginMentee from "@/page/loginMentee";
 import logo_text from "@/assets/logo-text.png";
 import logo2 from "@/assets/logo-text.png";
 
-export const NavbarLandingPage = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+export const NavbarLandingPage = ({ isDialogOpen, setIsDialogOpen }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();

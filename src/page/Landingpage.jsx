@@ -34,6 +34,7 @@ import { kampusList } from "@/lib/kampusList";
 const LandingPage = () => {
   const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? kampusList.length - 1 : prev - 1));
@@ -89,7 +90,7 @@ const LandingPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) =>
-        prev === kampusList.length - 1 ? 0 : prev + 1
+        prev === kampusList.length - 1 ? 0 : prev + 1,
       );
     }, 2000);
     return () => clearInterval(interval);
@@ -123,7 +124,10 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans pt-20">
       {/* Navbar */}
-      <NavbarLandingPage />
+      <NavbarLandingPage
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      />
 
       {/* header */}
       <section className="relative lg:mt-12 w-full min-h-[500px] lg:h-[80vh] bg-[#F5FAFA] overflow-hidden flex items-center">
@@ -186,7 +190,10 @@ const LandingPage = () => {
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="px-10 py-4 bg-[#013B35] text-white rounded-full font-bold hover:bg-[#084d46] transition-all shadow-lg shadow-emerald-900/20 active:scale-95">
+                <button
+                  onClick={() => setIsDialogOpen(true)}
+                  className="px-10 py-4 bg-[#013B35] text-white rounded-full font-bold hover:bg-[#084d46] transition-all shadow-lg shadow-emerald-900/20 active:scale-95"
+                >
                   Mulai Sekarang
                 </button>
                 <button className="px-10 py-4 border-2 border-[#013B35] text-[#013B35] rounded-full font-bold hover:bg-[#013B35] hover:text-white transition-all active:scale-95">

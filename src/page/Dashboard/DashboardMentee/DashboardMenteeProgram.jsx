@@ -248,7 +248,7 @@ export default function DashboardMenteeProgram() {
                     </div>
 
                     {/* description */}
-                    <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
+                    <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2 break-words">
                       <div
                         className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
                         dangerouslySetInnerHTML={{

@@ -151,8 +151,17 @@ export default function DashboardMenteeMateri() {
         {/* header Section */}
         <div className="bg-primary text-white p-6 md:p-8 rounded-xl md:rounded-2xl shadow-md mb-8 text-center">
           <h1 className="text-xl md:text-3xl font-bold mb-3">{program_name}</h1>
-          <p className="text-sm md:text-base text-white/90 max-w-3xl mx-auto leading-relaxed">
-            {program_description}
+          <p className="text-sm md:text-base text-white/90 max-w-3xl mx-auto leading-relaxed break-words">
+            <div
+              className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5 
+      [&_ul]:list-disc [&_ul]:ml-5 
+      [&_li]:mb-1
+      [&_p]:mb-4 
+      [&_a]:text-blue-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{
+                __html: program_description,
+              }}
+            />
           </p>
         </div>
 
@@ -181,7 +190,11 @@ export default function DashboardMenteeMateri() {
                     <div className="py-3 text-gray-700">
                       {
                         <div
-                          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                          className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5 
+      [&_ul]:list-disc [&_ul]:ml-5 
+      [&_li]:mb-1
+      [&_p]:mb-4 
+      [&_a]:text-blue-600 [&_a]:underline"
                           dangerouslySetInnerHTML={{
                             __html: item.description,
                           }}
