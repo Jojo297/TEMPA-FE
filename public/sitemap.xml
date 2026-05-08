@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Landing Page -->
+  <url>
+    <loc>https://tempa.ddnsking.com/</loc>
+    <lastmod>2026-05-08</lastmod>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- trial kuliah -->
+  <url>
+    <loc>http://localhost:5173/trial-kuliah</loc>
+    <lastmod>2026-05-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

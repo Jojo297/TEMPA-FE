@@ -19,6 +19,7 @@ export const NavbarLandingPage = ({ isDialogOpen, setIsDialogOpen }) => {
 
   const navLinks = [
     { name: "Kampus", id: "kampus" },
+    { name: "Trial Kuliah", id: "trial-kuliah" },
     { name: "Jurusan", id: "jurusan" },
     { name: "Kerja Sama", id: "kerjasama" },
   ];

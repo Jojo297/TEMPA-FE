@@ -16,6 +16,9 @@ import {
   Calculator,
   Waves,
   Cross,
+  Calendar,
+  Home,
+  Map,
 } from "lucide-react";
 import {
   FaFacebookF,
@@ -30,6 +33,56 @@ import { Card, CardContent } from "@/components/ui/card";
 import peta from "../assets/Peta.png";
 import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 import { kampusList } from "@/lib/kampusList";
+import { Helmet } from "react-helmet-async";
+import DynamicIcon from "@/components/DynamicIcon";
+
+const filteredPrograms = [
+  {
+    id: "p1",
+    program_name: "Web Development Bootcamp",
+    major_name: "Informatika",
+    campus_name: "Politeknik Negeri Batam",
+    type_sesi: "Online",
+    capacity: 50,
+    image_url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
+    description:
+      "Belajar fundamental React JS dan Node JS dalam sesi trial intensif selama 3 hari.",
+    start_regis_date: "2026-05-01",
+    end_regis_date: "2026-05-20",
+    start_program_date: "2026-06-01",
+    end_program_date: "2026-06-03",
+  },
+  {
+    id: "p2",
+    program_name: "Creative Design Workshop",
+    major_name: "DKV",
+    campus_name: "Universitas Internasional Batam",
+    type_sesi: "Offline",
+    capacity: 20,
+    image_url: "https://images.unsplash.com/photo-1558655146-d09347e92766",
+    description:
+      "Eksplorasi dunia desain grafis dan UI/UX langsung dari ahlinya di studio kampus.",
+    start_regis_date: "2026-04-15",
+    end_regis_date: "2026-05-15",
+    start_program_date: "2026-05-25",
+    end_program_date: "2026-05-25",
+  },
+  {
+    id: "p3",
+    program_name: "Business Strategy 101",
+    major_name: "Akuntansi",
+    campus_name: "ITEBA",
+    type_sesi: "Hybrid",
+    capacity: 100,
+    image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    description:
+      "Pahami cara menganalisis laporan keuangan perusahaan startup dengan metode terkini.",
+    start_regis_date: "2026-05-10",
+    end_regis_date: "2026-06-10",
+    start_program_date: "2026-06-15",
+    end_program_date: "2026-06-17",
+  },
+];
 
 const LandingPage = () => {
   const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
@@ -45,12 +98,14 @@ const LandingPage = () => {
   };
   // Animation refs and controls
   const kampusRef = useRef(null);
+  const TrialKuliahRef = useRef(null);
   const jurusanRef = useRef(null);
   const bertumbuhRef = useRef(null);
   const kerjasamaRef = useRef(null);
   const footerRef = useRef(null);
 
   const isKampusInView = useInView(kampusRef, { once: true, amount: 0.2 });
+  const isTrialKampusInView = useInView(kampusRef, { once: true, amount: 0.2 });
   const isJurusanInView = useInView(jurusanRef, { once: true, amount: 0.2 });
   const isBertumbuhInView = useInView(bertumbuhRef, {
     once: true,
@@ -64,6 +119,7 @@ const LandingPage = () => {
 
   const kampusControls = useAnimation();
   const jurusanControls = useAnimation();
+  const trialKuliahControls = useAnimation();
   const bertumbuhControls = useAnimation();
   const kerjasamaControls = useAnimation();
   const footerControls = useAnimation();
@@ -71,6 +127,9 @@ const LandingPage = () => {
   useEffect(() => {
     if (isKampusInView) kampusControls.start("visible");
   }, [isKampusInView, kampusControls]);
+  useEffect(() => {
+    if (isTrialKampusInView) trialKuliahControls.start("visible");
+  }, [isTrialKampusInView, trialKuliahControls]);
   useEffect(() => {
     if (isJurusanInView) jurusanControls.start("visible");
   }, [isJurusanInView, jurusanControls]);
@@ -121,8 +180,90 @@ const LandingPage = () => {
     requestAnimationFrame(animate);
   }, []);
 
+  // badge for status program
+  const getBadgeClass = (start_date, end_date) => {
+    const today = new Date();
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+
+    if (endDate.getTime() < today.getTime()) {
+      return {
+        text: "Tutup",
+        bgColor: "bg-red-100",
+        textColor: "text-red-800",
+      };
+    } else if (startDate.getTime() > today.getTime()) {
+      return {
+        text: "Segera Buka",
+        bgColor: "bg-blue-100",
+        textColor: "text-blue-800",
+      };
+    } else {
+      return {
+        text: "Buka",
+        bgColor: "bg-green-200",
+        textColor: "text-green-800",
+      };
+    }
+  };
+
+  // get location if type program onsite
+  const getLocation = (status, item) => {
+    switch (status) {
+      case "online":
+        return "Zoom/Gmeet";
+      case "onsite":
+        return item.onsiteLocationName;
+      default:
+        return "Tempat belum ditentukan";
+    }
+  };
+
+  const getCapacity = (num) => {
+    if (num <= 0) {
+      return "Sudah Penuh";
+    } else if (num > 0) {
+      return num + " Orang";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans pt-20">
+      <Helmet>
+        <title>TEMPA || Eksplorasi Masa Depan & Persiapan Kuliah</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempa.ac.id" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta
+          property="og:image"
+          content="http://tempa.ddnsking.com/assets/web-preview.png"
+        />{" "}
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
+
       {/* Navbar */}
       <NavbarLandingPage
         isDialogOpen={isDialogOpen}
@@ -276,6 +417,188 @@ const LandingPage = () => {
         </div>
       </motion.section>
 
+      {/* Trial kuliah section */}
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        transition={{ duration: 0.6 }}
+        className="bg-[#F9FBFB] py-20"
+        id="trial-kuliah"
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            {/* LEFT SIDE: Header & Call to Action (Sticky) */}
+            <div className="lg:w-1/3">
+              <div className="lg:sticky lg:top-32">
+                <div className="inline-block px-4 py-1.5 mb-4 bg-emerald-100 text-[#013B35] rounded-full text-xs font-bold uppercase tracking-widest">
+                  Program Unggulan
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                  Trial <span className="text-[#013B35]">Kuliah</span>
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                  Rasakan pengalaman belajar langsung di kampus impianmu. Ikuti
+                  kelas singkat dan temukan potensi tersembunyimu sebelum
+                  menentukan langkah besar ke dunia perkuliahan.
+                </p>
+
+                <div className="hidden lg:block">
+                  <Link
+                    to="/trial-kuliah"
+                    className="group inline-flex items-center gap-3 text-sm font-bold text-[#013B35] transition-all"
+                  >
+                    LIHAT SEMUA PROGRAM
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-[#013B35] group-hover:bg-[#013B35] group-hover:text-white transition-all">
+                      <ChevronRight size={16} />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT SIDE: Program List */}
+            <div className="lg:w-2/3">
+              <motion.div
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.15 } },
+                }}
+                className="flex flex-col gap-8"
+              >
+                {filteredPrograms.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col lg:flex-row border bg-white relative rounded-2xl overflow-hidden transition duration-300 hover:bg-white hover:shadow-xl"
+                  >
+                    {/* left side */}
+                    <div
+                      className="lg:w-1/3 flex flex-col justify-end bg-cover bg-center p-6 text-white"
+                      // Menggunakan background image dengan overlay warna untuk efek keren
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(1, 59, 53, 0.4), rgba(1, 59, 53, 0.7)),  url(${item.image_url})`,
+                        backgroundColor: "#013B35",
+                        minHeight: "200px",
+                      }}
+                    >
+                      {/* Completion Status */}
+                      {(() => {
+                        // get badge status
+                        const statusData = getBadgeClass(
+                          item.start_regis_date,
+                          item.end_regis_date,
+                        );
+                        return (
+                          <div
+                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
+                          >
+                            {statusData.text}
+                          </div>
+                        );
+                      })()}
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-lg">
+                        {item.program_name}
+                      </h3>
+                    </div>
+
+                    {/* right side */}
+                    <div className="lg:w-2/3 p-6 flex flex-col justify-between">
+                      <div>
+                        {/* Main info: Kampus, Jurusan */}
+                        <div className="flex flex-wrap items-center gap-4 mb-4">
+                          <div className="flex items-center text-[#013B35] font-semibold text-base md:text-lg">
+                            <span>{item.program_name}</span>
+                          </div>
+                          <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
+                            {item.major_name}
+                          </div>
+                          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
+                            {item.type_sesi}
+                          </div>
+                        </div>
+
+                        {/* description */}
+                        <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2 break-words">
+                          <div
+                            className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
+                        </p>
+
+                        {/* date and location */}
+                        <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-xs sm:text-sm mb-6 border-t pt-4">
+                          <div className="flex items-center">
+                            <Calendar
+                              size={16}
+                              className="mr-2 text-[#013B35]"
+                            />
+                            <span>
+                              {new Date(
+                                item.start_program_date,
+                              ).toLocaleDateString("id-ID", {
+                                day: "numeric",
+                              })}
+                              {" - "}
+                              {new Date(
+                                item.end_program_date,
+                              ).toLocaleDateString("id-ID", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Home size={16} className="mr-2 text-[#013B35]" />
+                            <span>{item.campus_name}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users size={16} className="mr-2 text-[#013B35]" />
+                            <span>{getCapacity(item.capacity)} </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Map size={16} className="mr-2 text-[#013B35]" />
+                            <span>
+                              Tempat: {getLocation(item.type_sesi, item)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Button */}
+                        <button
+                          onClick={() =>
+                            navigate(`/dashboard-mentee/program/${item.id}`)
+                          }
+                          className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300 text-sm sm:text-base"
+                        >
+                          Lihat Detail Program
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Mobile Only: Link See More */}
+              <div className="mt-10 text-center lg:hidden">
+                <Link
+                  to="/trial-kuliah"
+                  className="text-[#013B35] font-bold border-b-2 border-[#013B35] pb-1"
+                >
+                  Lihat Semua Program
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
       {/* Jurusan section */}
       <motion.section
         ref={jurusanRef}
@@ -304,7 +627,7 @@ const LandingPage = () => {
               hidden: {},
               visible: { transition: { staggerChildren: 0.1 } },
             }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-center"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center"
           >
             {[
               {
@@ -328,10 +651,14 @@ const LandingPage = () => {
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1 },
                 }}
-                className="bg-[#013B35] text-white w-36 h-36 rounded-xl flex flex-col items-center justify-center gap-3 shadow-lg hover:scale-105 transition-transform duration-300"
+                className="group bg-white w-full border border-gray-100 rounded-xl flex flex-col items-center justify-center p-5 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="text-[#9BD6C3]">{item.icon}</div>
-                <span className="text-sm font-medium">{item.nama}</span>
+                <div className="p-3.5 bg-primary/5 rounded-full text-primary mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  {item.icon}
+                </div>
+                <p className="text-sm font-bold text-gray-700 text-center group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                  {item.nama}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -479,17 +806,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Footer */}
-      <motion.footer
-        ref={footerRef}
-        variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
-        animate={footerControls}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-[#013B36] text-white py-12 px-8"
-      >
+      <div className="bg-[#013B36] text-white py-12 px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="p-4">
@@ -543,7 +860,7 @@ const LandingPage = () => {
         <div className="border-t border-gray-600 mt-10 pt-5 text-center text-sm text-gray-400">
           © 2025 TEMPA. All rights reserved. Icons by Icons8
         </div>
-      </motion.footer>
+      </div>
     </div>
   );
 };
