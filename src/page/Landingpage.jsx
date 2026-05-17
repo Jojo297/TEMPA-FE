@@ -20,6 +20,15 @@ import {
   Home,
   Map,
 } from "lucide-react";
+
+import LoginMentee from "@/page/loginMentee";
+import logo_text from "@/assets/logo-text.png";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   FaFacebookF,
   FaInstagram,
@@ -34,19 +43,20 @@ import peta from "../assets/Peta.png";
 import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 import { kampusList } from "@/lib/kampusList";
 import { Helmet } from "react-helmet-async";
-import DynamicIcon from "@/components/DynamicIcon";
+import preview from "@/../public/web-preview.png";
 
+// dummy data
 const filteredPrograms = [
   {
     id: "p1",
-    program_name: "Web Development Bootcamp",
-    major_name: "Informatika",
+    program_name: "Trial Kuliah: Dasar Pemrograman Web",
+    major_name: "Teknik Informatika",
     campus_name: "Politeknik Negeri Batam",
     type_sesi: "Online",
     capacity: 50,
     image_url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
     description:
-      "Belajar fundamental React JS dan Node JS dalam sesi trial intensif selama 3 hari.",
+      "Rasakan pengalaman menjadi mahasiswa IT Polibatam. Pelajari dasar HTML, CSS, dan JavaScript dalam kelas simulasi selama 3 hari.",
     start_regis_date: "2026-05-01",
     end_regis_date: "2026-05-20",
     start_program_date: "2026-06-01",
@@ -54,29 +64,29 @@ const filteredPrograms = [
   },
   {
     id: "p2",
-    program_name: "Creative Design Workshop",
-    major_name: "DKV",
-    campus_name: "Universitas Internasional Batam",
+    program_name: "Trial Kuliah: Pengantar Manajemen Bisnis",
+    major_name: "Manajemen Bisnis",
+    campus_name: "Universitas Indobaru Nasional",
     type_sesi: "Offline",
-    capacity: 20,
-    image_url: "https://images.unsplash.com/photo-1558655146-d09347e92766",
+    capacity: 30,
+    image_url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
     description:
-      "Eksplorasi dunia desain grafis dan UI/UX langsung dari ahlinya di studio kampus.",
-    start_regis_date: "2026-04-15",
-    end_regis_date: "2026-05-15",
+      "Ikuti sesi tatap muka langsung di kampus UIN. Bedah strategi pemasaran modern dan manajemen operasional perusahaan.",
+    start_regis_date: "2026-05-01",
+    end_regis_date: "2026-05-18",
     start_program_date: "2026-05-25",
     end_program_date: "2026-05-25",
   },
   {
     id: "p3",
-    program_name: "Business Strategy 101",
-    major_name: "Akuntansi",
-    campus_name: "ITEBA",
+    program_name: "Trial Kuliah: Jaringan Komputer & Cyber Security",
+    major_name: "Teknik Multimedia & Jaringan",
+    campus_name: "Politeknik Negeri Batam",
     type_sesi: "Hybrid",
-    capacity: 100,
-    image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    capacity: 40,
+    image_url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
     description:
-      "Pahami cara menganalisis laporan keuangan perusahaan startup dengan metode terkini.",
+      "Simulasi praktikum jaringan di laboratorium canggih Polibatam. Terbuka untuk umum yang ingin merasakan kurikulum vokasi.",
     start_regis_date: "2026-05-10",
     end_regis_date: "2026-06-10",
     start_program_date: "2026-06-15",
@@ -85,17 +95,8 @@ const filteredPrograms = [
 ];
 
 const LandingPage = () => {
-  const data_client_id = import.meta.env.VITE_DATA_CLIENT_ID;
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? kampusList.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === kampusList.length - 1 ? 0 : prev + 1));
-  };
   // Animation refs and controls
   const kampusRef = useRef(null);
   const TrialKuliahRef = useRef(null);
@@ -145,7 +146,7 @@ const LandingPage = () => {
 
   const duplicatedList = Array(8).fill(kampusList).flat();
 
-  // 🎯 Autoplay carousel tiap 2 detik
+  // Autoplay carousel tiap 2 detik
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) =>
@@ -155,7 +156,6 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, [kampusList.length]);
 
-  // 🎯 Animasi angka menghitung
   const stats = [
     { angka: 1000, label: "Mentee" },
     { angka: 1000, label: "Mentor" },
@@ -229,8 +229,9 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans pt-20">
+      {/* header html */}
       <Helmet>
-        <title>TEMPA || Eksplorasi Masa Depan & Persiapan Kuliah</title>
+        <title>Tempa | Eksplorasi Masa Depan & Persiapan Kuliah</title>
         <meta
           name="description"
           content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
@@ -239,7 +240,7 @@ const LandingPage = () => {
           name="keywords"
           content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
         />
-        <link rel="canonical" href="https://tempa.ac.id" />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
         {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
         <meta property="og:type" content="website" />
         <meta
@@ -250,10 +251,7 @@ const LandingPage = () => {
           property="og:description"
           content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
         />
-        <meta
-          property="og:image"
-          content="http://tempa.ddnsking.com/assets/web-preview.png"
-        />{" "}
+        <meta property="og:image" content={preview} />
         <meta
           name="twitter:title"
           content="TEMPA - Bangun Masa Depan Bersama"
@@ -347,15 +345,9 @@ const LandingPage = () => {
       </section>
 
       {/* kampus section */}
-      <motion.section
+      <section
         ref={kampusRef}
-        variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
         animate={kampusControls}
-        transition={{ duration: 0.5, delay: 0.1 }}
         id="kampus"
         className="w-full bg-[#013B35] text-white py-16"
       >
@@ -415,21 +407,10 @@ const LandingPage = () => {
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Trial kuliah section */}
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={{
-          hidden: { opacity: 0, y: 50 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        transition={{ duration: 0.6 }}
-        className="bg-[#F9FBFB] py-20"
-        id="trial-kuliah"
-      >
+      <section className="bg-[#F9FBFB] py-20" id="trial-kuliah">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
             {/* LEFT SIDE: Header & Call to Action (Sticky) */}
@@ -448,28 +429,22 @@ const LandingPage = () => {
                 </p>
 
                 <div className="hidden lg:block">
-                  <Link
-                    to="/trial-kuliah"
+                  <button
+                    onClick={() => setIsDialogOpen(true)}
                     className="group inline-flex items-center gap-3 text-sm font-bold text-[#013B35] transition-all"
                   >
                     LIHAT SEMUA PROGRAM
                     <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-[#013B35] group-hover:bg-[#013B35] group-hover:text-white transition-all">
                       <ChevronRight size={16} />
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* RIGHT SIDE: Program List */}
             <div className="lg:w-2/3">
-              <motion.div
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.15 } },
-                }}
-                className="flex flex-col gap-8"
-              >
+              <div className="flex flex-col gap-8">
                 {filteredPrograms.map((item) => (
                   <div
                     key={item.id}
@@ -572,9 +547,7 @@ const LandingPage = () => {
 
                         {/* Button */}
                         <button
-                          onClick={() =>
-                            navigate(`/dashboard-mentee/program/${item.id}`)
-                          }
+                          onClick={() => setIsDialogOpen(true)}
                           className="w-full py-3 bg-[#013B35] text-white rounded-xl font-bold hover:bg-[#015f53] transition-all duration-300 text-sm sm:text-base"
                         >
                           Lihat Detail Program
@@ -583,32 +556,25 @@ const LandingPage = () => {
                     </div>
                   </div>
                 ))}
-              </motion.div>
+              </div>
 
               {/* Mobile Only: Link See More */}
               <div className="mt-10 text-center lg:hidden">
-                <Link
-                  to="/trial-kuliah"
+                <button
+                  onClick={() => setIsDialogOpen(true)}
                   className="text-[#013B35] font-bold border-b-2 border-[#013B35] pb-1"
                 >
                   Lihat Semua Program
-                </Link>
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Jurusan section */}
-      <motion.section
+      <section
         ref={jurusanRef}
-        initial="hidden"
-        animate={jurusanControls}
-        variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        transition={{ duration: 0.5, delay: 0.1 }}
         className="bg-white py-16 text-center"
         id="jurusan"
       >
@@ -622,13 +588,7 @@ const LandingPage = () => {
             bidang terbaik untuk masa depanmu bersama TEMPA.
           </p>
 
-          <motion.div
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.1 } },
-            }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center"
-          >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center">
             {[
               {
                 nama: "Informatika",
@@ -645,12 +605,8 @@ const LandingPage = () => {
               { nama: "Kelautan", icon: <Waves size={36} /> },
               { nama: "Kedokteran", icon: <Cross size={36} /> },
             ].map((item, index) => (
-              <motion.div
+              <div
                 key={index}
-                variants={{
-                  hidden: { opacity: 0, scale: 0.8 },
-                  visible: { opacity: 1, scale: 1 },
-                }}
                 className="group bg-white w-full border border-gray-100 rounded-xl flex flex-col items-center justify-center p-5 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="p-3.5 bg-primary/5 rounded-full text-primary mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -659,28 +615,20 @@ const LandingPage = () => {
                 <p className="text-sm font-bold text-gray-700 text-center group-hover:text-primary transition-colors duration-300 line-clamp-2">
                   {item.nama}
                 </p>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
-          <Link
-            to="/JurusanPage"
+          <button
+            onClick={() => setIsDialogOpen(true)}
             className="mt-10 inline-block text-sm font-semibold border-b-2 border-black hover:text-[#013B35] hover:border-[#013B35] transition"
           >
             Lihat Selengkapnya
-          </Link>
+          </button>
         </div>
-      </motion.section>
-
-      <motion.section
+      </section>
+      <section
         ref={bertumbuhRef}
-        variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
-        animate={bertumbuhControls}
-        transition={{ duration: 0.5, delay: 0.1 }}
         className="bg-[#F8FCF9] py-20 px-6 lg:px-20 text-center"
       >
         <h2 className="text-4xl font-extrabold text-[#013B35] mb-6">
@@ -727,27 +675,14 @@ const LandingPage = () => {
             </React.Fragment>
           ))}
         </motion.div>
-      </motion.section>
-
+      </section>
       {/* kerja sana section */}
-      <motion.section
+      <section
         ref={kerjasamaRef}
-        initial="hidden"
-        animate={kerjasamaControls}
         id="kerjasama"
         className="relative flex flex-col lg:flex-row items-center px-6 md:px-12 lg:px-20 py-16 lg:py-24 bg-[#013B35] text-white overflow-hidden"
       >
-        <motion.div
-          variants={{
-            hidden: { opacity: 0, x: -100 },
-            visible: {
-              opacity: 1,
-              x: 0,
-              transition: { duration: 0.8, ease: "easeOut" },
-            },
-          }}
-          className="relative z-10 w-full lg:w-1/2 text-center lg:text-left mb-10 lg:mb-0"
-        >
+        <div className="relative z-10 w-full lg:w-1/2 text-center lg:text-left mb-10 lg:mb-0">
           <h1 className="text-3xl md:text-4xl font-extrabold leading-snug mb-4">
             BANGUN MASA DEPAN BERSAMA TEMPA
           </h1>
@@ -784,9 +719,9 @@ const LandingPage = () => {
               Gabung Perusahaan
             </button>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           variants={{
             hidden: { opacity: 0, x: 100 },
             visible: {
@@ -802,9 +737,8 @@ const LandingPage = () => {
             alt="Kolaborasi"
             className="w-full h-full object-cover"
           />
-        </motion.div>
-      </motion.section>
-
+        </div>
+      </section>
       {/* Footer */}
       <div className="bg-[#013B36] text-white py-12 px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -861,6 +795,25 @@ const LandingPage = () => {
           © 2025 TEMPA. All rights reserved. Icons by Icons8
         </div>
       </div>
+
+      {/* Login Dialog (Global) */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-[#013B35]">
+          <DialogHeader className="mb-4 ">
+            <DialogTitle className=" text-white ">
+              <div className="flex justify-center items-center ">
+                <div className="text-3xl">Masuk </div>
+                <img src={logo_text} alt="" className="w-28" srcset="" />
+              </div>
+              <div className="px-16">
+                <div className="w-full  h-1 bg-[#96CCEC] mt-3 mb-2"></div>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          {/* button login google */}
+          <LoginMentee />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -31,6 +31,9 @@ import DashboardMenteeMateriSkeleton from "@/components/DashboardMenteeMateriSke
 import ReactLinkify from "react-linkify";
 import renderLink from "@/utils/RenderLink";
 import DialogProgramCompleted from "@/components/DialogProgramCompleted";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardMenteeMateri() {
   const { id } = useParams();
@@ -129,8 +132,46 @@ export default function DashboardMenteeMateri() {
     return <DashboardMenteeMateriSkeleton />;
   }
 
+  if (!displayMateri || !program_name) {
+    return <div className="text-center p-10">Loading...</div>;
+  }
+
+  // let program_name = program_name.toString();
+
   return (
     <div className="max-w-7xl mx-auto">
+      {/* header html */}
+      <Helmet>
+        <title>{`${program_name} | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -147,23 +188,14 @@ export default function DashboardMenteeMateri() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
       <div className="min-h-screen  ">
         {/* header Section */}
-        <div className="bg-primary text-white p-6 md:p-8 rounded-xl md:rounded-2xl shadow-md mb-8 text-center">
-          <h1 className="text-xl md:text-3xl font-bold mb-3">{program_name}</h1>
-          <p className="text-sm md:text-base text-white/90 max-w-3xl mx-auto leading-relaxed break-words">
-            <div
-              className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5 
-      [&_ul]:list-disc [&_ul]:ml-5 
-      [&_li]:mb-1
-      [&_p]:mb-4 
-      [&_a]:text-blue-600 [&_a]:underline"
-              dangerouslySetInnerHTML={{
-                __html: program_description,
-              }}
-            />
-          </p>
-        </div>
+        <HeaderPage
+          title={program_name}
+          description={program_description}
+          badge={"Explore Materi"}
+        />
 
         <div className="container">
           {/* Accordion Materi, Quiz, Link Meeting */}
@@ -190,10 +222,10 @@ export default function DashboardMenteeMateri() {
                     <div className="py-3 text-gray-700">
                       {
                         <div
-                          className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5 
-      [&_ul]:list-disc [&_ul]:ml-5 
+                          className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5
+      [&_ul]:list-disc [&_ul]:ml-5
       [&_li]:mb-1
-      [&_p]:mb-4 
+      [&_p]:mb-4
       [&_a]:text-blue-600 [&_a]:underline"
                           dangerouslySetInnerHTML={{
                             __html: item.description,

@@ -1,7 +1,7 @@
-import useGetResponseAi from "@/hooks/hooksMentee/useGetResponseAi";
 import NotFounPages from "./NotFoundPages";
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 export default function RecomendationMajors({ responseAI }) {
   const navigate = useNavigate();
@@ -15,6 +15,38 @@ export default function RecomendationMajors({ responseAI }) {
   }
   return (
     <>
+      {/* header html */}
+      <Helmet>
+        <title>{`Rekomendasi Jurusan | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
       <div className="bg-gray-50 min-h-screen p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
           {/* Header dan judul */}

@@ -70,7 +70,7 @@ const SidebarWithNavbar = ({ children }) => {
       path: "/dashboard-mentee",
     },
     {
-      name: "Program",
+      name: "Trial Kuliah",
       icon: <GraduationCap size={18} />,
       path: "/dashboard-mentee/program",
     },

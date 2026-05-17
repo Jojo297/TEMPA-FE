@@ -30,6 +30,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import NotFounPages from "@/components/NotFoundPages";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 export default function DashboardBeranda() {
   const navigate = useNavigate();
@@ -107,7 +109,7 @@ export default function DashboardBeranda() {
       };
     }
 
-    // 4. Masuk ke switch statement jika program sudah dimulai atau selesai
+    // Masuk ke switch statement jika program sudah dimulai atau selesai
     switch (status) {
       case "uncompleted":
         return {
@@ -167,6 +169,39 @@ export default function DashboardBeranda() {
 
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
+      {/* header html */}
+      <Helmet>
+        <title>Dashboard Mentee | Tempa</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
+
       {/* notification */}
       {statusMajorInterest && (
         <Alert className="mb-4 bg-white border-indigo-100 shadow-sm py-3 px-4">

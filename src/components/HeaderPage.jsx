@@ -24,9 +24,21 @@ export default function HeaderPage({ title, description, badge }) {
         <div className="mb-8 h-[1px] w-24 bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
 
         {/* description */}
-        <p className="max-w-3xl text-base font-normal leading-relaxed text-white/80 md:text-md drop-shadow-sm">
-          {description}
+        <p className="max-w-3xl text-base font-normal leading-relaxed text-white/80 md:text-md drop-shadow-sm break-words">
+          <div
+            className="whitespace-pre-wrap  [&_ol]:list-decimal [&_ol]:ml-5
+    [&_ul]:list-disc [&_ul]:ml-5
+    [&_li]:mb-1
+    [&_p]:mb-4
+    [&_a]:text-blue-600 [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: description,
+            }}
+          />
         </p>
+        {/* <p className="max-w-3xl text-base font-normal leading-relaxed text-white/80 md:text-md drop-shadow-sm">
+          {description}
+        </p>*/}
       </div>
 
       {/* Glossy Overlay */}
