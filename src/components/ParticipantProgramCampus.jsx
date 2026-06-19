@@ -186,6 +186,7 @@ export default function ParticipantProgramCampus({
   const { isLoading, error, successMessage, sendBulkMessage } =
     useSendBulkMessage();
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
+  const [isPresensiDialogOpen, setIsPresensiDialogOpen] = useState(false);
   const [isPremiumDialogOpen, setIsPremiumDialogOpen] = useState(false);
   const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
     useState(false);
@@ -444,7 +445,8 @@ export default function ParticipantProgramCampus({
         isOpen={isInDevelopmentDialogOpen}
         idProgram={idProgram}
         onOpenChange={setIsInDevelopmentDialogOpen}
-        menteeList={selectedMentees}
+        selectedMentees={selectedMentees}
+        allMentee={menteeList}
       />
       <ParticipantAnalytics
         menteeList={menteeList}
@@ -482,7 +484,7 @@ export default function ParticipantProgramCampus({
                 className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
               >
                 <Award size={16} />
-                Generate Sertifikat ({selectedMentees.length})
+                Generate Sertifikat
               </Button>
             ) : (
               // if subscription
@@ -492,7 +494,7 @@ export default function ParticipantProgramCampus({
                 className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
               >
                 <Award size={16} />
-                Generate Sertifikat ({selectedMentees.length})
+                Generate Sertifikat
               </Button>
             )}
             {/* button send bulk message */}
@@ -609,7 +611,10 @@ export default function ParticipantProgramCampus({
               </>
             )}
             {/* button generate qr-code */}
-            <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
+            <Dialog
+              open={isPresensiDialogOpen}
+              onOpenChange={setIsPresensiDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button
                   variant="outline"

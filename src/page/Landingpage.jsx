@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { useAnimation, useInView, motion } from "framer-motion";
 
 import {
   ChevronLeft,
@@ -43,7 +43,6 @@ import peta from "../assets/Peta.png";
 import { NavbarLandingPage } from "@/components/NavbarLandingPage";
 import { kampusList } from "@/lib/kampusList";
 import { Helmet } from "react-helmet-async";
-import preview from "@/../public/web-preview.png";
 
 // dummy data
 const filteredPrograms = [
@@ -67,7 +66,7 @@ const filteredPrograms = [
     program_name: "Trial Kuliah: Pengantar Manajemen Bisnis",
     major_name: "Manajemen Bisnis",
     campus_name: "Universitas Indobaru Nasional",
-    type_sesi: "Offline",
+    type_sesi: "Onsite",
     capacity: 30,
     image_url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
     description:
@@ -82,7 +81,7 @@ const filteredPrograms = [
     program_name: "Trial Kuliah: Jaringan Komputer & Cyber Security",
     major_name: "Teknik Multimedia & Jaringan",
     campus_name: "Politeknik Negeri Batam",
-    type_sesi: "Hybrid",
+    type_sesi: "Online",
     capacity: 40,
     image_url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
     description:
@@ -146,16 +145,6 @@ const LandingPage = () => {
 
   const duplicatedList = Array(8).fill(kampusList).flat();
 
-  // Autoplay carousel tiap 2 detik
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) =>
-        prev === kampusList.length - 1 ? 0 : prev + 1,
-      );
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [kampusList.length]);
-
   const stats = [
     { angka: 1000, label: "Mentee" },
     { angka: 1000, label: "Mentor" },
@@ -180,37 +169,10 @@ const LandingPage = () => {
     requestAnimationFrame(animate);
   }, []);
 
-  // badge for status program
-  const getBadgeClass = (start_date, end_date) => {
-    const today = new Date();
-    const startDate = new Date(start_date);
-    const endDate = new Date(end_date);
-
-    if (endDate.getTime() < today.getTime()) {
-      return {
-        text: "Tutup",
-        bgColor: "bg-red-100",
-        textColor: "text-red-800",
-      };
-    } else if (startDate.getTime() > today.getTime()) {
-      return {
-        text: "Segera Buka",
-        bgColor: "bg-blue-100",
-        textColor: "text-blue-800",
-      };
-    } else {
-      return {
-        text: "Buka",
-        bgColor: "bg-green-200",
-        textColor: "text-green-800",
-      };
-    }
-  };
-
   // get location if type program onsite
   const getLocation = (status, item) => {
     switch (status) {
-      case "online":
+      case "Online":
         return "Zoom/Gmeet";
       case "onsite":
         return item.onsiteLocationName;
@@ -226,42 +188,19 @@ const LandingPage = () => {
       return num + " Orang";
     }
   };
+  const getSession = (type) => {
+    switch (type) {
+      case "Online":
+        return "text-blue-600 bg-blue-100";
+      case "Onsite":
+        return "text-gray-600 bg-gray-100";
+      default:
+        return "text-gray-600 bg-gray-100";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAF8] font-sans pt-20">
-      {/* header html */}
-      <Helmet>
-        <title>Tempa | Eksplorasi Masa Depan & Persiapan Kuliah</title>
-        <meta
-          name="description"
-          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
-        />
-        <meta
-          name="keywords"
-          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
-        />
-        <link rel="canonical" href="https://tempaa.ddns.net" />
-        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:title"
-          content="Eksplorasi Masa Depanmu Bersama TEMPA"
-        />
-        <meta
-          property="og:description"
-          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
-        />
-        <meta property="og:image" content={preview} />
-        <meta
-          name="twitter:title"
-          content="TEMPA - Bangun Masa Depan Bersama"
-        />
-        <meta
-          name="twitter:description"
-          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
-        />
-      </Helmet>
-
       {/* Navbar */}
       <NavbarLandingPage
         isDialogOpen={isDialogOpen}
@@ -294,7 +233,7 @@ const LandingPage = () => {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className=" lg:flex lg:w-1/2 lg:pt-20 justify-start"
             >
-              <div className="relative lg:w-[480px] lg:h-[580px] xl:w-[520px] xl:h-[620px] p-4">
+              <div className="relative hidden lg:flex lg:w-[480px] lg:h-[580px] xl:w-[520px] xl:h-[620px] p-4">
                 {" "}
                 <img
                   src={img2}
@@ -323,9 +262,9 @@ const LandingPage = () => {
               </h1>
 
               <p className="mt-6 text-base md:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                TEMPA adalah platform pengembangan diri dan edukasi digital yang
-                membantu kamu menemukan potensi, belajar dengan cara baru, dan
-                mempersiapkan masa depan dengan lebih percaya diri.
+                TEMPA adalah platform edukasi digital untuk coba kuliah sebelum
+                mendaftar ke perguruan tinggi. Ikuti berbagai pilihan trial
+                kuliah gratis untuk temukan jurusan yang pas buat masa depanmu.
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -460,21 +399,6 @@ const LandingPage = () => {
                         minHeight: "200px",
                       }}
                     >
-                      {/* Completion Status */}
-                      {(() => {
-                        // get badge status
-                        const statusData = getBadgeClass(
-                          item.start_regis_date,
-                          item.end_regis_date,
-                        );
-                        return (
-                          <div
-                            className={`absolute top-4 z-10 px-3 py-1 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0 ${statusData.bgColor} ${statusData.textColor}`}
-                          >
-                            {statusData.text}
-                          </div>
-                        );
-                      })()}
                       <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-lg">
                         {item.program_name}
                       </h3>
@@ -491,20 +415,22 @@ const LandingPage = () => {
                           <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
                             {item.major_name}
                           </div>
-                          <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0">
+                          <div
+                            className={`px-3 py-1 ${getSession(item.type_sesi)} rounded-full text-xs sm:text-sm font-medium mt-2 sm:mt-0`}
+                          >
                             {item.type_sesi}
                           </div>
                         </div>
 
                         {/* description */}
-                        <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2 break-words">
+                        <div className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2 break-words">
                           <div
                             className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
                             dangerouslySetInnerHTML={{
                               __html: item.description,
                             }}
                           />
-                        </p>
+                        </div>
 
                         {/* date and location */}
                         <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-xs sm:text-sm mb-6 border-t pt-4">
@@ -757,8 +683,15 @@ const LandingPage = () => {
             </p>
             <div className="flex space-x-4 mt-5 text-xl">
               <FaFacebookF className="hover:text-[#75B4C6] cursor-pointer" />
-              <FaInstagram className="hover:text-[#75B4C6] cursor-pointer" />
+              <a
+                href="https://www.instagram.com/tempa.explore?igsh=cWJ4c29iZnlndHQy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram className="hover:text-[#75B4C6] cursor-pointer" />
+              </a>
               <FaYoutube className="hover:text-[#75B4C6] cursor-pointer" />
+
               <FaXTwitter className="hover:text-[#75B4C6] cursor-pointer" />
             </div>
           </div>

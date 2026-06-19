@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Beritahu mesin pencari di mana lokasi sitemap-nya
-Sitemap: https://tempa.ddnsking.com/sitemap.xml
+Sitemap: https://tempaa.ddns.net/sitemap.xml

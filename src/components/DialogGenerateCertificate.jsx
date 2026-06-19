@@ -8,6 +8,8 @@ import {
   MedalIcon,
   Medal,
   Award,
+  Mails,
+  MailCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button"; // Pastikan path button sesuai
 import useGenerateCertificate from "@/hooks/hooksCampus/useGenerateCertificate";
@@ -17,7 +19,8 @@ export const DialogGenerateCertificate = ({
   isOpen,
   onOpenChange,
   idProgram,
-  menteeList = [],
+  selectedMentees = [],
+  allMentee,
 }) => {
   const token = localStorage.getItem("userJwt");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -25,19 +28,40 @@ export const DialogGenerateCertificate = ({
     useGenerateCertificate();
 
   if (!isOpen) return null;
-  //   console.log(menteeList);
-  //   only get id mentees
-  const menteeId = menteeList.map((mentee) => mentee.id);
-  // console.log(menteeId);
+  const SelectedMenteeId = selectedMentees.map((mentee) => mentee.id);
+  const AllMenteeId = allMentee.map((mentee) => mentee.id);
+  // console.log("selected mentee", SelectedMenteeId);
+  // console.log("all mentee", AllMenteeId);
 
-  const handleGenerate = async () => {
+  // send selected mentee
+  const handleSelectedMentee = async () => {
     setIsGenerating(true);
     try {
       const payload = {
-        menteeId: menteeId,
+        menteeId: SelectedMenteeId,
         idProgram: idProgram,
       };
-      // console.log(payload);
+      console.log("ini di dialog: ", payload);
+      const result = await generateCertificate(token, payload);
+      toast.success(result);
+      setIsGenerating(false);
+      onOpenChange(false);
+    } catch (error) {
+      setIsGenerating(false);
+      console.log(error);
+      toast.error("Gagal menghasilkan sertifikat!", message);
+    }
+  };
+
+  // send all mentee
+  const handleAllMentee = async () => {
+    setIsGenerating(true);
+    try {
+      const payload = {
+        menteeId: AllMenteeId,
+        idProgram: idProgram,
+      };
+      // console.log("ini di dialog: ", payload);
       const result = await generateCertificate(token, payload);
       toast.success(result);
       setIsGenerating(false);
@@ -72,10 +96,8 @@ export const DialogGenerateCertificate = ({
             </h3>
             <p className="text-gray-500 text-sm">
               Sistem akan memproses sertifikat untuk{" "}
-              <span className="font-semibold text-gray-700">
-                {menteeList.length} mentee
-              </span>{" "}
-              yang terpilih.
+              <span className="font-semibold text-gray-700">mentee</span> yang
+              terpilih.
             </p>
           </div>
 
@@ -97,26 +119,50 @@ export const DialogGenerateCertificate = ({
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-3">
+            {/* Button send all mentee */}
             <Button
-              onClick={handleGenerate}
-              disabled={isGenerating || menteeList.length === 0}
+              onClick={handleAllMentee}
+              disabled={isGenerating || allMentee.length === 0}
               className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
             >
               {isGenerating ? (
-                <>Memproses...</>
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Memproses...
+                </>
               ) : (
                 <>
-                  <Mail className="w-4 h-4" />
-                  Generate & Kirim Sekarang
+                  <Mails className="w-5 h-5" />
+                  Kirim ke Semua Mentee ({allMentee.length})
                 </>
               )}
             </Button>
 
+            {/* Button send selected mentee */}
+            <Button
+              onClick={handleSelectedMentee}
+              disabled={isGenerating || selectedMentees.length === 0}
+              className="w-full bg-white border-2 border-primary text-primary hover:bg-primary/5 font-bold py-6 rounded-xl transition-all flex items-center justify-center gap-2"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Memproses...
+                </>
+              ) : (
+                <>
+                  <MailCheck className="w-5 h-5" />
+                  Kirim ke Mentee Terpilih ({selectedMentees.length})
+                </>
+              )}
+            </Button>
+
+            {/* Button cancel */}
             <Button
               variant="ghost"
               onClick={() => !isGenerating && onOpenChange(false)}
               disabled={isGenerating}
-              className="w-full text-gray-400 hover:text-gray-600 font-medium"
+              className="w-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 font-medium py-6 rounded-xl transition-all"
             >
               Batal
             </Button>
