@@ -21,6 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminCampus() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function DashboardAdminCampus() {
 
   // search campus by name
   const filteredCampus = displayCampus.filter((item) =>
-    item.campus_name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.campus_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // fetch all campus
@@ -92,16 +93,15 @@ export default function DashboardAdminCampus() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className=" mb-8 text-center">
-        <div className="bg-primary text-white rounded-xl p-6 shadow">
-          <h1 className="text-2xl font-bold mb-2">Kampus</h1>
-          <p className="text-sm max-w-2xl mx-auto">
-            Kelola data kampus yang terdaftar dalam sistem. Lakukan verifikasi
-            terhadap pengajuan kampus baru, pantau status pendaftaran, dan
-            pastikan informasi kampus yang ditampilkan valid.
-          </p>
-        </div>
-      </div>
+
+      {/* header */}
+      <HeaderPage
+        title={"Kampus"}
+        description={
+          " Kelola data kampus yang terdaftar dalam sistem. Lakukan verifikasi terhadap pengajuan kampus baru, pantau status pendaftaran, dan pastikan informasi kampus yang ditampilkan valid."
+        }
+        badge={"Manage Campus"}
+      />
       {/* verivication campus */}
       <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
@@ -163,7 +163,7 @@ export default function DashboardAdminCampus() {
                     <TableCell>
                       <span
                         className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
-                          item.verification_status
+                          item.verification_status,
                         )} font-semibold whitespace-nowrap`}
                       >
                         {getStatusLabel(item.verification_status)}
@@ -174,7 +174,7 @@ export default function DashboardAdminCampus() {
                         <button
                           onClick={() =>
                             navigate(
-                              `/dashboard-admin/detail-kampus/${item.id}`
+                              `/dashboard-admin/detail-kampus/${item.id}`,
                             )
                           }
                           className="px-4 py-1.5 text-sm hover:underline"
@@ -185,7 +185,7 @@ export default function DashboardAdminCampus() {
                         <Button
                           onClick={() =>
                             navigate(
-                              `/dashboard-admin/verifikasi-campus/${item.id}`
+                              `/dashboard-admin/verifikasi-campus/${item.id}`,
                             )
                           }
                           className="bg-secondary text-white font-semibold px-6 py-1.5 text-sm rounded-md shadow-sm hover:bg-secondary hover:opacity-45 transition"

@@ -37,6 +37,7 @@ import { CampusSearchMajors } from "@/components/CampusSearchMajors";
 import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
 import NotFounPages from "@/components/NotFoundPages";
+import HeaderPage from "@/components/HeaderPage";
 // import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
@@ -47,11 +48,13 @@ export default function DashboardCampusProgram() {
   const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
     useGetAllProgram();
 
+  const ScrollTop = () => window.scrollTo(0, 0);
+
   useEffect(() => {
     if (!token) return;
 
     getAllPrograms(token);
-  }, [token]);
+  }, [token, getAllPrograms]);
 
   // Data program
   const programs = allPrograms || [];
@@ -184,15 +187,13 @@ export default function DashboardCampusProgram() {
         </div>
 
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="bg-primary text-white rounded-xl p-6 shadow">
-            <h1 className="text-2xl font-bold mb-2">Program</h1>
-            <p className="text-sm max-w-2xl mx-auto">
-              Tarik perhatian calon mentee unggulan! Publikasikan dan kelola
-              berbagai program kampus Anda.
-            </p>
-          </div>
-        </div>
+        <HeaderPage
+          title={"Program"}
+          description={
+            "Tarik perhatian calon mentee unggulan! Publikasikan dan kelola berbagai program kampus Anda."
+          }
+          badge={"Manage Program"}
+        />
 
         {/* Filters */}
         <section>
@@ -256,7 +257,7 @@ export default function DashboardCampusProgram() {
                         // get badge status
                         const statusData = getBadgeClass(
                           item.start_date,
-                          item.end_date
+                          item.end_date,
                         );
                         return (
                           <div
@@ -270,7 +271,7 @@ export default function DashboardCampusProgram() {
                       {/* visibility */}
                       {(() => {
                         const getVisibility = getBadgeVisibility(
-                          item.visibility
+                          item.visibility,
                         );
                         return (
                           <Tooltip>
@@ -309,7 +310,12 @@ export default function DashboardCampusProgram() {
                         </div>
                       </div>
                       <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                        {item.description}
+                        <div
+                          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                          dangerouslySetInnerHTML={{
+                            __html: item.description,
+                          }}
+                        />
                       </p>
 
                       <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
@@ -320,7 +326,7 @@ export default function DashboardCampusProgram() {
                               "id-ID",
                               {
                                 day: "numeric",
-                              }
+                              },
                             )}
                             {" - "}
                             {new Date(item.end_date).toLocaleDateString(
@@ -329,7 +335,7 @@ export default function DashboardCampusProgram() {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </div>
@@ -368,6 +374,7 @@ export default function DashboardCampusProgram() {
                         <DeleteProgram
                           idProgram={item.id}
                           programName={item.program_name}
+                          ScrollTop={() => ScrollTop()}
                           token={token}
                           refetch={() => getAllPrograms(token)}
                           className="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-500 hover:opacity-60 transition"

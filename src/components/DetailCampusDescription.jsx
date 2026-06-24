@@ -1,4 +1,13 @@
-import { Pencil, Save, X, Plus, Trash2, Loader2 } from "lucide-react";
+import {
+  Pencil,
+  Save,
+  X,
+  Plus,
+  Trash2,
+  Loader2,
+  ExternalLink,
+  Globe,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +17,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import useEditCampusInfo from "@/hooks/hooksCampus/useEditCampusInfo";
 import { toast } from "sonner";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Controller } from "react-hook-form";
 
 // Skema validasi menggunakan Zod
 const descriptionSchema = z.object({
+  campusWebsite: z
+    .string()
+    .url("Format URL tidak valid (contoh: https://kampus.ac.id)")
+    .min(1, "Website kampus wajib diisi."),
   description: z
     .string()
     .min(20, "Deskripsi harus memiliki minimal 20 karakter."),
@@ -19,7 +35,7 @@ const descriptionSchema = z.object({
     .array(
       z.object({
         value: z.string().min(5, "Misi harus memiliki minimal 5 karakter."),
-      })
+      }),
     )
     .min(1, "Minimal harus ada 1 misi."),
 });
@@ -59,35 +75,47 @@ export default function DetailCampusDescription({
     const missionArray = (DescriptionSection.visi?.mission || []).map((m) => ({
       value: m,
     }));
+
     reset({
+      campusWebsite: DescriptionSection.campusWebsite || "", // Tambahkan ini
       description: DescriptionSection.desc || "",
       vision: DescriptionSection.visi?.vision || "",
       mission: missionArray,
     });
-  }, [DescriptionSection]);
+  }, [DescriptionSection, reset]); // Tambahkan reset ke dependency
 
   const handleSave = async (data) => {
     const payload = {
       token,
+      campus_website: data.campusWebsite, // Tambahkan ini (sesuaikan key dengan backend)
       description: data.description,
       vision_mission: {
         vision: data.vision,
-        mission: data.mission.map((m) => m.value), // Ekstrak hanya value string
+        mission: data.mission.map((m) => m.value),
       },
     };
 
     try {
+      // Set loading state di sini jika ada (misal: setIsLoading(true))
+
       await editCampusDescription(payload);
+      // console.log(payload);
       toast.success("Deskripsi berhasil diperbarui!");
-      await refetchCampusData();
+
+      if (refetchCampusData) {
+        await refetchCampusData();
+      }
+
       setIsEditing(false);
+      window.scrollTo(0, 0);
     } catch (e) {
       toast.error(e.message || "Gagal menyimpan perubahan.");
+      console.error(e);
     }
   };
 
   const handleCancel = () => {
-    reset(); // Reset form ke defaultValues
+    reset(); // Reset form defaultValues
     setIsEditing(false);
   };
 
@@ -95,37 +123,90 @@ export default function DetailCampusDescription({
     <section className="bg-white rounded-2xl shadow-md p-8 md:p-10 space-y-6 w-full mt-5">
       <div className="flex justify-between items-start">
         <h2 className="text-2xl font-bold text-[#013B35]">Deskripsi Kampus</h2>
-        {isEditing ? (
-          <div className="flex gap-2">
+        <div className="flex gap-2">
+          {!isEditing ? (
+            <>
+              {/* button redirect */}
+              <Button
+                variant="outline"
+                className="border-[#013B35] text-[#013B35] hover:bg-[#013B35]/5"
+                onClick={() =>
+                  window.open(DescriptionSection.campusWebsite || "", "_blank")
+                }
+              >
+                <span>Lihat Website Kampus</span>
+                <ExternalLink size={16} className="ml-2" />
+              </Button>
+
+              {/* button edit */}
+              <Button
+                onClick={() => setIsEditing(true)}
+                className="flex items-center gap-2 bg-[#013B35] text-white"
+              >
+                <Pencil size={16} /> Edit Deskripsi
+              </Button>
+            </>
+          ) : (
             <Button
               variant="outline"
               onClick={handleCancel}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 border-red-500 text-red-500 hover:bg-red-50"
             >
-              <X size={16} /> Batal
+              <X size={16} /> Batal Edit
             </Button>
-          </div>
-        ) : (
-          <Button
-            onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 bg-[#013B35] text-white disabled:opacity-50"
-          >
-            <Pencil size={16} /> Edit Deskripsi
-          </Button>
-        )}
+          )}
+        </div>
       </div>
 
       {isEditing ? (
-        <form onSubmit={handleSubmit(handleSave)} className="space-y-6">
-          <Textarea
-            {...register("description")}
-            className="w-full mt-4 leading-relaxed"
-            rows={5}
-            placeholder="Tulis deskripsi tentang kampus Anda..."
-          />
-          {errors.description && (
-            <p className="text-sm text-red-500">{errors.description.message}</p>
-          )}
+        <form
+          onSubmit={handleSubmit(handleSave)}
+          className="space-y-6 bg-gray-50/50 p-6 rounded-xl border border-dashed border-gray-300"
+        >
+          {/* input website */}
+          <div className="space-y-2">
+            <label className="font-semibold text-lg flex items-center gap-2">
+              <Globe size={18} className="text-[#013B35]" /> URL Website Kampus
+            </label>
+            <Input
+              {...register("campusWebsite")}
+              placeholder="https://contohkampus.ac.id"
+              className="bg-white"
+            />
+
+            {errors.campusWebsite && (
+              <p className="text-sm text-red-500">
+                {errors.campusWebsite.message}
+              </p>
+            )}
+          </div>
+
+          {/* input description */}
+          <div className="space-y-2">
+            <label className="font-semibold text-lg mb-2">
+              Deskripsi Kampus
+            </label>
+
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <ReactQuill
+                  {...field}
+                  theme="snow"
+                  placeholder="Tulis deskripsi tentang kampus Anda..."
+                  onChange={(content) => field.onChange(content)}
+                  className={`bg-white ${errors.description ? "border-red-500" : ""}`}
+                />
+              )}
+            />
+
+            {errors.description && (
+              <p className="text-sm text-red-500">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
 
           <div>
             <h3 className="font-semibold text-lg mb-2">Visi</h3>
@@ -195,9 +276,20 @@ export default function DetailCampusDescription({
         </form>
       ) : (
         <>
-          <p className="text-gray-700 mt-4 leading-relaxed">
-            {DescriptionSection.desc || "Deskripsi belum ditambahkan."}
-          </p>
+          <div className="text-gray-700 mt-4 w-full overflow-hidden break-words">
+            <div
+              className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{
+                __html:
+                  DescriptionSection.desc || "Deskripsi belum ditambahkan.",
+              }}
+            />
+          </div>
           <div className="mt-6">
             <h3 className="font-semibold text-lg">Visi</h3>
             <p className="text-gray-700 mt-2">

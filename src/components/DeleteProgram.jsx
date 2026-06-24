@@ -13,6 +13,8 @@ import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
 import { AlertTriangle, AlertTriangleIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
+import { useState } from "react";
 
 export default function DeleteProgram({
   idProgram,
@@ -20,18 +22,24 @@ export default function DeleteProgram({
   token,
   className,
   refetch,
+  ScrollTop,
 }) {
   const navigate = useNavigate();
   const { deleteProgram, isLoading, error, data } = useUpdateProgram();
+  const [isOpend, setIsOpen] = useState(false);
 
   const isClassNameEmpty = !className || className.trim() === "";
-  //   console.log(isClassNameEmpty);
+  // console.log(programName);
 
   const handleDeleteProgram = async (idProgram) => {
     try {
       await deleteProgram(token, idProgram);
+
+      await refetch();
+
       toast.success("Program berhasil dihapus!");
-      refetch();
+      setIsOpen(false);
+      ScrollTop();
     } catch (error) {
       toast.error(error.message || "Gagal menghapus program.");
       console.error(error);
@@ -39,7 +47,7 @@ export default function DeleteProgram({
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpend} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <button
           className={
@@ -69,37 +77,27 @@ export default function DeleteProgram({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        {/* --- Bagian Peringatan Kustom (Mengikuti Style Gambar) --- */}
-        {/* <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg flex items-start gap-3">
-          <AlertTriangle
-            size={20}
-            className="mt-0.5 text-red-500 flex-shrink-0"
-          />
-          <div>
-            <p className="font-bold text-sm">Warning</p>
-            <p className="text-sm">
-              Dengan menghapus program ini, **89** aktivitas/data lain yang
-              terkait juga akan **dihapus secara permanen**.
-            </p>
-          </div>
-        </div> */}
-        {/* -------------------------------------------------------- */}
-
-        <AlertDialogFooter className="mt-6 flex justify-end gap-3">
-          {/* Tombol Batal */}
+        <div className="mt-6 flex justify-end gap-3">
+          {/* Button Cancel */}
           <AlertDialogCancel className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg">
             Batal
           </AlertDialogCancel>
 
-          {/* Tombol Hapus (Mengikuti Style Merah di Gambar) */}
-          <AlertDialogAction
+          {/* Button Confirm */}
+          <Button
             onClick={() => handleDeleteProgram(idProgram)}
             disabled={isLoading}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1"
           >
-            {isLoading ? "Loading..." : ((<Trash2 size={16} />), "Hapus")}
-          </AlertDialogAction>
-        </AlertDialogFooter>
+            {isLoading ? (
+              "Loading..."
+            ) : (
+              <>
+                <Trash2 size={16} /> Hapus
+              </>
+            )}
+          </Button>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   );

@@ -1,4 +1,5 @@
 import { X, Pencil, Calendar } from "lucide-react";
+import { differenceInDays, parseISO, format, addDays } from "date-fns";
 
 /* ========================== COMPONENT INFO ========================== */
 function Info({ label, value }) {
@@ -20,6 +21,8 @@ export default function DescriptionProgramCampus({ program }) {
       ? program.terms_and_conditions.split(",").map((item) => item.trim())
       : program.terms_and_conditions || [];
 
+  // console.log(program);
+
   const getTypeSesi = (sesi) => {
     switch (sesi) {
       case "online":
@@ -32,9 +35,18 @@ export default function DescriptionProgramCampus({ program }) {
   };
 
   const formatDateRange = (startDate, endDate) => {
+    // console.log(startDate, endDate);
     if (!startDate || !endDate) return "-";
     const start = new Date(startDate);
     const end = new Date(endDate);
+
+    const totdalDays =
+      startDate && endDate
+        ? differenceInDays(new Date(endDate), new Date(startDate)) + 1
+        : 0;
+
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     const fullOptions = {
       year: "numeric",
@@ -45,34 +57,28 @@ export default function DescriptionProgramCampus({ program }) {
 
     const startYear = start.getUTCFullYear();
     const endYear = end.getUTCFullYear();
-
-    if (startYear !== endYear) {
-      return `${start.toLocaleDateString(
-        "id-ID",
-        fullOptions
-      )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
-    }
-
     const startMonth = start.getUTCMonth();
     const endMonth = end.getUTCMonth();
 
-    if (startMonth !== endMonth) {
+    let formattedDate = "";
+
+    // Logika format teks tanggal
+    if (startYear !== endYear) {
+      formattedDate = `${start.toLocaleDateString("id-ID", fullOptions)} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    } else if (startMonth !== endMonth) {
       const startFormatted = start.toLocaleDateString("id-ID", {
         day: "numeric",
         month: "long",
         timeZone: "UTC",
       });
-      return `${startFormatted} - ${end.toLocaleDateString(
-        "id-ID",
-        fullOptions
-      )}`;
+      formattedDate = `${startFormatted} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    } else {
+      const startDay = start.getUTCDate();
+      formattedDate = `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
     }
 
-    const startDay = start.toLocaleDateString("id-ID", {
-      day: "numeric",
-      timeZone: "UTC",
-    });
-    return `${startDay} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
+    // Gabungkan dengan durasi
+    return `${formattedDate} (${totdalDays} hari)`;
   };
 
   const getMapsUrl = (lat, lng) => {
@@ -125,14 +131,14 @@ export default function DescriptionProgramCampus({ program }) {
               label="Buka Pendaftaran"
               value={formatDateRange(
                 program.start_regis_date,
-                program.end_regis_date
+                program.end_regis_date,
               )}
             />
             <Info
               label="Tanggal Pelaksanaan"
               value={formatDateRange(
                 program.start_program_date,
-                program.end_program_date
+                program.end_program_date,
               )}
             />
             {program.type_sesi !== "online" && (
@@ -160,9 +166,20 @@ export default function DescriptionProgramCampus({ program }) {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <p className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
-                {program.description || "-"}
-              </p>
+              <div className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+                <div
+                  className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      program.description || "Deskripsi belum ditambahkan.",
+                  }}
+                />
+              </div>
             </div>
 
             <div className="col-span-2">

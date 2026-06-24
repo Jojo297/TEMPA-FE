@@ -4,10 +4,11 @@ import { isTokenValid } from "@/utils/authHelper"; // Import fungsi dari langkah
 const ProtectedRoute = ({ allowedRoles, Component }) => {
   const token = localStorage.getItem("userJwt");
   const isAuthenticated = isTokenValid(token, allowedRoles);
+  const location = useLocation();
 
   if (!isAuthenticated) {
     // Jika tidak valid, redirect ke halaman depan ('/' adalah halaman login/homepage)
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   return (

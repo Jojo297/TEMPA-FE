@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -55,6 +55,7 @@ import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useAddProgram from "@/hooks/hooksMentor/useAddProgram";
 import { toast } from "sonner";
 import { SearchMajorsProgramFormMentor } from "@/components/SearchMajorsProgramFormMentor";
+import useGetBalance from "@/hooks/hooksMentor/useGetBalance";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -81,7 +82,7 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           variant={"outline"}
           className={cn(
             "w-full justify-between text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value
@@ -104,10 +105,6 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
     </Popover>
   );
 };
-// =====================================================================
-// 1. KONSTANTA DAN SKEMA VALIDASI ZOD
-// 1. DEFINISI SKEMA VALIDASI DENGAN ZOD (DIMODIFIKASI)
-// =====================================================================
 
 const MAX_FILE_SIZE = 2000000; // 2MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -124,11 +121,11 @@ const ProgramSchema = z
       .refine((files) => files?.length == 1, "Banner gambar wajib diunggah.")
       .refine(
         (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-        `Ukuran file maksimal adalah 2MB.`
+        `Ukuran file maksimal adalah 2MB.`,
       )
       .refine(
         (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        ".jpg, .jpeg, .png dan .webp adalah format yang didukung."
+        ".jpg, .jpeg, .png dan .webp adalah format yang didukung.",
       ),
     name: z.string().min(3, "Nama program harus memiliki minimal 3 karakter."),
     majorName: z
@@ -195,7 +192,7 @@ const ProgramSchema = z
     {
       message: "Nama tempat dan lokasi peta wajib diisi untuk program Onsite.",
       path: ["onsiteLocationName"],
-    }
+    },
   );
 
 // =====================================================================
@@ -224,16 +221,31 @@ export default function DashboardMentorAddProgram() {
     terms: [],
     imageUrl: "",
   };
-
+  const token = localStorage.getItem("userJwt");
   const [newBenefit, setNewBenefit] = useState("");
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  // Panggil hook untuk add program
+  // hook add program
   const { addProgram, isLoading, error } = useAddProgram();
+  const {
+    balance,
+    quotaMentee,
+    isLoadingWallet,
+    error: errorWallet,
+    getWallet,
+  } = useGetBalance();
 
-  // 2. Setup React Hook Form dan Zod Resolver
+  useEffect(() => {
+    if (token) {
+      getWallet(token);
+    }
+  }, [token, getWallet]);
+
+  const displayQuotaMentee = quotaMentee ?? 0;
+  // console.log(displayQuotaMentee);
+
   const form = useForm({
     // Gunakan nama variabel 'form' untuk props FormField
     resolver: zodResolver(ProgramSchema),
@@ -293,6 +305,14 @@ export default function DashboardMentorAddProgram() {
     if (!token) {
       alert("Sesi Anda telah berakhir. Silakan login kembali.");
       return;
+    }
+
+    if (data.capacity > displayQuotaMentee) {
+      form.setError("capacity", {
+        type: "manual",
+        message: `Kuota melebihi batas langganan Anda. Sisa kuota saat ini: ${displayQuotaMentee}. Silakan isi ulang saldo wallet Anda.`,
+      });
+      return; // Berhenti disini
     }
 
     // 1. Buat objek FormData
@@ -582,20 +602,48 @@ export default function DashboardMentorAddProgram() {
                 <ShadcnFormField
                   control={control}
                   name="capacity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kuota Peserta</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Contoh: 50"
-                          {...field}
-                          min="1"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const isOverLimit = field.value > displayQuotaMentee;
+
+                    return (
+                      <FormItem>
+                        <div className="flex justify-between items-end">
+                          <FormLabel>Kuota Peserta</FormLabel>
+                          <span
+                            className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${
+                              isOverLimit
+                                ? "bg-red-50 text-red-600 border-red-100"
+                                : "bg-emerald-50 text-emerald-700 border-emerald-100"
+                            }`}
+                          >
+                            Tersedia: {displayQuotaMentee} Peserta
+                          </span>
+                        </div>
+
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Contoh: 50"
+                            {...field}
+                            className={
+                              isOverLimit
+                                ? "border-red-500 focus-visible:ring-red-500"
+                                : ""
+                            }
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+
+                        <FormDescription className="text-[11px] leading-relaxed">
+                          <span>
+                            Jumlah peserta yang dapat ditampung dalam program
+                            ini. Pastikan kuota mencukupi kapasitas mentor.
+                          </span>
+                        </FormDescription>
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 {/* ========================================================= */}
@@ -755,7 +803,7 @@ export default function DashboardMentorAddProgram() {
                                   handleAddListItem(
                                     "benefit",
                                     newBenefit,
-                                    setNewBenefit
+                                    setNewBenefit,
                                   )
                                 }
                                 disabled={newBenefit.trim() === ""}

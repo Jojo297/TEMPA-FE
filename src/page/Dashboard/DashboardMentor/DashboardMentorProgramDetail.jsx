@@ -60,14 +60,14 @@ export default function DashboardMentorProgramDetail() {
 
       if (result.success) {
         toast.success(
-          result.message || "Mentor berhasil dihapus dari program."
+          result.message || "Mentor berhasil dihapus dari program.",
         );
         fetchDetailProgram(token, idProgram); // Muat ulang data program
       } else {
         toast.error(result.error || "Gagal menghapus mentor.");
       }
     },
-    [token, idProgram, fetchDetailProgram, deleteMentorFromProgram]
+    [token, idProgram, fetchDetailProgram, deleteMentorFromProgram],
   );
 
   if (isLoading) {
@@ -205,6 +205,12 @@ export default function DashboardMentorProgramDetail() {
                   menteeList={program.mentee_list}
                   idCampus={program.idCampus}
                   token={token}
+                  sendMail={program.send_mail}
+                  startProgram={program.start_program_date}
+                  endProgram={program.end_program_date}
+                  expiredPresensi={program.expired_presensi}
+                  idProgram={program.id}
+                  attendance_list={program.attendance_list}
                 />
               </TabsContent>
 

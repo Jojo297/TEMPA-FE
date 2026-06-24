@@ -30,42 +30,11 @@ import useGetAllMentors from "@/hooks/hooksCampus/useGetAllMentors"; // Impor ho
 import useDetailCampus from "@/hooks/hooksCampus/useDetailCampus"; // Impor hook untuk detail kampus
 import { Button } from "@/components/ui/button";
 import { getColumns } from "@/components/columns";
-import { DataTable } from "@/components/data-table";
-
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import DashboardCampusBerandaSkeleton from "@/components/DashboardCampusBerandaSkeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Skema validasi untuk form tambah mentor
 const addMentorSchema = z
@@ -104,7 +73,6 @@ export default function DashboardCampusBeranda() {
   const { detailCampus, fetchDetailCampus } = useDetailCampus(); // Gunakan hook untuk mendapatkan detail kampus
   const { addMentor, isLoading: isAddingMentor } = useAddMentor();
   const {
-    // Pastikan ini ada
     mentors,
     isLoading: isLoadingMentors,
     fetchMentors,
@@ -124,6 +92,7 @@ export default function DashboardCampusBeranda() {
     },
   });
 
+  // add new mentor
   const onSubmit = async (values) => {
     const payload = {
       name: values.name,
@@ -145,6 +114,7 @@ export default function DashboardCampusBeranda() {
     }
   };
 
+  // delete mentor
   const handleDeleteMentor = useCallback(
     async (mentor) => {
       const result = await deleteMentor(token, mentor.id);
@@ -155,7 +125,7 @@ export default function DashboardCampusBeranda() {
         toast.error(result.error);
       }
     },
-    [token, deleteMentor, fetchMentors]
+    [token, deleteMentor, fetchMentors],
   );
 
   // fetch program for chart
@@ -176,7 +146,7 @@ export default function DashboardCampusBeranda() {
 
   const columns = useMemo(
     () => getColumns(handleDeleteMentor, () => fetchMentors(token)),
-    [handleDeleteMentor, fetchMentors, token]
+    [handleDeleteMentor, fetchMentors, token],
   );
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -365,185 +335,6 @@ export default function DashboardCampusBeranda() {
           <div className="text-center mt-4 text-xs text-gray-600">
             Data Pendaftaran Mentee Total (Per Program)
           </div>
-        </section>
-
-        {/* Mentor Section */}
-        <section className="bg-white rounded-xl p-6 pt-6 text-gray-800 shadow-md border">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-            <h3 className="text-lg font-semibold text-[#013D3A]">
-              Kelola Mentor
-            </h3>
-
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <Form {...form}>
-                <DialogTrigger asChild>
-                  <button className="bg-[#013D3A] text-white hover:bg-[#015f53] flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors">
-                    <Plus size={16} /> Tambah Mentor
-                  </button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-white">
-                  <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <DialogHeader>
-                      <DialogTitle>Tambah Mentor Baru</DialogTitle>
-                      <DialogDescription>
-                        Masukkan data mentor untuk mendaftarkannya ke dalam
-                        sistem.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nama Mentor</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Masukkan nama lengkap"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="mentor_type"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Tipe Mentor</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Pilih tipe mentor" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="default">Default</SelectItem>
-                                <SelectItem value="super_mentor">
-                                  Super Mentor
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="nik"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>NIK</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Masukkan NIK" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Minimal 8 karakter"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Konfirmasi Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Ulangi password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit" disabled={isAddingMentor}>
-                        {isAddingMentor && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        {isAddingMentor ? "Menyimpan..." : "Simpan"}
-                      </Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Form>
-            </Dialog>
-          </div>
-
-          {/* informasi login mentor */}
-          <Alert className="relative overflow-hidden border-none bg-blue-50/50 px-4 py-3 shadow-sm ring-1 ring-blue-100">
-            {/* Aksen garis di samping */}
-            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500" />
-
-            <div className="flex items-start gap-3">
-              <AlertCircleIcon className="mt-0.5 h-5 w-5 text-blue-600" />
-              <div className="grid gap-1">
-                <AlertTitle className="text-sm font-bold leading-none tracking-tight text-blue-900">
-                  Informasi Login Mentor
-                </AlertTitle>
-                <AlertDescription className="text-sm flex gap-4 items-center leading-relaxed text-blue-700/90">
-                  <span>
-                    Silakan bagikan tautan ini kepada mentor Anda untuk masuk ke
-                    dalam sistem:{" "}
-                    <a
-                      href={`${window.location.origin}/login-mentor`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline font-medium hover:text-blue-900 break-all"
-                    >
-                      {`${DOMAIN_URL}/login-mentor`}
-                    </a>
-                  </span>
-                  {/* button save link */}
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="bg-white border-blue-300 text-blue-700 hover:bg-blue-100 shrink-0"
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        `${DOMAIN_URL}/login-mentor`
-                      );
-                      toast.success("Link berhasil disalin!");
-                    }}
-                  >
-                    <Copy size={14} className="mr-2" />
-                    Salin Link
-                  </Button>
-                </AlertDescription>
-              </div>
-            </div>
-          </Alert>
-
-          <DataTable
-            columns={columns}
-            data={mentors}
-            isLoading={isLoadingMentors}
-          />
         </section>
       </main>
     </>

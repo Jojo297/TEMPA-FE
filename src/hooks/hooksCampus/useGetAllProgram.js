@@ -31,7 +31,7 @@ const useGetAllProgram = create((set) => ({
    * @param {string} token - Token JWT otentikasi.
    */
   getAllPrograms: async (token) => {
-    set({ isLoadingPrograms: true, errorPrograms: null, allPrograms: null });
+    set({ isLoadingPrograms: true, errorPrograms: null });
 
     try {
       const API_URL = `${API_BASE_URL}/get-program-campus`;

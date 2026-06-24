@@ -46,6 +46,9 @@ import { SearchMajorsProgramForm } from "@/components/SearchMajorsProgramForm";
 import useUpdateProgram from "@/hooks/hooksCampus/useUpdateProgram";
 import { toast } from "sonner";
 import { EditSearchMajorsProgramForm } from "./EditSearchMajorsProgramForm";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
 
 // =====================================================================
 // KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
@@ -69,7 +72,7 @@ const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
           variant={"outline"}
           className={cn(
             "w-full justify-between text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value
@@ -114,7 +117,7 @@ const ProgramSchema = z
         // Izinkan jika tidak ada file (undefined) atau jika tidak ada file yang dipilih (panjang 0)
         (files) =>
           !files || files.length === 0 || files[0]?.size <= MAX_FILE_SIZE,
-        `Ukuran file maksimal adalah 2MB.`
+        `Ukuran file maksimal adalah 2MB.`,
       )
       .refine(
         // Izinkan jika tidak ada file atau jika tidak ada file yang dipilih
@@ -122,7 +125,7 @@ const ProgramSchema = z
           !files ||
           files.length === 0 ||
           ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
-        ".jpg, .jpeg, .png dan .webp adalah format yang didukung."
+        ".jpg, .jpeg, .png dan .webp adalah format yang didukung.",
       ),
     name: z.string().min(3, "Nama program harus memiliki minimal 3 karakter."),
     majorName: z
@@ -199,7 +202,7 @@ const ProgramSchema = z
     {
       message: "Nama tempat dan lokasi peta wajib diisi untuk program Onsite.",
       path: ["onsiteLocationName"],
-    }
+    },
   );
 
 // =====================================================================
@@ -208,11 +211,20 @@ const ProgramSchema = z
 export default function ProgramEditForm({ initialData, onClose, onSave }) {
   const navigate = useNavigate();
   const { updateProgram, isLoading } = useUpdateProgram();
+  const {
+    balance,
+    quotaMentee,
+    isLoadingWallet,
+    error: errorWallet,
+    getWallet,
+  } = useCreatePaymentIntent();
+
+  const token = localStorage.getItem("userJwt");
 
   const [newBenefit, setNewBenefit] = useState("");
   const [newTerm, setNewTerm] = useState("");
   const [bannerPreview, setBannerPreview] = useState(
-    initialData.image_url || null
+    initialData.image_url || null,
   );
   const [selectedLocation, setSelectedLocation] = useState(
     initialData.lat && initialData.lng
@@ -221,10 +233,18 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
           lat: initialData.lat,
           lng: initialData.lng,
         }
-      : null
+      : null,
   );
 
-  console.log("initialData:", initialData);
+  useEffect(() => {
+    if (token) {
+      getWallet(token);
+    }
+  }, [token, getWallet]);
+
+  const displayQuotaMentee = quotaMentee ?? 0;
+  // console.log("initialData:", initialData);
+  // console.log("id_major:", initialData.id_major);
 
   // Siapkan nilai default untuk formulir
   const defaultFormValues = {
@@ -259,13 +279,13 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
     benefits: Array.isArray(initialData.benefit)
       ? initialData.benefit
       : typeof initialData.benefit === "string"
-      ? initialData.benefit.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.benefit.split(",").map((s) => s.trim())
+        : [],
     terms: Array.isArray(initialData.terms_and_conditions)
       ? initialData.terms_and_conditions
       : typeof initialData.terms_and_conditions === "string"
-      ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
-      : [],
+        ? initialData.terms_and_conditions.split(",").map((s) => s.trim())
+        : [],
     imageUrl: initialData.image_url || "",
   };
 
@@ -295,7 +315,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
             lat: initialData.lat,
             lng: initialData.lng,
           }
-        : null
+        : null,
     );
   }, [initialData]);
 
@@ -334,7 +354,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
     if (isDirty) {
       if (
         window.confirm(
-          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?"
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda yakin ingin keluar?",
         )
       ) {
         onClose();
@@ -351,12 +371,25 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
       return;
     }
 
+    if (data.capacity > displayQuotaMentee) {
+      form.setError("capacity", {
+        type: "manual",
+        message: `Kuota melebihi batas langganan Anda. Sisa kuota saat ini: ${displayQuotaMentee}. Silakan isi ulang saldo wallet Anda.`,
+      });
+      return; // Berhenti disini
+    }
+
     const formData = new FormData();
 
     // Hanya tambahkan bannerImage jika ada file baru yang diunggah
     if (data.bannerImage && data.bannerImage.length > 0) {
       formData.append("bannerImage", data.bannerImage[0]);
     }
+
+    console.log("--- DEBUG DATA FORM ---");
+    console.log("Raw Data:", data);
+    console.log("Major Name ID:", data.majorName);
+    console.log("Benefits Array:", data.benefits);
 
     // Tambahkan field lainnya
     formData.append("name", data.name);
@@ -404,7 +437,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
       console.error("VALIDATION ERRORS:", errors);
       // Tampilkan error ke toast agar langsung terlihat
       toast.error(
-        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai."
+        "Ada kesalahan validasi pada formulir. Silakan periksa kolom yang ditandai.",
       );
     }
   }, [errors]);
@@ -642,23 +675,66 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
               <ShadcnFormField
                 control={control}
                 name="capacity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kuota Peserta</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Contoh: 50"
-                        {...field}
-                        min="1"
-                        onChange={(e) =>
-                          field.onChange(parseInt(e.target.value, 10))
-                        } // Pastikan tipe angka
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  // Hitung apakah input melebihi kuota yang tersedia
+                  const isOverLimit = field.value > displayQuotaMentee;
+
+                  return (
+                    <FormItem>
+                      <div className="flex justify-between items-end">
+                        <FormLabel>Kuota Peserta</FormLabel>
+                        <span
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${
+                            isOverLimit
+                              ? "bg-red-50 text-red-600 border-red-100"
+                              : "bg-emerald-50 text-emerald-700 border-emerald-100"
+                          }`}
+                        >
+                          Tersedia: {displayQuotaMentee} Peserta
+                        </span>
+                      </div>
+
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Contoh: 50"
+                          {...field}
+                          className={
+                            isOverLimit
+                              ? "border-red-500 focus-visible:ring-red-500"
+                              : ""
+                          }
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+
+                      <FormDescription className="text-[11px] leading-relaxed">
+                        {isOverLimit ? (
+                          <span className="text-red-600 font-medium flex flex-wrap items-center gap-1.5">
+                            <span className="flex items-center gap-1">
+                              ⚠️ Kuota melebihi batas langganan.
+                            </span>
+                            <button
+                              type="button" // Penting: agar tidak mentrigger submit form
+                              onClick={() =>
+                                navigate("/dashboard-campus/berlangganan")
+                              }
+                              className="ml-1 px-2 py-0.5 bg-red-600 text-white rounded-md text-[10px] font-bold uppercase tracking-wider hover:bg-red-700 transition-colors shadow-sm active:scale-95"
+                            >
+                              Isi Saldo
+                            </button>
+                          </span>
+                        ) : (
+                          <span>
+                            Jumlah peserta yang dapat ditampung dalam program
+                            ini. Pastikan kuota mencukupi kapasitas mentor.
+                          </span>
+                        )}
+                      </FormDescription>
+                    </FormItem>
+                  );
+                }}
               />
 
               {/* 2. Input Nama Tempat/Alamat (Hanya muncul jika ONSITE) */}
@@ -755,10 +831,10 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
                     <FormItem>
                       <FormLabel>Detail Kegiatan / Deskripsi</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Jelaskan secara rinci kegiatan yang akan dilaksanakan..."
-                          rows={5}
-                          {...field}
+                        <ReactQuill
+                          theme="snow"
+                          value={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />
@@ -816,7 +892,7 @@ export default function ProgramEditForm({ initialData, onClose, onSave }) {
                                 handleAddListItem(
                                   "benefit",
                                   newBenefit,
-                                  setNewBenefit
+                                  setNewBenefit,
                                 )
                               }
                               disabled={newBenefit.trim() === ""}

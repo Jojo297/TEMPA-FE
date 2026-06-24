@@ -28,31 +28,22 @@ export default function LoginMentor() {
   const LIGHT_BLUE = "text-[#5BC0EB]";
   const PROGRESS_BLUE = "bg-[#5BC0EB]";
 
-  // validating form using zod
+  /// validating form using zod
   const validateLoginMentor = z.object({
-    nik: z
+    email: z
       .string()
-      .min(1, "Masukkan NIK Anda!")
-      // check if input number
-      .refine((val) => !isNaN(Number(val)) && val !== "", {
-        message: "Input NIK harus berupa angka!",
-      })
-      // Transform string to number.
-      .transform((val) => Number(val))
-      // wrap the resulting numbers from the transform using pipe
-      .pipe(
-        z
-          .number()
-          .int({ message: "NIK harus berupa bilangan bulat." })
-          .min(3, "Masukkan NIK minimal 2 digit!")
-      ),
-    password: z.string().min(2, "Masukkan Password!"),
+      .min(1, "Masukkan Email Anda!")
+      .email("Format email tidak valid (contoh: nama@kampus.com)")
+      .trim()
+      .toLowerCase(), // Memastikan input selalu lowercase agar cocok dengan DB
+
+    password: z.string().min(1, "Masukkan Password!"),
   });
 
   // handle form state and validation for mentor login
   const formLoginMentor = useForm({
     defaultValues: {
-      nik: "",
+      email: "",
       password: "",
     },
     resolver: zodResolver(validateLoginMentor),
@@ -64,7 +55,7 @@ export default function LoginMentor() {
     try {
       setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/mentor/login-mentor`, {
-        nik: data.nik,
+        email: data.email,
         password: data.password,
       });
       if (response.status == 200) {
@@ -143,13 +134,13 @@ export default function LoginMentor() {
                 {/* input product username */}
                 <FormField
                   control={formLoginMentor.control}
-                  name="nik"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="nik">NIK</FormLabel>
+                      <FormLabel htmlFor="nik">Email</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Masukkan NIK"
+                          placeholder="Masukkan Email"
                           className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                           {...field}
                         />

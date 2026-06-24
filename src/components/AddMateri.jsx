@@ -23,6 +23,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 import useAddMateri from "@/hooks/hooksCampus/useAddMateri";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const materiSchema = z
   .object({
@@ -111,7 +113,7 @@ export default function AddMateri({ onCancel, onSubmitSuccess, idProgram }) {
   const [previewUrl, setPreviewUrl] = useState(null);
 
   // DEBUG: Lacak perubahan pada selectedFile
-  console.log("Watched File State:", selectedFile);
+  // console.log("Watched File State:", selectedFile);
 
   const { addMateri, isLoading, error, isSuccess, resetState } = useAddMateri();
 
@@ -131,7 +133,7 @@ export default function AddMateri({ onCancel, onSubmitSuccess, idProgram }) {
   const onSubmit = async (data) => {
     // Cukup kirim objek `data` mentah dari form.
     // Hook `useAddMateri` akan menanganinya menjadi FormData.
-    console.log("Submitting raw data:", data);
+    // console.log("Submitting raw data:", data);
 
     try {
       const token = localStorage.getItem("userJwt");
@@ -145,7 +147,7 @@ export default function AddMateri({ onCancel, onSubmitSuccess, idProgram }) {
     } catch (error) {
       console.error("Error adding materi:", error);
       toast.error(
-        error?.response?.data?.message || "Gagal menambahkan materi!"
+        error?.response?.data?.message || "Gagal menambahkan materi!",
       );
       resetState();
     }
@@ -176,10 +178,10 @@ export default function AddMateri({ onCancel, onSubmitSuccess, idProgram }) {
               <FormItem>
                 <FormLabel>Deskripsi</FormLabel>
                 <FormControl>
-                  <textarea
-                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="Masukkan deskripsi materi"
-                    {...field}
+                  <ReactQuill
+                    theme="snow"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

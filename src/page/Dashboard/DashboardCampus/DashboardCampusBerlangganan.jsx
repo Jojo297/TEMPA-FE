@@ -10,19 +10,27 @@ import {
   ShieldCheck,
   Calendar,
   ShieldX,
+  Wallet,
+  Plus,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
-import { id } from "date-fns/locale";
+import { id, se } from "date-fns/locale";
 import useGetSubscriptionPackages from "@/hooks/hooksCampus/useGetSubscriptionPackages";
 import DynamicIcon from "@/components/DynamicIcon";
 import { set } from "zod";
 import { Spinner } from "@/components/ui/spinner";
 import DashboardCampusBerlanggananSkeleton from "@/components/DashboardCampusBerlanggananSkeleton";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import PaymentValidationModal from "@/components/PaymentValidationModal";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import TopUpModal from "@/components/TopUpModal";
+import useTopUpWallet from "@/hooks/hooksCampus/useTopUpWallet";
 
 export default function DashboardCampusBerlangganan() {
   const token = localStorage.getItem("userJwt");
+  const navigate = useNavigate();
   const {
     packages,
     isLoading: isLoadingPackages,
@@ -30,11 +38,20 @@ export default function DashboardCampusBerlangganan() {
     campusSubscription,
     fetchPackages,
   } = useGetSubscriptionPackages();
-  const { isLoading, error, paymentUrl, createPaymentIntent } =
-    useCreatePaymentIntent();
+  const {
+    createPaymentIntent,
+    balance,
+    quotaMentee,
+    isLoadingWallet,
+    error: errorWallet,
+    getWallet,
+  } = useCreatePaymentIntent();
+  const { isLoadingTopUp, error, topUpSaldo } = useTopUpWallet();
   const [loadingPackageId, setLoadingPackageId] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [showTopUp, setShowTopUp] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Cari paket yang sedang aktif (sesuaikan logika 'is_active' dengan response backend Anda)
   const currentPackage = campusSubscription;
@@ -46,11 +63,14 @@ export default function DashboardCampusBerlangganan() {
 
   const displayPackages = packages ?? [];
   const displayPackagesCampus = campusSubscription ?? [];
-  // console.log(displayPackagesCampus);
+  const displayBalance = balance ?? 0;
+  const displayQuota = quotaMentee ?? 0;
+  // console.log(paymentUrl);
 
   useEffect(() => {
     if (token) {
       fetchPackages(token);
+      getWallet(token);
     }
   }, [token, fetchPackages]);
 
@@ -58,44 +78,51 @@ export default function DashboardCampusBerlangganan() {
     return <DashboardCampusBerlanggananSkeleton />;
   }
 
-  // handle payment
+  // handle payment subscription feature
   const dokuPayment = async (idSubscription) => {
-    // console.log(idSubscription);
     setLoadingPackageId(idSubscription);
     try {
-      // Ambil token (pastikan token ada)
       const token = localStorage.getItem("userJwt");
-
-      // 1. Panggil hook Zustand
-      // createPaymentIntent sudah kita buat mengembalikan { success, paymentUrl }
       const result = await createPaymentIntent(token, idSubscription);
 
-      if (result.success) {
-        if (result.isFree) {
-          setLoadingPackageId(null);
-          toast.success(
-            result.message || "Paket Free Trial berhasil diaktifkan!"
-          );
-          window.location.reload();
-        } else if (result.paymentUrl) {
-          // 2. Panggil SDK DOKU untuk memunculkan modal pembayaran
-          window.loadJokulCheckout(result.paymentUrl);
-          setLoadingPackageId(null);
-        }
+      if (result.success && result.data?.pay_url) {
+        // Redirect menggunakan window.location.href untuk URL eksternal
+        window.location.href = result.data.pay_url;
       } else {
-        setLoadingPackageId(null);
-        toast.error(result.message || "Gagal memulai pembayaran");
-        console.log("Gagal memulai pembayaran: " + result);
+        toast.error("Gagal memulai pembayaran");
       }
     } catch (err) {
-      // Error sudah dihandle di Zustand, tapi bisa tambah alert di sini
       const errorMessage =
         err.response?.data?.message ||
         err.message ||
         "Gagal memulai pembayaran";
       toast.error(errorMessage);
-      console.log("Gagal memulai pembayaran: " + err);
+    } finally {
       setLoadingPackageId(null);
+    }
+  };
+
+  const handleTopUpProcess = async (amount) => {
+    setIsProcessing(true);
+    try {
+      // console.log("saldo: ", amount);
+      const token = localStorage.getItem("userJwt");
+      const result = await topUpSaldo(token, amount);
+
+      if (result.success && result.data?.pay_url) {
+        // Redirect menggunakan window.location.href untuk URL eksternal
+        window.location.href = result.data.pay_url;
+      } else {
+        toast.error("Gagal memulai pembayaran");
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Gagal memulai pembayaran";
+      toast.error(errorMessage);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -138,101 +165,131 @@ export default function DashboardCampusBerlangganan() {
       <div className="max-w-6xl mx-auto -mt-20 px-6">
         {/* Section package now */}
         {currentPackage && (
-          <div
-            className={`rounded-3xl p-6 md:p-8 shadow-lg border relative overflow-hidden mb-8 z-30 transition-all duration-300 ${
-              isExpired
-                ? "bg-red-50 border-red-100"
-                : "bg-white border-emerald-100"
-            }`}
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 z-30 relative items-start">
+            {/* Status Paket Card */}
             <div
-              className={`absolute top-0 right-0 w-32 h-32 rounded-full -mr-10 -mt-10 blur-2xl ${
-                isExpired ? "bg-red-100" : "bg-emerald-50"
+              className={`lg:col-span-2 rounded-3xl p-6 md:p-8 shadow-lg border overflow-hidden transition-all duration-300 ${
+                isExpired
+                  ? "bg-red-50 border-red-100"
+                  : "bg-white border-emerald-100"
               }`}
-            />
-
-            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="flex items-center gap-6">
-                <div
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${
-                    isExpired ? "bg-red-100" : "bg-emerald-100"
-                  }`}
-                >
-                  {isExpired ? (
-                    <ShieldX size={32} className="text-red-600" />
-                  ) : (
-                    <ShieldCheck size={32} className="text-[#003631]" />
-                  )}
-                </div>
-                <div>
-                  <h2
-                    className={`text-sm font-bold uppercase tracking-wider mb-1 ${
-                      isExpired ? "text-red-600" : "text-emerald-600"
+            >
+              <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                  <div
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                      isExpired
+                        ? "bg-red-100 text-red-600"
+                        : "bg-emerald-100 text-[#003631]"
                     }`}
                   >
-                    {isExpired ? "Paket Telah Berakhir" : "Paket Anda Saat Ini"}
-                  </h2>
-                  <h3
-                    className={`text-2xl font-black ${
-                      isExpired ? "text-red-900" : "text-gray-900"
-                    }`}
-                  >
-                    {currentPackage
-                      ? currentPackage.package_name
-                      : "Belum Berlangganan"}
-                  </h3>
-                  <p
-                    className={`text-sm mt-1 ${
-                      isExpired ? "text-red-700/80" : "text-gray-500"
-                    }`}
-                  >
-                    {isExpired
-                      ? "Masa aktif paket Anda telah habis. Segera perbarui untuk menikmati layanan kembali."
-                      : currentPackage.sub_heading ||
-                        "Pilih paket di bawah untuk meningkatkan layanan kampus Anda."}
-                  </p>
-                </div>
-              </div>
-
-              {currentPackage && (
-                <div
-                  className={`flex items-center gap-4 px-5 py-3 rounded-xl border transition-colors ${
-                    isExpired
-                      ? "bg-white border-red-100 shadow-sm"
-                      : "bg-gray-50 border-gray-100"
-                  }`}
-                >
-                  <Calendar
-                    size={20}
-                    className={isExpired ? "text-red-400" : "text-gray-400"}
-                  />
+                    {isExpired ? (
+                      <ShieldX size={28} />
+                    ) : (
+                      <ShieldCheck size={28} />
+                    )}
+                  </div>
                   <div>
-                    <p
-                      className={`text-xs font-bold uppercase ${
-                        isExpired ? "text-red-400" : "text-gray-400"
+                    <h2
+                      className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${
+                        isExpired ? "text-red-500" : "text-emerald-600"
                       }`}
                     >
-                      {isExpired ? "Berakhir Sejak" : "Berakhir Pada"}
-                    </p>
-                    <p
-                      className={`text-sm font-bold ${
-                        isExpired ? "text-red-700" : "text-gray-700"
-                      }`}
-                    >
-                      {currentPackage.expired_date
-                        ? new Date(
-                            currentPackage.expired_date
-                          ).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })
-                        : "-"}
+                      {isExpired ? "Status: Expired" : "Paket Aktif"}
+                    </h2>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {currentPackage.package_name}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Berlaku hingga{" "}
+                      {new Date(currentPackage.expired_date).toLocaleDateString(
+                        "id-ID",
+                        { day: "numeric", month: "long", year: "numeric" },
+                      )}
                     </p>
                   </div>
                 </div>
-              )}
+                <button
+                  onClick={() =>
+                    navigate("/dashboard-campus/history-transaction")
+                  }
+                  className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
+                >
+                  Riwayat Transaksi
+                </button>
+              </div>
             </div>
+
+            {/* Wallet / Balance Card */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 shadow-xl relative overflow-hidden group border border-slate-700">
+              {/* Efek Glassmorphism lebih halus */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-amber-400/20 transition-all" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full -ml-12 -mb-12 blur-2xl" />
+
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">
+                      Sisa Saldo Deposit
+                    </p>
+                    <div className="h-1 w-8 bg-amber-400 rounded-full" />
+                  </div>
+                  <div className="p-2 bg-slate-700/50 rounded-xl border border-slate-600">
+                    <Wallet size={18} className="text-amber-400" />
+                  </div>
+                </div>
+
+                <div className="flex items-baseline gap-2 text-white">
+                  <span className="text-lg font-medium text-slate-400 ">
+                    Rp
+                  </span>
+                  {isLoadingWallet ? (
+                    <Skeleton className="h-6 w-3/4 bg-gray-700 " />
+                  ) : (
+                    <span className="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
+                      {displayBalance?.toLocaleString("id-ID") || "0"}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-700/50 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">
+                      Estimasi Kuota
+                    </p>
+                    {isLoadingWallet ? (
+                      <div className="flex gap-2 text-sm items-center">
+                        <Skeleton className="h-6 w-2/5 bg-gray-700 " />{" "}
+                        <span className="text-slate-400 font-medium">
+                          Siswa
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-white font-bold">
+                        ~{displayQuota || 0}{" "}
+                        <span className="text-slate-400 font-medium">
+                          Siswa
+                        </span>
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setShowTopUp(true)}
+                    className="flex items-center gap-2 text-[10px] font-black text-slate-900 bg-amber-400 px-4 py-2 rounded-xl hover:bg-amber-300 transition-all shadow-lg shadow-amber-900/20 active:scale-95"
+                  >
+                    <Plus size={12} strokeWidth={4} />
+                    TOP UP
+                  </button>
+                </div>
+              </div>
+            </div>
+            <TopUpModal
+              isOpen={showTopUp}
+              onClose={() => setShowTopUp(false)}
+              onConfirm={(amount) => handleTopUpProcess(amount)}
+              isLoading={isProcessing}
+            />
           </div>
         )}
 
@@ -343,8 +400,12 @@ export default function DashboardCampusBerlangganan() {
                 </ul>
 
                 {/* CTA Button */}
+
                 <button
-                  onClick={() => handlePackageClick(pkg)}
+                  onClick={() => {
+                    setSelectedPackage(pkg); // Simpan data paket yang diklik
+                    setIsDialogOpen(true);
+                  }}
                   disabled={loadingPackageId !== null}
                   className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg ${
                     pkg.isPopular
@@ -364,6 +425,14 @@ export default function DashboardCampusBerlangganan() {
                     "Aktifkan Sekarang"
                   )}
                 </button>
+
+                <PaymentValidationModal
+                  isOpen={isDialogOpen}
+                  onClose={() => setIsDialogOpen(false)}
+                  onConfirm={() => dokuPayment(selectedPackage.id)}
+                  packageData={selectedPackage}
+                  isLoading={loadingPackageId === pkg.id}
+                />
               </div>
             </div>
           ))}
@@ -379,50 +448,6 @@ export default function DashboardCampusBerlangganan() {
           </span>
         </div>
       </div>
-
-      {/* Confirmation Dialog */}
-      {isDialogOpen && selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100 animate-in zoom-in-95 duration-200">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 ring-8 ring-emerald-50/50">
-                <Rocket
-                  className="text-[#003631] w-10 h-10"
-                  strokeWidth={1.5}
-                />
-              </div>
-
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                Aktifkan Free Trial?
-              </h3>
-
-              <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                Anda akan mengaktifkan paket{" "}
-                <span className="font-bold text-[#003631]">
-                  {selectedPackage.package_name}
-                </span>{" "}
-                secara gratis. Kesempatan ini hanya berlaku satu kali untuk
-                kampus Anda.
-              </p>
-
-              <div className="flex gap-3 w-full">
-                <button
-                  onClick={() => setIsDialogOpen(false)}
-                  className="flex-1 py-3.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  onClick={confirmFreeTrial}
-                  className="flex-1 py-3.5 px-4 rounded-xl bg-[#003631] text-white font-bold text-sm hover:bg-[#004d45] shadow-lg shadow-emerald-100 transition-all active:scale-95"
-                >
-                  Ya, Aktifkan
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

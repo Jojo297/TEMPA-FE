@@ -4,34 +4,30 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL_PAYMENT;
 
 const useCreatePaymentIntent = create((set) => ({
-  isLoading: false,
+  balance: 0,
+  quotaMentee: 0,
+  isLoadingWallet: false,
   error: null,
-  paymentUrl: null,
-  isFree: false,
 
-  // Action untuk membuat payment intent
+  // create invoice
   createPaymentIntent: async (token, idSubscription) => {
-    set({ isLoading: true, error: null, paymentUrl: null, isFree: false });
+    set({ isLoading: true, error: null });
 
     try {
-      // Endpoint: /create-payment-intent/:id
       const response = await axios.post(
-        `${API_BASE_URL}/create-payment-intent/${idSubscription}`,
-        {}, // Body kosong karena data diambil dari params dan token user
+        `${API_BASE_URL}/create-payment-invoice/${idSubscription}`,
+        {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
 
-      const { paymentUrl, message, isFree } = response.data;
+      // Sesuai response yang Anda kirim: response.data.data
+      const rawData = response.data.data;
 
-      set({ isLoading: false, paymentUrl: paymentUrl, isFree: isFree });
-      return { success: true, message, paymentUrl, isFree };
+      return { success: true, data: rawData };
     } catch (error) {
       console.error("Gagal membuat payment intent:", error);
-
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
@@ -42,8 +38,44 @@ const useCreatePaymentIntent = create((set) => ({
     }
   },
 
+  // get balance
+  getWallet: async (token) => {
+    set({ isLoadingWallet: true, error: null });
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/get-balance`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const rawData = response.data.data;
+
+      set({
+        balance: rawData.balance,
+        quotaMentee: rawData.quota_mentee,
+        isLoadingWallet: false,
+        error: null,
+      });
+
+      return { success: true, data: rawData };
+    } catch (error) {
+      console.error("Gagal mengambil data wallet:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Gagal mengambil data wallet.";
+
+      set({ isLoading: false, error: errorMessage });
+      throw error;
+    }
+  },
+
   resetState: () =>
-    set({ isLoading: false, error: null, paymentUrl: null, isFree: false }),
+    set({
+      balance: 0,
+      quotaMentee: 0,
+      isLoadingWallet: false,
+      error: null,
+    }),
 }));
 
 export default useCreatePaymentIntent;

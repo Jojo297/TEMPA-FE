@@ -51,14 +51,14 @@ const editHeaderSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran file maksimal adalah 5MB.`
+      `Ukuran file maksimal adalah 5MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp.",
     ),
   logo: z
     .any()
@@ -66,14 +66,14 @@ const editHeaderSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran file maksimal adalah 5MB.`
+      `Ukuran file maksimal adalah 5MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp."
+      "Format gambar yang didukung adalah .jpg, .jpeg, .png, dan .webp.",
     ),
 });
 
@@ -86,7 +86,7 @@ export default function DetailCampus() {
 
   // Fallback ke objek kosong jika detailCampus null/undefined
   const displayDetailCampus = detailCampus || {};
-  console.log(displayDetailCampus);
+  // console.log(displayDetailCampus);
 
   // State untuk form edit, diinisialisasi saat data tersedia
   const [campusData, setCampusData] = useState(displayDetailCampus);
@@ -96,6 +96,7 @@ export default function DetailCampus() {
   const DescriptionSection = {
     desc: displayDetailCampus.description,
     visi: displayDetailCampus.vision_mission,
+    campusWebsite: displayDetailCampus.website_campus,
   };
 
   const majors = displayDetailCampus.major;
@@ -175,16 +176,16 @@ export default function DetailCampus() {
             {/* info campus */}
             <div className="bg-[#013B35] text-white px-12 py-6 flex justify-between items-center rounded-b-xl -mt-16 relative z-10">
               <div className="flex items-center space-x-4">
-                <div className="bg-white p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-10">
+                <div className="bg-white p-2 sm:p-3 rounded-full shadow-lg border-4 border-gray-100 -mt-16 sm:-mt-10 flex-shrink-0">
                   <img
                     src={
                       displayDetailCampus.logo_url ||
                       "https://placehold.co/200?text=Logo+Kampus"
                     }
-                    alt={`Logo Kampus`}
-                    className="w-20 h-20 object-contain"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
                   />
                 </div>
+
                 <div className="flex items-center gap-3">
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                     {displayDetailCampus.campus_name}{" "}

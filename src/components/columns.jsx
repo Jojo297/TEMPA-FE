@@ -64,8 +64,8 @@ export const getColumns = (handleDelete, onMentorUpdate, showEdit = true) => [
     },
   },
   {
-    accessorKey: "nik",
-    header: "NIK",
+    accessorKey: "email",
+    header: "Email",
   },
   {
     id: "actions",

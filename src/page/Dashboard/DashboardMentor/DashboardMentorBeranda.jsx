@@ -29,7 +29,6 @@ export default function DashboardMentorBeranda() {
   const decode = jwtDecode(token);
   // console.log(decode);
   const mentorName = decode.username;
-  const mentorNik = decode.nik;
   const superMentor = decode.mentorType === "super_mentor";
   const { programs, totalProgram, isLoading, error, fetchPrograms } =
     useGetProgramChart();
@@ -40,7 +39,7 @@ export default function DashboardMentorBeranda() {
 
   const totalMentees = chartData.reduce(
     (acc, curr) => acc + (curr.total_mentee || 0),
-    0
+    0,
   );
 
   useEffect(() => {
@@ -168,9 +167,7 @@ export default function DashboardMentorBeranda() {
       {/* HEADER */}
       <div>
         <p className="text-sm text-gray-700">SELAMAT DATANG,</p>
-        <h1 className="text-3xl font-bold text-[#003631]">
-          {mentorName} - {mentorNik}
-        </h1>
+        <h1 className="text-3xl font-bold text-[#003631]">{mentorName}</h1>
       </div>
 
       {/* === STATS CARDS === */}

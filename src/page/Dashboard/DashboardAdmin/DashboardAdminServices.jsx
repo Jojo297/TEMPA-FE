@@ -28,6 +28,7 @@ import useGetSubscriptionPackages from "@/hooks/hooksAdmin/useGetSubscriptionPac
 import ServiceDialogContent from "@/components/ServiceDialogContent";
 import AddServiceDialog from "@/components/AddServiceDialog";
 import DeleteService from "@/components/DeleteService";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminServices() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function DashboardAdminServices() {
   }, [token, fetchPackages]);
 
   const filteredData = displayPackage.filter((item) =>
-    item.package_name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.package_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleUpdateService = (id, updatedData) => {
@@ -86,15 +87,15 @@ export default function DashboardAdminServices() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className=" mb-8 text-center">
-        <div className="bg-primary text-white rounded-xl p-6 shadow">
-          <h1 className="text-2xl font-bold mb-2">Layanan</h1>
-          <p className="text-sm max-w-2xl mx-auto">
-            Kelola data layanan yang tersedia dalam sistem. Anda dapat menambah,
-            melihat, mengubah, dan menghapus layanan.
-          </p>
-        </div>
-      </div>
+
+      {/* header */}
+      <HeaderPage
+        title={"Layanan"}
+        description={
+          "Kelola data layanan yang tersedia dalam sistem. Anda dapat menambah, melihat, mengubah, dan menghapus layanan."
+        }
+        badge={"Manage Services"}
+      />
       {/* verivication campus */}
       <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
@@ -151,7 +152,7 @@ export default function DashboardAdminServices() {
                     <TableCell>
                       <span
                         className={`px-3 py-1 text-xs rounded-md border ${getStatusColor(
-                          item.free_trial
+                          item.free_trial,
                         )} font-semibold whitespace-nowrap`}
                       >
                         {item.free_trial ? "Gratis Uji Coba" : "Biasa"}

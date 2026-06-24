@@ -244,9 +244,12 @@ export default function DetailJurusan() {
             Tentang Jurusan
           </h2>
           <p className="text-gray-700 leading-relaxed text-justify">
-            {/* Menggunakan data jurusan */}
-            {jurusan.deskripsi ||
-              "Deskripsi default: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+            <div
+              className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{
+                __html: item.description,
+              }}
+            />{" "}
           </p>
         </div>
 

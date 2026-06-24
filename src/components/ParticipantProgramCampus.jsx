@@ -1,5 +1,5 @@
 import useGetDetailProgram from "@/hooks/hooksCampus/useGetDetailProgram";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -57,6 +57,10 @@ import {
   ArrowRight,
   HardHat,
   Award,
+  Check,
+  X,
+  Minus,
+  QrCode,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
@@ -65,11 +69,13 @@ import CampusSendMessage from "./CampusSendMessage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import useSendMessage from "@/hooks/hooksCampus/useSendMessage";
 import { toast } from "sonner";
 import useSendBulkMessage from "@/hooks/hooksCampus/useSendBulkMessage";
 import { ParticipantAnalytics } from "./ParticipantAnalytics";
 import { jwtDecode } from "jwt-decode";
+import { DialogGenerateCertificate } from "./DialogGenerateCertificate";
+import { DialogGenerateQrCodePresensi } from "./DialogGenerateQrCodePresensi";
+import { addDays, isSameDay, format, startOfDay } from "date-fns";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;
@@ -169,17 +175,23 @@ export default function ParticipantProgramCampus({
   idCampus,
   token,
   sendMail,
+  startProgram,
+  endProgram,
+  expiredPresensi,
+  idProgram,
+  attendance_list,
 }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
   const { isLoading, error, successMessage, sendBulkMessage } =
     useSendBulkMessage();
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
+  const [isPresensiDialogOpen, setIsPresensiDialogOpen] = useState(false);
   const [isPremiumDialogOpen, setIsPremiumDialogOpen] = useState(false);
   const [isInDevelopmentDialogOpen, setIsInDevelopmentDialogOpen] =
     useState(false);
 
-  // console.log(statusSubscription);
+  // console.log(attendance_list);
 
   // Form for bulk message
   const formBulkMessage = useForm({
@@ -189,6 +201,18 @@ export default function ParticipantProgramCampus({
       message: "",
     },
   });
+
+  const getDayProgram = (startDate, endDate) => {
+    if (!startDate || !endDate) return "-";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // console.log(diffDays);
+    return diffDays;
+  };
 
   // console.log(menteeList);
 
@@ -219,15 +243,18 @@ export default function ParticipantProgramCampus({
         enableSorting: false,
         enableHiding: false,
       },
+      // number
       {
         id: "no",
         header: "No",
         cell: ({ row }) => row.index + 1,
       },
+      // username
       {
         accessorKey: "username",
         header: "Nama Mentee",
       },
+      // email
       {
         accessorKey: "email",
         header: "Email",
@@ -248,6 +275,7 @@ export default function ParticipantProgramCampus({
           );
         },
       },
+      // completion status
       {
         accessorKey: "completion_status",
         header: "Status",
@@ -266,6 +294,65 @@ export default function ParticipantProgramCampus({
           );
         },
       },
+      // presensi
+      {
+        header: "Presensi",
+        id: "presensi",
+        cell: ({ row }) => {
+          const menteeAttendance = row.original.attendance_list || [];
+
+          const totalDays = getDayProgram(startProgram, endProgram);
+
+          const attendanceData = Array.from({ length: totalDays }, (_, i) => {
+            const targetDate = addDays(new Date(startProgram), i);
+
+            const foundAttendance = menteeAttendance.find((attend) =>
+              isSameDay(new Date(attend.attendance_date), targetDate),
+            );
+
+            return foundAttendance ? foundAttendance.status : "pending";
+          });
+
+          return (
+            <div className="flex items-center gap-1.5 overflow-x-auto max-w-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
+              {attendanceData.map((status, index) => {
+                if (status === "present") {
+                  return (
+                    <div
+                      key={index}
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm transition-transform hover:scale-110"
+                    >
+                      <Check className="h-2 w-2 stroke-[4px]" />
+                    </div>
+                  );
+                }
+
+                if (status === "absent") {
+                  return (
+                    <div
+                      key={index}
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-500 text-white shadow-sm transition-transform hover:scale-110"
+                    >
+                      <X className="h-2 w-2 stroke-[4px]" />
+                    </div>
+                  );
+                }
+
+                // Status 'pending' atau belum saatnya (Abu-abu)
+                return (
+                  <div
+                    key={index}
+                    className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-400 text-white/80 shadow-sm transition-opacity hover:opacity-80"
+                  >
+                    <Minus className="h-2 w-2 stroke-[4px]" />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        },
+      },
+      // send email
       {
         id: "actions",
         header: "Kirim Pesan",
@@ -302,7 +389,7 @@ export default function ParticipantProgramCampus({
         },
       },
     ],
-    [idCampus, token, statusSubscription]
+    [idCampus, token, statusSubscription],
   );
 
   const table = useReactTable({
@@ -336,7 +423,7 @@ export default function ParticipantProgramCampus({
 
     if (result) {
       toast.success(
-        `Pesan berhasil dikirim ke ${selectedMentees.length} mentee`
+        `Pesan berhasil dikirim ke ${selectedMentees.length} mentee`,
       );
       setIsBulkDialogOpen(false);
       setRowSelection({}); // Reset selection
@@ -353,9 +440,13 @@ export default function ParticipantProgramCampus({
         token={token}
         onOpenChange={setIsPremiumDialogOpen}
       />
-      <InDevelopmentDialog
+
+      <DialogGenerateCertificate
         isOpen={isInDevelopmentDialogOpen}
+        idProgram={idProgram}
         onOpenChange={setIsInDevelopmentDialogOpen}
+        selectedMentees={selectedMentees}
+        allMentee={menteeList}
       />
       <ParticipantAnalytics
         menteeList={menteeList}
@@ -386,22 +477,24 @@ export default function ParticipantProgramCampus({
 
             {/* button generate certificate */}
             {!statusSubscription ? (
+              // if not subscription
               <Button
                 variant="outline"
                 onClick={() => setIsPremiumDialogOpen(true)}
                 className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
               >
                 <Award size={16} />
-                Generate Sertifikat ({selectedMentees.length})
+                Generate Sertifikat
               </Button>
             ) : (
+              // if subscription
               <Button
                 variant="outline"
                 onClick={() => setIsInDevelopmentDialogOpen(true)}
                 className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
               >
                 <Award size={16} />
-                Generate Sertifikat ({selectedMentees.length})
+                Generate Sertifikat
               </Button>
             )}
             {/* button send bulk message */}
@@ -449,7 +542,7 @@ export default function ParticipantProgramCampus({
                       <Form {...formBulkMessage}>
                         <form
                           onSubmit={formBulkMessage.handleSubmit(
-                            onSendBulkMessage
+                            onSendBulkMessage,
                           )}
                           className="space-y-4"
                         >
@@ -517,6 +610,27 @@ export default function ParticipantProgramCampus({
                 )}
               </>
             )}
+            {/* button generate qr-code */}
+            <Dialog
+              open={isPresensiDialogOpen}
+              onOpenChange={setIsPresensiDialogOpen}
+            >
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+                >
+                  <QrCode size={16} />
+                  Presensi
+                </Button>
+              </DialogTrigger>
+              <DialogGenerateQrCodePresensi
+                startProgram={startProgram}
+                endProgram={endProgram}
+                expiredPresensi={expiredPresensi}
+                idProgram={idProgram}
+              />
+            </Dialog>
           </div>
         </div>
 
@@ -537,7 +651,7 @@ export default function ParticipantProgramCampus({
                               ? null
                               : flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext()
+                                  header.getContext(),
                                 )}
                           </TableHead>
                         );
@@ -556,7 +670,7 @@ export default function ParticipantProgramCampus({
                           <TableCell key={cell.id}>
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </TableCell>
                         ))}

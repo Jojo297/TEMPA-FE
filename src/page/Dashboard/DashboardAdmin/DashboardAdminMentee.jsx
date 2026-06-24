@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminMentee() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function DashboardAdminMentee() {
   console.log(displayMentee.map((item) => item.registered_programs));
   // search campus by name
   const filteredMentee = displayMentee.filter((item) =>
-    item.username.toLowerCase().includes(searchQuery.toLowerCase())
+    item.username.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // fetch all campus
@@ -103,15 +104,15 @@ export default function DashboardAdminMentee() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className=" mb-8 text-center">
-        <div className="bg-primary text-white rounded-xl p-6 shadow">
-          <h1 className="text-2xl font-bold mb-2">Mentee</h1>
-          <p className="text-sm max-w-2xl mx-auto">
-            Kelola data mentee yang terdaftar dalam sistem. Pantau informasi
-            pengguna mentee dan pastikan data akun yang ditampilkan valid.
-          </p>
-        </div>
-      </div>
+      {/* header */}
+
+      <HeaderPage
+        title={"Mentee"}
+        description={
+          " Kelola data mentee yang terdaftar dalam sistem. Pantau informasi pengguna mentee dan pastikan data akun yang ditampilkan valid."
+        }
+        badge={"Manage Mentee"}
+      />
       {/* verivication campus */}
       <div className="bg-white text-gray-900 shadow-md rounded-xl border border-gray-200 p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
@@ -207,11 +208,11 @@ export default function DashboardAdminMentee() {
                                           </Label>
                                           <div
                                             className={`text-sm capitalize font-medium px-2 py-1 rounded-md border w-fit ${getStatusColor(
-                                              program.completion_status
+                                              program.completion_status,
                                             )}`}
                                           >
                                             {getStatusLabel(
-                                              program.completion_status
+                                              program.completion_status,
                                             )}
                                           </div>
                                         </div>
@@ -222,7 +223,7 @@ export default function DashboardAdminMentee() {
                                           <div className="text-sm font-medium text-gray-900">
                                             {program.completion_date
                                               ? new Date(
-                                                  program.completion_date
+                                                  program.completion_date,
                                                 ).toLocaleDateString("id-ID", {
                                                   day: "numeric",
                                                   month: "long",
@@ -233,7 +234,7 @@ export default function DashboardAdminMentee() {
                                         </div>
                                       </div>
                                     </div>
-                                  )
+                                  ),
                                 )}
                               </div>
                             ) : (

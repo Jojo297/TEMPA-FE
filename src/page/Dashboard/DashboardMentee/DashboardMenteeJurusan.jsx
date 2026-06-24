@@ -27,6 +27,9 @@ import useGetAllMajors from "@/hooks/hooksMentee/useGetAllMajors";
 import MajorsListSkeleton from "@/components/MajorsListSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
 import DynamicIcon from "@/components/DynamicIcon";
+import HeaderPage from "@/components/HeaderPage";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 const DashboardJurusan = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,7 +62,7 @@ const DashboardJurusan = () => {
 
   // handle search majors
   const filteredMajors = mergedData.filter((major) =>
-    major.major_name.toLowerCase().includes(searchTerm.toLowerCase())
+    major.major_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // fetch data majors
@@ -85,6 +88,38 @@ const DashboardJurusan = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
+      {/* header html */}
+      <Helmet>
+        <title>{`Jurusan | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -101,13 +136,13 @@ const DashboardJurusan = () => {
       </Breadcrumb>
       <div className="min-h-screen  ">
         {/* header Section */}
-        <div className="bg-primary text-white p-6 md:p-8 rounded-xl shadow mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-3">Jurusan</h1>
-          <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto">
-            Jelajahi berbagai jurusan dan temukan bidang yang sesuai dengan
-            minat serta bakatmu.
-          </p>
-        </div>
+        <HeaderPage
+          title={"Jurusan"}
+          description={
+            "Memilih jurusan adalah langkah awal yang krusial dalam perjalanan akademik Anda. Di sini, Anda dapat menelusuri berbagai bidang studi. Pelajari setiap detail mengenai apa yang akan dipelajari selama masa perkuliahan dan bagaimana jurusan tersebut relevan dengan perkembangan industri saat ini guna menemukan kecocokan yang sempurna."
+          }
+          badge={"Explore Majors"}
+        />
 
         {/* all majors section */}
         <section>

@@ -23,6 +23,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 import useAddMateri from "@/hooks/hooksMentor/useAddMateri";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const materiSchema = z
   .object({
@@ -149,7 +151,7 @@ export default function MentorAddMateriProgram({
     } catch (error) {
       console.error("Error adding materi:", error);
       toast.error(
-        error?.response?.data?.message || "Gagal menambahkan materi!"
+        error?.response?.data?.message || "Gagal menambahkan materi!",
       );
       resetState();
     }
@@ -180,10 +182,10 @@ export default function MentorAddMateriProgram({
               <FormItem>
                 <FormLabel>Deskripsi</FormLabel>
                 <FormControl>
-                  <textarea
-                    className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="Masukkan deskripsi materi"
-                    {...field}
+                  <ReactQuill
+                    theme="snow"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

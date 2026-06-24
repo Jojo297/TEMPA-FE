@@ -37,6 +37,7 @@ import NotFounPages from "@/components/NotFoundPages";
 import { MentorSearchMajors } from "@/components/MentorSearchMajors";
 import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardMentorProgram() {
   const navigate = useNavigate();
@@ -189,17 +190,13 @@ export default function DashboardMentorProgram() {
         </div>
 
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="bg-primary text-white rounded-xl p-6 shadow">
-            <h1 className="text-2xl font-bold mb-2">Program</h1>
-            <p className="text-sm max-w-2xl mx-auto">
-              Daftar program aktif yang berada di bawah bimbingan Anda. Melalui
-              halaman ini, Anda dapat memantau progres peserta, mengelola
-              program, serta memberikan umpan balik strategis untuk memastikan
-              keberhasilan setiap sesi pembelajaran.
-            </p>
-          </div>
-        </div>
+        <HeaderPage
+          title={"Program"}
+          description={
+            "Tarik perhatian calon mentee unggulan! Publikasikan dan kelola berbagai program kampus Anda."
+          }
+          badge={"Manage Program"}
+        />
 
         {/* Filters */}
         <section>
@@ -266,7 +263,7 @@ export default function DashboardMentorProgram() {
                         // get badge status
                         const statusData = getBadgeClass(
                           item.start_date,
-                          item.end_date
+                          item.end_date,
                         );
                         return (
                           <div
@@ -280,7 +277,7 @@ export default function DashboardMentorProgram() {
                       {/* visibility */}
                       {(() => {
                         const getVisibility = getBadgeVisibility(
-                          item.visibility
+                          item.visibility,
                         );
                         return (
                           <Tooltip>
@@ -319,9 +316,14 @@ export default function DashboardMentorProgram() {
                           {item.type_sesi}
                         </div>
                       </div>
-                      <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                        {item.description}
-                      </p>
+                      <div className="text-gray-600 mb-4 text-sm line-clamp-2">
+                        <div
+                          className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                          dangerouslySetInnerHTML={{
+                            __html: item.description,
+                          }}
+                        />
+                      </div>
 
                       <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
                         <div className="flex items-center">
@@ -331,7 +333,7 @@ export default function DashboardMentorProgram() {
                               "id-ID",
                               {
                                 day: "numeric",
-                              }
+                              },
                             )}
                             {" - "}
                             {new Date(item.end_date).toLocaleDateString(
@@ -340,7 +342,7 @@ export default function DashboardMentorProgram() {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </div>

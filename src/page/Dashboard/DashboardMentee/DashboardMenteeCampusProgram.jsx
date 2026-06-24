@@ -89,7 +89,7 @@ export default function DashboardCampusProgram({ kampus }) {
                     // get badge status
                     const statusData = getBadgeClass(
                       item.start_regis_date,
-                      item.end_regis_date
+                      item.end_regis_date,
                     );
                     return (
                       <div
@@ -125,7 +125,12 @@ export default function DashboardCampusProgram({ kampus }) {
 
                     {/* description */}
                     <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2">
-                      {item.description}
+                      <div
+                        className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+                        dangerouslySetInnerHTML={{
+                          __html: item.description,
+                        }}
+                      />
                     </p>
 
                     {/* date and location */}
@@ -137,7 +142,7 @@ export default function DashboardCampusProgram({ kampus }) {
                             "id-ID",
                             {
                               day: "numeric",
-                            }
+                            },
                           )}
                           {" - "}
                           {new Date(item.end_program_date).toLocaleDateString(
@@ -146,7 +151,7 @@ export default function DashboardCampusProgram({ kampus }) {
                               year: "numeric",
                               month: "long",
                               day: "numeric",
-                            }
+                            },
                           )}
                         </span>
                       </div>

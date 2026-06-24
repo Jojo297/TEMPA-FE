@@ -18,7 +18,12 @@ const useEditCampusInfo = create((set) => ({
    * @param {string} [params.description] - Deskripsi baru kampus (opsional).
    * @param {object|string} [params.vision_mission] - Visi misi baru (opsional).
    */
-  editCampusDescription: async ({ token, description, vision_mission }) => {
+  editCampusDescription: async ({
+    token,
+    campus_website,
+    description,
+    vision_mission,
+  }) => {
     set({ isLoading: true, error: null, successMessage: null });
 
     try {
@@ -30,6 +35,7 @@ const useEditCampusInfo = create((set) => ({
       const API_URL = `${API_BASE_URL}/edit-description-campus`;
       const payload = {};
 
+      if (campus_website !== undefined) payload.campus_website = campus_website;
       if (description !== undefined) payload.description = description;
       if (vision_mission !== undefined) payload.vision_mission = vision_mission;
 

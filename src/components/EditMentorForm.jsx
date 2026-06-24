@@ -10,6 +10,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,12 +38,6 @@ import useEditMentor from "@/hooks/hooksCampus/useEditMentor";
 const editMentorSchema = z
   .object({
     name: z.string().min(3, "Nama mentor minimal 3 karakter."),
-    nik: z.coerce
-      .number({
-        invalid_type_error: "NIK harus berupa angka.",
-        required_error: "NIK wajib diisi.",
-      })
-      .positive("NIK harus berupa angka positif."),
     password: z
       .string()
       .optional()
@@ -50,7 +45,7 @@ const editMentorSchema = z
         (val) => val === undefined || val.length === 0 || val.length >= 8,
         {
           message: "Password minimal 8 karakter jika diisi.",
-        }
+        },
       ),
     confirmPassword: z.string().optional(),
     mentor_type: z.string().min(1, "Tipe mentor wajib dipilih."),
@@ -70,7 +65,6 @@ export default function EditMentorForm({ mentor, onUpdated }) {
     resolver: zodResolver(editMentorSchema),
     defaultValues: {
       name: mentor.name || "",
-      nik: mentor.nik || "",
       password: "",
       confirmPassword: "",
       mentor_type: mentor.mentor_type || "default",
@@ -82,7 +76,6 @@ export default function EditMentorForm({ mentor, onUpdated }) {
   useEffect(() => {
     form.reset({
       name: mentor.name || "",
-      nik: mentor.nik || "",
       password: "",
       confirmPassword: "",
       mentor_type: mentor.mentor_type || "default",
@@ -96,7 +89,6 @@ export default function EditMentorForm({ mentor, onUpdated }) {
       setShowPassword(false);
       form.reset({
         name: mentor.name || "",
-        nik: mentor.nik || "",
         password: "",
         confirmPassword: "",
         mentor_type: mentor.mentor_type || "default",
@@ -105,9 +97,9 @@ export default function EditMentorForm({ mentor, onUpdated }) {
   };
 
   const onSubmit = async (values) => {
+    console.log(values);
     const payload = {
       name: values.name,
-      nik: values.nik,
       mentor_type: values.mentor_type,
     };
 
@@ -147,6 +139,7 @@ export default function EditMentorForm({ mentor, onUpdated }) {
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
+              {/* mentor name */}
               <FormField
                 control={form.control}
                 name="name"
@@ -179,19 +172,6 @@ export default function EditMentorForm({ mentor, onUpdated }) {
                         </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="nik"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>NIK</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Masukkan NIK" {...field} />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

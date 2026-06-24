@@ -17,6 +17,8 @@ import { X, Pencil, Plus, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import useUpdateStandardMajor from "@/hooks/hooksAdmin/useUpdateStandardMajor";
 import { useNavigate } from "react-router";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 // Zod Schema
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -39,14 +41,14 @@ const majorSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran logo maksimal 5MB.`
+      `Ukuran logo maksimal 5MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format logo yang didukung: .jpg, .jpeg, .png, .webp."
+      "Format logo yang didukung: .jpg, .jpeg, .png, .webp.",
     ),
   banner: z
     .any()
@@ -54,14 +56,14 @@ const majorSchema = z.object({
     .refine(
       (files) =>
         !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
-      `Ukuran banner maksimal 2MB.`
+      `Ukuran banner maksimal 2MB.`,
     )
     .refine(
       (files) =>
         !files ||
         files.length === 0 ||
         ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Format banner yang didukung: .jpg, .jpeg, .png, .webp."
+      "Format banner yang didukung: .jpg, .jpeg, .png, .webp.",
     ),
 });
 
@@ -72,7 +74,7 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
   const [newProspect, setNewProspect] = useState("");
   const [logoPreview, setLogoPreview] = useState(initialData.logo_url || null);
   const [bannerPreview, setBannerPreview] = useState(
-    initialData.banner_url || null
+    initialData.banner_url || null,
   );
 
   const form = useForm({
@@ -83,8 +85,8 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
       prospek_kerja: Array.isArray(initialData.prospek_kerja)
         ? initialData.prospek_kerja
         : typeof initialData.prospek_kerja === "string"
-        ? [initialData.prospek_kerja]
-        : [],
+          ? [initialData.prospek_kerja]
+          : [],
       logo: undefined,
       banner: undefined,
     },
@@ -118,7 +120,7 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
     if (isDirty) {
       if (
         window.confirm(
-          "Anda memiliki perubahan yang belum disimpan. Yakin ingin keluar?"
+          "Anda memiliki perubahan yang belum disimpan. Yakin ingin keluar?",
         )
       ) {
         onClose();
@@ -210,7 +212,7 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
                                 setBannerPreview(URL.createObjectURL(file));
                               } else {
                                 setBannerPreview(
-                                  initialData.banner_url || null
+                                  initialData.banner_url || null,
                                 );
                               }
                             }}
@@ -223,56 +225,6 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
                 </FormItem>
               )}
             />
-            {/* logo */}
-            {/* <FormField
-              control={control}
-              name="logo"
-              render={({ field: { value, onChange, ...fieldProps } }) => (
-                <FormItem>
-                  <FormLabel>Logo Jurusan</FormLabel>
-                  <FormControl>
-                    <div className="mt-2 relative h-32 w-32 rounded-full border border-dashed border-gray-300 flex items-center justify-center">
-                      {logoPreview ? (
-                        <img
-                          src={logoPreview}
-                          alt="Logo Preview"
-                          className="h-full w-full object-cover rounded-full"
-                        />
-                      ) : (
-                        <div className="text-center text-gray-500 text-sm">
-                          <p>Tidak ada logo</p>
-                        </div>
-                      )}
-                      <label
-                        htmlFor="logo-upload"
-                        className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer rounded-full"
-                      >
-                        <div className="text-white flex items-center gap-2 bg-black/50 px-3 py-1 rounded-md text-xs">
-                          <Pencil size={14} /> Ganti
-                        </div>
-                        <Input
-                          id="logo-upload"
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          {...fieldProps}
-                          onChange={(e) => {
-                            onChange(e.target.files);
-                            const file = e.target.files?.[0];
-                            setLogoPreview(
-                              file
-                                ? URL.createObjectURL(file)
-                                : initialData.logo_url
-                            );
-                          }}
-                        />
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
           </div>
 
           {/* Major Name */}
@@ -298,10 +250,10 @@ export default function MajorEditForm({ initialData, onClose, onSave }) {
               <FormItem>
                 <FormLabel>Deskripsi</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Jelaskan tentang jurusan ini"
-                    rows={5}
-                    {...field}
+                  <ReactQuill
+                    theme="snow"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

@@ -1,4 +1,5 @@
 export default function CampusDescription({ kampus }) {
+  // console.log(kampus);
   return (
     <>
       {/* Deskripsi & Visi Misi */}
@@ -6,9 +7,20 @@ export default function CampusDescription({ kampus }) {
         <h2 className="text-xl sm:text-2xl font-bold text-[#013B35] text-center">
           Tentang {kampus.campus_name}
         </h2>
-        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-          {kampus.description}
-        </p>
+
+        <div className="text-gray-700 mt-4 w-full overflow-hidden break-words">
+          <div
+            className="whitespace-pre-wrap 
+             [&_ol]:list-decimal [&_ol]:ml-5 
+             [&_ul]:list-disc [&_ul]:ml-5 
+             [&_li]:mb-1
+             [&_p]:mb-4 
+             [&_a]:text-blue-600 [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: kampus.description || "Deskripsi belum ditambahkan.",
+            }}
+          />
+        </div>
 
         <h3 className="text-xl sm:text-2xl font-bold text-[#013B35] text-center">
           Visi & Misi

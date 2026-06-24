@@ -13,6 +13,8 @@ import { Calendar, Home, Map, Users } from "lucide-react";
 import useGetDetailMajor from "@/hooks/hooksMentee/useGetDetailMajor";
 import MajorDetailSkeleton from "@/components/MajorDetailSkeleton";
 import NotFounPages from "@/components/NotFoundPages";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 const ChevronRightIcon = () => (
   <svg
@@ -132,7 +134,7 @@ const ProgramItem = ({ program, jurusan, kampus }) => {
           </p>
           <div className="flex flex-wrap gap-x-4 text-sm text-gray-100 mb-2">
             <span>{displayedCampusName}</span>
-            <span>{jurusan.nama}</span>
+            <span>{jurusan.nama} </span>
             <span>• Onsite</span>
           </div>
           <hr className="border-gray-500 mb-3" />
@@ -228,7 +230,7 @@ export default function DashboardJurusanDetail() {
 
   // get program
   const getProgram = getCampus.flatMap(
-    (majorEntry) => majorEntry.program_program_id_majorTocampus || []
+    (majorEntry) => majorEntry.program_program_id_majorTocampus || [],
   );
   console.log(getProgram);
 
@@ -248,8 +250,46 @@ export default function DashboardJurusanDetail() {
     return <MajorDetailSkeleton />;
   }
 
+  if (!displayDetailMajor || !displayDetailMajor.major_name) {
+    return <div className="text-center p-10">Loading...</div>;
+  }
+
+  let major_name = displayDetailMajor.major_name.toString();
+
   return (
     <div className="min-h-screen pb-16">
+      {/* header html */}
+      <Helmet>
+        <title>{`${major_name} | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -300,8 +340,12 @@ export default function DashboardJurusanDetail() {
           Tentang Jurusan
         </h2>
         <p className="text-gray-700 leading-relaxed text-justify">
-          {displayDetailMajor.description ||
-            "Deskripsi jurusan belum tersedia."}
+          <div
+            className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
+            dangerouslySetInnerHTML={{
+              __html: displayDetailMajor.description,
+            }}
+          />
         </p>
       </div>
 
@@ -401,7 +445,7 @@ export default function DashboardJurusanDetail() {
                     // get badge status
                     const statusData = getBadgeClass(
                       item.start_program_date,
-                      item.end_program_date
+                      item.end_program_date,
                     );
                     return (
                       <div
@@ -444,7 +488,7 @@ export default function DashboardJurusanDetail() {
                         <span>
                           <span>
                             {new Date(
-                              item.start_program_date
+                              item.start_program_date,
                             ).toLocaleDateString("id-ID", {
                               day: "numeric",
                             })}
@@ -455,7 +499,7 @@ export default function DashboardJurusanDetail() {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </span>

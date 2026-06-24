@@ -19,17 +19,20 @@ import {
 import useGetDetailCampus from "@/hooks/hooksMentee/useGetDetailCampus";
 import DashboardCampusDetailSkeleton from "@/components/DashboardCampusDetailSkeleton";
 import CampusLocation from "@/components/CampusLocation";
+import { Button } from "@/components/ui/button";
+import { ExternalLink } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 const DashboardCampusDetail = () => {
   const { id } = useParams();
   const token = localStorage.getItem("userJwt");
   const { detailCampus, isLoading, error, fetchDetailCampus, addViewCampus } =
     useGetDetailCampus();
-  const kampus = kampusList.find((k) => k.id === parseInt(id));
 
   // store detail campus to displayCampusDetail
   const displayCampusDetail = detailCampus ?? [];
-  // console.log(displayCampusDetail);
+  console.log(displayCampusDetail);
 
   const idCampus = displayCampusDetail.id;
 
@@ -58,7 +61,7 @@ const DashboardCampusDetail = () => {
     };
   }, [idCampus, token]);
 
-  if (!kampus)
+  if (!displayCampusDetail)
     return (
       <SidebarWithNavbar>
         <div className="min-h-screen flex items-center justify-center text-red-500">
@@ -71,8 +74,46 @@ const DashboardCampusDetail = () => {
     return <DashboardCampusDetailSkeleton />;
   }
 
+  if (!displayCampusDetail || !displayCampusDetail.campus_name) {
+    return <div className="text-center p-10">Loading...</div>;
+  }
+
+  let campus_name = displayCampusDetail.campus_name.toString();
+
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
+      {/* header html */}
+      <Helmet>
+        <title>{`${campus_name} | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -100,46 +141,60 @@ const DashboardCampusDetail = () => {
       <CampusHeaderProfile kampus={displayCampusDetail} />
       <section className="mt-7 max-w-7xl bg-[#F8FAFB] mx-auto mb-20 flex flex-col items-start">
         <Tabs defaultValue="deskripsi" className="w-full">
-          {/* Navigation button */}
-          <TabsList className="flex flex-nowrap overflow-x-auto w-full gap-3 sm:gap-4 mb-5 justify-start h-auto bg-transparent pb-2 sm:pb-0">
-            {/* description */}
-            <TabsTrigger
-              value="deskripsi"
-              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                               hover:bg-[#013B35] hover:text-white transition 
+          <div className="flex justify-between">
+            {/* Navigation button */}
+            <TabsList className="flex flex-nowrap overflow-x-auto w-full gap-3 sm:gap-4 mb-5 justify-start h-auto bg-transparent pb-2 sm:pb-0">
+              {/* description */}
+              <TabsTrigger
+                value="deskripsi"
+                className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                               hover:bg-[#013B35] hover:text-white transition
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
-            >
-              Deskripsi
-            </TabsTrigger>
+              >
+                Deskripsi
+              </TabsTrigger>
 
-            {/* major */}
-            <TabsTrigger
-              value="jurusan"
-              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                               hover:bg-[#013B35] hover:text-white transition 
+              {/* major */}
+              <TabsTrigger
+                value="jurusan"
+                className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                               hover:bg-[#013B35] hover:text-white transition
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
-            >
-              Jurusan
-            </TabsTrigger>
+              >
+                Jurusan
+              </TabsTrigger>
 
-            {/* program */}
-            <TabsTrigger
-              value="program"
-              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                               hover:bg-[#013B35] hover:text-white transition 
+              {/* program */}
+              <TabsTrigger
+                value="program"
+                className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                               hover:bg-[#013B35] hover:text-white transition
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
-            >
-              Program
-            </TabsTrigger>
-            <TabsTrigger
-              value="lokasi"
-              className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                               hover:bg-[#013B35] hover:text-white transition 
+              >
+                Program
+              </TabsTrigger>
+              <TabsTrigger
+                value="lokasi"
+                className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                               hover:bg-[#013B35] hover:text-white transition
                                data-[state=active]:bg-[#013B35] data-[state=active]:text-white whitespace-nowrap"
+              >
+                Lokasi
+              </TabsTrigger>
+            </TabsList>
+
+            {/* button redirect website campus */}
+            <Button
+              variant="outline"
+              className="border-[#013B35] text-[#013B35] hover:bg-[#013B35]/5"
+              onClick={() =>
+                window.open(displayCampusDetail.website_campus || "", "_blank")
+              }
             >
-              Lokasi
-            </TabsTrigger>
-          </TabsList>
+              <span>Lihat Website Kampus</span>
+              <ExternalLink size={16} className="ml-2" />
+            </Button>
+          </div>
 
           {/* content Tabs */}
           <TabsContent value="deskripsi">

@@ -23,6 +23,8 @@ import {
 import useRegisterProgram from "@/hooks/hooksMentee/useRegisterProgram";
 import { DisplayMapsLocation } from "@/components/DisplayMapsLocation";
 import Info from "@/components/Info";
+import { Helmet } from "react-helmet-async";
+import preview from "@/../public/web-preview.png";
 
 const DashboardMenteeDetailProgram = () => {
   // get id program from url
@@ -101,28 +103,6 @@ const DashboardMenteeDetailProgram = () => {
     }
   }, [token, fetchDetailProgram]);
 
-  // get location if sesi onsite
-  const getLocation = (sesi) => {
-    if (!sesi) {
-      return [];
-    }
-
-    switch (sesi.type_sesi) {
-      case "online":
-        return "Online";
-      case "onsite":
-        return sesi.onsiteLocationName;
-    }
-  };
-
-  const getCapacity = (num) => {
-    if (num <= 0) {
-      return "Sudah Penuh";
-    } else if (num > 0) {
-      return num + " Orang";
-    }
-  };
-
   const getTypeSesi = (sesi) => {
     switch (sesi) {
       case "online":
@@ -153,7 +133,7 @@ const DashboardMenteeDetailProgram = () => {
       // Different years: "20 Des 2025 - 10 Jan 2026"
       return `${start.toLocaleDateString(
         "id-ID",
-        fullOptions
+        fullOptions,
       )} - ${end.toLocaleDateString("id-ID", fullOptions)}`;
     }
 
@@ -170,7 +150,7 @@ const DashboardMenteeDetailProgram = () => {
       });
       return `${startFormatted} - ${end.toLocaleDateString(
         "id-ID",
-        fullOptions
+        fullOptions,
       )}`;
     }
 
@@ -183,11 +163,7 @@ const DashboardMenteeDetailProgram = () => {
   };
 
   const getMapsUrl = (lat, lng) => {
-    // Format universal untuk Google Maps
     return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-
-    // Opsi lain: Untuk menampilkan pin tunggal (Place mode)
-    // return `https://www.google.com/maps/place/${lat},${lng}`;
   };
 
   const formatTime = (isoTimeString) => {
@@ -220,33 +196,86 @@ const DashboardMenteeDetailProgram = () => {
   if (isLoading) {
     return <DetailProgramSkeleton />;
   }
-
-  // Logic button register
   const now = new Date();
-  const startDate = new Date(displayDetailProgram.start_regis_date);
-  const endDate = new Date(displayDetailProgram.end_regis_date);
+  const start = new Date(displayDetailProgram.start_regis_date);
+  const end = new Date(displayDetailProgram.end_regis_date);
+
+  // Fungsi untuk reset waktu ke 00:00:00.000 agar akurat per tanggal
+  const stripTime = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  const todayClean = stripTime(now);
+  const startClean = stripTime(start);
+  const endClean = stripTime(end);
+
   const isFull = displayDetailProgram.capacity <= 0;
 
   let buttonText = "Daftar Sekarang";
   let buttonClass = "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]";
   let isDisabled = false;
 
-  if (endDate < now) {
-    buttonText = "Pendaftaran Sudah Tutup";
-    buttonClass = "bg-red-500 text-white cursor-not-allowed";
-    isDisabled = true;
-  } else if (startDate > now) {
+  // check date if date not
+  if (todayClean < startClean) {
     buttonText = "Segera Dibuka";
-    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
+    buttonClass = "bg-gray-400 text-white cursor-not-allowed";
+    isDisabled = true;
+  } else if (
+    todayClean > endClean ||
+    displayDetailProgram.is_registration_closed
+  ) {
+    buttonText = "Pendaftaran Ditutup";
+    buttonClass = "bg-red-500 text-white cursor-not-allowed text-xs";
     isDisabled = true;
   } else if (isFull) {
-    buttonText = "Program Sudah Penuh";
-    buttonClass = "bg-gray-400 text-gray-700 cursor-not-allowed";
+    buttonText = "Kuota Penuh";
+    buttonClass = "bg-orange-500 text-white cursor-not-allowed";
     isDisabled = true;
   }
 
+  if (!displayDetailProgram || !displayDetailProgram.program_name) {
+    return <div className="text-center p-10">Loading...</div>;
+  }
+
+  let program_name = displayDetailProgram.program_name.toString();
+
   return (
     <div className="max-w-7xl mx-auto w-full min-w-0">
+      {/* header html */}
+      <Helmet>
+        <title>{`${program_name} | Tempa`}</title>
+        <meta
+          name="description"
+          content="TEMPA adalah platform pengembangan diri untuk menemukan potensi, mencoba simulasi perkuliahan, dan memilih jurusan terbaik seperti Informatika, Hukum, dan Kedokteran."
+        />
+        <meta
+          name="keywords"
+          content=" cobain kuliah, trial kuliah, rekomendasi jurusan, eksplorasi jurusan, simulasi kuliah, pengembangan diri, politeknik negeri batam, edukasi digital"
+        />
+        <link rel="canonical" href="https://tempaa.ddns.net" />
+        {/* Open Graph / Facebook (Untuk tampilan saat share link) */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Eksplorasi Masa Depanmu Bersama TEMPA"
+        />
+        <meta
+          property="og:description"
+          content="Temukan potensi dan persiapkan kariermu melalui program coba kelas di berbagai jurusan populer."
+        />
+        <meta property="og:image" content={preview} />
+        <meta
+          name="twitter:title"
+          content="TEMPA - Bangun Masa Depan Bersama"
+        />
+        <meta
+          name="twitter:description"
+          content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
+        />
+      </Helmet>
+
       {/* breadcum */}
       <Breadcrumb className="mb-2">
         <BreadcrumbList>
@@ -311,7 +340,7 @@ const DashboardMenteeDetailProgram = () => {
                           <li key={index} className="text-sm">
                             {item}
                           </li>
-                        )
+                        ),
                       )}
                     </ul>
                   </DialogDescription>
@@ -331,7 +360,7 @@ const DashboardMenteeDetailProgram = () => {
                     className="ml-2 text-sm text-white cursor-pointer"
                   >
                     Saya telah membaca, memahami, dan menyetujui semua
-                    **Ketentuan dan Prasyarat** di atas.
+                    <strong> Ketentuan dan Prasyarat</strong> di atas.
                   </label>
                 </div>
 
@@ -374,14 +403,14 @@ const DashboardMenteeDetailProgram = () => {
               label="Buka Pendaftaran"
               value={formatDateRange(
                 displayDetailProgram.start_regis_date,
-                displayDetailProgram.end_regis_date
+                displayDetailProgram.end_regis_date,
               )}
             />
             <Info
               label="Tanggal Pelaksanaan"
               value={formatDateRange(
                 displayDetailProgram.start_program_date,
-                displayDetailProgram.end_program_date
+                displayDetailProgram.end_program_date,
               )}
             />
 
@@ -397,9 +426,22 @@ const DashboardMenteeDetailProgram = () => {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <p className="text-sm text-gray-900 sm:text-base whitespace-pre-line border p-3 rounded-xl">
-                {displayDetailProgram.description || "-"}
-              </p>
+              {/* Ganti <p> di bawah ini menjadi <div> */}
+              <div className="text-sm text-gray-900 sm:text-base border p-3 rounded-xl break-words">
+                <div
+                  className="whitespace-pre-wrap
+      [&_ol]:list-decimal [&_ol]:ml-5
+      [&_ul]:list-disc [&_ul]:ml-5
+      [&_li]:mb-1
+      [&_p]:mb-4
+      [&_a]:text-blue-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      displayDetailProgram.description ||
+                      "Deskripsi belum ditambahkan.",
+                  }}
+                />
+              </div>
             </div>
 
             <div className="col-span-2">

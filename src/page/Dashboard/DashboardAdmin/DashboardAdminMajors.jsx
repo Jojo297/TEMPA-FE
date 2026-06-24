@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import AdminAddStandartMajor from "@/components/AdminAddStandartMajor";
 import useDeleteStandardMajor from "@/hooks/hooksAdmin/useDeleteStandardMajor";
 import AdminMajorsListSkeleton from "@/components/AdminMajorsListSkeleton";
+import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminMajors() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function DashboardAdminMajors() {
 
   // search majors by name
   const filteredMajors = displayMajors.filter((item) =>
-    item.major_name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.major_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleDeleteMajor = async (id) => {
@@ -95,15 +96,13 @@ export default function DashboardAdminMajors() {
       </Breadcrumb>
 
       {/* header */}
-      <div className=" mb-8 text-center">
-        <div className="bg-primary text-white rounded-xl p-6 shadow">
-          <h1 className="text-2xl font-bold mb-2">Jurusan</h1>
-          <p className="text-sm max-w-2xl mx-auto">
-            Kelola data jurusan standar yang tersedia dalam sistem. Anda dapat
-            melihat detail dan mengelola informasi setiap jurusan.
-          </p>
-        </div>
-      </div>
+      <HeaderPage
+        title={"Jurusan"}
+        description={
+          "Kelola data jurusan standar yang tersedia dalam sistem. Anda dapat melihat detail dan mengelola informasi setiap jurusan."
+        }
+        badge={"Manage Majors"}
+      />
 
       {/* Majors Card */}
       <div className=" text-gray-900">
