@@ -20,6 +20,8 @@ const useGetAllProgram = create((set) => ({
         headers: {
           // Mengirim JWT dalam header Authorizationb
           Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
         },
       });
 
