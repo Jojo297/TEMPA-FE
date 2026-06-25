@@ -18,8 +18,9 @@ const useGetAllMajors = create((set) => ({
 
       const response = await axios.get(API_URL, {
         headers: {
-          // Mengirim JWT dalam header Authorizationb
           Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
         },
       });
 

@@ -19,6 +19,8 @@ const useGetDetailMajor = create((set) => ({
       const response = await axios.get(API_URL, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
         },
       });
 
