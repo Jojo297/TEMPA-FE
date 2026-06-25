@@ -16,8 +16,10 @@ const useCheckVerifyStatus = create((set) => ({
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+            "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const status = response.data.data.verify_status;
