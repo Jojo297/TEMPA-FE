@@ -135,7 +135,7 @@ export default function DashboardAdminProgram() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="max-w-7xl mx-auto">
       {/* Sidebar */}
 
       {/* Konten utama */}
@@ -252,9 +252,21 @@ export default function DashboardAdminProgram() {
                         </div>
 
                         {/* description */}
-                        <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                          {item.description}
-                        </p>
+                        <div className="text-gray-600 mb-4 text-sm line-clamp-2 break-words">
+                          <div
+                            className="whitespace-pre-wrap 
+                      [&_ol]:list-decimal [&_ol]:ml-5 
+                      [&_ul]:list-disc [&_ul]:ml-5 
+                      [&_li]:mb-1
+                      [&_p]:mb-4 
+                      [&_a]:text-blue-600 [&_a]:underline"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                item.description ||
+                                "Deskripsi belum ditambahkan.",
+                            }}
+                          />
+                        </div>
 
                         {/* date and location */}
                         <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">

@@ -12,7 +12,13 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,9 +38,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import HeaderPage from "@/components/HeaderPage";
+import { renderPageNumbers } from "@/utils/renderPageNumbers";
 
 export default function DashboardAdminMentee() {
   const navigate = useNavigate();
@@ -42,13 +48,20 @@ export default function DashboardAdminMentee() {
   const { menteeData, isLoadingMentee, errorMentee, fetchAllMentee } =
     useGetAllMentee();
   const [searchQuery, setSearchQuery] = useState("");
+  // logic pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // page
 
   const displayMentee = menteeData ?? [];
-  console.log(displayMentee.map((item) => item.registered_programs));
   // search campus by name
   const filteredMentee = displayMentee.filter((item) =>
     item.username.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredMentee.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredMentee.length / itemsPerPage);
 
   // fetch all campus
   useEffect(() => {
@@ -133,27 +146,27 @@ export default function DashboardAdminMentee() {
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow className="hover:bg-gray-50 border-b border-gray-200">
-                <TableHead className="text-gray-700  font-bold w-[50px]">
+                <TableHead className="text-gray-700 font-bold w-[50px]">
                   No
                 </TableHead>
-                <TableHead className="text-gray-700  font-bold">
+                <TableHead className="text-gray-700 font-bold">
                   Nama Pengguna
                 </TableHead>
-                <TableHead className="text-gray-700  font-bold">
-                  Email
-                </TableHead>
-                <TableHead className="text-gray-700  font-bold">Aksi</TableHead>
+                <TableHead className="text-gray-700 font-bold">Email</TableHead>
+                <TableHead className="text-gray-700 font-bold">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredMentee.length > 0 ? (
-                filteredMentee.map((item, index) => (
+              {/* Gunakan currentItems, bukan filteredMentee */}
+              {currentItems.length > 0 ? (
+                currentItems.map((item, index) => (
                   <TableRow
                     key={item.id}
                     className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
                   >
                     <TableCell className="font-medium text-gray-700">
-                      {index + 1}
+                      {/* Perhitungan nomor agar tetap berurutan antar halaman */}
+                      {indexOfFirstItem + index + 1}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -266,6 +279,44 @@ export default function DashboardAdminMentee() {
             </TableBody>
           </Table>
         </div>
+
+        {/* Komponen Pagination Shadcn */}
+        {totalPages > 1 && (
+          <Pagination className="justify-end mt-4">
+            {" "}
+            {/* Tambahkan mt-4 agar ada jarak dengan tabel */}
+            <PaginationContent className="flex-wrap justify-center sm:justify-end gap-1">
+              {" "}
+              {/* Memastikan agar tetap rapi di mobile */}
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+              {/* Panggil fungsi render nomor halaman di sini */}
+              {renderPageNumbers(totalPages, currentPage, setCurrentPage)}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

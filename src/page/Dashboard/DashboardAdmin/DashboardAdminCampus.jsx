@@ -12,7 +12,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -36,6 +43,15 @@ export default function DashboardAdminCampus() {
   const filteredCampus = displayCampus.filter((item) =>
     item.campus_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  // logic pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // page
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredCampus.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredCampus.length / itemsPerPage);
 
   // fetch all campus
   useEffect(() => {
@@ -68,7 +84,7 @@ export default function DashboardAdminCampus() {
       case "accepted":
         return "Diterima";
       case "pending":
-        return "Belum dicek";
+        return "Belum di Verifikasi";
       case "null":
         return "Belum Memasukkan Data";
       case "rejected":
@@ -122,13 +138,13 @@ export default function DashboardAdminCampus() {
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow className="hover:bg-gray-50 border-b border-gray-200">
-                <TableHead className="text-gray-700  font-bold w-[50px]">
+                <TableHead className="text-gray-700 font-bold w-[50px]">
                   No
                 </TableHead>
-                <TableHead className="text-gray-700  font-bold">
+                <TableHead className="text-gray-700 font-bold">
                   Kampus
                 </TableHead>
-                <TableHead className="text-gray-700  font-bold">
+                <TableHead className="text-gray-700 font-bold">
                   Status
                 </TableHead>
                 <TableHead className="text-gray-700 text-center font-bold">
@@ -137,14 +153,14 @@ export default function DashboardAdminCampus() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCampus.length > 0 ? (
-                filteredCampus.map((item, index) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((item, index) => (
                   <TableRow
                     key={item.id}
                     className="hover:bg-gray-50 border-b border-gray-100 transition-colors"
                   >
                     <TableCell className="font-medium text-gray-700">
-                      {index + 1}
+                      {indexOfFirstItem + index + 1}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -209,6 +225,54 @@ export default function DashboardAdminCampus() {
             </TableBody>
           </Table>
         </div>
+        {/* Komponen Pagination Shadcn */}
+        {totalPages > 1 && (
+          <Pagination className="justify-center md:justify-end mt-4">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+
+              {/* Generate nomor halaman */}
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNumber = i + 1;
+                return (
+                  <PaginationItem key={pageNumber}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(pageNumber)}
+                      isActive={currentPage === pageNumber}
+                      className="cursor-pointer"
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

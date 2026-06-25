@@ -1,15 +1,5 @@
-import useGetAllCampus from "@/hooks/hooksAdmin/useGetAllCampus";
-import DashboardAdminCampusSkeleton from "@/components/DashboardAdminCampusSkeleton";
 import { CirclePlus, Loader2, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 
@@ -41,7 +31,6 @@ import AdminMajorsListSkeleton from "@/components/AdminMajorsListSkeleton";
 import HeaderPage from "@/components/HeaderPage";
 
 export default function DashboardAdminMajors() {
-  const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const { standardMajors, isLoading, error, fetchStandardMajors } =
     useGetStandardMajors();
@@ -129,56 +118,18 @@ export default function DashboardAdminMajors() {
         {/* card majors */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {filteredMajors.map((item) => (
-            <div
+            <Link
+              to={`/dashboard-admin/jurusan-detail/${item.id}`}
               key={item.id}
-              className="relative group bg-primary rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
+              className="group bg-white border border-gray-100 rounded-xl flex flex-col items-center justify-center p-5 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
             >
-              <Link
-                to={`/dashboard-admin/jurusan-detail/${item.id}`}
-                className="flex flex-col items-center justify-center p-6 h-full w-full"
-              >
-                <DynamicIcon name={item.logo_url} size={48} color="white" />
-                <p className="mt-2 text-sm font-medium text-center text-white">
-                  {item.major_name}
-                </p>
-              </Link>
-              {/* button delete major */}
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100"
-                  >
-                    <X size={16} />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Hapus Jurusan "{item.major_name}"?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Tindakan ini tidak dapat diurungkan. Ini akan menghapus
-                      jurusan secara permanen dari server.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Batal</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDeleteMajor(item.id)}
-                      disabled={isDeleting}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      {isDeleting && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Hapus
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+              <div className="p-3.5 bg-primary/5 rounded-full text-primary mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <DynamicIcon name={item.logo_url} size={40} />
+              </div>
+              <p className="text-sm font-bold text-gray-700 text-center group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                {item.major_name}
+              </p>
+            </Link>
           ))}
         </div>
       </div>
