@@ -210,7 +210,7 @@ const SidebarWithNavbar = ({ children }) => {
                     </span>
 
                     <span
-                      className={`tracking-wide ${isActive ? "font-bold" : "font-medium"}`}
+                      className={`tracking-wide transition-transform duration-300 ${isActive ? "font-bold " : "font-medium group-hover:scale-110 "}`}
                     >
                       {item.name}
                     </span>

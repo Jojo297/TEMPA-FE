@@ -11,10 +11,18 @@ import useRecomendationMajors from "@/hooks/hooksMentee/useRecomendationMajors";
 import RecomendationMajors from "@/components/RecomendationMajors";
 import LoadingAiRecomendationMajors from "@/components/LoadingAiRecomendationMajors";
 import LoadingSkeletonFetchRecomendationMajors from "@/components/LoadingSkeletonFetchRecomendationMajors";
-import LoadingRedirect from "@/components/loadingRedirect";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import HeaderPage from "@/components/HeaderPage";
 import { Helmet } from "react-helmet-async";
 import preview from "@/../public/web-preview.png";
+import { Link } from "react-router";
 
 // validation
 const formSchema = z.object({
@@ -560,6 +568,23 @@ export default function DashboardTestJurusanForm() {
           content="Platform edukasi digital untuk persiapan karier dan pemilihan jurusan mahasiswa."
         />
       </Helmet>
+
+      {/* breadcum */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild className="hover:text-primary">
+              <Link to="/dashboard-mentee">Beranda</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="text-primary">
+            <BreadcrumbPage className="text-primary">
+              Jurusan Cerdas
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {/* Header */}
       <HeaderPage
         title={"Rekomendasi Jurusan Cerdas"}

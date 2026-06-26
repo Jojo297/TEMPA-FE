@@ -15,6 +15,7 @@ const useGetDetailCampus = create((set) => ({
 
     try {
       const API_URL = `${API_BASE_URL}/mentee/detail-campus/${id}`;
+      console.log(API_BASE_URL);
 
       const response = await axios.get(API_URL, {
         headers: {

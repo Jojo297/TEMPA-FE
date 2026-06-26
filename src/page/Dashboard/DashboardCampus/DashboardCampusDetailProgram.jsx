@@ -103,7 +103,7 @@ export default function DashboardCampusDetailProgram() {
           onSave={handleSaveEdit}
         />
       ) : (
-        <div className="max-w-7xl">
+        <div className="max-w-7xl mx-auto">
           {/* Wrapper untuk Breadcrumb dan Tombol */}
           <div className="flex justify-between items-center mb-4">
             {/* Breadcrumb */}

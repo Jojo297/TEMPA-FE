@@ -14,7 +14,6 @@ import {
   Cross,
   FileQuestionIcon,
 } from "lucide-react";
-import roboterror from "@/assets/robot-error.png";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -122,8 +122,20 @@ export default function DashboardAdminVerivication() {
               {/* Jenis Pelaksanaan (Online/Onsite) */}
               <div className="space-y-2">
                 <Label>Deskripsi Kampus</Label>
-                <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700">
-                  {displayCampus.description || "Data Kosong"}
+                <div className="p-2 border rounded-md bg-gray-50 text-sm text-gray-700 break-words">
+                  <div
+                    className="whitespace-pre-wrap 
+                      [&_ol]:list-decimal [&_ol]:ml-5 
+                      [&_ul]:list-disc [&_ul]:ml-5 
+                      [&_li]:mb-1
+                      [&_p]:mb-4 
+                      [&_a]:text-blue-600 [&_a]:underline"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        displayCampus.description ||
+                        "Deskripsi belum ditambahkan.",
+                    }}
+                  />
                 </div>
               </div>
 
