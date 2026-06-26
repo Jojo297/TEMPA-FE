@@ -30,7 +30,8 @@ export default function CampusVerificationPending() {
               peninjauan oleh tim kami.
             </p>
             <p className="text-gray-500 text-sm md:text-base">
-              Mohon tunggu beberapa saat, kami akan segera mengabari Anda.
+              Mohon tunggu beberapa saat, kami akan segera mengabari anda lewat
+              email.
             </p>
           </div>
         </div>

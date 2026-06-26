@@ -65,7 +65,7 @@ export default function DashboardCampusBerlangganan() {
   const displayPackagesCampus = campusSubscription ?? [];
   const displayBalance = balance ?? 0;
   const displayQuota = quotaMentee ?? 0;
-  // console.log(paymentUrl);
+  // console.log("berlangganan: ", currentPackage);
 
   useEffect(() => {
     if (token) {
@@ -102,6 +102,7 @@ export default function DashboardCampusBerlangganan() {
     }
   };
 
+  // handle top up feature
   const handleTopUpProcess = async (amount) => {
     setIsProcessing(true);
     try {

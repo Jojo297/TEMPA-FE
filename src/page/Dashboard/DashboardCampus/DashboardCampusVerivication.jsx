@@ -18,11 +18,12 @@ export default function DashboardCampusVerivication() {
   // 1. Ambil Status Verifikasi (Hook/Side Effect)
   useEffect(() => {
     if (token) {
-      // checkVeirificationCampus(token);
+      checkVeirificationCampus(token);
     }
   }, [token]);
 
   const status = displayVerification.verification_status;
+  console.log(status);
 
   // 2. Tentukan Konten yang akan Dirender
   let contentToRender;

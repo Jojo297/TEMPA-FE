@@ -315,68 +315,120 @@ const DashboardMenteeDetailProgram = () => {
           </div>
           {/* start Popup register program */}
           <Dialog>
-            <form>
-              <DialogTrigger asChild>
-                <button
-                  disabled={isDisabled}
-                  className={`w-full sm:w-auto font-semibold px-4 py-2 sm:px-6 rounded-md transition flex-shrink-0 text-sm sm:text-base ${buttonClass}`}
-                >
-                  {buttonText}
-                </button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] bg-[#0E3B3D] border-[#B4D0E7]">
+            <DialogTrigger asChild>
+              <button
+                disabled={isDisabled}
+                className={`w-full sm:w-auto font-medium px-5 py-2.5 rounded-lg transition-colors flex-shrink-0 text-sm sm:text-base ${buttonClass}`}
+              >
+                {buttonText}
+              </button>
+            </DialogTrigger>
+
+            {/* Menggunakan bg-white untuk kontras tinggi dan mudah dibaca */}
+            <DialogContent className="sm:max-w-[550px] p-0 bg-white border-slate-200 shadow-xl overflow-hidden rounded-xl">
+              {/* Bagian Header */}
+              <div className="px-6 py-5 border-b border-slate-100 bg-[#0E3B3D]">
                 <DialogHeader>
-                  <DialogTitle className="text-center text-[#B4D0E7] text-xl">
+                  <DialogTitle className="text-xl font-bold text-white">
                     Ketentuan dan Prasyarat
                   </DialogTitle>
-                  {/* Mengganti DialogDescription dengan daftar ketentuan */}
-                  <DialogDescription className="text-white pt-2 space-y-3">
-                    <p className="font-semibold mb-2">
-                      Mohon baca dan setujui prasyarat berikut:
-                    </p>
-                    <ul className="list-disc list-inside space-y-1">
-                      {displayDetailProgram.terms_and_conditions?.map(
+                  <DialogDescription className="text-sm text-slate-100 mt-1">
+                    Mohon baca dan pahami persyaratan pendaftaran sebelum
+                    melanjutkan.
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+
+              {/* Bagian Body (Scrollable Terms & Checkbox) */}
+              <div className="px-6 py-5">
+                {/* Kotak Syarat & Ketentuan */}
+                <div className="bg-slate-50 rounded-lg border border-slate-200 p-4 max-h-[35vh] overflow-y-auto text-sm text-slate-700">
+                  <ul className="space-y-3 pl-4 list-disc marker:text-slate-400">
+                    {displayDetailProgram.terms_and_conditions?.length > 0 ? (
+                      displayDetailProgram.terms_and_conditions.map(
                         (item, index) => (
-                          <li key={index} className="text-sm">
+                          <li key={index} className="leading-relaxed pl-1">
                             {item}
                           </li>
                         ),
-                      )}
-                    </ul>
-                  </DialogDescription>
-                </DialogHeader>
-
-                {/* checkbox */}
-                <div className="flex items-start mt-4">
-                  <input
-                    type="checkbox"
-                    id="agreement-checkbox"
-                    checked={isAgreed}
-                    onChange={(e) => setIsAgreed(e.target.checked)}
-                    className="mt-1 h-4 w-4 text-[#B4D0E7] bg-gray-700 border-gray-500 rounded focus:ring-transparent checked:bg-[#B4D0E7]"
-                  />
-                  <label
-                    htmlFor="agreement-checkbox"
-                    className="ml-2 text-sm text-white cursor-pointer"
-                  >
-                    Saya telah membaca, memahami, dan menyetujui semua
-                    <strong> Ketentuan dan Prasyarat</strong> di atas.
-                  </label>
+                      )
+                    ) : (
+                      <li className="list-none text-slate-400 italic">
+                        Tidak ada prasyarat khusus untuk program ini.
+                      </li>
+                    )}
+                  </ul>
                 </div>
 
+                {/* Area Checkbox Persetujuan */}
+                <div className="mt-6 flex items-start group">
+                  <div className="flex items-center h-5 mt-0.5">
+                    <input
+                      type="checkbox"
+                      id="agreement-checkbox"
+                      checked={isAgreed}
+                      onChange={(e) => setIsAgreed(e.target.checked)}
+                      className="w-4 h-4 rounded border-slate-300 text-[#0E3B3D] focus:ring-[#0E3B3D] focus:ring-offset-0 transition-colors cursor-pointer"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <label
+                      htmlFor="agreement-checkbox"
+                      className="text-sm font-semibold text-[#0E3B3D] cursor-pointer select-none"
+                    >
+                      Saya menyetujui Ketentuan dan Prasyarat
+                    </label>
+                    <p className="text-slate-500 text-xs mt-1 leading-relaxed">
+                      Dengan mencentang kotak ini, Anda mengonfirmasi bahwa Anda
+                      telah membaca dan menyetujui seluruh kebijakan program
+                      trial.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bagian Footer (Tombol Aksi) */}
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end">
                 <button
-                  className={`font-semibold px-6 py-2 rounded-md transition flex-shrink-0 mt-6 ${
-                    isAgreed
-                      ? "bg-[#B4D0E7] text-[#0E3B3D] hover:bg-[#A3C5E0]"
-                      : "bg-gray-500 text-gray-300 cursor-not-allowed" // Warna non-aktif
+                  className={`w-full sm:w-auto font-medium px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center ${
+                    isAgreed && !isLoadingRegister
+                      ? "bg-[#0E3B3D] text-white hover:bg-[#0a2a2c] shadow-sm hover:shadow"
+                      : "bg-slate-200 text-slate-400 cursor-not-allowed"
                   }`}
-                  disabled={!isAgreed || isLoadingRegister} // Tombol dinonaktifkan jika belum dicentang
+                  disabled={!isAgreed || isLoadingRegister}
                   onClick={() => handleRegisterProgram()}
                 >
-                  Submit Pendaftaran
+                  {isLoadingRegister ? (
+                    <>
+                      {/* SVG Spinner untuk status Loading */}
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Memproses...
+                    </>
+                  ) : (
+                    "Submit Pendaftaran"
+                  )}
                 </button>
-              </DialogContent>
-            </form>
+              </div>
+            </DialogContent>
           </Dialog>
           {/* end Popup register program */}
         </div>
