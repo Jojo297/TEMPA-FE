@@ -24,7 +24,7 @@ const retryFetch = async (fn, maxRetries, initialDelayMs) => {
         const delay = initialDelayMs * Math.pow(2, attempt - 1);
 
         console.warn(
-          `Fetch gagal (Percobaan ${attempt}/${maxRetries}). Mencoba lagi dalam ${delay}ms...`
+          `Fetch gagal (Percobaan ${attempt}/${maxRetries}). Mencoba lagi dalam ${delay}ms...`,
         );
         console.error(error.message);
 
@@ -53,14 +53,14 @@ const useAdressCampus = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `/api/wilayah/provinces.json`;
+      const API_URL = `${API_BASE_URL}/api/wilayah/provinces.json`;
       const MAX_RETRIES = 3;
       const initialDelayMs = 1000; // Jeda awal 1 detik
 
       const response = await retryFetch(
         () => axios.get(API_URL),
         MAX_RETRIES,
-        initialDelayMs
+        initialDelayMs,
       );
 
       const fetchedProvince = response.data.data ?? [];
@@ -88,7 +88,7 @@ const useAdressCampus = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `/api/wilayah/regencies/${code}.json`;
+      const API_URL = `${API_BASE_URL}/api/wilayah/regencies/${code}.json`;
 
       const response = await axios.get(API_URL);
 
@@ -117,7 +117,7 @@ const useAdressCampus = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `/api/wilayah/districts/${code}.json`;
+      const API_URL = `${API_BASE_URL}/api/wilayah/districts/${code}.json`;
 
       const response = await axios.get(API_URL);
 
@@ -146,7 +146,7 @@ const useAdressCampus = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const API_URL = `/api/wilayah/villages/${code}.json`;
+      const API_URL = `${API_BASE_URL}/api/wilayah/villages/${code}.json`;
 
       const response = await axios.get(API_URL);
 
