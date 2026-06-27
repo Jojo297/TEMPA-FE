@@ -5,7 +5,7 @@
       "destination": "/index.html"
     },
     {
-      "source": "/api/v1/api/wilayah/(.*)",
+      "source": "/api/wilayah/(.*)",
       "destination": "https://api.tempa.biz.id/api/v1/api/wilayah/$1"
     }
   ]
