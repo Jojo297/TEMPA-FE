@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  TrendingUp,
-  Handshake,
   Check,
   Star,
   Info,
-  Crown,
-  Rocket,
   ShieldCheck,
-  Calendar,
   ShieldX,
   Wallet,
   Plus,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
-import { id, se } from "date-fns/locale";
 import useGetSubscriptionPackages from "@/hooks/hooksCampus/useGetSubscriptionPackages";
 import DynamicIcon from "@/components/DynamicIcon";
 import { set } from "zod";
@@ -24,7 +18,6 @@ import DashboardCampusBerlanggananSkeleton from "@/components/DashboardCampusBer
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentValidationModal from "@/components/PaymentValidationModal";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import TopUpModal from "@/components/TopUpModal";
 import useTopUpWallet from "@/hooks/hooksCampus/useTopUpWallet";
 
@@ -162,67 +155,84 @@ export default function DashboardCampusBerlangganan() {
         </div>
       </div>
 
-      {/* Pricing Cards */}
-      <div className="max-w-6xl mx-auto -mt-20 px-6">
-        {/* Section package now */}
-        {currentPackage && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 z-30 relative items-start">
-            {/* Status Paket Card */}
-            <div
-              className={`lg:col-span-2 rounded-3xl p-6 md:p-8 shadow-lg border overflow-hidden transition-all duration-300 ${
-                isExpired
-                  ? "bg-red-50 border-red-100"
-                  : "bg-white border-emerald-100"
-              }`}
-            >
-              <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div className="flex items-center gap-6">
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
-                      isExpired
-                        ? "bg-red-100 text-red-600"
-                        : "bg-emerald-100 text-[#003631]"
-                    }`}
-                  >
-                    {isExpired ? (
-                      <ShieldX size={28} />
-                    ) : (
-                      <ShieldCheck size={28} />
-                    )}
-                  </div>
-                  <div>
-                    <h2
-                      className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${
-                        isExpired ? "text-red-500" : "text-emerald-600"
+      {/* Main Content Section */}
+      <div className="max-w-6xl mx-auto -mt-20 px-6 mb-24">
+        <div
+          className={`grid gap-6 relative z-30 items-start ${
+            currentPackage
+              ? "grid-cols-1 lg:grid-cols-3"
+              : "grid-cols-1 place-items-center"
+          }`}
+        >
+          {/* Section package now */}
+          {currentPackage && (
+            <div className="lg:col-span-2 w-full">
+              {/* Status Paket Card */}
+              <div
+                className={`rounded-3xl p-6 md:p-8 shadow-lg border overflow-hidden transition-all duration-300 ${
+                  isExpired
+                    ? "bg-red-50 border-red-100"
+                    : "bg-white border-emerald-100"
+                }`}
+              >
+                <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="flex items-center gap-6">
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                        isExpired
+                          ? "bg-red-100 text-red-600"
+                          : "bg-emerald-100 text-[#003631]"
                       }`}
                     >
-                      {isExpired ? "Status: Expired" : "Paket Aktif"}
-                    </h2>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {currentPackage.package_name}
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Berlaku hingga{" "}
-                      {new Date(currentPackage.expired_date).toLocaleDateString(
-                        "id-ID",
-                        { day: "numeric", month: "long", year: "numeric" },
+                      {isExpired ? (
+                        <ShieldX size={28} />
+                      ) : (
+                        <ShieldCheck size={28} />
                       )}
-                    </p>
+                    </div>
+                    <div>
+                      <h2
+                        className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${
+                          isExpired ? "text-red-500" : "text-emerald-600"
+                        }`}
+                      >
+                        {isExpired ? "Status: Expired" : "Paket Aktif"}
+                      </h2>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        {currentPackage.package_name}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Berlaku hingga{" "}
+                        {new Date(
+                          currentPackage.expired_date,
+                        ).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    onClick={() =>
+                      navigate("/dashboard-campus/history-transaction")
+                    }
+                    className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
+                  >
+                    Riwayat Transaksi
+                  </button>
                 </div>
-                <button
-                  onClick={() =>
-                    navigate("/dashboard-campus/history-transaction")
-                  }
-                  className="text-xs font-bold text-[#003631] bg-emerald-50 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
-                >
-                  Riwayat Transaksi
-                </button>
               </div>
             </div>
+          )}
 
-            {/* Wallet / Balance Card */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 shadow-xl relative overflow-hidden group border border-slate-700">
+          {/* Wallet / Balance Card */}
+          <div
+            className={`w-full transition-all duration-300 ${
+              currentPackage ? "lg:col-span-1" : "max-w-md mb-24"
+            }`}
+          >
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 shadow-xl relative overflow-hidden group border border-slate-700 w-full">
               {/* Efek Glassmorphism lebih halus */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-amber-400/20 transition-all" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full -ml-12 -mb-12 blur-2xl" />
@@ -285,15 +295,17 @@ export default function DashboardCampusBerlangganan() {
                 </div>
               </div>
             </div>
-            <TopUpModal
-              isOpen={showTopUp}
-              onClose={() => setShowTopUp(false)}
-              onConfirm={(amount) => handleTopUpProcess(amount)}
-              isLoading={isProcessing}
-            />
           </div>
-        )}
+        </div>
 
+        <TopUpModal
+          isOpen={showTopUp}
+          onClose={() => setShowTopUp(false)}
+          onConfirm={(amount) => handleTopUpProcess(amount)}
+          isLoading={isProcessing}
+        />
+
+        {/* subscription  */}
         <div
           className={`grid grid-cols-1 ${
             currentPackage ? "mt-20" : ""
