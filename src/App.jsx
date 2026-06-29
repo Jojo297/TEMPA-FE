@@ -14,6 +14,7 @@ const SuspenseWrapper = ({ Component }) => (
 
 // --- Lazy Imports ---
 const LandingPage = lazy(() => import("./page/Landingpage"));
+const MitraLandingPage = lazy(() => import("./page/MitraLandingPage"));
 const TrialKuliahPage = lazy(() => import("./page/TrialKuliah"));
 // const LoginMentee = lazy(() => import("./page/loginMentee"));
 const LoginCampus = lazy(() => import("./page/loginCampus"));
@@ -241,6 +242,10 @@ const NotFounPages = lazy(() => import("@/components/NotFoundPage"));
 
 const router = createBrowserRouter([
   { path: "/", element: <SuspenseWrapper Component={LandingPage} /> },
+  {
+    path: "/mitra-kampus",
+    element: <SuspenseWrapper Component={MitraLandingPage} />,
+  },
   {
     path: "/trial-kuliah",
     element: <SuspenseWrapper Component={TrialKuliahPage} />,

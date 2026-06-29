@@ -63,25 +63,24 @@ export default function DashboardCampusDetailProgram() {
     }
   }, [token, idProgram]);
 
-  const [editMode, setEditMode] = useState(false); // Gunakan boolean untuk mode edit
+  const [editMode, setEditMode] = useState(false);
 
   const handleSaveEdit = () => {
-    fetchDetailProgram(token, idProgram); // Ambil ulang data setelah disimpan
-    setEditMode(false); // Keluar dari mode edit
-    window.scrollTo(0, 0); // Scroll ke atas halaman
+    fetchDetailProgram(token, idProgram);
+    setEditMode(false);
+    window.scrollTo(0, 0);
   };
 
-  // Fungsi untuk menghapus mentor dari program
+  // handle delete mentor from program
   const handleRemoveMentorFromProgram = useCallback(
     async (mentor) => {
-      // Menggunakan hook baru untuk menghapus mentor
       const result = await deleteMentorFromProgram(token, mentor.id);
 
       if (result.success) {
         toast.success(
           result.message || "Mentor berhasil dihapus dari program.",
         );
-        fetchDetailProgram(token, idProgram); // Muat ulang data program
+        fetchDetailProgram(token, idProgram);
       } else {
         toast.error(result.error || "Gagal menghapus mentor.");
       }
@@ -129,7 +128,7 @@ export default function DashboardCampusDetailProgram() {
               </BreadcrumbList>
             </Breadcrumb>
 
-            {/* Grup Tombol edit and delete */}
+            {/* goup edit and delete button */}
             <div className="flex gap-3">
               <DeleteProgramDetail
                 idProgram={program.id}
@@ -152,7 +151,7 @@ export default function DashboardCampusDetailProgram() {
                 className="w-full h-72 object-cover"
               />
             </div>
-            {/* Overlay konten di bawah gambar */}
+            {/* program name */}
             <div className="absolute bottom-0 left-0 right-0 bg-[#0E3B3D]/90 text-white p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold">
@@ -170,8 +169,8 @@ export default function DashboardCampusDetailProgram() {
                   {/* description */}
                   <TabsTrigger
                     value="deskripsi"
-                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                                 hover:bg-[#013B35] hover:text-white transition 
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                                 hover:bg-[#013B35] hover:text-white transition
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
                   >
                     Deskripsi
@@ -180,8 +179,8 @@ export default function DashboardCampusDetailProgram() {
                   {/* peserta */}
                   <TabsTrigger
                     value="peserta"
-                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                                 hover:bg-[#013B35] hover:text-white transition 
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                                 hover:bg-[#013B35] hover:text-white transition
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
                   >
                     Peserta
@@ -190,8 +189,8 @@ export default function DashboardCampusDetailProgram() {
                   {/* mentor */}
                   <TabsTrigger
                     value="mentor"
-                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                                 hover:bg-[#013B35] hover:text-white transition 
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                                 hover:bg-[#013B35] hover:text-white transition
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
                   >
                     Mentor
@@ -200,8 +199,8 @@ export default function DashboardCampusDetailProgram() {
                   {/* materi */}
                   <TabsTrigger
                     value="materi"
-                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                                 hover:bg-[#013B35] hover:text-white transition 
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                                 hover:bg-[#013B35] hover:text-white transition
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
                   >
                     Materi
@@ -210,8 +209,8 @@ export default function DashboardCampusDetailProgram() {
                   {/* feedback */}
                   <TabsTrigger
                     value="feedback"
-                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold 
-                                 hover:bg-[#013B35] hover:text-white transition 
+                    className="px-6 py-2 border border-[#013B35] bg-white text-[#013B35] rounded-full font-semibold
+                                 hover:bg-[#013B35] hover:text-white transition
                                  data-[state=active]:bg-[#013B35] data-[state=active]:text-white"
                   >
                     Feedback
