@@ -5,12 +5,10 @@ import {
   Pencil,
   Plus,
   Calendar as CalendarIcon,
-} from "lucide-react"; // Import CalendarIcon
-import { format } from "date-fns"; // Import format date library
-import { id } from "date-fns/locale"; // Import bahasa Indonesia untuk format
-
-// Import yang diperlukan dari Zod & React Hook Form
-import { useForm, useController } from "react-hook-form"; // Import useController
+} from "lucide-react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -57,17 +55,14 @@ import { toast } from "sonner";
 import useCreatePaymentIntent from "@/hooks/hooksCampus/useCreatePaymentIntent";
 
 // =====================================================================
-// KOMPONEN BARU: DatePicker yang terintegrasi dengan React Hook Form
+// component DatePicker
 // =====================================================================
 const DatePickerRHF = ({ name, control, placeholder = "Pilih Tanggal" }) => {
   const { field } = useController({ name, control });
 
-  // Konversi nilai string (YYYY-MM-DD) dari RHF menjadi objek Date
   const selectedDate = field.value ? new Date(field.value) : undefined;
 
-  // Fungsi handler untuk memperbarui RHF
   const handleDateSelect = (date) => {
-    // Simpan tanggal dalam format string YYYY-MM-DD agar kompatibel dengan Zod string validation
     const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
     field.onChange(formattedDate);
   };

@@ -478,7 +478,6 @@ const DashboardMenteeDetailProgram = () => {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              {/* Ganti <p> di bawah ini menjadi <div> */}
               <div className="text-sm text-gray-900 sm:text-base border p-3 rounded-xl break-words">
                 <div
                   className="whitespace-pre-wrap

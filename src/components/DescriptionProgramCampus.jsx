@@ -166,7 +166,7 @@ export default function DescriptionProgramCampus({ program }) {
 
             <div className="col-span-2">
               <p className="font-medium text-gray-600 mb-1">Detail Kegiatan</p>
-              <div className="text-gray-800 whitespace-pre-line border p-3 rounded-xl">
+              <div className="text-gray-800 whitespace-pre-line border p-3 rounded-xl break-words">
                 <div
                   className="whitespace-pre-wrap 
              [&_ol]:list-decimal [&_ol]:ml-5 
