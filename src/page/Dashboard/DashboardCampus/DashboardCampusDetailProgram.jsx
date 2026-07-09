@@ -217,6 +217,7 @@ export default function DashboardCampusDetailProgram() {
                   </TabsTrigger>
                 </TabsList>
 
+                {/* amount mentee see */}
                 <div className="group flex items-center gap-2 text-muted-foreground hover:text-primary transition-all duration-300">
                   <div className="relative">
                     <Eye className="h-4 w-4 transition-transform group-hover:scale-110" />

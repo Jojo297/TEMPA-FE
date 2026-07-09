@@ -13,24 +13,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Calendar,
-  Home,
-  Map,
-  Search,
-  Users,
-  Loader2,
-  CirclePlus,
-} from "lucide-react";
+import { Calendar, Home, Map, Search, Users, CirclePlus } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 import AddProgram from "@/components/AddProgram";
-import { ProgramDummy } from "@/lib/ProgramDummy";
 
 import useGetAllProgram from "@/hooks/hooksCampus/useGetAllProgram";
-import { useAuthStore } from "@/hooks/hooksCampus/useAuthStore";
 import DeleteProgram from "@/components/DeleteProgram";
 import DashboardCampusProgramSkeleton from "@/components/DashboardCampusProgramSkeleton";
 import { CampusSearchMajors } from "@/components/CampusSearchMajors";
@@ -38,15 +28,13 @@ import { useFilterStore } from "@/hooks/hooksMentee/useFilterProgramMajor";
 import { useFilterProgramType } from "@/hooks/hooksMentee/useFilterProgramType";
 import NotFounPages from "@/components/NotFoundPages";
 import HeaderPage from "@/components/HeaderPage";
-// import useGetAllMajorsCampus from "@/hooks/hooksCampus/useGetAllMajorsCampus";
 
 export default function DashboardCampusProgram() {
   const navigate = useNavigate();
   const token = localStorage.getItem("userJwt");
   const [searchTerm, setSearchTerm] = useState("");
   // Hooks Program
-  const { allPrograms, isLoadingPrograms, errorPrograms, getAllPrograms } =
-    useGetAllProgram();
+  const { allPrograms, isLoadingPrograms, getAllPrograms } = useGetAllProgram();
 
   const ScrollTop = () => window.scrollTo(0, 0);
 
@@ -299,17 +287,23 @@ export default function DashboardCampusProgram() {
                   <div className="lg:w-2/3 p-6 flex flex-col justify-between">
                     <div>
                       <div className="flex flex-wrap items-center space-x-4 mb-4">
+                        {/* program name */}
                         <div className="flex items-center text-[#013B35] font-semibold text-lg">
                           <span>{item.program_name}</span>
                         </div>
+
+                        {/* major  */}
                         <div className="px-3 py-1 bg-green-100 text-[#013B35] rounded-full text-sm font-medium">
                           {item.major_name || "Tidak Ada Jurusan"}
                         </div>
+
+                        {/* sesi */}
                         <div className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
                           {item.sesi_program}
                         </div>
                       </div>
-                      <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                      {/* description */}
+                      <p className="text-gray-600 mb-4 text-xs sm:text-sm line-clamp-2 break-words">
                         <div
                           className="whitespace-pre-wrap [&_p]:mb-4 [&_a]:text-blue-600 [&_a]:underline"
                           dangerouslySetInnerHTML={{
@@ -318,6 +312,7 @@ export default function DashboardCampusProgram() {
                         />
                       </p>
 
+                      {/* date */}
                       <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-gray-700 text-sm mb-6 border-t pt-4">
                         <div className="flex items-center">
                           <Calendar size={16} className="mr-2 text-[#013B35]" />
