@@ -1,5 +1,4 @@
-import useGetDetailProgram from "@/hooks/hooksCampus/useGetDetailProgram";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,9 +9,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -52,7 +49,6 @@ import {
   SendHorizonal,
   Mail,
   Search,
-  Lock,
   Sparkles,
   ArrowRight,
   HardHat,
@@ -75,7 +71,7 @@ import { ParticipantAnalytics } from "./ParticipantAnalytics";
 import { jwtDecode } from "jwt-decode";
 import { DialogGenerateCertificate } from "./DialogGenerateCertificate";
 import { DialogGenerateQrCodePresensi } from "./DialogGenerateQrCodePresensi";
-import { addDays, isSameDay, format, startOfDay } from "date-fns";
+import { addDays, isSameDay } from "date-fns";
 
 const InDevelopmentDialog = ({ isOpen, onOpenChange }) => {
   if (!isOpen) return null;

@@ -40,9 +40,12 @@ export default function DashboardAdminCampus() {
   const displayCampus = campusData ?? [];
 
   // search campus by name
-  const filteredCampus = displayCampus.filter((item) =>
-    item.campus_name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const filteredCampus = displayCampus.filter((item) => {
+    const campusName = item?.campus_name || "";
+    const query = searchQuery || "";
+
+    return campusName.toLowerCase().includes(query.toLowerCase());
+  });
 
   // logic pagination
   const [currentPage, setCurrentPage] = useState(1);

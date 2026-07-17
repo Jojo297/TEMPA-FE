@@ -1,32 +1,17 @@
 import React, { useState } from "react";
-import {
-  HardHat,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  Mail,
-  MedalIcon,
-  Medal,
-  Award,
-  Download,
-} from "lucide-react";
-import { Button } from "@/components/ui/button"; // Pastikan path button sesuai
-import useGenerateCertificate from "@/hooks/hooksCampus/useGenerateCertificate";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { QRCodeCanvas } from "qrcode.react";
 import {
-  Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { differenceInDays, parseISO, format, addDays } from "date-fns";
+import { differenceInDays, format, addDays } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Clock, Calendar, Info } from "lucide-react";
+import { Calendar, Info } from "lucide-react";
 import { Input } from "./ui/input";
 import * as z from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
